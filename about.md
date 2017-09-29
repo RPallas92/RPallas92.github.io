@@ -4,34 +4,19 @@ layout: page
 ---
 ![Profile Image]({{ site.url }}/{{ site.picture }})
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p>Mobile software engineer passionated about software engineering. I’m a functional programming beginner, geek and a curious learner. Huge fan of agile methodologies, programming and technology in general.</p>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
 <h2>Skills</h2>
 
 <ul class="skill-list">
-	<li>HTML - Jade - Haml - Erb</li>
-	<li>Responsive (Mobile First)</li>
-	<li>CSS (Stylus, Sass, Less)</li>
-	<li>Css Frameworks (Bootstrap, Foundation)</li>
-	<li>Javascript (Design Patterns, Testes)</li>
-	<li>NodeJS</li>
-	<li>AngularJS - ReactJS</li>
-	<li>Grunt - Gulp - Yeoman</li>
+	<li>iOS</li>
+	<li>Android</li>
+	<li>node.js</li>
+	<li>JavaScript</li>
 	<li>Git</li>
-	<li>PHP</li>
-	<li>Python</li>
+	<li>Functional programming</li>
+	<li>Sowftware engineering</li>
 	<li>MySQL - MongoDB</li>
 	<li>Scrum and Kanban</li>
 	<li>TDD e Continuous Integration</li>
@@ -40,7 +25,11 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 <h2>Projects</h2>
 
 <ul>
-	<li><a href="https://github.com/">Lorem Lorem</a></li>
-	<li><a href="https://github.com/">Ipsum Dolor</a></li>
-	<li><a href="https://github.com/">Dolor Lorem</a></li>
+	<li><a href="https://github.com/RPallas92/Swiftz-Validation">Swiftz Validation</a></li>
+	<li><a href="https://github.com/RPallas92/JS-access-property">JS Safe access properties</a></li>
+	<li><a href="https://github.com/RPallas92/Graus_iOS">Graus iOS</a></li>
+	<li><a href="https://github.com/RPallas92/Functional-MENStack">Functional-MENStack</a></li>
+	<li><a href="https://github.com/RPallas92/curryJS">CurryJS</a></li>
+	<li><a href="https://github.com/RPallas92/congreso-web-2016/tree/master/app_videos/app_finished">Functional Youtube React searcher</a></li>
+
 </ul>
