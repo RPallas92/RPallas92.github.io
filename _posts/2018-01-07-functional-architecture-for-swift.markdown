@@ -10,14 +10,12 @@ tag:
 - ArchitectureKit
 - FunctionalKit
 - Swiftz
-- Monad
 category: blog
 author: Ricardo Pallas
 projects: true
 description: Simplest architecture for FunctionalKit
 # jemoji: '<img class="emoji" title=":ramen:" alt=":ramen:" src="https://assets.github.com/images/icons/emoji/unicode/1f35c.png" height="20" width="20" align="absmiddle">'
 ---
-
 
 ![](https://cdn-images-1.medium.com/max/1600/1*6rHrtpuEEnQj19mOUpS-pQ.png)
 
