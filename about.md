@@ -26,6 +26,8 @@ layout: page
 
 <ul>
 	<li><a href="https://github.com/RPallas92/Swiftz-Validation">Swiftz Validation</a></li>
+	<li><a href="https://github.com/RPallas92/ArchitectureKit">ArchitectureKit</a></li>
+	<li><a href="https://github.com/RPallas92/FunctionalSwiftArchitecture">Functional Swift Architecture</a></li>
 	<li><a href="https://github.com/RPallas92/JS-access-property">JS Safe access properties</a></li>
 	<li><a href="https://github.com/RPallas92/Graus_iOS">Graus iOS</a></li>
 	<li><a href="https://github.com/RPallas92/Functional-MENStack">Functional-MENStack</a></li>
