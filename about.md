@@ -25,6 +25,7 @@ layout: page
 <h2>Projects</h2>
 
 <ul>
+	<li><a href="https://github.com/RPallas92/PromisedArchitectureKit">Promised Architecture Kit V2</a></li>
 	<li><a href="https://github.com/RPallas92/Swiftz-Validation">Swiftz Validation</a></li>
 	<li><a href="https://github.com/RPallas92/ArchitectureKit">ArchitectureKit</a></li>
 	<li><a href="https://github.com/RPallas92/FunctionalSwiftArchitecture">Functional Swift Architecture</a></li>
