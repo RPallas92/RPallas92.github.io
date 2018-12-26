@@ -1,3 +1,25 @@
+---
+title: "Promised Architecture Kit V2"
+layout: post
+date: 2018-12-26 14:00
+image: /assets/images/markdown.jpg
+headerImage: false
+tag:
+- functional programming
+- swift
+- ArchitectureKit
+- PromisedArchitectureKit
+- PromiseKit
+- FunctionalKit
+- Swiftz
+category: blog
+author: Ricardo Pallas
+projects: true
+description: Simplest architecture for PromiseKit
+# jemoji: '<img class="emoji" title=":ramen:" alt=":ramen:" src="https://assets.github.com/images/icons/emoji/unicode/1f35c.png" height="20" width="20" align="absmiddle">'
+---
+
+
 # PromisedArchitectureKit V2
 
 The simplest architecture for [PromiseKit](https://github.com/mxcl/PromiseKit), now V2, even simpler and easier to reason about.
