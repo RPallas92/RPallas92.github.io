@@ -56,14 +56,14 @@ Here is the table of contents:
 
 You can find it on all Amazon marketplaces like:
 
-- US: https://www.amazon.com/dp/B0BRJPFT54
-- ES: https://www.amazon.es/dp/B0BRJPFT54.
-- DE: https://www.amazon.de/dp/B0BRJPFT54.
-- UK: https://www.amazon.co.uk/dp/B0BRJPFT54.
-- FR: https://www.amazon.fr/dp/B0BRJPFT54.
-- IT: https://www.amazon.it/dp/B0BRJPFT54.
-- JP: https://www.amazon.co.jp/dp/B0BRJPFT54.
-- CA: https://www.amazon.ca/dp/B0BRJPFT54.
+- US: [https://www.amazon.com/dp/B0BRJPFT54](https://www.amazon.com/dp/B0BRJPFT54).
+- ES: [https://www.amazon.es/dp/B0BRJPFT54](https://www.amazon.es/dp/B0BRJPFT54).
+- DE: [https://www.amazon.de/dp/B0BRJPFT54](https://www.amazon.de/dp/B0BRJPFT54).
+- UK: [https://www.amazon.co.uk/dp/B0BRJPFT54](https://www.amazon.co.uk/dp/B0BRJPFT54).
+- FR: [https://www.amazon.fr/dp/B0BRJPFT54](https://www.amazon.fr/dp/B0BRJPFT54).
+- IT: [https://www.amazon.it/dp/B0BRJPFT54](https://www.amazon.it/dp/B0BRJPFT54).
+- JP: [https://www.amazon.co.jp/dp/B0BRJPFT54](https://www.amazon.co.jp/dp/B0BRJPFT54).
+- CA: [https://www.amazon.ca/dp/B0BRJPFT54](https://www.amazon.ca/dp/B0BRJPFT54).
 
 Thank you for your interest, and I hope you find this book helpful!
 
