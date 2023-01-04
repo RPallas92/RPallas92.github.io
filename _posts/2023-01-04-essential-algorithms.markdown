@@ -1,7 +1,7 @@
 ---
 title: "Essential algorithms for the coding interview"
 layout: post
-date: 2023-01-04 17:00
+date: 2023-01-04 08:00
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
