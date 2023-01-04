@@ -56,7 +56,7 @@ Here is the table of contents:
 
 You can find it on all Amazon marketplaces like:
 
-- US: https://www.amazon.com/dp/B0BRJPFT54.
+- US: https://www.amazon.com/dp/B0BRJPFT54
 - ES: https://www.amazon.es/dp/B0BRJPFT54.
 - DE: https://www.amazon.de/dp/B0BRJPFT54.
 - UK: https://www.amazon.co.uk/dp/B0BRJPFT54.
