@@ -2,7 +2,7 @@
 title: "Gas stations finder in Golang"
 layout: post
 date: 2023-11-30 08:00
-image: /assets/images/markdown.jpg
+image: https://raw.githubusercontent.com/RPallas92/GasPrices/main/gas_prices_ui.png
 headerImage: false
 tag:
 - go
