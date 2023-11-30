@@ -24,6 +24,8 @@ I wanted to share a project I created a couple of years ago, during winter holid
 
 In December 2022, gas prices were more expensive than ever in Spain, and I drove a lot. That's why I written the [Gas Station Finder](https://github.com/RPallas92/GasPrices) in Go; I wanted to find all gas stations between 2 cities and sort them by price. This way, I could fill the tank at a cheaper gas station without having to deviate from the route.
 
+![Sample UI for Gas Stations service](https://raw.githubusercontent.com/RPallas92/GasPrices/main/gas_prices_ui.png)
+
 Let me break down how it all works.
 
 The project relies on the OpenRouteService API to find the route between two coordinates. It also uses its reverse geocoding service to convert city names into coordinates. This is done to expose an API that given 2 city names, it returns both the route and all near gas stations with its prices.
@@ -41,7 +43,7 @@ As an improvement, instead of having all the gas stations prices in memory, we c
 
 I enjoyed coding it since it only took a few hours, and it proved to be a useful app for myself. Also, I learned a little bit of Go!
 
-You can find the code on GitHub: https://github.com/RPallas92/GasPrices.
+You can find the code [on GitHub: GasPrices](https://github.com/RPallas92/GasPrices).
 
 Thanks for reading!
 Ricardo.
