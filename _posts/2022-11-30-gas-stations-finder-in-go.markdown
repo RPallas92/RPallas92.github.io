@@ -38,7 +38,7 @@ In order to improve performance, I did two things:
 - Use a KDTree to store Gas stations. For a given route, it called the KDTree to find nearby gas stations really fast (O(log n)).
 - Keep all prices in memory and refresh them in the background every 4 hours. Since the prices don´t change that often, caching them was a good idea to improve performance, because retrieving the prices from the Spanish goverment website takes quite a bit.
 
-As an improvement, instead of having all the gas stations prices in memory, we can use an embedded databse like [GrausDB](https://github.com/RPallas92/GrausDB). It can also be used to store routes between cities instead of calling OpenRouteService to calculate them each time. These routes are not going to change often, therefore we can keep refresh them every 2 weeks, for example.
+As an improvement, instead of having all the gas stations prices in memory, we can use an embedded database like [GrausDB](https://github.com/RPallas92/GrausDB). It can also be used to store routes between cities instead of calling OpenRouteService to calculate them each time. These routes are not going to change often, therefore we can keep refresh them every 2 weeks, for example.
 
 
 I enjoyed coding it since it only took a few hours, and it proved to be a useful app for myself. Also, I learned a little bit of Go!
