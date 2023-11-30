@@ -1,7 +1,7 @@
 ---
 title: "Gas stations finder in Golang"
 layout: post
-date: 2023-11-30 22:00
+date: 2023-11-30 08:00
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
