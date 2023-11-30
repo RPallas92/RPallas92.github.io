@@ -34,7 +34,7 @@ The REST API is built with the Gin web framework. I liked it as it was straightf
 
 The app is split into different components: one for figuring out where you are, one for planning routes, another for getting directions, one for getting gas station prices, and another to retrieve gas stations nearby.
 
-In order to improve performance, I did to things:
+In order to improve performance, I did two things:
 - Use a KDTree to store Gas stations. For a given route, it called the KDTree to find nearby gas stations really fast (O(log n)).
 - Keep all prices in memory and refresh them in the background every 4 hours. Since the prices don´t change that often, caching them was a good idea to improve performance, because retrieving the prices from the Spanish goverment website takes quite a bit.
 
