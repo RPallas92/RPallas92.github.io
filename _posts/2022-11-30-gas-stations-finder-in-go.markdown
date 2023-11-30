@@ -39,7 +39,7 @@ In order to improve performance, I did to things:
 As an improvement, instead of having all the gas stations prices in memory, we can use an embedded databse like [GrausDB](https://github.com/RPallas92/GrausDB). It can also be used to store routes between cities instead of calling OpenRouteService to calculate them each time. These routes are not going to change often, therefore we can keep refresh them every 2 weeks, for example.
 
 
-I enjoyed coding it since it only took a few hours, and it proved to be a useful app for myself. Also, I learned a little bit of Go.
+I enjoyed coding it since it only took a few hours, and it proved to be a useful app for myself. Also, I learned a little bit of Go!
 
 You can find the code on GitHub: https://github.com/RPallas92/GasPrices.
 
