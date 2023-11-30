@@ -46,4 +46,5 @@ I enjoyed coding it since it only took a few hours, and it proved to be a useful
 You can find the code [on GitHub: GasPrices](https://github.com/RPallas92/GasPrices).
 
 Thanks for reading!
+
 Ricardo.
