@@ -22,7 +22,7 @@ Hi all,
 
 I wanted to share a project I created a couple of years ago, during winter holidays, with the purpose of learning Go.
 
-In December 2022, gas prices were more expensive than ever in Spain, and I drove a lot. That's why I written the [Gas Station Finder](https://github.com/RPallas92/GasPrices) in Go; I wanted to find all gas stations between 2 cities and sort them by price. This way, I could fill the tank at a cheaper gas station without having to deviate from the route.
+In December 2021, gas prices were more expensive than ever in Spain, and I drove a lot. That's why I written the [Gas Station Finder](https://github.com/RPallas92/GasPrices) in Go; I wanted to find all gas stations between 2 cities and sort them by price. This way, I could fill the tank at a cheaper gas station without having to deviate from the route.
 
 ![Sample UI for Gas Stations service](https://raw.githubusercontent.com/RPallas92/GasPrices/main/gas_prices_ui.png)
 
