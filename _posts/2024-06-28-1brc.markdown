@@ -56,7 +56,7 @@ I decided to write my own solution in Rust without using any external crates. My
 
 The code is [available on this Github repository](https://github.com/RPallas92/one-billion-row).
 
-## Base Naive Implementation
+## Base Naive Implementation (90 seconds)
 
 I started by writing a simple, naive and unoptimized first version to use it as a base implementation for further improvements.
 
