@@ -167,7 +167,7 @@ As simple as this:
 It is executed in **90 seconds** on my mini PC. This is too far from the 5.7 seconds of the official implementation. Let's get started!
 
 
-I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
+> I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
 
 
 To be continued.
