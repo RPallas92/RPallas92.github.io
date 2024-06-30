@@ -8,7 +8,6 @@ tag:
 - 1brc
 - algorithms
 - data structures
-- faang
 - 1 billion row challenge
 - rust
 - performance
@@ -168,9 +167,7 @@ It is executed in **90 seconds** on my mini PC. This is too far from the 5.7 sec
 
 **TODO Ricardo commit link**
 
-
 > I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
-
 
 ## Multithreading Solution (17.96 secs)
 
@@ -317,7 +314,6 @@ This solution improves the execution time from 90 seconds to 17.96 seconds. Grea
 
 **TODO Ricardo commit link**
 
-
 ## Custom number parsing (8.1 seconds)
 
 Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing. Since I am using Fedora, it uses [perf](https://perf.wiki.kernel.org/index.php/Main_Page) under the hood:
@@ -327,14 +323,11 @@ Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visu
 
 We get the following flame graph:
 
-
 ![Flamegraph of the first multitheading solution](../assets/images/1brc/flamegraph1.png)
 
 If we zoom in on the right side of the image, we will see that almost 10% of the samples are for parsing the temperature into a `f32` number:
 
-
 ![Zoomed in flamegraph of the first multitheading solution](../assets/images/1brc/flamegraph2.png)
-
 
 The image corresponds to this part of the code:
 
@@ -391,5 +384,54 @@ This is how the function works:
 
 > Note that if we want to support other formats, we just need to update the function by adding a new branch to the `match` statement.
 
+After this change, we have improved the execution time from 17.96 seconds to 8.1 seconds. We are getting closer!
 
 **TODO Ricardo commit link**
+
+## Custom key parsing (X seconds)
+
+Let's now generate another frame graph of the current solution to see what can be our next improvement:
+
+![Flamegraph of the second multitheading solution](../assets/images/1brc/flamegraph3.png)
+
+If we zoom in on the right side of the image, we will see that more than 10% of the samples are for parsing the city ftom a bytes slice to a string:
+
+![Zoomed in flamegraph of the first multitheading solution](../assets/images/1brc/flamegraph4.png)
+
+Let's do the same we did for parsing the temperature. We are going to write a custom parser to make the program faster.
+
+Our current `StationsMap` maps from city names (String) to `StationMetrics`. What if we change it to `BTreeMap<u64, StationMetrics>`? We can write a fast function that parses from a bytes slice to a u64, and u64 (8 bytes) should be enough to identify a city (e.g. the first 8 characters of its name).
+
+Having a `u64` instead of a string as key also comes with the advantage of having the hash map keys inlined.
+
+### How hash maps work
+
+When you use `String` as keys in a HashMap, each key is a heap-allocated, dynamically sized string. This can have implications for performance, especially in terms of hashing and memory usage:
+
+![Hash map 1](../assets/images/1brc/hashmap1.png)
+
+When you use `u64` as keys in a HashMap, each key is a fixed-size, stack-allocated integer. This is typically more efficient in terms of both hashing and memory usage.
+
+![Hash map 2](../assets/images/1brc/hashmap2.png)
+
+The difference is that since each `u64` key is stack-allocated,  it uses a fixed amount of memory and is stored directly on the stack, which is generally faster to allocate and deallocate. That is why by using `u64` keys, we can achieve better performance for lookups, insertions, and deletions in the hash map.
+
+See how a value is retrieved in both cases.
+
+HashMap with `String` keys:
+
+![Hash map with string keys](../assets/images/1brc/hashmap3.png)
+
+HashMap with `u64` keys (inlined):
+
+![Hash map with u64 keys](../assets/images/1brc/hashmap4.png)
+
+As we can see in the graphs, the differences are that:
+1. `u64` keys are allocated in the stack which is faster and don´t need the additional step of heap allocating the key.
+1. Hashing a fixed-size integer is faster.
+
+### Code changes
+
+Let's then change `StationsMap` to `BTreeMap<u64, StationMetrics>` and write a function to parse the city as u64. The inconvenience is that we will need to add a string field (city) to `StationMetrics` to store the actual name of the city. Notice this string will be only calculated once for each city, not for the one billion rows.
+
+To be continued
