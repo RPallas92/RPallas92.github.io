@@ -166,8 +166,153 @@ As simple as this:
 
 It is executed in **90 seconds** on my mini PC. This is too far from the 5.7 seconds of the official implementation. Let's get started!
 
+**TODO Ricardo commit link**
+
 
 > I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
 
 
-To be continued.
+## Multithreading Solution (17.96 secs)
+
+The first thing that came to my mind to improve performance was to introduce multithreading, as my mini PC has a CPU with 8 cores and 16 threads. We can follow this strategy: create as many threads as the number of CPU threads (N). Then, each thread will process 1/N of the file in parallel. Finally, we will merge the results from all threads to calculate the final result.
+
+Here are the changes:
+
+The main function determines the number of available CPU cores to decide how many threads to spawn.
+
+```rust
+fn main() {
+    /*
+    The release build is executed in around 17.96 seconds on SER5 PRO MAX:
+       - CPU: AMD Ryzen 7 5800H with Radeon Graphics (16) @ 3.200GHz
+       - GPU: AMD ATI Radeon Vega Series / Radeon Vega Mobile Series
+       - Memory: 28993MiB
+    */
+    let start = Instant::now();
+
+    let n_threads: usize = std::thread::available_parallelism().unwrap().into();
+
+    ...
+```
+
+Then it divides the file into intervals based on `n_threads. Each interval represents a chunk of the file to be processed by a thread in parallel.
+
+**Note that the function that calculates the intervals ensures that no lines are split beetween chunks by adjusting the end positions to the end of the line.**
+
+```rust
+/// Splits the file into intervals based on the number of CPUs.
+/// Each interval is determined by dividing the file size by the number of CPUs
+/// and adjusting the intervals to ensure lines are not split between chunks.
+///
+/// Example:
+///
+/// Suppose the file size is 1000 bytes and `cpus` is 4.
+/// The file will be divided into 4 chunks, and the intervals might be as follows:
+///
+/// Interval { start: 0, end: 249 }
+/// Interval { start: 250, end: 499 }
+/// Interval { start: 500, end: 749 }
+/// Interval { start: 750, end: 999 }
+/// ```
+fn get_file_intervals_for_cpus(
+    cpus: usize,
+    file_size: u64,
+    reader: &mut BufReader<File>,
+) -> Vec<Interval> {
+    let chunk_size = file_size / (cpus as u64);
+    let mut intervals = Vec::new();
+    let mut start = 0;
+    let mut buf = String::new();
+
+    for _ in 0..cpus {
+        let mut end: u64 = (start + chunk_size).min(file_size);
+        _ = reader.seek(SeekFrom::Start(end));
+        let bytes_until_end_of_line = reader.read_line(&mut buf).unwrap();
+        end = end + (bytes_until_end_of_line as u64) - 1; // -1 because read_line() also reads the /n
+
+        intervals.push(Interval { start, end });
+
+        start = end + 1;
+        buf.clear();
+    }
+    intervals
+}
+```
+
+For each interval, a new thread is spawned to process the corresponding file chunk. The `process_chunk`function reads the assigned file chunk and builds its own `StationsMap` for that chunk.
+
+```rust
+
+fn process_chunk(file_path: &Path, interval: Interval) -> StationsMap {
+    let mut reader = get_file_reader(file_path).unwrap();
+    // Starts from the interval start.
+    _ = reader.seek(SeekFrom::Start(interval.start));
+    // The readers only reads the number of bytes for that interval.
+    let chunk_reader = reader.take(interval.end - interval.start);
+    build_map(chunk_reader).unwrap()
+}
+```
+
+After all threads complete, their results are merged into a single map using the `merge_maps` function.
+
+```rust
+fn merge_maps(a: StationsMap, b: &StationsMap) -> StationsMap {
+    let mut merged_map = a;
+    for (k, v) in b {
+        merged_map.entry(k.into()).or_default().merge(v);
+    }
+    merged_map
+}
+```
+
+Here is the final main function to get a better overview of all parts.
+
+```rust
+
+fn main() {
+    let start = Instant::now();
+
+    // Number of threads available.
+    let n_threads: usize = std::thread::available_parallelism().unwrap().into();
+
+    let file_path = Path::new("./data/weather_stations.csv");
+    let file_size = fs::metadata(&file_path).unwrap().size();
+    let mut reader = get_file_reader(file_path).unwrap();
+
+    // Divide the file into n_threads intervals.
+    let intervals = get_file_intervals_for_cpus(n_threads, file_size, &mut reader);
+
+    // Vector that contains all partial results of each thread.
+    let results = Arc::new(Mutex::new(Vec::new()));
+    let mut handles = Vec::new();
+
+    for interval in intervals {
+        let results = Arc::clone(&results);
+
+        // Each thread process a chunk in parallel.
+        let handle = thread::spawn(move || {
+            let station_to_metrics = process_chunk(file_path, interval);
+            results.lock().unwrap().push(station_to_metrics);
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().expect("Thread panicked");
+    }
+
+    // Combines all partial results into the final result.
+    let result = results
+        .lock()
+        .unwrap()
+        .iter()
+        .fold(StationsMap::default(), |a, b| merge_maps(a, &b));
+
+    print_metrics(&result);
+    println!("\n Execution time: {:?}", start.elapsed());
+}
+```
+
+This solution improves the execution time from 90 seconds to 17.96 seconds. Great achivement! But we need to to better to be closer to the 5.7 seconds of the official solution. Let's continue optimizing!
+
+**TODO Ricardo commit link**
