@@ -310,7 +310,7 @@ fn main() {
 }
 ```
 
-This solution improves the execution time from 90 seconds to 17.96 seconds. Great achivement! But we need to to better to be closer to the 5.7 seconds of the official solution. Let's continue optimizing!
+This solution improves the execution time from 90 seconds to 17.96 seconds. Great achivement! But we need to do better to be closer to the 5.7 seconds of the official solution. Let's continue optimizing!
 
 **TODO Ricardo commit link**
 
@@ -388,7 +388,7 @@ After this change, we have improved the execution time from 17.96 seconds to 8.1
 
 **TODO Ricardo commit link**
 
-## Custom key parsing (X seconds)
+## Custom key parsing (6.76 seconds)
 
 Let's now generate another frame graph of the current solution to see what can be our next improvement:
 
@@ -434,4 +434,90 @@ As we can see in the graphs, the differences are that:
 
 Let's then change `StationsMap` to `BTreeMap<u64, StationMetrics>` and write a function to parse the city as u64. The inconvenience is that we will need to add a string field (city) to `StationMetrics` to store the actual name of the city. Notice this string will be only calculated once for each city, not for the one billion rows.
 
-To be continued
+```rust
+fn to_key(data: &[u8]) -> u64 {
+    let mut hash = 0u64;
+    let len = data.len();
+    unsafe {
+        if len >= 8 {
+            hash = *(data.as_ptr() as *const u64);
+        } else {
+            for i in 0..len {
+                hash |= (*data.get_unchecked(i) as u64) << (i * 8);
+            }
+        }
+    }
+
+    hash ^= len as u64;
+    hash
+}
+
+```
+
+As we already said, the `to_key` function converts a slice of bytes into a `u64` integer that is used to identify cities in our `StationMaps`. This is how it works:
+
+1. It starts by creating a variable called `hash` and sets it to 0.
+1. It then gets the length of the input data (number of bytes).
+1. If the data length is 8 or more bytes:
+    - It directly reads the first 8 bytes and interprets them as a `u64` integer. This is a fast way to create a key.
+1. If the data length is less than 8 bytes:
+    - It processes each byte individually in a loop.
+    - For each byte, it shifts the byte’s value by its position (multiplied by 8) and combines it with the hash using the bitwise OR operator.
+1. Finally, it adjusts the final hash by XOR-ing with the length of the data. This is to ensure that cities that start with the same 8 bytes have a different hash (assuming they have different length).
+
+Running this solution now improves the execution time from 8.1 seconds to 6.76 seconds. We still have some work do to!
+
+**TODO Ricardo commit link**
+
+## Custom hash function (5.85 seconds)
+
+In the previous section, we explained how hash maps work. In the diagrams, we saw that retrieving a value for a given key from the hash map requires first hashing the key, then looking up that hash in the hash table, and finally retriving the data for that hash.
+
+A question that naturally arises now is: why do we need to hash our keys if we are already using a `u64` key that identifies the city? Why not using that `u64` key directly as hash so we avoid that extra step?
+
+Let's use a custom hasher that just returns the `u64` without applying any hash function.
+
+One incovenience is that `BTreeMap` does not support custom hashers, so we will have to use a `HashMap` instead. This means we will need to sort the values before printing them.
+
+```rust
+#[derive(Default)]
+struct NoOpHasher {
+    hash: u64,
+}
+
+impl Hasher for NoOpHasher {
+    fn write(&mut self, _bytes: &[u8]) {
+        panic!("NoOpHasher only supports u64 values");
+    }
+
+    fn write_u64(&mut self, i: u64) {
+        self.hash = i;
+    }
+
+    fn finish(&self) -> u64 {
+        self.hash
+    }
+}
+
+struct NoOpBuildHasher;
+
+impl BuildHasher for NoOpBuildHasher {
+    type Hasher = NoOpHasher;
+
+    fn build_hasher(&self) -> NoOpHasher {
+        NoOpHasher::default()
+    }
+}
+
+type StationsMap = HashMap<u64, StationMetrics, NoOpBuildHasher>;
+```
+
+Not much to comment about this piece of code, it just does what we already mentioned: it uses a `u64` value without applying any hash function.
+
+After applying these changes and executing the code, we see an improvement from 6.76 seconds to 5.85 seconds. This is almost the same as the official Rust solution (5.7 seconds)!
+
+**TODO Ricardo commit link**
+
+## Unsafe string parsing (x seconds)
+
+This is already optimized and similar as the offcial Rust solution, but can we do a final optimization?
