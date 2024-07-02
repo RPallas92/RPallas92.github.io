@@ -23,9 +23,20 @@ description: Fast implementation of the 1BRC in Rust with 0 crates.
 
 # Rust 1 Billion Row Challenge without Dependencies
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Base Naive Implementation (90 seconds)](#base-naive-implementation-90-seconds)
+3. [Multithreading Solution (17.96 secs)](#multithreading-solution-1796-secs)
+4. [Custom Number Parsing (8.1 seconds)](#custom-number-parsing-81-seconds)
+5. [Custom Key Parsing (6.76 seconds)](#custom-key-parsing-676-seconds)
+6. [Custom Hash Function (5.85 seconds)](#custom-hash-function-585-seconds)
+7. [Unsafe String Parsing (x seconds)](#unsafe-string-parsing-x-seconds)
+8. [Conclusion](#conclusion)
+
 ## Introduction
 
-On January 1st, 2024, [Gunnar Morling announced](https://www.morling.dev/blog/one-billion-row-challenge/) the 1 Billion Row Challenge (1BRC). The challenge consists on write a Java program for retrieving temperature measurement values from a text file and calculating the min, mean, and max temperature per weather station. There’s just one caveat: the file contains 1,000,000,000 rows.
+On January 1st, 2024, [Gunnar Morling announced](https://www.morling.dev/blog/one-billion-row-challenge/) the 1 Billion Row Challenge (1BRC). The challenge consists of writing a Java program for retrieving temperature measurement values from a text file and calculating the min, mean, and max temperature per weather station. There’s just one caveat: the file contains 1,000,000,000 rows.
 
 
 The text file has a simple structure with one measurement value per row:
@@ -45,7 +56,7 @@ The program should print out the min, mean, and max values per station, ordered 
 {Graus=5.0/18.0/27.4, Madrid=15.7/26.0/34.1, New York=12.1/29.4/35.6, ...}
 ```
 
-Out of curiosity, I read several implementations in Rust. They were really good and optimized, and I learned a lot from them. However, they did not follow one of the rules of the 1BRC: no external dependencies may be used.
+I was curious and read several implementations in Rust. They were really good and optimized, and I learned a lot from them. However, they did not follow one of the rules of the 1BRC: no external dependencies may be used.
 
 
 I tried running the [official Rust solution](https://1brc.dev/) with my 1 billion rows test file on my [SER5 MAX mini PC](https://www.bee-link.com/products/beelink-ser5-max-5800h?variant=46189745766642). It took **5.7 seconds** to execute.
@@ -165,13 +176,13 @@ As simple as this:
 
 It is executed in **90 seconds** on my mini PC. This is too far from the 5.7 seconds of the official implementation. Let's get started!
 
-**TODO Ricardo commit link**
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/2a1c2f75a59ce7e4f03b60846a1f46b36f003c48)**
 
 > I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
 
 ## Multithreading Solution (17.96 secs)
 
-The first thing that came to my mind to improve performance was to introduce multithreading, as my mini PC has a CPU with 8 cores and 16 threads. We can follow this strategy: create as many threads as the number of CPU threads (N). Then, each thread will process 1/N of the file in parallel. Finally, we will merge the results from all threads to calculate the final result.
+The first thing that came to mind to improve performance was to introduce multithreading, as my mini PC has a CPU with 8 cores and 16 threads. We can follow this strategy: create as many threads as the number of CPU threads (N). Then, each thread will process 1/N of the file in parallel. Finally, we will merge the results from all threads to calculate the final result.
 
 Here are the changes:
 
@@ -312,7 +323,7 @@ fn main() {
 
 This solution improves the execution time from 90 seconds to 17.96 seconds. Great achivement! But we need to do better to be closer to the 5.7 seconds of the official solution. Let's continue optimizing!
 
-**TODO Ricardo commit link**
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/a8072a50829070a74e44cf1144f9aee940169a98)**
 
 ## Custom number parsing (8.1 seconds)
 
@@ -335,7 +346,7 @@ The image corresponds to this part of the code:
 let temperature: f32 = temperature.parse().expect("Incorrect temperature");
 ```
 
-We know that our test file contains all temperatues in one of these two formats:
+We know that our test file contains all temperatures in one of the following two formats:
 1. `ab.c` (e.g., 12.5)
 1. `b.c`  (e.g., 5.4)
 
@@ -382,11 +393,11 @@ This is how the function works:
 1. The sum of these products gives the temperature. But notice that we need to divide it by 10 at the printing step.
 1. If the number is negative it returns `-v`.
 
-> Note that if we want to support other formats, we just need to update the function by adding a new branch to the `match` statement.
+> Note that if we want to support other formats, we need to update the function by adding a new branch to the `match` statement.
 
 After this change, we have improved the execution time from 17.96 seconds to 8.1 seconds. We are getting closer!
 
-**TODO Ricardo commit link**
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f67e2d752bde29c51427cc24c0e817a00efe277a)**
 
 ## Custom key parsing (6.76 seconds)
 
@@ -465,19 +476,19 @@ As we already said, the `to_key` function converts a slice of bytes into a `u64`
     - For each byte, it shifts the byte’s value by its position (multiplied by 8) and combines it with the hash using the bitwise OR operator.
 1. Finally, it adjusts the final hash by XOR-ing with the length of the data. This is to ensure that cities that start with the same 8 bytes have a different hash (assuming they have different length).
 
-Running this solution now improves the execution time from 8.1 seconds to 6.76 seconds. We still have some work do to!
+Running this solution now improves the execution time from 8.1 seconds to 6.76 seconds. We still have some work to do!
 
-**TODO Ricardo commit link**
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f5d8ec3239297097359e3f01ba0f96572e91771b)**
 
 ## Custom hash function (5.85 seconds)
 
-In the previous section, we explained how hash maps work. In the diagrams, we saw that retrieving a value for a given key from the hash map requires first hashing the key, then looking up that hash in the hash table, and finally retriving the data for that hash.
+In the previous section, we explained how hash maps work. In the diagrams, we saw that retrieving a value for a given key from the hash map requires first hashing the key, then looking up that hash in the hash table, and finally retrieving the data for that hash.
 
 A question that naturally arises now is: why do we need to hash our keys if we are already using a `u64` key that identifies the city? Why not using that `u64` key directly as hash so we avoid that extra step?
 
 Let's use a custom hasher that just returns the `u64` without applying any hash function.
 
-One incovenience is that `BTreeMap` does not support custom hashers, so we will have to use a `HashMap` instead. This means we will need to sort the values before printing them.
+One inconvenience is that `BTreeMap` does not support custom hashers, so we will have to use a `HashMap` instead. This means we will need to sort the values before printing them.
 
 ```rust
 #[derive(Default)]
@@ -516,8 +527,46 @@ Not much to comment about this piece of code, it just does what we already menti
 
 After applying these changes and executing the code, we see an improvement from 6.76 seconds to 5.85 seconds. This is almost the same as the official Rust solution (5.7 seconds)!
 
-**TODO Ricardo commit link**
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f424a88727b284dcdacbb4977a381e894e42b53f)**
 
-## Unsafe string parsing (x seconds)
+## Unsafe string parsing (5.16 seconds)
 
-This is already optimized and similar as the offcial Rust solution, but can we do a final optimization?
+Our current solution is already optimized and has a performance similar to the official Rust solution. But can we do a final optimization? Let's see what the flamegraph has to say:
+
+![Flamegraph of the custom hash solution](../assets/images/1brc/flamegraph5.png)
+
+If we zoom in, we see that 11% of the samples are calls to `core::str::converts::from_utf8`:
+
+![Zoomed in flamegraph of the custom hash solution](../assets/images/1brc/flamegraph6.png)
+
+How is this possible if we are parsing the city names as `u64`? This is because we are still parsing it as strings to store them in the `StationMetrics` struct to printing at the end. Even though we only parse them once per city and per thread, this represents 11% of the traces.
+
+How can we improve this? We know that we are calling `std::str::from_utf8(city).unwrap().to_string()`, which is safe and checks whether the byte slice is valid UTF-8. Since we know that our file contains valid UTF-8 strings, we can replace it with:
+
+```rust
+city: unsafe { std::str::from_utf8_unchecked(city).to_string() },
+
+```
+
+This way, we skip the UTF-8 validation. Note that it should be only used when you are certain that the byte slice is a valid UTF-8.
+
+Now the program takes 5.16 seconds. This time, it is faster than the official Rust solution!
+
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/b7c799cad367173c901b4e253ec4ccb41eac1fdc)**
+
+
+## Conclusion
+
+In this blog post, we explored various optimizations for the 1 Billion Row Challenge in Rust, aiming to improve performance without external dependencies. We started from a basic solution that took 90 seconds and implemented several enhancements:
+
+- Multithreading: Reduced execution time to 17.96 seconds.
+- Custom Number Parsing: Improved performance to 8.1 seconds.
+- Custom Key Parsing: Further optimized to 6.76 seconds.
+- Custom Hash Function: Achieved a time of 5.85 seconds.
+- Unsafe String Parsing: Reached a final time of 5.16 seconds, which is faster than the official Rust solution!
+
+While our final solution is faster than the official Rust implementation, other approaches using libraries like memmap or hashmap might be even more efficient for real-world scenarios.
+
+Keep in mind that these results are specific to my machine and test file, so performance may vary for others. I invite you to find more optimizations and share them in the comments!
+
+Thanks for reading, and happy optimizing!
