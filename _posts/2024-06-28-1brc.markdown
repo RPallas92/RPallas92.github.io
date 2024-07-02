@@ -58,6 +58,7 @@ The program should print out the min, mean, and max values per station, ordered 
 
 I was curious and read several implementations in Rust. They were really good and optimized, and I learned a lot from them. However, they did not follow one of the rules of the 1BRC: no external dependencies may be used.
 
+
 I tried running the [official Rust solution](https://1brc.dev/) with my 1 billion rows test file on my [SER5 MAX mini PC](https://www.bee-link.com/products/beelink-ser5-max-5800h?variant=46189745766642). It took **5.7 seconds** to execute.
 
 
@@ -179,7 +180,7 @@ It is executed in **90 seconds** on my mini PC. This is too far from the 5.7 sec
 
 > I also wrote this script to create a sample test file to try against. In the repository, you can execute it by running `cargo run --bin create_data_file`.
 
-## Multithreading Solution (17.96 secs)
+## Multithreading Solution (17.96 secs - 80% improvement)
 
 The first thing that came to mind to improve performance was to introduce multithreading, as my mini PC has a CPU with 8 cores and 16 threads. We can follow this strategy: create as many threads as the number of CPU threads (N). Then, each thread will process 1/N of the file in parallel. Finally, we will merge the results from all threads to calculate the final result.
 
@@ -324,7 +325,7 @@ This solution improves the execution time from 90 seconds to 17.96 seconds. Grea
 
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/a8072a50829070a74e44cf1144f9aee940169a98)**
 
-## Custom number parsing (8.1 seconds)
+## Custom number parsing (8.1 seconds - 54.9% improvement)
 
 Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing. Since I am using Fedora, it uses [perf](https://perf.wiki.kernel.org/index.php/Main_Page) under the hood:
 
@@ -398,7 +399,7 @@ After this change, we have improved the execution time from 17.96 seconds to 8.1
 
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f67e2d752bde29c51427cc24c0e817a00efe277a)**
 
-## Custom key parsing (6.76 seconds)
+## Custom key parsing (6.76 seconds - 16.5% improvement)
 
 Let's now generate another frame graph of the current solution to see what can be our next improvement:
 
@@ -479,7 +480,7 @@ Running this solution now improves the execution time from 8.1 seconds to 6.76 s
 
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f5d8ec3239297097359e3f01ba0f96572e91771b)**
 
-## Custom hash function (5.85 seconds)
+## Custom hash function (5.85 seconds - 13.5% improvement)
 
 In the previous section, we explained how hash maps work. In the diagrams, we saw that retrieving a value for a given key from the hash map requires first hashing the key, then looking up that hash in the hash table, and finally retrieving the data for that hash.
 
@@ -528,7 +529,7 @@ After applying these changes and executing the code, we see an improvement from 
 
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/f424a88727b284dcdacbb4977a381e894e42b53f)**
 
-## Unsafe string parsing (5.16 seconds)
+## Unsafe string parsing (5.16 seconds - 11.8% improvement)
 
 Our current solution is already optimized and has a performance similar to the official Rust solution. But can we do a final optimization? Let's see what the flamegraph has to say:
 
