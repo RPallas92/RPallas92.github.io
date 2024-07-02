@@ -36,7 +36,7 @@ description: Fast implementation of the 1BRC in Rust with 0 crates.
 
 ## Introduction
 
-On January 1st, 2024, [Gunnar Morling announced](https://www.morling.dev/blog/one-billion-row-challenge/) the 1 Billion Row Challenge (1BRC). The challenge consists of writing a Java program for retrieving temperature measurement values from a text file and calculating the min, mean, and max temperature per weather station. There’s just one caveat: the file contains 1,000,000,000 rows.
+On January 1st, 2024, [Gunnar Morling announced](https://www.morling.dev/blog/one-billion-row-challenge/) the 1 Billion Row Challenge (1BRC). The challenge is to write a Java program to read temperature data from a text file and find the minimum, average, and maximum temperatures for each weather station. The file has 1,000,000,000 rows.
 
 
 The text file has a simple structure with one measurement value per row:
@@ -57,7 +57,6 @@ The program should print out the min, mean, and max values per station, ordered 
 ```
 
 I was curious and read several implementations in Rust. They were really good and optimized, and I learned a lot from them. However, they did not follow one of the rules of the 1BRC: no external dependencies may be used.
-
 
 I tried running the [official Rust solution](https://1brc.dev/) with my 1 billion rows test file on my [SER5 MAX mini PC](https://www.bee-link.com/products/beelink-ser5-max-5800h?variant=46189745766642). It took **5.7 seconds** to execute.
 
