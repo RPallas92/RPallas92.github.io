@@ -2,7 +2,7 @@
 title: "Rust 1 Billion Row Challenge without Dependencies"
 layout: post
 date: 2024-06-28 08:00
-image: /assets/images/markdown.jpg
+image: /assets/images/1brc/flamegraph1.jpg
 headerImage: false
 tag:
 - 1brc
@@ -335,7 +335,7 @@ Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visu
 
 We get the following flame graph:
 
-[![Flamegraph of the first multitheading solution](../assets/images/1brc/flamegraph1.png)](./assets/images/1brc/flamegraph1.png)
+[![Flamegraph of the first multitheading solution](../assets/images/1brc/flamegraph1.png)](../assets/images/1brc/flamegraph1.png)
 
 If we zoom in on the right side of the image, we will see that almost 10% of the samples are for parsing the temperature into a `f32` number:
 
