@@ -32,7 +32,7 @@ description: Fast implementation of the 1BRC in Rust with 0 crates.
 5. [Custom Key Parsing (6.76 seconds - 16.5% improvement)](#custom-key-parsing-676-seconds---165-improvement)
 6. [Custom Hash Function (5.85 seconds - 13.5% improvement)](#custom-hash-function-585-seconds---135-improvement)
 7. [Unsafe String Parsing (5.16 seconds - 11.8% improvement)](#unsafe-string-parsing-516-seconds---118-improvement)
-8. [Edit 1: Custom line splitting  (4.82 seconds - 6.59% improvement)](#edit-1-custom-line-splitting-482-seconds---659-improvement)
+8. [Edit 1: Custom Line Splitting (4.82 seconds - 6.59% improvement)](#edit-1-custom-line-splitting-482-seconds---659-improvement)
 9. [Conclusion](#conclusion)
 
 
@@ -557,7 +557,7 @@ Now the program takes 5.16 seconds. This time, it is faster than the official Ru
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/b7c799cad367173c901b4e253ec4ccb41eac1fdc)**
 
 
-### Edit 1: Custom line splitting  (4.82 seconds - 6.59% improvement)
+### Edit 1: Custom line splitting (4.82 seconds - 6.59% improvement)
 
 After reading this post, my friend [Kyriacos](https://kkyr.io/) suggested an optimization to me. He said: 
 
