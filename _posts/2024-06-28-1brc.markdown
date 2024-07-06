@@ -32,7 +32,8 @@ description: Fast implementation of the 1BRC in Rust with 0 crates.
 5. [Custom Key Parsing (6.76 seconds - 16.5% improvement)](#custom-key-parsing-676-seconds---165-improvement)
 6. [Custom Hash Function (5.85 seconds - 13.5% improvement)](#custom-hash-function-585-seconds---135-improvement)
 7. [Unsafe String Parsing (5.16 seconds - 11.8% improvement)](#unsafe-string-parsing-516-seconds---118-improvement)
-8. [Conclusion](#conclusion)
+8. [Edit 1: Custom line splitting  (4.82 seconds - 6.59% improvement)](#edit-1-custom-line-splitting-482-seconds---659-improvement)
+9. [Conclusion](#conclusion)
 
 
 ## Introduction
@@ -204,7 +205,7 @@ fn main() {
     ...
 ```
 
-Then it divides the file into intervals based on `n_threads. Each interval represents a chunk of the file to be processed by a thread in parallel.
+Then it divides the file into intervals based on `n_threads`. Each interval represents a chunk of the file to be processed by a thread in parallel.
 
 **Note that the function that calculates the intervals ensures that no lines are split beetween chunks by adjusting the end positions to the end of the line.**
 
@@ -248,7 +249,7 @@ fn get_file_intervals_for_cpus(
 }
 ```
 
-For each interval, a new thread is spawned to process the corresponding file chunk. The `process_chunk`function reads the assigned file chunk and builds its own `StationsMap` for that chunk.
+For each interval, a new thread is spawned to process the corresponding file chunk. The `process_chunk` function reads the assigned file chunk and builds its own `StationsMap` for that chunk.
 
 ```rust
 
@@ -555,6 +556,38 @@ Now the program takes 5.16 seconds. This time, it is faster than the official Ru
 
 **[Link to commit](https://github.com/RPallas92/one-billion-row/commit/b7c799cad367173c901b4e253ec4ccb41eac1fdc)**
 
+
+### Edit 1: Custom line splitting  (4.82 seconds - 6.59% improvement)
+
+After reading this post, my friend [Kyriacos](https://kkyr.io/) suggested an optimization to me. He said: 
+
+> Why are you using `line.split_once(|&c| c == b';')` to split each line if you know that the separator is almost always at the same position?
+
+He was right. I was using the `split_once` functions, which performs a linear search over the line. This means it scans through the byte slice from the beginning to the end until it finds the separator character. This can clearly be optimized given the file format.
+
+We know that the separator can be at one of these three positions:
+1. `line_length - 4`: for lines like "city_name;2.3"
+1. `line_length - 5`: for lines like "city_name;12.3" or "city_name;-2.3"
+1. `line_length - 6`: for lines like "city_name;-12.3"
+
+Instead of scanning the whole line (linear time complexity), we can check any of these three positions (constant time complexity). Let's update the code:
+
+```rust
+let line_length = line.len();
+let separator_pos = if line[line_length - 4] == b';' {
+    line_length - 4
+} else if line[line_length - 5] == b';' {
+    line_length - 5
+} else {
+    line_length - 6
+};
+
+let (city, temperature) = line.split_at(separator_pos);
+```
+
+After executing the program again, the time decreased from 5.16 seconds to 4.82 seconds. Thanks, Kyriacos!
+
+**[Link to commit](https://github.com/RPallas92/one-billion-row/commit/d361957a8f75d9f4d0db6dc56abe66b45c34fcfb)**
 
 ## Conclusion
 
