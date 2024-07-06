@@ -563,7 +563,7 @@ After reading this post, my friend [Kyriacos](https://kkyr.io/) suggested an opt
 
 > Why are you using `line.split_once(|&c| c == b';')` to split each line if you know that the separator is almost always at the same position?
 
-He was right. I was using the `split_once` functions, which performs a linear search over the line. This means it scans through the byte slice from the beginning to the end until it finds the separator character. This can clearly be optimized given the file format.
+He was right. I was using the `split_once` function, which performs a linear search over the line. This means it scans through the byte slice from the beginning to the end until it finds the separator character. This can clearly be optimized given the file format.
 
 We know that the separator can be at one of these three positions:
 1. `line_length - 4`: for lines like "city_name;2.3"
