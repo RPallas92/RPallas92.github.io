@@ -244,7 +244,7 @@ One improvement that Pingora could add to its non-stealing runtime is the use of
 
 There are also other existing alternative runtimes that lend themselves to thread-per-core architectures: [glommio](https://crates.io/crates/glommio) from DataDog and [monoio](https://crates.io/crates/monoio) from ByteDance.
 
-I recommend reading [this post](https://emschwartz.me/async-rust-can-be-a-pleasure-to-work-with-without-send-sync-static/) aboiut async Rust without `Send + Sync + 'static`.
+I recommend reading [this post](https://emschwartz.me/async-rust-can-be-a-pleasure-to-work-with-without-send-sync-static/) about async Rust without `Send + Sync + 'static`.
 
 ### Which Pingora runtime should I use?
 
