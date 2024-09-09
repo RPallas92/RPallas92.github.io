@@ -38,7 +38,7 @@ I am starting a **series of posts where I will dive deep into the internals of P
 
 ## Pingora's async runtime
 
-Pingora's async runtime is based in [Tokio](https://tokio.rs/). Tokio is the *de facto* runtime for write asynchronous, non-blocking code in Rust:
+Pingora's async runtime is based on [Tokio](https://tokio.rs/). Tokio is the *de facto* runtime for write asynchronous, non-blocking code in Rust:
 
 > Tokio is scalable, built on top of the async/await language feature, which itself is scalable. When dealing with networking, there's a limit to how fast you can handle a connection due to latency, so the only way to scale is to handle many connections at once. With the async/await language feature, increasing the number of concurrent operations becomes incredibly cheap, allowing you to scale to a large number of concurrent tasks.
 
@@ -88,7 +88,7 @@ At its most basic level, a runtime has a collection of tasks that need to be sch
 
 The multi-thread runtime maintains one global queue, and a local queue for each worker thread. The runtime will prefer to choose the next task to schedule from the local queue, and will only pick a task from the global queue if the local queue is empty.
 
-If both the local queue and global queue is empty, then the worker thread **will attempt to steal tasks from the local queue of another worker thread**. Stealing is done by moving half of the tasks in one local queue to another local queue.
+If both the local queue and global queue are empty, the worker thread **will attempt to steal tasks from the local queue of another worker thread**. Stealing is done by moving half of the tasks in one local queue to another local queue.
 
 ```
  Multi-Thread Scheduler with 2 threads                        
@@ -234,13 +234,13 @@ The no-steal runtime model in Pingora is an alternative where each thread runs i
 
 ```
 
-As we can see in the diagram above, thread has its own Tokio runtime and task queues, and tasks scheduled on one thread remain on that thread throughout their lifetime. This means there is no work stealing, each thread is responsible for its own work, and no tasks are stolen or migrated across threads. Pingora ensures that any new task spawned in this runtime is randomly assigned to one of the threads.
+As we can see in the diagram above, each thread has its own Tokio runtime and task queues, and tasks scheduled on one thread remain on that thread throughout their lifetime. This means there is no work stealing, each thread is responsible for its own work, and no tasks are stolen or migrated across threads. Pingora ensures that any new task spawned in this runtime is randomly assigned to one of the threads.
 
 This runtime flavour allows a thread-per-core thread model: it spawns multiple OS threads, with one thread typically mapped to each available CPU core.
 
 #### Alternative thread-per-core runtimes
 
-One improvement that Pingora could add to its non-stealing runtime is the use of `LocalSet` ([see docs](https://docs.rs/tokio/1.40.0/tokio/runtime/struct.Builder.html#method.new_current_thread)). Since it is composed on Tokio single-trhead runtimes the futures shouldn't be required to be `Send` and `Sync` as they are always run in the same thread. `LocalSet`  provides a way to spawn and manage non-Send tasks within the context of a single-threaded runtime.
+One improvement that Pingora could add to its non-stealing runtime is the use of `LocalSet` ([see docs](https://docs.rs/tokio/1.40.0/tokio/runtime/struct.Builder.html#method.new_current_thread)). Since it is composed of Tokio single-thread runtimes the futures shouldn't be required to be `Send` and `Sync` as they are always run in the same thread. `LocalSet`  provides a way to spawn and manage non-Send tasks within the context of a single-threaded runtime.
 
 There are also other existing alternative runtimes that lend themselves to thread-per-core architectures: [glommio](https://crates.io/crates/glommio) from DataDog and [monoio](https://crates.io/crates/monoio) from ByteDance.
 
@@ -270,7 +270,7 @@ Let's discuss the pros and cons of each alternative:
 **Cons:**
 - If some tasks require more time to execute than others, this could lead to some CPU cores being busy while others remain idle.
 
-In my opinion, in the particular case of an HTTP proxy like Pingora, if the incoming traffic is predictable and each request requires a similar acmount of time to be processed, a thread-per-core model might provide consistent performance with reduced thread contention. I opened a discussion [here](https://github.com/cloudflare/pingora/discussions/376). 
+In my opinion, in the particular case of an HTTP proxy like Pingora, if the incoming traffic is predictable and each request requires a similar amount of time to be processed, a thread-per-core model might provide consistent performance with reduced thread contention. I opened a discussion [here](https://github.com/cloudflare/pingora/discussions/376). 
 
 
 ## Conclusion
