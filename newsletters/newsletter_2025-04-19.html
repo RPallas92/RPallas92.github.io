@@ -1,0 +1,965 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 19/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">19/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ul>
+                    <li><a href='#video-qxkcgIw_8AU'>POLICÍAS VS CULTURISTAS | QUIEN ES MÁS FUERTE?</a></li>
+<li><a href='#video-5wiypBcbkEE'>"ESTARÉ EN PITTSBURGH Y ANUNCIARÉ ALGO QUE GUSTARÁ" Ramón Dino ELEVA  el HYPE ¿COMPETIRÁ?</a></li>
+<li><a href='#video-BQY1RQHLVVE'>Mi Presentación En Tarima… | 90 Días Para Mi Competición Profesional</a></li>
+<li><a href='#video-CPN4JoZJwS0'>JOAN PRADELLS ODIA la FAMA</a></li>
+<li><a href='#video-uFAUefOCCpA'>Peso muerto policía vs culturistas</a></li>
+<li><a href='#video-x9ttHD88Rek'>Press banca culturista vs policía</a></li>
+<li><a href='#video-YiCdlCihTwA'>¡ES OFICIAL! ¡YA SE CONOCEN LOS RIVALES DE PRADELLS EN TAMPA! ¿Podrá METERSE en la FINAL?</a></li>
+                </ul>
+            </div>
+            
+            
+        <div class="video-section" id="video-qxkcgIw_8AU">
+            <h2>POLICÍAS VS CULTURISTAS | QUIEN ES MÁS FUERTE?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 19/04/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=qxkcgIw_8AU" target="_blank">
+                    <img src="https://i.ytimg.com/vi/qxkcgIw_8AU/hqdefault.jpg" alt="POLICÍAS VS CULTURISTAS | QUIEN ES MÁS FUERTE?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Este es un transcrito de un evento deportivo de caridad con varios desafíos físicos, aparentemente entre policías y personas aficionadas al fitness o strongman. La transcripción es bastante desordenada, llena de interrupciones y comentarios, pero podemos extraer los puntos principales:</p>
+
+<p><strong>Resumen del Evento:</strong></p>
+
+<p>El evento consistía en una serie de desafíos físicos, probablemente con el objetivo de recaudar fondos para la P.O.A.T. (probablemente una organización benéfica).  Los desafíos incluyen:</p>
+
+<ul>
+<li><strong>Press de Banca:</strong> (Aunque no se describe en detalle, alude a una competición de press de banca)</li>
+<li><strong>Arrastre de Peso:</strong> El equipo de policías arrastró un objeto pesado, probablemente un peso muy grande o un objeto pesado, a una distancia determinada. El equipo de policías ganó en un tiempo de 53 segundos y 28 milisegundos, superando al equipo contrario que tardó 60 segundos.  Hay mucho énfasis en el uso del peso corporal y la inercia para este desafío.</li>
+<li><strong>Competencia de Fuerza Final:</strong>  Al final, hay una carrera y un final que no se describe en detalle.</li>
+</ul>
+
+<p><strong>Puntos Destacados:</strong></p>
+
+<ul>
+<li><strong>El peso de Jared:</strong> Hay una referencia repetida a un individuo llamado Jared y su enorme peso (10,000 kilos).  Esto parece ser más una broma o exageración, ya que un peso de esa magnitud es altamente improbable.</li>
+<li><strong>Eric Janicki:</strong> Se destaca la fuerza y tamaño de Eric Janicki, descrito como un hombre tan grande que incluso la policía le tiene miedo. Su participación fue crucial para el equipo en el arrastre de peso.</li>
+<li><strong>Comentario Constante:</strong>  La transcripción está llena de comentarios, bromas y reacciones entre los participantes y comentaristas.</li>
+<li><strong>Carácter Benéfico:</strong> El evento tenía una clara motivación benéfica, con un llamado a donar a la P.O.A.T.</li>
+<li><strong>Tensión y Rivalidad:</strong> Se aprecia un ambiente de competencia sana entre los equipos, lleno de ánimo y exclamaciones de apoyo.</li>
+<li><strong>Enfoque en la Técnica:</strong> Hay referencias a la técnica correcta para los desafíos, especialmente en el arrastre de peso, donde se enfatiza el uso del peso corporal y la inercia.</li>
+</ul>
+
+<p><strong>En resumen, la transcripción captura un evento deportivo emocionante, lleno de fuerza, humor y un buen propósito benéfico.</strong></p>
+
+<p>Espero que esto ayude a entender el contenido de la transcripción.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=0" target="_blank" class="timestamp">[00:00]</a> ¡Policía contra influecer! ¿Quién es más fuerte? ¡Ojo, ojo, ojo! Estos son conocidos, ¿eh? ¡De Jesse James! ¡Hostia, mira, Gregg Duffet! ¡Tía, qué es eso! ¡El Gregg Duffet es un genomo, eh! ¡Cojones, tío! ¡Ellos, los oficiales más fuertes de Miami-Dade!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=19" target="_blank" class="timestamp">[00:19]</a> Y vamos a competir en cinco competiciones para saber quién es más fuerte. Primer evento. Levantamiento. 315 libras. Peso muerto. Quien falla la repetición pierde el equipo. El que pierda primero hace que pierda el equipo. ¡Muy bien! Pero qué poco peso han puesto, ¿no? ¡Vamos! ¡Vamos! ¡Bum! Iguala... 143. Igualalo ahora. ¡Calma! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=44" target="_blank" class="timestamp">[00:44]</a> Oh, casi. ¿Y así? Me parece a mí… ¿Quién crees que va a ganar esta prueba? Me parece a mí que al culturista le va a fallar el agarre, tío. Al culturista le va a fallar el agarre. Primera de cinco competiciones… Yo digo que gana el policía. Comenzó. ¡Vamos, arriba! Buah, el policía se está giñando ya, tío. ¡Arriba! ¡Arriba! ¡No te rindas! Mierda para mí. Ahora me he equivocado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=72" target="_blank" class="timestamp">[01:12]</a> ¡El primero que falle pierde todo! ¡Vamos, Ian! ¡Vamos! ¡Te teme! ¡Vamos, Ian! ¡Arriba! ¡Arriba! ¡Vamos! ¡Arriba! ¡Arriba! ¡Arriba! ¡Adelante! ¡Excelente! ¡No sé cómo él puede continuar! ¡Vamos! ¡Vamos! ¡Vamos! ¡Rápido! ¡Rápido! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Vamos! ¡Vamos! ¡Arriba! ¡No, Dios! ¡A la mierda!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=103" target="_blank" class="timestamp">[01:43]</a> Pues nada, me he equivocado. Dios mío de mi vida la panza que tiene el doctor Mike, tú.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=126" target="_blank" class="timestamp">[02:06]</a> Te baja como una mierda Jesse James en esto, vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=146" target="_blank" class="timestamp">[02:26]</a> Pues en seis minutos o menos, gana la carrera. ¿Tendré ventaja para que sea justo? Sí, yo soy el que persiguen. ¡Empiecen los juegos! Mi corazón está latiendo, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=159" target="_blank" class="timestamp">[02:39]</a> ¡Ok! ¿Listo? ¡Listo, listo! ¡Vamos, Jesse! ¡Vamos, amigo! ¡Vamos, Jesse! ¡Vamos! ¡Comenzamos! Empezando con una milla y media. ¡Forest Gunn para la carrera! ¿Sí? ¿Qué métodos debería darme la ventaja? Pero con 12 obstáculos desafiantes, necesito mucha ayuda para vencer al oficial Randy. ¡Ay, Dios mío! ¡El chaleco lastrado es horrible! ¡Vamos, Jesse! ¡Ya lo tienes! ¡Ah!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=188" target="_blank" class="timestamp">[03:08]</a> ¡Lo tienes! Una vuelta menos. Queda una. Pero debo apurarme. Randy se está acercando. ¡Vamos, Jesse! Y rápido. ¡Bien, Jesse! ¡Vamos! ¡Terminaste! ¡Vamos, vamos! Sigue la carrera de obstáculos. ¿Ha dicho que Randy se está acercando? ¿Dónde está Randy? Primero el salto de pared, caminata de oso y saltar las valles. ¡Vamos! ¡No los derribes! Si los derribas comienzas de nuevo. No sabía que Randy estaba atrás de mí. Tuve que apresurarme.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=219" target="_blank" class="timestamp">[03:39]</a> ¡A que le han dado ventaja! ¡Le han dado ventaja! Escúchame, antes de seguir con el vídeo, estoy sorteando una tarjeta de regalo de 150 euros en Prozis. El producto es a elegir, 150 euros para gastar en Prozis. ¿Cómo? Usando mi código de descuento Antonio G en Prozis. Haciendo una comprita automáticamente participas. Va a durar hasta que acabe el mes de abril. Y ya. Así que haz tu compra que puedes ganarte 150 euros en producto de Prozis. ¿Y antes de darme cuenta? Mi liderazgo se perdió. ¡Randy, ahora!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=249" target="_blank" class="timestamp">[04:09]</a> Estábamos cabeza a cabeza. En la carrera del maniquí debía darlo todo. ¡Vamos, tómalo! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=273" target="_blank" class="timestamp">[04:33]</a> ¡Vamos! ¡No te rindas! ¡Ven! ¡Vamos! ¡Tómalo, Randy! ¡Vamos! ¿Quién está ganando esto ahora? En este punto Randy estaba por delante de mí. Y yo estaba agotado. Pero eso no iba a impedirme darlo todo. ¡Ahora debes empujar!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=291" target="_blank" class="timestamp">[04:51]</a> ¡Vamos! ¡Hasta el final! ¡Hasta el final! ¡Vamos! ¡Sigue! ¡Sigue! ¡Vamos! ¡Vamos! ¡Meguita! ¡Vamos! ¡Tú puedes! ¡Tú puedes! ¡Rápido! ¡Buen trabajo! ¡Vamos! ¡Tú puedes! ¡Rápido! ¡Eso! ¡Rápido! ¡Ocho! ¡Nueve! ¡A los conos! ¡A los conos! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=312" target="_blank" class="timestamp">[05:12]</a> ¡Tiempo! ¡7.30! ¡7.30! Hermanos, es que no tiene nada que ver estar fuerte con estar en forma, ¿eh? Nada que ver, ¿eh? Agradezco tener compañeros, como Doctor Mike, que después de darme una charla... Lo hiciste bien, Jesse. Gracias, eso es todo el orgullo. El equipo y yo estábamos listos para el siguiente evento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=335" target="_blank" class="timestamp">[05:35]</a> Próximo evento, Jiu-Jitsu. Venga, claro, y ahora va el Dr. Mike, ¿no? Venga, es de la mierda. ...dividido en peso ligero, en peso medio y en peso pesado. Enfrentándose a cada clase, seré yo como el peso ligero, Greg Doucet como peso medio y peso pesado tenemos un arma secreta. Traje a un invitado especial que me alegra tener aquí. No lo he visto en años. ¡Abuelo West! ¡Todos aplaudan! Cinturón negro por 40 años. Será el árbitro. ¡Ay!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=364" target="_blank" class="timestamp">[06:04]</a> No habla mucho. Hace 30 años que no habla. Tengo idea de cómo hacer jiu-jitsu. ¡Luchen! ¡Ojo! ¡Ojo! ¡Ay, Dios mío! Sí, esto nos va a llevar mucho tiempo. Oye, si lo haces bien, usa tu cuerpo contra el suyo. ¡Abuelo! ¡Ayuda! ¡Abuelo! ¡Ah! No toques a mi nieto. ¿Ven aquí? Es un punto para nosotros, abuelo. ¿Cierto? ¡Ay! ¡El siguiente! ¡Gre...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=395" target="_blank" class="timestamp">[06:35]</a> ¿Pero qué hacen?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=409" target="_blank" class="timestamp">[06:49]</a> El hijo puta del Greg critica todo el que se chufa y él va hasta arriba, ¿sabes? ¿No hace más gracia? Él critica todo el que se chufa y el cabrón va hasta las cejas. Y natural de Wisconsin. ¡Venga, hombre! ¿Ves? Creo que llevo como una hora aquí. ¡Tres minutos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=438" target="_blank" class="timestamp">[07:18]</a> Con pocos minutos en el reloj, Greg tuvo que actuar si quería ganar. Sí, en TRT, mis cojones, en TRT. ¿Cómo está Greg ahora? TRT de 500 miligramos. Digo, para una persona que no tiene atletismo, lo está haciendo bien. ¡Le dio una bofetada!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=462" target="_blank" class="timestamp">[07:42]</a> ¡No, no, no! ¡Tiempo! ¿Estás bien? Sí. Está fuerte el Greg. ¿Estás bien? Sí. El ganador de la segunda ronda. Está fuerte, tú.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=481" target="_blank" class="timestamp">[08:01]</a> Muy bien. Casi 10 millones. Si quieres más contenido, suscríbete. Damas y caballeros, para la ronda final. La ronda más importante de Jiu-Jitsu. El segundo más guapo Dr. Mike. Irratel. ¡Sí! Así luce un cinturón negro. ¿Hablas de diferente manera cuando usas tu traje? Sí. Se llama hablar pura... ¡Sí! ¡Luchen!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=509" target="_blank" class="timestamp">[08:29]</a> ¡Vamos! Quiero ver algo bueno. Pocos lo saben, pero el Dr. Mike es un cinturón real negro. Al menos eso es lo que me dijo que era. ¡Ay, Dios mío! ¿Qué está pasando? ¡Mike! ¡Mike! ¿Dijiste que era el cinturón negro? ¡No respiro! ¡Haz algo! ¡Dios mío! ¡Tiene sus genitales en mi cara! Yo pagué todas las multas de tráfico que tenía a tiempo. ¡A tiempo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=532" target="_blank" class="timestamp">[08:52]</a> Esto no debía pasar. Te dije que viniera porque es un cinturón negro real. Tengo tu pierna. ¿Eso es bueno? ¿Qué sucede? Tiene que estar de broma, ¿no? ¿Lo intenta? ¿Alguien lo sabe? ¿Es bueno? ¿Estoy ganando? No lo sé. Estoy atrapado. Está vacilándolo 100%. Tres minutos. Tres minutos en el cronómetro. Vamos, Mike. Vamos, rápido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=552" target="_blank" class="timestamp">[09:12]</a> ¡No! ¡Si perdemos, perdemos el desafío! ¿Qué pasa ahora mismo? ¿Alguien te ayuda? ¡Tú eres cinturón negro! ¡Sí! ¡Vamos! ¡No tiene una cámara corporal! ¡Vamos! ¡Sí! ¡Muy bien! ¿Te golpeó? ¿Te golpeó? ¿Ha perdido? Mike, ¿estás bien? ¿Por qué me toca mi muslo así? ¡No, Mike! ¡No, no! ¡No, Mike! ¿Cómo sientes perder? Fue muy fuerte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=590" target="_blank" class="timestamp">[09:50]</a> Ay, abuelo, te pasaste. Y los ganadores son... ¡Policías!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=597" target="_blank" class="timestamp">[09:57]</a> Creo que se ha dejado, pero bueno. ¿Quién haga más...? ¡Vamos! Presente, press de banca con 102 kilos. Vale, banca con 100 kilos me parece justa. Lo que pasa es que la prueba de policía de banca creo que era con 40 kilos, puede ser. En España, en Estados Unidos no sé cómo será. Pero en España, ¿no? Una de las pruebas que hay para entrar a ser policía es con 40 kilos en 30 segundos, ¿no? Las máximas repeticiones posibles, ¿no? En el nacional no hay banca. Yo creo que sí, ¿no? ¿Cuántas repeticiones haces con 140 pesos muertos, Antonio?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=626" target="_blank" class="timestamp">[10:26]</a> Nunca lo he probado, ¿eh? ¿Si acaso fallaría sin tiempo? Sin tiempo. O sea, yo bastante creo. ¿En España no hay banca? Ah, vale, vale. Yo pensaba que sí. Hostia, pues creo que en los Mosul sí que hay banca, ¿eh? ¿Quién haga más repeticiones? Gana. Si vuelves a guardar la barra o fallas, pierdes. Tú irás primero y te enfrentarás con Jared, quien es un powerlifter. ¿Qué tal tú? No eres el anfitrión. ¿Por qué no vas al banco?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=654" target="_blank" class="timestamp">[10:54]</a> ¡Vamos! ¡Vamos! ¡Alto! ¡Alto! ¡Vamos! ¿Estás asustado? ¿Logo yo? Iré yo. Sí. Solo pasan dos. ¿Que Jared es powerlifter? ¿En serio? ¿Pero no era culturista? ¿En serio? Yo, más mi arma secreta, Jared. Y uno de ustedes dos, ratas. Oye, iré yo. Completos, tocando el pecho, sin trampas. Sé cómo lo haces cuando las cámaras están apagadas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=684" target="_blank" class="timestamp">[11:24]</a> Dos. Dos. Tres. Cuatro. Completo. Cinco. Seis. Siete. Cero. Cero. Doce. Cero. Dieciocho. Diecinueve. Completo. De nuevo. Vamos. Vamos. Vamos. Déjalo morir. Déjalo morir. Muy bien. Repes con cien kilos nada mal. Muy bien. Muy bien. Veintiuna repes con cien kilos nada mal. Excelente. Bien hecho. Nada mal amigos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=712" target="_blank" class="timestamp">[11:52]</a> 100 kilos y 21 reps. Es una puta locura, ¿verdad? Un tío que no esté metido dentro de la fuerza. A ver el Jesse James.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=731" target="_blank" class="timestamp">[12:11]</a> Porque es una ronda en parejas, el oficial Spencer necesitaba más para sumar al total de repeticiones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=749" target="_blank" class="timestamp">[12:29]</a> Siete. Diez. Genial, amigo. Vamos. Este no es tan bueno ya. ¡Vamos! ¡Sube, sube! ¡Once! ¡Oh! ¡Oh! ¡Oh! ¡Doce! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! Este es el último desempate. Uno. Con Jared de último, solo debía ser dieciocho. Tres peticiones. Que no debería ser tan difícil para él. Trece. Catorce.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=778" target="_blank" class="timestamp">[12:58]</a> Oh, se está ahogando. Esperen, 18, 19, 20... 22. Bueno, eso fue anticlimático. ¿Qué hace? Solo está presumiendo. 37 repeticiones. Ellos tienen 33 repeticiones por lo tanto. Hostia. Ganamos esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=797" target="_blank" class="timestamp">[13:17]</a> Está fuerte el Jared. Eso no pesa 10.000 kilos en la vida. En la vida. Pesa 10.000 kilos. Imposible, vamos. Es un blindado, dices.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=828" target="_blank" class="timestamp">[13:48]</a> Un camión de 10.000 kilos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=830" target="_blank" class="timestamp">[13:50]</a> Bueno, claro, si es un blindado me callo la puta boca. Si es un blindado me callo la puta boca, la verdad. Dos. Gana el más rápido. ¿Algunas últimas palabras? Vamos. Muy bien. Eso suena bien. En tres, dos, uno, cero. Apenas se mueve. Apenas se mueve. 10.000 kilos contra 84. Bueno, aquí la técnica que tienes que usar es intentar usar tu peso corporal, como se hace en el Strongman, tirarte bien al suelo. El problema es que las cuerdas las está agarrando él con los brazos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=860" target="_blank" class="timestamp">[14:20]</a> No es lo mismo que llevar un petral, que las cuerdas están fijas y tú te puedes hacer lo que tú quieras. Aquí es más inestable. Pero la clave en un arrastre es ponerte lo más paralelo al suelo que puedas para que tu peso corporal también haga fuerza para tirar para adelante. ¡Vamos! ¡Adelante! ¡Vamos! ¡Vamos! ¡Tú puedes! ¡Fuerte! ¡Vamos! ¡Fuerte! ¡Tú puedes! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=887" target="_blank" class="timestamp">[14:47]</a> ¡Llegaste! ¡Llegaste a tiempo! ¡Sí! ¡Sí! El tiempo fue 53 segundos y 28 milisegundos. ¡Lo tenemos! Aquí también cuenta mucho el peso corporal. Porque nuestro equipo... Tenemos a un tipo llamado Eric Janicki. Un hombre tan grande... Hasta la policía le tiene miedo. Este es un tío gigante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=911" target="_blank" class="timestamp">[15:11]</a> ¡Tres! ¡Dos! ¡Uno! ¡Vamos! ¡Vamos! ¡Eso! ¡Vamos! ¡Tira fuerte! ¡Erik, sigue! ¡Debes hacerlo! ¡Cierto diez kilos! ¡Tú lo sabes! ¡Eso! ¡Vamos! ¡Tipo fuera! ¿Qué ocurre? ¿Qué sucede? ¡Fuera! ¿Cuánto te pagaron? Mucho dinero. ¿Mucho dinero? Lo doblo. Oye, ¿lo ves? Si no jalas más rápido...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=937" target="_blank" class="timestamp">[15:37]</a> familia te odiera después</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=949" target="_blank" class="timestamp">[15:49]</a> ¡Uno! ¡Vamos! ¡Jala! ¡Jala! ¡Jala! ¡110! ¡Jala! ¡Lo tienes, Eric! ¡Lo tienes! No lo hace nada mal, ¿eh? Todo el tiempo. ¡Recio! ¡Vamos! ¡Sigue! ¡Sigue! ¡Sigue! ¡No te gusta! Ya pillé la inercia y ya está. ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Ya ha terminado! ¡Vamos! ¡Ya ha terminado! ¡Vamos! ¡Ya ha terminado! ¡Vamos! ¡Ya ha terminado! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=980" target="_blank" class="timestamp">[16:20]</a> Antes de anunciar al ganador, quiero dar un aplauso a todos por hacer que esto pasara. Esto es por caridad para la P.O.A.T. Link en la descripción. Véanlo, dona, yo voy a donar, pero veremos quién ganó el evento. Tu tiempo fue de 53 segundos. Nuestro tiempo. Fue de 60 segundos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=qxkcgIw_8AU&t=1001" target="_blank" class="timestamp">[16:41]</a> ¡Es broma! ¡40! ¡Vamos! ¡Vamos! ¡Bien hecho! ¿Cómo se asienten ahora? ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date la vuelta! ¡Date</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-5wiypBcbkEE">
+            <h2>"ESTARÉ EN PITTSBURGH Y ANUNCIARÉ ALGO QUE GUSTARÁ" Ramón Dino ELEVA  el HYPE ¿COMPETIRÁ?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 19/04/2025 14:55</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=5wiypBcbkEE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/5wiypBcbkEE/hqdefault.jpg" alt=""ESTARÉ EN PITTSBURGH Y ANUNCIARÉ ALGO QUE GUSTARÁ" Ramón Dino ELEVA  el HYPE ¿COMPETIRÁ?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes un resumen y análisis de la información proporcionada en el texto, organizado para facilitar su comprensión:</p>
+
+<p><strong>1. Preparación de Ramondino y su Foco en las Poses:</strong></p>
+
+<ul>
+<li><strong>Prioridad: Mostrar su físico:</strong> Ramondino está dedicándose a mejorar sus poses y presentarse en su mejor forma.</li>
+<li><strong>Peso y Competición:</strong> El texto menciona que está pesando alrededor de 120 kg, y considera improbable que compita debido a los límites de peso (comparándolo con Josema, que ronda los 100 kg).</li>
+<li><strong>Trabajo con Derek:</strong>  Está trabajando en poses con Derek.</li>
+</ul>
+
+<p><strong>2. Pittsburgh Pro: El Evento Principal y las Posibilidades de Ramondino</strong></p>
+
+<ul>
+<li><strong>Presencia Confirmada:</strong> Ramondino estará presente en el Pittsburgh Pro.</li>
+<li><strong>Anuncio en Pittsburgh:</strong> Anunciará algo cuando llegue a Pittsburgh.</li>
+<li><strong>Guest Posing: Rumores y Posibilidades:</strong>
+<ul>
+<li><strong>No hay Guest Posing Oficial:</strong> No se espera un guest posing formal con muchos atletas como en años anteriores.</li>
+<li><strong>Posibilidad de Guest Posing Improvisado:</strong>  Existe la posibilidad de que Ramondino sea invitado a realizar un guest posing improvisado, similar a lo que ocurrió en el Detroit Pro. Esto podría implicar simplemente subir al escenario, quitarse la ropa y posar.</li>
+<li><strong>Anuncio especial:</strong> Podría anunciar algo más relacionado a su futuro o planes.</li>
+</ul></li>
+</ul>
+
+<p><strong>3. La Invitación y la Comunidad:</strong></p>
+
+<ul>
+<li><strong>Beyond the Stage:</strong> La publicación Beyond the Stage ha estado difundiendo noticias sobre la posible participación de Ramondino en el guest posing en Brasil.</li>
+<li><strong>Comentarios y Expectativas:</strong> El canal insta a los espectadores a dejar sus opiniones en los comentarios.</li>
+<li><strong>Próxima Noticia:</strong>  Se anuncia una noticia importante para el día siguiente, que estará disponible a las 8 o 9 de la noche en el canal.</li>
+</ul>
+
+<p><strong>En resumen, el foco principal es la preparación de Ramondino para mostrar su físico en el Pittsburgh Pro.  La competencia es improbable debido al peso, pero la posibilidad de una aparición en un guest posing improvisado o un anuncio relacionado a su futuro es real.</strong></p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=3" target="_blank" class="timestamp">[00:03]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal, espero que estéis pasando un gran sábado y por supuesto también daros las gracias, lo hago poco pero debo hacerlo mucho más, daros las gracias a todos vosotros que estáis ahí detrás de vuestros dispositivos, de vuestras pantallas, viendo el canal, informándoos del mundo del culturismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=20" target="_blank" class="timestamp">[00:20]</a> Y de todo lo que os rodea, ya sabéis, al mundo del culturismo, salseo varios también que los hay. Así que por supuesto, daros las gracias por el apoyo al canal, por el apoyo de estas últimas semanas que está siendo bestial. Y sobre todo en este caso, vengo a tratar un tema interesante. Un tema que ha saltado en las últimas horas y que sin duda vais a ver que a mí me ha dejado desde luego a cuadro. Porque no me lo esperaba para nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=43" target="_blank" class="timestamp">[00:43]</a> Y es en este caso Ramón Dino, sus nuevas mejoras en el tema del posing, que esto hasta cierto punto ya sabíamos que iba a contratar a un nuevo preparador o entrenador en el tema de las poses, que iba a mejorar o a cambiar un poco su entorno y su equipo, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=61" target="_blank" class="timestamp">[01:01]</a> Lo que sí que no teníamos ni idea es que va a estar en Pittsburgh, evidentemente yo creo y creo que todos entendemos que no va a estar para competir, pero sí que podría haber un guest posing de Ramón Dino y podría haber estado ahí detrás la influencia de los Manion en intentar conseguir que el brasileño suba otra vez a tarima.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=80" target="_blank" class="timestamp">[01:20]</a> y pueda mostrar algunos aspectos de su físico que desde luego van a ser muy interesantes. Insisto en que me parece imposible, prácticamente imposible, que en estas cuatro semanas Ramondino alcance el nivel y la condición y demás para poder competir. Se está hablando del Pittsburgh, a mí me parece algo bastante improbable. Pero sí que es verdad que por otro lado tenemos una limitación con el peso en el caso de Ramondino, o sea que aunque quisiera...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=103" target="_blank" class="timestamp">[01:43]</a> Tendría que ir a marchas forzadas y no me da la sensación de que vaya la cosa por ahí. Sí por el guest posing. Ahora hablaremos. Se hablaba bastante de que en el Pittsburgh Pro no iba a haber guest posing, pero también tenéis que entender que muchas veces este tipo de eventos, shows, etcétera, etcétera, muchas veces hacen hasta casi sobre la marcha. Se programan bastante poco y se pueden programar incluso con una semana, dos semanas de antelación, con lo cual entraría dentro de los márgenes que pudiera Tyler Mannion o los Mannion en general...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=129" target="_blank" class="timestamp">[02:09]</a> haber hablado con Ramondino y haberle propuesto el hecho de que esté en Pittsburgh y que se pueda mostrar. Así que como digo vamos a analizarlo todo, no por supuesto sin antes recordaros el código de descuento de BIC, también daros las gracias porque está habiendo una gran acogida del código del 10% Iron Road.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=147" target="_blank" class="timestamp">[02:27]</a> en Big como digo la suplementación es espectacular yo estoy con ella últimamente en esta fase de definición en la que ya llevo metido un par de meses y desde luego que lo estoy notando un montón así que como digo aprovechar los sabores son espectaculares estar al loro del tema de los valores nutricionales para ver cuál de ellas encaja mejor o cuál de esos productos encaja mejor en la fase en la que estáis pero como digo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=171" target="_blank" class="timestamp">[02:51]</a> Está siendo un auténtico éxito el hecho de la recepción que le estáis dando. Así que, por supuesto, daros las gracias. El producto, además, por los reportes que me estáis mandando, gustan muchísimo. Los sabores, estáis flipando con ellos. Así que, como digo, dadle mucha caña. Y, por supuesto, código de 10% de descuento Iron Road en toda la web de Gonjin. La Gonjin que tiene un nuevo drop, el de Badding in the Game.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=193" target="_blank" class="timestamp">[03:13]</a> que es como digo volviendo a la Goldenera y la verdad es que me gusta mucho y vamos a hacer grandes cosas como ya hemos hecho y como vamos a seguir haciendo con nuestros amigos de Agonjin como digo vamos a pasar a analizar todo lo referente a Ramón Dino porque Ramón Dino aquí lo tenéis ha aumentado en este caso su equipo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=215" target="_blank" class="timestamp">[03:35]</a> Y ha decidido en este caso contratar los servicios de nada más y nada menos que André Pierin. Y mucha gente os pregunta, bueno, ¿quién es André Pierin? Pues desde luego se va a presentar él, pero antes de nada deciros que es la persona que está ahí al lado de Ramón, esta persona de ahí, la que está justo al lado de Pacholoc, entre Pacholoc y Ramón. Y es la que va a llevar todo el tema de la mejoría de Ramón Dino, el tema de las poses. Ya sabéis que a Ramón Dino se la ha dado, vamos, como si no hubiera un mañana...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=244" target="_blank" class="timestamp">[04:04]</a> Se le ha atizado por el tema del post-índice, si debería mejorar el post-índice, si es un elemento que no se puede entender como un tipo que ha sido numerador del Ministerio Olimpia posaba, no voy a decir tan mal, pero francamente mejorable. Y en este caso parece que Ramón Dino, y esto es algo que destaco mucho de los atletas que lo hacen, parece que ha escuchado el feedback, no solamente de la comunidad, sino de dentro del mundo del culturismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=269" target="_blank" class="timestamp">[04:29]</a> Y se ha puesto las pilas. Evidentemente todos sabéis que en este caso, por ejemplo, Mike Sommerfeld, Ruth Diesel, Caique, por ejemplo, sin ir más lejos, que también ha sido muy alabado en Brasil por ello, pues han contratado diferentes personas que le van a ayudar, que le aconsejan, le asesoran en materia de posting. Y parecía que no llegaba el día en el que Ramón Dino tomara esa decisión. Vamos a escuchar primero quién es André Pierín y seguimos con el vídeo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=298" target="_blank" class="timestamp">[04:58]</a> Ramón, ¿y las poses? ¿Cómo vamos hacer con las poses? Ahí me preguntó, ¿qué crees de este hombre aquí? Mostró la foto del André Pagé. Le dije, este hombre aquí es mi hermano. Para quien no conoce, el André Pagé es mi amigo de longa data. Él prácticamente fue el hombre que me presentó el fisiculturismo. Él fue mi coach en mi primera preparación, en mi estreante, en 2010. Él fue mi padre de casamiento. Es un hermano de longa data. Y estuve muy feliz cuando Ramón lo elegí para hacer este trabajo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=328" target="_blank" class="timestamp">[05:28]</a> Bueno, con vosotros. Hola, chicos. Estoy muy feliz de estar aquí con nuestro Dino. Siempre sonhei por este momento y ahora estamos aquí. La primera cosa que hicimos fue hacer un estudio de los atletas que están en el topo y de aquellos que consideramos que son los que deben ser batidos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=346" target="_blank" class="timestamp">[05:46]</a> Rufy Diesel, Mike y la forma con que ellos posan. Entonces, estamos observando que a Classic no es más el lance de tener una pierna más fina que el troco. Estos atletas que tienen una pierna más fina están quedando para atrás. A Classic está buscando el X. ¿Qué es el X? Es cuando la pierna es tan desenvolvida como la parte de arriba. Entonces, la primera cosa que estamos haciendo aquí con Ramón</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=365" target="_blank" class="timestamp">[06:05]</a> Se certificando, a gente va por partes, se certificando a base dele. A base é o posicionamento de pernas dele. Nos temos que ficar grande. A Classic se trata de estética e de volume também. Se não, você não vê o Mike ali na frente, ele tem as pernas muito grandes, muito arredondadas. Da mesma maneira você tem o Chris que se aposentou e também agora a gente vê o Huff Diesel chegando muito arredondado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=386" target="_blank" class="timestamp">[06:26]</a> Entonces lo que hicimos hacer con Ramón fue certificar que vamos a poder mostrar el máximo de su volume, de todo el frame. Conseguir preencher todo el arredondamiento de pernas, de adutores, de expansión de dorsales. Y vamos a mostrar para ustedes etapas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=404" target="_blank" class="timestamp">[06:44]</a> Aquí le llama, en este caso, Pacho Locke, le llama André Payet. Bueno, en fin, es un nombre compuesto. Pero a lo que voy, sobre todo, que es algo que es lo que realmente a mí me interesa, es en primer lugar varias cositas de lo que dice, ¿no? En primer lugar, estudio de la gente que está...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=420" target="_blank" class="timestamp">[07:00]</a> Yo creo que cuando se refiere arriba se refiere sobre todo arriba en cuanto al posin, en cuanto a la manera de mostrarse que siempre se ha destacado en el caso de Ruth Diesel. Por eso lo mete ahí yo creo principalmente porque ahora mismo Ruth Diesel a día de hoy al menos es una incógnita, no se sabe muy bien dónde se va a posicionar con respecto a lo que hay en el Olimpia. Pero yo creo que lo destaca bastante por eso porque al final es un atleta que ha demostrado más que de sobra su nivel a la hora de posar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=443" target="_blank" class="timestamp">[07:23]</a> Lo pone ahí, pone a Mike y hace algo, una distinción que yo creo que es interesantísima y que sabéis que venimos de todo el debate, del tema de la línea de Classic, etc. Classic es estética y volumen, las dos cosas. Y yo creo que es un tratamiento muy acertado. Se centra bastante en el tema de las piernas, es algo que yo creo que es vital, porque prácticamente todos los aletas de Classic van a tener la cintura estrecha y van a ser amplios de arriba. Eso está claro a más no poder. ¿Qué es lo que ocurre?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=469" target="_blank" class="timestamp">[07:49]</a> que se está haciendo una criba en Classic y en eso estoy bastante de acuerdo con el tema de la densidad de las piernas y la línea de X. Lo hemos visto con Wesley Bissers y lo hemos visto con otros atletas a los que quizá les ha faltado ese bombeo en las piernas o mostrar el bombeo de las piernas, mostrar esa línea en X, que es lo que les ha llevado precisamente a irse un poquito para atrás, a pesar de que sean muy densos, con una condición brutal, una separación de locos, da igual. Quieren evidentemente ese bombeo en las piernas y ese volumen, esa densidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=497" target="_blank" class="timestamp">[08:17]</a> En el tren inferior, con lo cual me parece bastante interesante el hecho de lo que le está comentando, es decir, estudiamos a los que están arriba o creemos que van a estar arriba, como el caso de Ruf, a los que están ahí, qué es lo que quieren y a partir de ahí trabajar con Ramón. Vamos a ver un ejemplo para que os hagáis una idea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=515" target="_blank" class="timestamp">[08:35]</a> de cómo retoca las poses de Ramón y hay elementos que me parecen muy interesantes, lo vais a ver porque creo que da en el clavo de… en concreto la pose del doble bíceps de frente, da en el clavo de varias cositas de Ramón que más de uno nos hayamos dado cuenta de que flojeaba. Vamos a escucharlo. Lo que más pensamos es en el posicionamiento de las piernas en el duplo bíceps de frente. Ramón hace la pose estilizando, jugando un poco la pierna por un lado,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=550" target="_blank" class="timestamp">[09:10]</a> Boa, segura. Entonces, es eso que nos vamos a buscar, este arredondamiento y los adutores. Los adutores están bien preenchidos. Esta pose está muy bonita, pero vamos a hacer un test con las dos bases iguales también. Vamos ver. Porque yo sé que el pessoal pide mucho aquella pose que se hizo en la premiación del Arnold. Con las dos piernas iguales. Vamos ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=575" target="_blank" class="timestamp">[09:35]</a> Yo creo que prefiero un poco más la otra. Yo también. Porque lo que acontece, el problema de colocar una pierna para el lado es que se queda más estética, solo que muchas veces se pierde el tamaño de la pierna de la base. En el caso del Ramón, no perder el tamaño de la pierna de la base. Entonces, cuando se monta la pose, se pone el peso en esta, esta aquí está ativada y coloca la otra aquí, y monta la pose en la.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=604" target="_blank" class="timestamp">[10:04]</a> Otra cosa también es en relación a la altura de los brazos, ¿no? Entonces, el pessoal generalmente hablaba del lance de levantar un poco el bíceps en relación a la altura del cotovelo más próximo de la cabeza. Pero el problema es levantar todo junto. Entonces, ¿cuál sería la idea? Si hiciste la pose aquí y a la hora que se travó, simplemente la cutuca más para arriba un poco, sin dejar levantar los ombros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=633" target="_blank" class="timestamp">[10:33]</a> Eso. Y levanta un poco. Ahí, mira. Ficó bueno, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=637" target="_blank" class="timestamp">[10:37]</a> Tiene una presión aquí. Muy bien. El lance es nunca dejar esto levantar. Y yo creo que... Nunca había pensado en esto. Todo el mismo pasillo ya. Es, eso. Aquí lo que es el lance. El lance es... Mira el dorsal. Mira el tamaño. Es este dorsal que necesitamos en el duplo bíceps. Yo ya percebi que muchas veces antes de posar, intenta colocar el ombro en un lugar. Eso está bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=664" target="_blank" class="timestamp">[11:04]</a> Entonces, nunca puede salir en esta pose con el ombro aquí. Siempre tiene que salir con el ombro de hecho aquí. Mira el tamaño que queda. Es como si estuviera haciendo un pack deck.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=676" target="_blank" class="timestamp">[11:16]</a> Fijaros en este caso, sin ser evidentemente yo ningún maestro del posing solo faltaba, pero fijaros en este caso la diferencia que hay, que parece una tontería, entre lo que es la rotación del hombro para mostrar el dorsal. Fijaros de ahí a ahí, todo el dorsal que muestra. O sea, son pequeños elementos y muchas veces a lo mejor al posing no le conferimos la dimensión que realmente tiene. No deja de ser de mostrar lo que realmente tú tienes. Si tú coges en esta pose de Ramondino, además es súper característica, si coges ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=706" target="_blank" class="timestamp">[11:46]</a> Y ves el bíceps que tiene Y sin embargo, muestras al girar El dorsal, fijaros la diferencia del dorsal O sea, de estar ahí Voy a intentar parar, de estar ahí A ver si lo pongo, ahí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=720" target="_blank" class="timestamp">[12:00]</a> ahí, o sea, es que estás mostrando casi un 50% casi más de dorsal, o sea, es una auténtica locura y yo insisto en que es algo muy, muy, muy importante y en el caso de Ramón era bastante notorio que le faltaba, le faltaba esa chispa y le faltaba mostrarse bien en tarima, yo creo que era algo necesario, ¿no? Vamos a escucharle finalmente las reflexiones con André Pirín y vamos al tema del Pittsburgh Pro, que es otro de los elementos y sobre todo el elemento central del vídeo, vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=746" target="_blank" class="timestamp">[12:26]</a> Choc, feedback de Dino. Cara, primera aula, los primeros puntos que le dio a consertar, ya sentí mucha diferencia. Y en esta rodada ahora conseguí hacer más confiante. Entonces, cara, tiene todo para dar bien. Ya viene dando bien. Te agradezco demasiado. Gracias por el apoyo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=768" target="_blank" class="timestamp">[12:48]</a> Y ajustando a ella y hacer un trabajo de duras con más de 120kg. Si tuviera el peso de competición, esa posición va a ser fácil. Y mi impresión, que ya acompañaba el Ramón de longe, ya había visto él de cerca y nada así, había algunos ajustes que yo tenía que hacer con él, pero no pensaba que iba a dar bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=787" target="_blank" class="timestamp">[13:07]</a> principalmente los ajustes de glúteos, comenzamos haciendo más interversión, entonces ahora conseguimos hacer eso. El ajuste también en el dorsal, yo tenía certeza que salió un poco más, de hecho salió así. Sí, creo que fue la cosa que más te dio diferencia. Lo que acontece es que la hora que yo vi la perna de él me dio una alegría, pero al mismo tiempo me dio una preocupación. Porque yo pensé, será que vamos a conseguir meter el dorsal para hacer el X ahí? Pero la hora que yo vi encima, ahí, me dio cierto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=813" target="_blank" class="timestamp">[13:33]</a> y ahora más o menos despegada y eso mañana se va a hacer el certificado que hicimos hoy vamos resgatar, vamos pegar más cosas y así, el primer paso es encajar las poses maravillosamente bien del jeito que a gente acha que da para brigar con los principales concorrentes segundo paso es conseguir segurar la contración no tremer, no perder</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=833" target="_blank" class="timestamp">[13:53]</a> y no perder corte en la perna segundo paso también el triángulo encaixe rápido que él no de conseguir no demorar mucho para encaixar es el teórico se bueno primero siempre se encaixaba y ahí después a gente va a comenzar a mexer con la coreografía sólo que la coreografía es más una oportunidad de acceder al físico entonces se ve</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=853" target="_blank" class="timestamp">[14:13]</a> Por ejemplo, nunca se puede perder contración. Por ejemplo, si van llegaba, se bajaba, el glúteo subía, el glúteo subía, el glúteo subía, el glúteo continuaba contraído, le ponía el pie por aquí y el glúteo estaba contraído. Entonces, el árbitro no quiere ver nada sin contración. Hay muchos atletas que vienen a girar, a hacer cosas y el glúteo, si no está bien contraído, se quedan bien, el árbitro no quiere ver eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=874" target="_blank" class="timestamp">[14:34]</a> Entonces, yo creo que el disco del Ramón es muy bonito, optar por una música más lenta, más épica, que aproveite bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=884" target="_blank" class="timestamp">[14:44]</a> Pues ahí teníamos los planes de, en este caso, de su nuevo entrenador de poses, de André Pierín. Desde luego que yo insisto que esto hay que alabárselo a Ramón Dino porque cualquiera habría cogido... Yo soy el top 2 Olimpia o he sido top 2 Olimpia con este físico, con esta manera de posar y yo voy a seguir por donde iba. Bueno, pues ha dejado a un lado cualquier tipo de ego si es que lo tuviera Ramón Dino y desde luego que se ha puesto manos a la obra a trabajar. Y hablando de trabajo, y aquí viene la parte central del vídeo,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=914" target="_blank" class="timestamp">[15:14]</a> sale a la palestra el tema de Pismo. Quiero que lo escuchéis de inicio a final y sacamos conclusiones de ello. ¿Cuáles son las opciones que tenemos? Dos en Estados Unidos y una aquí en Brasil. La del Brasil... tu parcero va a llegar en junio y por ahí. La del Brasil nos dejamos adelantado más o menos para frente. La primera que es para la semana que viene en Dereck. Ya está anunciado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=944" target="_blank" class="timestamp">[15:44]</a> Y la otra es en Pittsburgh.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=960" target="_blank" class="timestamp">[16:00]</a> Pues ahí lo teníamos, en Pittsburgh va a estar, tiene pinta de que va a entrenar unos días previos a la competición con Derek, que parece que es algo que como cábala Derek lo ha pedido, pero dice que va a anunciar algo en Pittsburgh, cuando ya esté allí va a anunciar algo. Se está hablando mucho en redes sociales, en todos los medios brasileños, ya ni os cuento, con el tema de que Ramón Dino estará en un guest posing. Yo ya os comento, porque os lo comenté en su día,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=990" target="_blank" class="timestamp">[16:30]</a> que no había guest posing en el Pittsburgh Pro, entendido como un guest posing, a ver cómo explicaría esto, de carácter establecido o institucional, vamos a decirlo así con algo como se venía hablando en los últimos años del tema este de los guest posing bastante míticos del Pittsburgh Pro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1009" target="_blank" class="timestamp">[16:49]</a> ¿Qué es lo que pasa? Que tenemos aquí publicaciones, como por ejemplo Beyond the Stage, haciéndose eco de varias noticias de Brasil, sobre la posibilidad de que Ramón Dino forme parte de ese guest posing. Yo insisto en que no haya guest posing de manera oficial, con 10 atletas de diferentes categorías, generalmente Open y alguno de Classic, en lo que ha habido en los últimos tiempos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1031" target="_blank" class="timestamp">[17:11]</a> Que no exista eso no significa que no le digan a Ramón Dino y a dos o tres que pasen por allí que hagan guest posing. De hecho, el último guest posing que hemos visto bastante, digamos, poco institucionalizado o poco oficial, vamos a decirlo así, recordarí que fue el del Detroit Pro con Sassón Dauda y en este caso Martin Feewater.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1053" target="_blank" class="timestamp">[17:33]</a> Insisto, son get posing improvisados, que salen, hablan, tal, se quitan la camiseta, se quitan el pantalón, posan. Yo creo que a lo mejor algo similar a eso sí que podría haber en el Pittsburgh. Otra cosa diferente es que vaya a haber algo más de carácter como ha habido otros años, donde han posado 5, 6, 7 Olimpias, etc. Pero sí me cuadraría que pudiera existir esa opción y ya estáis escuchando a Ramondino. Estar va a estar en el Pittsburgh Pro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1079" target="_blank" class="timestamp">[17:59]</a> estar va a estar con Derek y va a anunciar algo cuando llega a Pittsburgh va a anunciar algo con lo cual quedamos ahí para ver qué es lo que tiene que decir así que como digo chicos y chicas esta es la información un Ramondino que ya trabaja en el tema de las poses</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1094" target="_blank" class="timestamp">[18:14]</a> que quiere mostrar su físico, dudo muchísimo que vaya a competir, está con 120 kilos, lo habéis escuchado, y el límite de Ramondino no creo yo que sea mucho más de, por ejemplo, el de Josema, que son 99,3, o sea, que sean 100 kilos, una cosa así, no creo que se vaya más, con lo cual me parece improbable a todas luces el hecho de que pueda competir, pero sí en el guest posing, pues se podría hacer algo, algún tipo de evento, algún tipo de subir a dar un premio y de pronto guest posing, lo que sea, o que se anuncie de manera oficial, que ya hemos escuchado a Ramondino,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1122" target="_blank" class="timestamp">[18:42]</a> Que hay posibilidades, no, posibilidades no Que es real que va a anunciar algo en el PISUR PRO Así como digo, dejadme en la caja de comentarios Que opináis de todo esto, fuerte like al vídeo Suscribíos al canal, que tengáis un buen fin de semana Ojito a la noticia que traigo mañana A las 8, creo que es a las 8 o a las 9 de la noche Por ahí en el canal</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5wiypBcbkEE&t=1138" target="_blank" class="timestamp">[18:58]</a> Ojo a la noticia que traigo. Lo he dejado para el final para que los más fieles del vídeo estén alerta. Comentadlo si lo escucháis a los que lleguéis hasta el final. Ojo a la noticia que traigo mañana en el canal. Lo digo ya y el que avisa no es traidor. Así que como digo, paséis un buen finde y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-BQY1RQHLVVE">
+            <h2>Mi Presentación En Tarima… | 90 Días Para Mi Competición Profesional</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 19/04/2025 15:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=BQY1RQHLVVE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/BQY1RQHLVVE/hqdefault.jpg" alt="Mi Presentación En Tarima… | 90 Días Para Mi Competición Profesional" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Okay, let's break down the key topics and observations from this long monologue. It's a really candid and stream-of-consciousness recording, giving a lot of insight into the speaker's world. Here's a summary, categorized for clarity, along with key emotions/themes:</p>
+
+<p><strong>1. Business &amp; Sponsorship (Trade Bank and Promotions):</strong></p>
+
+<ul>
+<li><strong>Trade Bank/Bank Promotion:</strong> A significant portion of the conversation revolves around a promotional video/partnership with Trade Bank. He's excited about it, emphasizing that it's authentic, they genuinely use the service, and it shows in the video. This suggests a successful brand collaboration.</li>
+<li><strong>Feeling Valued:</strong> He highlights how people appreciate genuine endorsements, which is important for influencing others.</li>
+</ul>
+
+<p><strong>2. Personal Life &amp; Relationships:</strong></p>
+
+<ul>
+<li><strong>Marta's Absence:</strong> Marta is currently in Marbella. He mentions a surprise/project they have at home that he wants her to see upon her return, creating a sense of anticipation and affection.</li>
+<li><strong>Román &amp; Irene:</strong> Mentions something Román and Irene have done at his home. Appears to be a romantic gesture, something he wants Marta to see.</li>
+<li><strong>Communication with Tony:</strong> He's been discussing decisions and future plans with Tony.</li>
+<li><strong>Posting/Social Media:</strong> He's looking to hire someone to help with his social media posting – it’s a priority.</li>
+</ul>
+
+<p><strong>3. Competition &amp; Fitness:</strong></p>
+
+<ul>
+<li><strong>Upcoming Competition:</strong> He’s very focused on his next competition. This is a central theme.</li>
+<li><strong>Past Competition Experiences:</strong> He recalls feeling "bad" and unmotivated in his last competition. He’s determined to avoid that this time.</li>
+<li><strong>Physical Condition &amp; Training:</strong> He describes feeling fatigued but motivated. He's excited about his arms workout and the adjusted training schedule (earlier arms workout on Saturdays).</li>
+<li><strong>Working with Fran (Trainer):</strong> He mentions discussions with Fran about intensifying training and then relaxing it closer to the competition, aiming for peak physical condition. He’s nervous but also confident.</li>
+<li><strong>Physical Progress:</strong>  He seems pleased with the progress of his physique and believes it's evolving. He expects Fran's help in shaping it.</li>
+<li><strong>Humor, Confidence, and Enjoyment:</strong> The goal is to compete with a positive attitude, feeling physically prepared, and actually <em>enjoying</em> the process.</li>
+</ul>
+
+<p><strong>4. Future Plans &amp; Winter Preparation:</strong></p>
+
+<ul>
+<li><strong>Winter Decisions:</strong> He's already making plans for the winter, focusing on enjoyable training.</li>
+<li><strong>Enjoyable Training:</strong> He aims for training he genuinely likes, not just for performance, but also for enjoyment.</li>
+</ul>
+
+<p><strong>5. Technical Issues &amp; Frustrations:</strong></p>
+
+<ul>
+<li><strong>Camera Trouble:</strong> Experienced issues with his camera and had to use Tony's, further adding to his sense of fatigue.</li>
+<li><strong>Feeling Exhausted:</strong> Repeatedly mentions feeling tired and overwhelmed.</li>
+<li><strong>Self-Criticism ("Qué gilipollas"):</strong> A moment of frustration and self-criticism.</li>
+</ul>
+
+<p><strong>Key Themes &amp; Emotions:</strong></p>
+
+<ul>
+<li><strong>Anxiety/Nervousness:</strong> Strong undercurrent of anxiety around the competition.</li>
+<li><strong>Motivation &amp; Determination:</strong> Driven to perform well and avoid past mistakes.</li>
+<li><strong>Appreciation &amp; Gratitude:</strong> Values the Trade Bank partnership and the positive feedback it brings.</li>
+<li><strong>Affection:</strong> Clear fondness for Marta.</li>
+<li><strong>Frustration:</strong> Technical issues and physical exhaustion cause frustration.</li>
+<li><strong>Ambition:</strong> Determined to be in top condition for the competition.</li>
+<li><strong>Self-Awareness:</strong> Aware of his strengths, weaknesses, and emotional state.</li>
+</ul>
+
+<p><strong>Overall Impression:</strong> This monologue paints a picture of a highly driven and ambitious individual—likely a bodybuilder or athlete—juggling professional commitments, personal relationships, and the intense demands of training for a major competition. It's a very raw and honest portrayal of the effort and emotional rollercoaster involved in pursuing a demanding goal. He's a high-achiever with a lot on his plate!</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=0" target="_blank" class="timestamp">[00:00]</a> ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Va! ¡Ahí! ¡Perfecto! ¡Piernas! ¡Piernas! ¡Piernas! ¡Arriba!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=29" target="_blank" class="timestamp">[00:29]</a> A mí la competición al final no me sentía así. Y creo que esta competición me va a sentir así. Muy buenas a todos, chicos. Estamos en el día 26. Sí, estamos en el día 26. Está haciendo cardio. Es viernes. Me doy el lumbar desde el día que entrené. Eso me jodió bastante, hermano. Pero bueno, lo importante es que es día 26. Vamos a por el día 30. Sigo teniendo energía, sobre todo por la mañana. Yo por la mañana tengo bastante, bastante energía. Y además me he despertado y como que me marcaba en plan que había dormido nueve horas y media. ¿Qué se ha pasado a un amigo? Me ha dicho...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=58" target="_blank" class="timestamp">[00:58]</a> Bueno, básicamente me duermo y ya está la suplementación, un montón de magnesio, de melatonina, de tal, de cual. Pero prefiero dormir pronto, sobre todo. Yo creo que eso es una de las cosas más importantes. No estaba Marta hoy, pero bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=74" target="_blank" class="timestamp">[01:14]</a> Estamos aquí en el cardio. ¿Hoy qué vamos a hacer? ¿Hoy cuál es el día? Hoy es el día de estar encerrados, estamos en preparación. No tengo coche, no me puedo mover de aquí. Si no me equivoco, quizá hoy Román monta el gallinero, ¿vale? Pero no hay gallinas, evidentemente. Pero hoy es Semana Santa, así que vendrá muchísima gente de Andorra. Ahora está súper calmado, os lo juro. Pero no se me asuma así, porque a veces...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=94" target="_blank" class="timestamp">[01:34]</a> No veo el minutero de la cámara, porque básicamente la cámara nos está dando muchísimos problemas y me está molestando muchísimo. Se para, deja de grabar, no sé qué le pasa. Al final yo llegué a la conclusión de que el objetivo estaba de puta madre y dije, este objetivo está de puta madre. Sí que es verdad que a veces me voy a tener hasta un 35 y demás, pero es verdad que el ojo de pez para bloguear es la polla. Y el micro de pistola también me parece la polla. Lo único es el cuerpo, que no sé qué le pasa, pero cuando tiene la pantalla abatible, que es una de las cosas que buscamos evidentemente para bloguear, yo tengo fuerza para aguantar esta cámara.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=123" target="_blank" class="timestamp">[02:03]</a> Así que en eso estamos. Ayer llamamos a Fran. Bueno, las cosas van avanzando, van avanzando en la preparación. Hay una cosa que sí que hablaba ayer con Marta, ¿no? Que la llamé por la noche y era en plan... Es que Fran te va a poner mucho a las pilas y luego te va a mantener un poco ya más cerca a las competiciones. Entonces probablemente ahora te llegue la peor época. Y es cierto, es cierto. Porque vamos entrenando, estamos bajando el ritmo, pero aún así me quedo muy muerto, muy muy muerto. Y nada, no sé, no sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=149" target="_blank" class="timestamp">[02:29]</a> Qué deciros de la prep, pero la realidad es que llevo creo que 13 semanas, buah, 13 semanas sin comida libre. Es una puta locura si lo pensáis, o sea, es muchísimo. Pero la verdad que he conseguido que ni Instagram, ni TikTok, ni todo, no me aparezca comida. He silenciado todo lo relacionado con comida, entonces no me entregan antojos. Lo único a veces es ver comer a Marta que digo, buah, me comería esas fresas que te estás comiendo, ¿sabes? Un poco así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=173" target="_blank" class="timestamp">[02:53]</a> Bueno, decía, como ella come sano, pues dentro de la calle tampoco me antojo ser como una hamburguesa, porque no se come ella una hamburguesa. Entonces, estamos un poco así, pero tío, día 26 me parece algo como ya muy muy guay. Hoy quiero posar, hoy quiero entrenar hombro, hoy quiero hacer cositas, quiero currar, currar como siempre básicamente, pero ya el fin de semana además, o sea, quiero en parte también relajarme el fin de semana hacia última hora, porque ahora pues estoy haciendo muchas cosas básicamente de trabajo, que por cierto se me ha roto el móvil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=198" target="_blank" class="timestamp">[03:18]</a> mi puta gracia, me da una raya increíble. Pero se hacen muchas cosas de trabajo y todavía es viernes, es medio festivo y tal, pero todavía se puede trabajar. ¿No sabéis la rabia que me está dando que esta cámara vaya mal? O sea, me está dando muchísima rabia, se me va a parar a mitad del cardio, no sé ni qué estaba diciendo, pero ¡buff!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=218" target="_blank" class="timestamp">[03:38]</a> Me estoy poniendo muy mal. O sea, esta cámara no puede ir mal, lo digo en serio. No puede ir mal porque no sé si es la tarjeta de memoria, no sé si es la batería, pero en ningún momento ha dado ningún problema nada y ahora de repente hace dos semanas ha empezado a dar problemas. Tengo aquí la cámara de Tony, pero no deja de ser de Tony, la verdad. El cuerpo y el objetivo, pero el objetivo para bloquear no lo puedo usar porque me veréis así todo el rato.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=239" target="_blank" class="timestamp">[03:59]</a> Ahora no está dando problemas, pero si no, pues se la pediré unos días y veré lo que hago. Tampoco sé qué cámaras hay hoy en día. Esta cámara hace mal que encima tampoco, o sea, es en plan, tampoco toma tu cámara, está rota. No, no me hace ninguna gracia que se me rompan las cosas, es lo que os he dicho. El otro día no me di ni cuenta y tengo el móvil todo roto. Es que no se va a ver, no se va a apreciar, pero por la parte de atrás, por la parte del flash, está todo el móvil roto. Se me cayó también, se me rompió por delante. O sea, se puede usar, pero me da rabia, me da rabia que se me rompan las cosas. No, no me hace ninguna gracia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=268" target="_blank" class="timestamp">[04:28]</a> Así que nada, chicos, tío. Qué puta rabia. O sea, lo juro. Qué puta rabia. Además, hoy quiero preparar la coreo bien. Quiero posar. He dado bien. Quiero prepararla con camiseta incluso, ¿sabes? O sea, quiero posar. Quiero ver cómo estoy. Y quiero preparar la coreo con camiseta. Ir pillando las poses. Pues que son un poco más complicadas. Las poses que vaya a tener que estar estirando. Cuando vuelva a Marta le pediré que me ayude pues a hacer estiramientos y demás. A enseñármelos simplemente para luego poder hacerlos yo solo. Entonces un poco así, pero... Pero joder. Joder. La competición anterior me costará muchísimo posar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=298" target="_blank" class="timestamp">[04:58]</a> Siento que estoy en el síntoma suelto, pues ando y tengo ganas, tengo ganas, tengo ganas de disfrutar del posing, de que todo vaya bien, de todo, pero con las cosas bien hechas. No sé cómo decir, si me ven problemas el resto de cosas externas, que no tendría que dar problemas. Así que bueno, voy a desayunar, a ver si me quita ya un poco el hambre, por lo menos, y me pongo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=314" target="_blank" class="timestamp">[05:14]</a> full working hasta la hora de entrenar que tengo aquí pues tres horitas por lo menos de estar con asesorías y con pbs y tengo unas reuniones bastante importantes con proveedores bastante importantes de cosas que van a salir muy guapas y tengo cambios de asesorías muy top porque llega el verano y la gente se pone las pilas se pone las pilas fuertemente así que perdón por mis chapas sé que no puedo salir de casa</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=338" target="_blank" class="timestamp">[05:38]</a> Bueno, tengo por ahí el patinete realmente. Pero sé que no puedo salir de casa, así que van a ser unos vlogs aquí dentro de casita encerraditos. Pero vamos a hacer cosas especialmente chulas. Lo prometo. Lo prometo. Que por cierto, yo quería ir al cine con Marta el sábado que viene. Y vamos a ir. Porque vamos a ir. Pero pensaba que salía el hilo de Stitch y sale el mayo. Estoy muy jodido. Esa película me encantada de pequeño.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=359" target="_blank" class="timestamp">[05:59]</a> Vale, gente, a ver si no se muere la cámara. Nos vamos al momento del día. Nos vamos al entrenamiento de hombro. Hoy en uno. No sé si me va a ajustar algo. Se han comido la comida. Pero yo no veo un puto gato, tío. Ahora también es que está la puerta cerrada. Tiene que venir Tony. Pero chiling. Chavales, me ametece hacer hombro. Me ametece darlo todo. Me ametece enseñaros la coreo, que es algo importante para mí. Así que a ver qué tal. He traído la cámara de Tony también. Porque esta, como está fallando, pues mira, yo no sé qué hace.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=386" target="_blank" class="timestamp">[06:26]</a> No sé qué hacer, recomendadme cámaras o algo o ver qué hacer. Pero es que encima hace Marta, es que me da mucha rabia. Tengo unas 6.400 aquí. La cosa es el objetivo para poder bloquear. Es una de las cosas más importantes. Y me han dado una buena noticia ahora esta mañana. Está aquí el enterrador. Hello. Estás bajo, ¿eh? Preparando el trapecio, ¿eh? Grande mi pana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=404" target="_blank" class="timestamp">[06:44]</a> No me gusta el entrenamiento de espalda, me estoy dando cuenta. Tengo muchas ganas del invierno. Para entrenar. Espalda, espalda, espalda, espalda, espalda, espalda, pierna, pierna, pierna, pierna, pierna. Oh, te veo fuerte, eh. A ver si me va la cámara, tío, que llevo un lío con las cámaras. Buah. Ahí dentro había una cámara. No es mal que ha pegado con la jaula, yo creo. Esto es muy malo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=432" target="_blank" class="timestamp">[07:12]</a> Estoy digno de mate, Silvio, por favor. Está perfecto, te lo juro. Está perfecto, te lo juro. Es que soy un desastre, tío. Soy lo más desastre de persona. No, boa, no, no. O sea, boa. Hostia, no me jodas. El micro. Por favor, la puta. O bueno, se lo voy a cambiar por mí. Ay, siempre igual, tío, ¿veis? Se me rompe el móvil, se me rompe tal, se me rompe todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=456" target="_blank" class="timestamp">[07:36]</a> La rampa está lo que conmigo. Me cago en mis muertos. Vamos a cerrar un bro, tío, y a ver si mejora. Me cago en la puta. Qué rabia, tío. Me he bajado prontito, además. Tenía ganas. Hoy es festivo. Me he enterado de que hoy es festivo, a mitad de mañana. El caso es que me voy a vestir. Voy a tomar mi intro de Hirox. Y llevo mi ropita favorita, o sea que... Mi último entrenamiento de la semana. Bien. Una. Sigue. Dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=493" target="_blank" class="timestamp">[08:13]</a> ¡Arriba! ¡Ocho! ¡Va! ¡Va! ¡Ya! ¡Ya! ¡Cinco! ¡Vamos! ¡Cuatro! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Tira! ¡Tira! ¡Tira! ¡Bien! ¡Bien! ¡Bien! ¡Bien! ¡Bien! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Fuerza! ¡Fuerza! ¡Fuerza! ¡Fuerza! ¡Cuatro! ¡Tres! ¡Uno!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=525" target="_blank" class="timestamp">[08:45]</a> Dame tres. Pábalo. Dame dos. Ya, parciales. Vamos. Vamos. Cinco. Cuatro. Tres. Dos. Uno. Bien. Dos. Tres. Cuatro. ¡Arriba, va! ¡Arriba, arriba! ¡Acuántala!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=557" target="_blank" class="timestamp">[09:17]</a> Vamos con la máquina. La máquina. Tres, dos, uno. Tuya ahí, ¿eh? Vamos. Fuerte arriba. Va. Bien. Una. Dos. Sigue. Tres. Arriba, arriba, arriba. ¡Arriba! ¡Va! Una más. Arriba. Fuera. Cinco. Cuatro. Tres.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=587" target="_blank" class="timestamp">[09:47]</a> Dos. Uno. Tres. Tres. Tres. Una más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=614" target="_blank" class="timestamp">[10:14]</a> ¡Arriba! ¡Arriba tú! ¡Tú! ¡Va! ¿Sueve con otra? Bueno... ¡Fuera! Una...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=631" target="_blank" class="timestamp">[10:31]</a> Buah, chicos. Voy a posar. Quiero probar aunque sea un gran visitado. Un poco las poses tiradas en el suelo. Es que solo quiere que haga Marta, pero no está Marta. Bueno, la puedo llamar. Marta, dime cómo quieres que posee. Se la tiene ya, la geografía hecha, ¿eh? ¿Sí? Sí. Ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=647" target="_blank" class="timestamp">[10:47]</a> Es que ya... No, me da igual, sí. Pero sí que quiero probar hacer alguna cosa un poco más diferente para correr. Que poses, sin más. O sea, aquí voy a posar. Voy a posar y luego hago con camiseta. Alguna tontería. Para ver simplemente la posición, si la cojo bien y todo. Ahora cada vez peso menos también. Es más fácil hacer posiciones. Vamos para arriba, aquí. No, me quedo un segundo más. Vamos, me muero de frío. Dando arriba. Ahí. Perfecto, quarter.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=687" target="_blank" class="timestamp">[11:27]</a> Ahí lo clavas. Clávalo bien. ¡Ahí! Perfecto. Abierta, bien. Siéntate. Piernas, piernas, piernas. Arriba. Ahí. Pecho arriba. Ahí. Mira, mira. Bien ahí. Buah, chaval. Jero, tío. Jero, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=728" target="_blank" class="timestamp">[12:08]</a> Voy a hacer la coreo. Si no se puede por copyright, ponemos un sonido de gatitos, ¿vale? Pero no, pero para que veas solo lo que quería que hiciera un poco. Mira, la canción de Niam. Déjame el espacio. No, no, no, no. Era como salir. No, pues no me acuerdo, ¿eh? Hay una parte que se puede girar y seguir así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=757" target="_blank" class="timestamp">[12:37]</a> El rey fue así. Ahora de aquí hacia así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=805" target="_blank" class="timestamp">[13:25]</a> Ah, bueno. Quería que íbamos a hacer dos de espaldas, dos de frente y tal. Luego también quería que íbamos al doble díceps. Lo va a díceps así. Estaría un momento ahí con los cuadradores con los pam, pam, pam. Por ejemplo, cuando vayas en la espalda. Sí. Te hace como tres pam, pam, pam, pam, pam. Y que justo acá es... No, que remes pam, pam, pam. Sí, cosas así. Claro, claro, sí, sí, porque hay que cuadrarlo. Yo ni hacer lo de ese estilo. Es un minuto y medio, o sea, aunque yo sea totalmente rítmico...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=835" target="_blank" class="timestamp">[13:55]</a> Te la prendes, te jodes y te la prendes. Es un poco así. Pero bueno. Está guay que ya la estéis preparando, tío. Hay que dejarla por luta. A ver, es más Marta que yo, ¿sabes? Yo saldría, haría... Pum, pum, pum, pum. Joder, que gran es este objetivo. Si no, no está justo en manual. A ver si lo cambio. Espero que Marta se los voy a hacer la corea. ¿De qué te ríes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=858" target="_blank" class="timestamp">[14:18]</a> Tú te ríes, pero es una promo muy guapa. Es una promo guapa que además usamos. Claro, es muy real. Está muy guapo. Vamos a grabar una promo para YouTube que los dos utilizamos de forma real. Por eso también me contactaron realmente porque yo era cliente ya. Entonces está muy guapo. Este es Republic, que es un banco. Y es donde hacemos las inversiones también. También lo utilizamos como banco, te dan comisiones y demás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=881" target="_blank" class="timestamp">[14:41]</a> No sé por qué estoy contando esto. Ha venido Toni y me lo voy a grabar justamente ahora y me voy a poner a zapillas del cardio porque lo voy a grabar encima de la cinta. Pero como que la acción no es por aquí por YouTube ni nada, pero que es lo que iría a contar básicamente. No sé si se está grabando, sí se está grabando. Hostia, subirme a la cinta otra vez. Eso es lo único malo de hoy. Pero la aplicación la verdad que la... De hecho estos días lo estábamos hablando bastante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=900" target="_blank" class="timestamp">[15:00]</a> Es verdad, es verdad. Sí, sí, sí. O sea, la parte de la app es una locura. Está muy guapa. Porque yo siempre digo que es como un Apple en ese sentido. En plan, es intuitiva y fácil. Así que... Me voy a la cinta. Tony me va a grabar. Ya va a pasar un poquito de hacer polvo. Hacer polvo, bro. Pol ya no vuelves a hacer tú, ¿eh? ¿Dónde hay problema? No se te va a ver. ¡Marita! ¡Marita que te la rompe! ¡Marita que te la rompe! Bueno, chicos. Vamos a darle calla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=931" target="_blank" class="timestamp">[15:31]</a> Pienso mucho. En mi cuerpo, pero también en mi futuro. Porque si entrego con cabeza, quiero que mi dinero también lo haga. Por eso utilizo Trier Republic. Un banco 100% online, que me da un 2,27% por tener mi dinero parado. Sin invertir. Sin movidas raras. No se trata solo de rentir aquí. También fuera del gimnasio. Tu dinero también puede entrenar. ¿Te gustan estas cosas? Tío, a mí, ¿sabes lo que me pasa?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=958" target="_blank" class="timestamp">[15:58]</a> Es una marca que mola, que lo usamos de verdad. Pero entiendo que es un banco, también tienes que decir algo muy claro. No puedes decir un 2,5 si es un 2,26. Cardio diario, dieta estricta, entrenos al límite, pero también pienso mi futuro. ¿Sabías que cuando dejas tu dinero en el banco, ellos se quedan con lo que quedara? El Banco Central Europeo les paga un 2,27% y Tim no vestía de euro. Yo uso Trade Republic para que mi dinero también trabaje. Te da ese 2,27% directo sin invertir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=992" target="_blank" class="timestamp">[16:32]</a> Fácil, seguro y destruido. Límpiate video o desliza. Haz que tu dinero también entrene. Mirad, brutal. Mirad, el gallinero. Hay un gato, se va, se va, se va. Teníamos un gato justo ahí en la puerta del gallinero. Estaban flipando. Mirad, mirad, mirad. Se lo voy a grabar a Marta. Al lado del gallinero. Mira el gallinero. ¡Pum!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1015" target="_blank" class="timestamp">[16:55]</a> Un chifú. Brutal, brutal, brutal, brutal. Tío, a ver si vienen y se quedan los gatos, tío. Me ha dicho Joel. Me ha dicho yo que si le quitáis las gallitas tal, puede que entren más gatos tal. Mira, esta la de la comida aquí que se ha volado yo creo. Porque esta la han comido toda. Es que no se quedan dentro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1032" target="_blank" class="timestamp">[17:12]</a> No sé qué podemos poner para que se queden dentro. Es que yo quiero que se queden dentro. Qué rabia. Vale, chicos. No sé por qué realmente creo que la cámara de Toni graba un poco diferente a la mía. Le tengo que preguntar. Creo que es la misma, pero no lo sé. Me la he quedado, por cierto. Mirad lo que le he hecho al micro, tíos. Me siento muy mal. Bueno, voy a comerme este tupper de manduca. Estoy la verdad que... Mirad, es que me siento muy mal, me siento muy mal. Mirad. Madre del amor hermoso. Es que me siento fatal. Qué gilipollas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1061" target="_blank" class="timestamp">[17:41]</a> Y encima mi cámara estaba yendo mal y me ha dejado otra vez la suya y se ha llevado la mía y me ha dicho, déjame que yo te la miro a ver qué coño le pasa. Así que bueno, ese es mi vídeo, Patricia. Marta está por Marbella ya, de hecho. Estaba ahora hablando un poquito con ella.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1077" target="_blank" class="timestamp">[17:57]</a> Estábamos viendo también una cosa que han hecho aquí en casa muy, muy guay, Román e Irene. No quiero decir mucho porque es cosa de Marta, creo yo. Tengo ganas de que vuelva y que lo vea porque sé que le va a hacer ilusión. Pero bueno, y tengo ganas de pasar un poco del posting. Me ha dicho que lo ve guay, pero el tema era coreo, como que tengo que trabajarlo 100%. Además, para el tema del posting también tengo una persona que creo que veo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1095" target="_blank" class="timestamp">[18:15]</a> Puede ayudar mucho, que la hagáis a ver pronto, porque lo necesito. Necesito realmente esa mi última competición al final. También creo que según cómo te sientas en la competición, en mi última competición me sentía bastante mal. Según cómo te sientas en la competición, te motivas más o menos, te sientes más móvil, más inspirado, más todo o no. Y luego, pues eso, es un poco eso. Por cierto, estoy empezando a estar reventado. O sea, reventado de que digo, es viernes, uff, el físico, lo llevo cansado, que flipas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1120" target="_blank" class="timestamp">[18:40]</a> Mañana último entrenamiento de la semana, pero es de puta madre, o sea, espero estamos ajustándolo bien. Mañana toca brazos, que además me motiva siempre el entrenamiento de brazos. Además lo hacemos en vez de a las 12 del mediodía lo solemos hacer a las 10. Entonces, como que acabas antes y tienes más sábado, más finde, aunque me da un poco igual este finde en concreto, pero es cierto que cambia un poco como el ritmo y se nota que es sábado, básicamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1139" target="_blank" class="timestamp">[18:59]</a> Así que, bueno, mañana haremos cositas. Y lo que os he dicho, mi última competición al final me sentía como así. Y creo que esta competición me va a sentir así. Como sabiendo que voy con humor físico, como que voy preparado, como que estoy yo ahí presente. Y yo creo que la semana que viene tendremos que hablar ya con Fran seriamente y decirle dónde vamos a competir, qué vamos a hacer, cómo van a ser las cosas. O sea, creo que ya empieza a llegar el momento. Estoy nervioso. Estoy bastante nervioso. Estoy bastante nervioso para las competiciones, la verdad. O sea, no lo quiero transmitir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1166" target="_blank" class="timestamp">[19:26]</a> y veo que el físico evoluciona encima sé que el punto de Fran va a ser apretar mucho y luego estar un pelín más relajados cerca de las condiciones para no estresar tanto llegar al punto antes entonces creo que viene ahora la época más el lunes veremos esa revisión el lunes quizá me pega otra apretada y digo ¡guau!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1184" target="_blank" class="timestamp">[19:44]</a> Pero bueno, es lo que hay, es lo que queremos, es lo que buscamos, es la puta realidad. Es que es así, es que es así, chicos. O sea, totalmente es así y quiero que sea así. Ya está. Quiero disfrutarlo. Así que, bueno, os voy a dejar aquí. Estoy tomando también decisiones para el invierno. Que no me gusta a veces adelantarme las cosas, pero estoy tomando decisiones para el invierno. Estaba hablando con Tony antes y estoy tomando decisiones para el invierno. Y además, creo que van a ser bastante guays.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BQY1RQHLVVE&t=1206" target="_blank" class="timestamp">[20:06]</a> o por lo menos de esas que me apetece disfrutar a mi entrenando también y tal no solo por el hecho que creo que es mejor luego de cara al rendimiento evidentemente pero que me apetece y encima hemos hecho hoy una promo super guapa sabes es algo que utilizamos de verdad y se nota y se valora y se aprecia así que bueno espero que os haya gustado el vídeo chicos no me enrollo más con esto y un bizcocho hasta mañana a las 8 aunque supongo que me despertaré a las 6 y pico de la mañana mmm mmm muy bonita adiós</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-CPN4JoZJwS0">
+            <h2>JOAN PRADELLS ODIA la FAMA</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 19/04/2025 16:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=CPN4JoZJwS0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=CPN4JoZJwS0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/CPN4JoZJwS0/hqdefault.jpg" alt="JOAN PRADELLS ODIA la FAMA" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes los momentos más impactantes de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p><strong>"El peso del anonimato perdido" [00:00]</strong></p>
+
+<ul>
+<li>El hablante confiesa que lo que más extraña de no ser famoso es el anonimato total, siendo honesto sobre su deseo de volver a la vida privada, especialmente en el contexto del culturismo. Es una confesión directa y vulnerable.</li>
+</ul></li>
+<li><p><strong>"La sinceridad al límite: 'Un flipado de mierda'" [00:00]</strong></p>
+
+<ul>
+<li>El uso de lenguaje fuerte ("flipado de mierda") al inicio busca inmediatamente restar importancia a la posible percepción de vanidad, creando un contraste impactante con el tema que aborda.</li>
+</ul></li>
+<li><p><strong>"El culturismo y la pérdida de privacidad" [00:00]</strong></p>
+
+<ul>
+<li>El culturista reconoce que su disciplina hace aún más difícil mantener el anonimato, sugiriendo que la atención pública es una constante en su profesión.  Es una observación realista sobre su realidad.</li>
+</ul></li>
+<li><p><strong>"Beneficios y desventajas: La dualidad de la fama" [00:00]</strong></p>
+
+<ul>
+<li>El hablante plantea una perspectiva equilibrada, admitiendo que la fama tiene sus pros y sus contras, y que la pérdida de anonimato es uno de los inconvenientes. Demuestra autoconsciencia.</li>
+</ul></li>
+<li><p><strong>"¿Lola Lolita? La confesión cómica" [00:00]</strong></p>
+
+<ul>
+<li>La referencia inesperada a "Lola Lolita" inyecta un toque de humor y trivialidad al tema, rompiendo la seriedad del momento. Es una forma de aligerar el peso de su confesión.</li>
+</ul></li>
+<li><p><strong>"La frustración a flor de piel: 'Joder, ojalá ser anónimo'" [00:00]</strong></p>
+
+<ul>
+<li>El uso de la interjección "joder" y el deseo explícito de volver a ser anónimo revelan una frustración genuina y un anhelo profundo por la privacidad. Es un momento de vulnerabilidad palpable.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CPN4JoZJwS0&t=0" target="_blank" class="timestamp">[00:00]</a> Es lo que más echas de menos de tu vida sin ser famoso. Siendo sincero y no quiero parecer un flipado de mierda, el anonimato. El anonimato total y creo que siendo culturista es mucho más complicado. Es un poco lo que hay. O sea, al final tiene sus beneficios, tiene sus inconvenientes y este es uno de ellos. No digo yo que sea aquí Lola Lolita, ¿vale? Evidentemente. Pero sí que es cierto que hay en ciertos momentos, en ciertas conchas, que dices, joder, ojalá ser anónimo al 100%.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-uFAUefOCCpA">
+            <h2>Peso muerto policía vs culturistas</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 19/04/2025 17:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=uFAUefOCCpA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=uFAUefOCCpA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/uFAUefOCCpA/hqdefault.jpg" alt="Peso muerto policía vs culturistas" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes los momentos más impactantes/polémicos de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p><strong>"¡El peso es ridículo! ¿Qué está pasando aquí?"</strong> [00:07]</p>
+
+<ul>
+<li>Comienza la queja sobre la cantidad de peso, indicando frustración e incredulidad. Desde el inicio se percibe un descontento con las condiciones de la prueba.</li>
+</ul></li>
+<li><p><strong>"¡Mierda para mí! Un error que puede costarnos caro"</strong> [00:29]</p>
+
+<ul>
+<li>Expresión de frustración y autocrítica tras cometer un error que pone en peligro al equipo. Revela la presión del momento y la importancia de la precisión.</li>
+</ul></li>
+<li><p><strong>"¡El policía ya está jugando! ¿Dónde está el espíritu competitivo?"</strong> [00:14]</p>
+
+<ul>
+<li>Comentario sarcástico sobre el comportamiento del oponente, insinuando que no se toma la prueba en serio. Sugiere una actitud poco deportiva por parte del policía.</li>
+</ul></li>
+<li><p><strong>"¡No sé cómo puede continuar! ¿Es posible esa resistencia?"</strong> [00:21]</p>
+
+<ul>
+<li>Expresión de asombro ante la capacidad de resistencia de uno de los participantes, mostrando sorpresa e incluso incredulidad.</li>
+</ul></li>
+<li><p><strong>"¡A la mierda! La frustración explota en un grito de desesperación"</strong> [00:25]</p>
+
+<ul>
+<li>Un momento de explosión emocional, evidenciando el estrés y la dificultad de la prueba, y un lenguaje muy directo.</li>
+</ul></li>
+<li><p><strong>"¿Qué clase de entrenamiento sigue este tipo?"</strong> [00:21]</p>
+
+<ul>
+<li>Pregunta retórica que denota admiración (o envidia) por la resistencia del oponente, resaltando el contraste en el rendimiento.</li>
+</ul></li>
+<li><p><strong>"¡La repetición del 'Arriba!' se vuelve un mantra desesperado"</strong> [00:20-00:28]</p>
+
+<ul>
+<li>La repetición constante de la palabra "Arriba!" enfatiza la lucha física y mental de los participantes, creando una atmósfera de tensión y agotamiento.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=uFAUefOCCpA&t=0" target="_blank" class="timestamp">[00:00]</a> El que pierda primero hace que pierda el equipo. ¡Muy bien! Pero qué poco peso han puesto, ¿no? ¡Vamos! ¡Vamos! ¡Boom! Iguala… 143. Igualalo ahora. Calma. ¡Vamos! ¡Oh, casi! ¿Quién crees que va a ganar esta prueba? Me parece que al culturista le va a fallar el agarre. Yo digo que gana el policía. Comenzó. ¡Vamos, amigos! ¡Vamos, vamos! Buah, el policía se está giñando ya, tío. ¡Vamos! ¡Eso, eso! ¡Vamos! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=uFAUefOCCpA&t=29" target="_blank" class="timestamp">[00:29]</a> Mierda para mí. Ahora me he equivocado. ¡Arriba! ¡Arriba! ¡Arriba! ¡Adelante! ¡Excelente! ¡No sé cómo él puede continuar! ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! ¡Rápido! ¡Vamos! ¡Arriba! ¡Arriba! ¡Arriba! Es que es muy poco peso, tío. ¡A la mierda! ¡Vamos! ¡Vamos! ¡Vamos! ¡Muy bien! ¡Adelante! ¡Arriba! Pues nada, me he equivocado.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-x9ttHD88Rek">
+            <h2>Press banca culturista vs policía</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 19/04/2025 19:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=x9ttHD88Rek" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=x9ttHD88Rek" target="_blank">
+                    <img src="https://i.ytimg.com/vi/x9ttHD88Rek/hqdefault.jpg" alt="Press banca culturista vs policía" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes el análisis de los momentos más impactantes de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p>"[¡Spencer al Límite!]" [00:00]</p>
+
+<ul>
+<li>Spencer se esfuerza visiblemente en las repeticiones, mostrando un claro agotamiento físico. El narrador lo anima con insistencia, resaltando su dificultad y creando tensión.</li>
+</ul></li>
+<li><p>"[Gritos de Animo en la Ronda]" [00:05]</p>
+
+<ul>
+<li>La intensidad de las voces y la repetición de "vamos" sugieren una competencia muy exigente. Se percibe un ambiente de presión y motivación extrema.</li>
+</ul></li>
+<li><p>"[Amenaza Velada a Spencer]" [00:12]</p>
+
+<ul>
+<li>La frase "Será mejor que te vayas" es brusca y posiblemente desmotivadora. Implica que el rendimiento de Spencer es insatisfactorio.</li>
+</ul></li>
+<li><p>"[Jared en Peligro]" [00:14]</p>
+
+<ul>
+<li>La descripción de Jared “se está ahogando” es alarmante y sugiere que está forzando su cuerpo al límite.  La situación suena peligrosa.</li>
+</ul></li>
+<li><p>"[¡Superación Extrema de Jared!]" [00:18]</p>
+
+<ul>
+<li>Jared excede ampliamente la meta inicial de 18 repeticiones, llegando a 27. Esto demuestra una resistencia física impresionante, pero también podría indicar una posible imprudencia.</li>
+</ul></li>
+<li><p>"[Victoria Robada con 33 Repeticiones]" [00:20]</p>
+
+<ul>
+<li>Se anuncia la victoria del equipo con un total de 33 repeticiones, superando la marca de Jared y de su oponente. La diferencia es significativa, lo que hace la victoria más contundente.</li>
+</ul></li>
+<li><p>"[¿Sobreesfuerzo Necesario?]" [00:25]</p>
+
+<ul>
+<li>El hecho de que Jared hiciera tantas repeticiones más allá de las necesarias plantea la pregunta de si el desafío fue demasiado intenso o si la competitividad lo llevó al extremo.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x9ttHD88Rek&t=0" target="_blank" class="timestamp">[00:00]</a> Aunque es una ronda en parejas, el oficial Spencer necesitaba más para sumar al total de repeticiones. ¡Siete! ¡Diez! ¡Genial, amigos! ¡Vamos, Spencer! ¡Vamos! Este no es tan bueno ya. ¡Vamos! ¡Sube, sube! ¡Ooooh! ¡Doce! ¡Será mejor que te vayas! ¡Vamos, vamos! ¡Vamos, adelante!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x9ttHD88Rek&t=22" target="_blank" class="timestamp">[00:22]</a> Este es el último desempate. Con Jared de último, solo debía ser 18 repeticiones. Que no debería ser tan difícil para él. 13. 14. Se está ahogando. 18. 19. 20. 27 repeticiones. Ellos tienen 33 repeticiones. Por lo tanto, ganamos esto.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-YiCdlCihTwA">
+            <h2>¡ES OFICIAL! ¡YA SE CONOCEN LOS RIVALES DE PRADELLS EN TAMPA! ¿Podrá METERSE en la FINAL?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 19/04/2025 19:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=YiCdlCihTwA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/YiCdlCihTwA/hqdefault.jpg" alt="¡ES OFICIAL! ¡YA SE CONOCEN LOS RIVALES DE PRADELLS EN TAMPA! ¿Podrá METERSE en la FINAL?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Este texto es un análisis exhaustivo de los posibles competidores de Joan Pradès en una competición de culturismo (bodybuilding). Aquí hay un resumen y los puntos clave:</p>
+
+<p><strong>Resumen General:</strong></p>
+
+<p>El analista está evaluando las posibilidades de Joan Pradès de competir contra una serie de rivales confirmados y potenciales. Reconoce que la competencia será dura, especialmente con atletas como John de la Rosa y Demiro Beragic, quienes parecen tener ventajas en tamaño y condición física.  El autor invita a los espectadores a compartir sus propias predicciones sobre cómo se desempeñará Joan Pradès en la competición.</p>
+
+<p><strong>Análisis de los Competidores:</strong></p>
+
+<ul>
+<li><strong>John de la Rosa:</strong>  Considerado un oponente muy fuerte, posiblemente difícil de superar, especialmente si la competición se celebra en su territorio (esto se infiere).</li>
+<li><strong>Demiro Beragic:</strong>  Se destaca su gran mejora en tamaño y condición física con respecto a temporadas anteriores.  Se le considera un rival fuerte, posiblemente superior a Joan, especialmente considerando su condición física y tamaño.  La ventaja de competir en casa de Joan (EMPRO) se considera un factor que podría no ser suficiente para superar a Beragic.</li>
+<li><strong>John G. Witt &amp; Quinton Wishwood:</strong>  Considerados "incógnitas".  Su nivel de preparación y desempeño son inciertos.</li>
+<li><strong>Stuart Sutherland (Beef Stew):</strong> Ha tenido resultados mixtos en competiciones recientes, con algunos problemas en la última competición.  A pesar de esto, es un competidor a tener en cuenta.</li>
+<li><strong>Otros:</strong> Se mencionan posibles competidores adicionales, pero no se les da el mismo nivel de análisis.</li>
+</ul>
+
+<p><strong>Puntos Clave sobre Joan Pradès:</strong></p>
+
+<ul>
+<li><strong>Fortaleza:</strong> Tiene un gran tamaño e imponente físico.</li>
+<li><strong>Debilidad:</strong> El analista cree que podría no tener la ventaja en condición física o tamaño en comparación con algunos de sus oponentes, como Demiro Beragic.  El analista reconoce que la versión de Joan que veremos en la competición será diferente a la que estamos viendo actualmente (entendiéndose que se preparará más).</li>
+<li><strong>Posibilidad de éxito:</strong> El analista cree que Joan podría estar en la lucha por entrar en las finales del Tampa Pro, siempre y cuando la alineación de competidores se mantenga como está.</li>
+</ul>
+
+<p><strong>En resumen, el analista predice que la competencia será feroz y que Joan Pradès enfrentará un desafío significativo para alcanzar el éxito. Reconoce su fortaleza en tamaño, pero cree que la condición física y el tamaño de algunos de sus oponentes podrían ser factores determinantes.</strong></p>
+
+<p>El autor invita a la participación de la audiencia, pidiéndoles que compartan sus predicciones sobre cómo se desempeñará Joan Pradès en la competición.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal y tenemos que hablar de la publicación, que en este caso ya es, tiene un carácter bastante oficial, de A.G. Kelly Roberts, que en Instagram ha publicado varios de los atletas que están confirmados para el Tampa Pro, un Tampa Pro que como todos sabéis es ese objetivo, ese campeonato.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=22" target="_blank" class="timestamp">[00:22]</a> que tiene Joan Pradels bastante puesto en el horizonte dentro de tan solo tres meses. Ahora veremos las fechas también. Y en este caso vamos a ver un poquito cuáles serían los rivales de Joan, que yo creo que apetece y que interese y ver dónde podremos situar a Joan dentro de esta nómina de atletas. Creo que va a tener un nivel superior al del año pasado, lo creo sinceramente, viendo sobre todo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=43" target="_blank" class="timestamp">[00:43]</a> El nivel general de los atletas que van a estar allí, y va a estar difícil para Joan entrar en una final, ojo, no imposible, creo que sí que va a poder competir con los atletas que vais a ver ahora, de hecho alguno hasta lo ha ganado, ahora lo vamos a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=59" target="_blank" class="timestamp">[00:59]</a> Así que, como digo, vamos a analizarlo todo para que no os perdáis ni un poquito de lo que pueda ocurrir en ese Tampa Pro. Como digo, vamos a pasar a analizarlo. No sin antes, obviamente, no olvidarme de los códigos de descuento. Código de descuento Iron Road en toda la web de Agonjin, que tiene ahora un nuevo drop. Back in the game, con ropa muy, digamos, evocando a la goldenera. Y, por supuesto, el código de descuento, mismo código Iron Road en toda la web.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=85" target="_blank" class="timestamp">[01:25]</a> de Big, ya sabéis que ahora estamos con nuestros amigos de Big yo he probado toda la suplementación, de hecho la tengo justo aquí atrás y desde luego que los sabores son espectaculares, la calidad es increíble, así que como digo confiad y aprovechad en Big y tenéis ahí un 10% de descuento con el que ayudáis al canal en su crecimiento como digo, vamos a pasar a analizar todo lo de Joan porque tenemos que remontarnos a esta publicación como digo, de Icarus Rovers</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=115" target="_blank" class="timestamp">[01:55]</a> donde habla un poco de los atletas que ya han confirmado o que a él le han llegado que van a estar en ese Tampa Pro, que como digo es el objetivo o uno de los objetivos que tiene Joan en esta temporada para volver a competir después de un año parado. Como digo, vamos a ir analizándolo luego.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=133" target="_blank" class="timestamp">[02:13]</a> pormenorizadamente, porque yo creo que interesa. Pero el primero de ellos es Emiro Beragic, que a mí es un atleta que personalmente me gusta muchísimo. Es un atleta que suele salir con un muy buen punto de condición. Por cierto, es un tipo que entrena tan duro más que Joan. Es un tipo que los entrenamientos son muy locos, los de Emiro Beragic. Y que como digo, va a estar, que es un habitual del circuito europeo. Y precisamente que aquí viene el morbo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=160" target="_blank" class="timestamp">[02:40]</a> A esta atleta que se clasificó posteriormente al Mister Olimpia, lo venció Joan Pradels en el EMPRO. Quedó por delante Joan Pradels, Demir Omerajic, en el EMPRO, aquel EMPRO de la discordia, aquel EMPRO de su debut profesional. Bueno, pues en aquel debut profesional, en este caso, Joan Pradels, aquella versión de Joan Pradels de hace dos años, venció a la versión también de hace dos años, Demir Omerajic.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=182" target="_blank" class="timestamp">[03:02]</a> Tenemos al siguiente que es el actual campeón, John de la Rosa. Como digo, luego vamos a ir uno a uno analizándolos pormenorizadamente, que yo creo que interesa bastante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=195" target="_blank" class="timestamp">[03:15]</a> En el caso de John De La Rosa, como digo, es el actual campeón del Tampa Pro, que ahora veremos. Un atleta que es más bajito que Joan. Sí que es verdad que tiene un músculo muy denso, muy compacto. Y suele ser un tipo bastante competitivo y tengo que decir que con bastante buena prensa en Estados Unidos. Hay que decirlo absolutamente todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=216" target="_blank" class="timestamp">[03:36]</a> El siguiente, que es un atleta que hemos hablado muchísimo de él, precisamente por el parecido estético con Joan, es el caso de Justin Sheer, que tuvo una temporada rookie espectacular, fulgurante, donde consiguió...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=232" target="_blank" class="timestamp">[03:52]</a> El pase a la Olimpia por primera vez en su carrera y única. Últimamente está mostrando un gran nivel a nivel de condicionamiento, también de tamaño y como podemos ver es un atleta que va a ser o que es un hueso duro y que sin ninguna duda es un atleta que a nivel como digo estético recuerda un poco a lo que puede ofrecer Joan, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=254" target="_blank" class="timestamp">[04:14]</a> Sobre todo lo referente al tren inferior y a la estética, evidentemente. Como digo, el siguiente es otro de los señalados. Quinton Wishwood, os acordaréis, de aquella movida que hubo en este caso con el ex preparador, entre otros, de Danny Walker, de Matt Jansen. Hubo bastante polémica, él salió diciendo que poco bajaron matasanos y demás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=281" target="_blank" class="timestamp">[04:41]</a> Y evidentemente luego se ha dejado bastante que desear en las competiciones en las que posteriormente estuvo. Hasta tal punto que tuvo que incluso parar un poco su preparación y demás para focalizarse en esta temporada. El siguiente es John Zewitt, que también es un atleta. Como veis, prácticamente todos han pisado la tarima del Mr. Olympia. Hemos visto ya el caso de John De La Rosa. Por supuesto, por supuesto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=309" target="_blank" class="timestamp">[05:09]</a> El caso de John G. Webb, Justin Sheer también ha estado en el Olimpia, Emiro Beragic, creo que también lo ha estado, si no me dejadlo en la caja de comentarios, pero me suena a mí que también ha estado en el Olimpia. El siguiente sería Bifestu, ojito con el tema, que este ya lo tuvo enfrente el año pasado nuestro Pablo Llopis en el California y no nos sorprendería que pudiera estar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=334" target="_blank" class="timestamp">[05:34]</a> Así que como digo, estos son los atletas que en este caso AJ Kelly Roberts puede confirmar que están haciendo el Tampa Pro, los rivales de lo que puede ser o de lo que seguramente tiene pinta de que va a ser el redebut profesional de Joan Pradles, en este caso en Estados Unidos. Así que si os parece vamos a coger y vamos a analizar un poquito</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=355" target="_blank" class="timestamp">[05:55]</a> ...quién es cada uno... ...qué pueden ofrecer... ...etcétera, etcétera... ...porque en el caso de algunos lo tenemos bastante claro... ...en el caso de otros quizás por ahí no tanto... ...si os parece vamos a empezar... ...con un poco lo que ocurrió... ...en la pasada temporada... ...en el Tampa Pro... ...porque yo creo que es un poco lo que interesa... ...lo que interesa ver un poquito... ...qué fue lo que pasó... ...qué atletas estuvieron... ...porque vais a ver que repiten algunos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=384" target="_blank" class="timestamp">[06:24]</a> Y en este caso yo creo que es cuanto menos interesante. En el caso de John de la Rosa, lo tenéis aquí, está confirmada su presencia, es el actual, como digo, campeón. Un atleta que no es muy grande o muy amplio, pero la realidad es que lo que tiene lo muestra muy bien y aparte es un tipo redondo que suele salir con un buen punto de condición. Sí que es cierto que a mí personalmente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=406" target="_blank" class="timestamp">[06:46]</a> No es de los atletas que más me gusten. Creo que tiene en el tema del abdomen algo que mejorar, obviamente. Pero sí que es verdad que cuenta con una muy buena presa en Estados Unidos. Ya os digo que es un atleta que lo tiene muy bien visto. El tren inferior la verdad es que es muy bueno. Las cosas como son. Es un atleta muy denso. Y que si sale con un buen punto de condición, pues evidentemente va a estar arriba. No en vano. Como digo, será todo el campeón de este evento del Tampa Pro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=433" target="_blank" class="timestamp">[07:13]</a> Donde, como podéis ver, ninguno de los cuatro, o mejor dicho, de los tres rivales que tuvo en esa final, a priori van a estar en el Tampa Pro. Evidentemente quedan muchas semanas y se puede confirmar, o se puede un poco, digamos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=447" target="_blank" class="timestamp">[07:27]</a> cerrar el círculo con otros atletas, entre otros casos como Vlad Soruzko, por ejemplo el caso de Moufoda, que son los que estamos viendo ahí, pues podrían dar el paso a querer estar. Evidentemente hay muchos más que los hemos visto. En el caso de Miro Meragi, como digo,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=469" target="_blank" class="timestamp">[07:49]</a> Miro Miralli que en la temporada pasada hay que recordar a la gente donde estuvo y si os parece vamos a buscarlo porque insisto que es un atleta que puede tener unas ciertas referencias con Joan, de hecho como ya he dicho quedó por detrás en el Empro pero sí que compitió ahora que lo estoy viendo y lo vamos a repasar es cierto que compitió en el Big Man donde quedó por detrás en este caso creo que quedó segundo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=495" target="_blank" class="timestamp">[08:15]</a> por detrás de Akin Williams. Aquí lo estamos teniendo, ¿no? Esta fue la batalla 2 entre Akin Williams y Emilio Meragic. Y como digo, es un atleta muy grande. Esto ya hay que decirlo, un atleta muy grande. Un atleta que ha mejorado muchísimo con respecto a la temporada en la que se vio las caras con Joan y quedó por detrás. Atleta alemán, evidentemente. Probablemente sea, y ahí no tenéis el comentario de Jekyll y Roberts, el mejor atleta open profesional de Alemania a día de hoy, con tan solo 25 años. Es un atleta más joven que Joan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=525" target="_blank" class="timestamp">[08:45]</a> Y que, como digo, va a ser un hueso durísimo, durísimo para Joan. O sea, este tipo yo creo que a día de hoy está un puntito por encima, si no dos, de lo que puede ofrecer Joan. Pero insisto, estamos hablando de una versión de Joan Prades que ahora mismo no la estamos imaginando. No sabemos o desconocemos cuál puede ser la versión de este 2025 de Demiro Meragi, que por cierto, y aquí lo tenéis, también estuvo en Rumanía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=553" target="_blank" class="timestamp">[09:13]</a> La temporada en la que Rafael Brandao, hace unos meses, fue cuando Rafael Brandao consiguió su pase al Mister Olimpia y lo tuvimos ahí, creo que quedando tercero, si no me falla la memoria, por detrás de Akin Williams y de Brandao y tenemos también a Horst.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=570" target="_blank" class="timestamp">[09:30]</a> Como digo, un atleta que ya realizó su temporada y que es un habitual en el circuito europeo. Aquí lo tenéis, por ejemplo, en Portugal, quedando tercero, por detrás de Bonn aquí y de Nazan de Asha. En fin, un atleta, como digo, que tiene mucho para ofrecer, mucho para ofrecer porque es un atleta muy grande, es un atleta con una buena densidad muscular, buena línea de X y que evidentemente se sale condicionado. De hecho, es uno de los atletas de Chris Aceto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=599" target="_blank" class="timestamp">[09:59]</a> Si sale bien condicionado es un atleta que puede dar mucha, mucha, mucha guerra y que puede hacerle a Joan sufrir bastante. Por otro lado, vamos a seguir porque yo creo que interesa mucho ver dentro de la publicación de J. Kelly Roberts un poquito lo que tenemos. Ya hemos hablado de Omiragic, hemos hablado de John Delarro, se queda este señor de aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=620" target="_blank" class="timestamp">[10:20]</a> que es en este caso Justin Sheer, que como digo es uno de los atletas que más se suele comparar con Joan, pero que lleva mucho tiempo inactivo, hay que decirlo así, lleva mucho tiempo sin competir, él como digo tuvo una actuación como rookie espectacular, donde se clasificó al Mr. Olympia, y aquí estamos viendo un poco lo que es Justin Sheer, un atleta grande, un atleta amplio, tenso, que suele salir un buen punto de condición, pero que a día de hoy es un poco incógnita porque no sabemos realmente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=649" target="_blank" class="timestamp">[10:49]</a> Lo que puede ofrecer o lo que puede ser, mejor dicho, el Justin Sear de la temporada 2025. En este caso, esto fue hace 15 semanas, ahí lo tenemos, unas semanas antes de la Olimpia, afirmando que quedan pocas semanas para la Olimpia, etc. Pero bueno, como digo, un recap.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=668" target="_blank" class="timestamp">[11:08]</a> de un atleta al que han comparado mucho con Joan, sobre todo por ese doble bíceps de frente, su particularidad y también su punto débil suelen ser los mismos que tiene con Joan. Un front post, la verdad es que es súper imponente y lo estáis viendo ahí, con un doble bíceps espectacular y donde realmente flaquea es en la espalda, principalmente en la espalda, no incluso en el tren inferior, pero sobre todo en la espalda donde queda un poquito por detrás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=695" target="_blank" class="timestamp">[11:35]</a> Es otro de los atletas que estoy seguro que a mí por lo menos me va a encantar verlo al lado de Joan, a ver esa comparativa que se ha hecho durante mucho tiempo y que desde luego que invita a ver qué es lo que realmente subyace de todo ello.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=712" target="_blank" class="timestamp">[11:52]</a> El siguiente atleta, que creo que es Quinton Wishwood, ahí lo tenéis. Quinton Wishwood, que como digo, a mí personalmente no me disgusta, pero lo veo como una especie de classic fuerte. Es decir, que cuando llega a competición Quinton Wishwood queda bastante descarnado. Vosotros lo veis aquí y parece que es muy denso, que tiene mucho tamaño y demás, pero cuando va a competir el problema es que lo que se nos queda, lo que queda de Quinton Wishwood, no sé si a lo mejor referente a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=741" target="_blank" class="timestamp">[12:21]</a> problemas en la puesta a punto, problemas en la preparación, etc. En lo que veis aquí, que es lo que vimos el año pasado en el Toronto Pro Show. Un atleta que en cuanto a línea es espectacular, muy bonito, pero que no deja de parecer un classic fuerte. Le falta bastante tamaño, sobre todo en el tren inferior yo creo que es un poco mejorable, pero quizás más todavía el tema de pectoral y demás, la condición bastante mejorable también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=771" target="_blank" class="timestamp">[12:51]</a> Entonces, como digo, es un atleta al que le va a faltar o que le falta, ¿no? Le falta mucho por ver qué es lo que puede ofrecer. Y luego, por otro lado, ya hablando de los restos de competidores que nos quedan, nos queda el caso de Beef Stew, ¿vale? Aquí sí que es verdad que es complicado, porque es un atleta que siempre ha contado con mucho hype, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=795" target="_blank" class="timestamp">[13:15]</a> mucha mucha demanda y sí que es cierto sí que es cierto que en el caso de Stuart Sutherland compitió en el New York Pro sin demasiada suerte hay que decirlo así finalizó en cuarta posición y luego hizo el campeonato de California donde para mi gusto y lo sabéis porque hubo bastante polémica con ello tuvo una salida de pata de banco vamos a decirlo así</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=823" target="_blank" class="timestamp">[13:43]</a> porque el Prejadkin aparentemente iba a quedar por detrás de Pablo Llopis para entrar en esa final a 4 parece que se quejó bastante luego lo metieron, en fin, hubo ahí un poquito de chanchullo como digo es un atleta que a mi personalmente no me disgusta pero que sí que es verdad que le veo ciertas flaquezas con respecto sobre todo a lo que estamos viendo en las tarivas profesionales es un atleta que no es muy amplio de clavículas ya lo estáis viendo, es un atleta que no es</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=853" target="_blank" class="timestamp">[14:13]</a> de los más amplios luego aparte el tema de la condición es algo que le ha costado bastante rematar esa jugada pero que sí que es verdad que bueno que veremos a ver kilos ha metido otra cosa no aquí se lo puede ver con bastantes kilos con 280 libras que es una pasada para la altura que tiene así que veremos a ver qué es lo que ofrece en cuanto a tamaño ¿Puede Joan Pradles con ellos? que esa es un poco la pregunta que sé que os estáis haciendo ¿Puede Joan Pradles con ellos?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=882" target="_blank" class="timestamp">[14:42]</a> Evidentemente creo que está complicado para meterle mano y más en casa a un John de la Rosa. Lo veo muy complicado. Emiro Beragic con las novedades o ventajas o la situación con la que se presenta, yo tengo que decir que lo veo también difícil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=902" target="_blank" class="timestamp">[15:02]</a> Lo veo difícil porque, como podéis ver, Demiro Meragic ha metido una mejora espectacular con respecto a temporadas anteriores. No quiere decir que Joan no y ya lo ganó, pero también hay que recordar que Joan jugaba en casa en el EMPRO. Eso también, queráis que no, pesa un poquito. En este caso, como digo, Demiro es una letra muy grande. No digo que Joan no lo sea, pero tenemos que ver qué es lo que queda de la definición de Joan y cuando agarre ese punto de condición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=930" target="_blank" class="timestamp">[15:30]</a> Y si tengo que ver esa conjunción entre punto de condición y tamaño, creo que Omiro Belagic siempre va a estar un paso por encima, o al menos a día de hoy, con respecto a Joan. Si nos vamos a los siguientes, ya he puesto dos que creo que para estar por encima de Joan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=945" target="_blank" class="timestamp">[15:45]</a> Si nos vamos a John G. Witt y a Quinton Wishwood, sí que es cierto que son un poco una incógnita. Esto hay que reconocerlo, son un poco una incógnita de los que nos podemos presentar. Y puedo meter en ese vagón también, porque meto a Stuart Sutherland evidentemente, meto a John G. Witt y meto a Quinton Wishwood.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=963" target="_blank" class="timestamp">[16:03]</a> como esos atletas que no sé realmente bien dónde encuadrarlos con respecto a la versión de Joan. Joan evidentemente lo que estamos viendo aquí es imponente y tiene un gran tamaño, pero no va a ser la versión que vamos a ver de Joan en unos meses. Entonces es bastante complicado a la hora de determinar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=989" target="_blank" class="timestamp">[16:29]</a> por dónde nos vamos a mover y por dónde va a estar el tema de Joan. Pero yo precisamente ese ejercicio, ese ejercicio, quiero que lo hagáis precisamente vosotros. Que me dejéis en la caja de comentarios cómo veréis a Joan enrolado en esta terna de 4 o 5 atletas que ya están confirmados. Yo personalmente veo a Joan de la Rosa y a Miro Medallín por encima, pero los otros, sinceramente, los tengo ahí. O sea, yo creo que Joan puede estar perfectamente peleando</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=YiCdlCihTwA&t=1013" target="_blank" class="timestamp">[16:53]</a> Por entrar en unas finales del Tampa Pro. Siempre y cuando el line-up sea este. Y no aparezcan nuevos. Que evidentemente los vaya a poner por encima. Así que como digo. Dejadme en la caja de comentarios. ¿Qué opináis? Fuerte like al vídeo. Suscribíos al canal. Y como siempre digo chicos y chicas. Siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 19/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
