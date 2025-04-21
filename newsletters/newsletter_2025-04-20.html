@@ -1,0 +1,1101 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 20/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">20/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ul>
+                    <li><a href='#video-wiTu-r1wJXs'>ANDONI PIERDE MUCHÍSIMO PESO A 3 MESES DE SU COMBATE</a></li>
+<li><a href='#video-xD-6QqyOGWU'>¡DENIS ROSE DESTROZA LA PUERTA! El FUTURO del CULTURISMO español YA ESTÁ AQUÍ</a></li>
+<li><a href='#video--uICN7ZHwMs'>¿Merece La Pena Esto? | 90 Días Para Mi Competición Profesional</a></li>
+<li><a href='#video-l4O-0PDApiw'>JOAN PRADELLS SOFRE UNA ENFERMEDAD</a></li>
+<li><a href='#video-FVE4uqA8NSM'>Andoni aparece con una definición extreme antes de la velada</a></li>
+<li><a href='#video-6j-YrdOF3xo'>SEZAR BLUE EN NORUEGA - GASTRONOMÍA ESCANDINAVA</a></li>
+<li><a href='#video-Pd3LxKdBkY4'>EXCLUSIVA| "EN 2026 ME RETIRO DE PREPARAR. YA NO PUEDO MAS" Raúl Carrasco ANUNCIA su RETIRADA</a></li>
+<li><a href='#video-11gn-rsL2HA'>La verdad más brutal que vas a escuchar sobre las rupturas</a></li>
+<li><a href='#video--KzuVCRzgTA'>Andoni tiene una genética de los dioses</a></li>
+                </ul>
+            </div>
+            
+            
+        <div class="video-section" id="video-wiTu-r1wJXs">
+            <h2>ANDONI PIERDE MUCHÍSIMO PESO A 3 MESES DE SU COMBATE</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 20/04/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=wiTu-r1wJXs" target="_blank">
+                    <img src="https://i.ytimg.com/vi/wiTu-r1wJXs/hqdefault.jpg" alt="ANDONI PIERDE MUCHÍSIMO PESO A 3 MESES DE SU COMBATE" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Vale, aquí tienes un resumen y análisis del texto, desglosando los puntos principales y las opiniones expresadas:</p>
+
+<p><strong>Resumen General</strong></p>
+
+<p>El texto es una transcripción de un comentario (probablemente en video o podcast) sobre el físico y la preparación de Andoni, un atleta o figura pública conocida por su forma física.  El comentarista analiza su dieta, posible uso de esteroides, y su genética excepcional.  Está muy impresionado con la definición muscular de Andoni, incluso cuando parece estar en déficit calórico.</p>
+
+<p><strong>Puntos Clave del Análisis:</strong></p>
+
+<ul>
+<li><strong>Físico Inalcanzable:</strong> El comentarista repite varias veces que el físico de Andoni es prácticamente inalcanzable, incluso para personas que utilizan esteroides.  Lo atribuye a una genética excepcional.</li>
+<li><strong>Genética Sobre Todo:</strong>  La genética es el factor más importante según el comentarista.  Aunque reconoce el uso de esteroides (y lo da por sentado), argumenta que no son suficientes para alcanzar un nivel similar al de Andoni sin una base genética superior.</li>
+<li><strong>Dieta y Nutrición:</strong> Describe la dieta de Andoni como relativamente simple: arroz, pollo, y batidos con crema de cacahuete o arroz. Considera que esta dieta, por sí sola, no es suficiente para lograr un físico como el suyo.</li>
+<li><strong>Esteroides:</strong>  Asume implícitamente que Andoni usa esteroides, pero subraya que estos no son la única clave.  Cree que incluso con esteroides, la mayoría de las personas no podrían alcanzar su nivel.</li>
+<li><strong>Peso y Definición:</strong> El comentarista especula sobre el peso actual de Andoni, estimándolo alrededor de 105-107 kg.  Está particularmente impresionado por su definición muscular, incluso cuando parece más delgado que en el pasado.</li>
+<li><strong>Trapecio:</strong> Destaca el desarrollo del trapecio de Andoni como algo fuera de lo común, un resultado, en su opinión, de su genética.</li>
+</ul>
+
+<p><strong>Opiniones y Argumentos Principales:</strong></p>
+
+<ul>
+<li><strong>La genética es el factor determinante:</strong> El comentarista insiste en que la genética juega un papel crucial en la capacidad de desarrollar un físico extremo.</li>
+<li><strong>Los esteroides son una ayuda, no una solución mágica:</strong> Reconoce que los esteroides pueden ayudar a mejorar la masa muscular y reducir la grasa corporal, pero argumenta que no son suficientes para lograr un físico como el de Andoni sin una base genética sólida.</li>
+<li><strong>Andoni tiene una genética excepcional:</strong> El comentarista está convencido de que Andoni posee una genética de élite que lo diferencia del resto de los atletas.</li>
+<li><strong>La definición de Andoni es impresionante:</strong> Se muestra asombrado por la definición muscular de Andoni, incluso cuando parece estar en déficit calórico.</li>
+</ul>
+
+<p><strong>En resumen:</strong></p>
+
+<p>El comentario es una mezcla de admiración por el físico de Andoni y una discusión sobre los factores que contribuyen a un desarrollo muscular extremo.  El comentarista enfatiza la importancia de la genética y argumenta que, aunque los esteroides pueden ser útiles, no son suficientes para lograr un nivel similar al de Andoni sin una base genética excepcional. El tono es informal y con jerga coloquial, sugiriendo un formato de conversación espontánea.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=0" target="_blank" class="timestamp">[00:00]</a> Andoni, así compatibilizo boxeo y gym en mi día. Vamos a ver el bicho, cómo anda para la velada, cómo anda físicamente, cómo va el tema de... Bueno, el cuerpo, vamos a ver. Muy buenas chicos, bienvenidos a un nuevo vídeo. Vídeo muy cortito, eh.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=15" target="_blank" class="timestamp">[00:15]</a> Lo siento mucho por la inactividad, ¿vale? Que hemos tenido estas tres semanas o cuatro semanas realmente. No hay mucho secreto, simplemente que me encantaría enseñar toda la preparación. Pero bueno, hay muchas cosas que a nivel técnico, pues, tal vez es mejor ocultar y... Sería Andoni. Compi, esto es, si fueses Mayweather Paquiao, te digo, vale. Pero a ver, que sois Andoni y Belcast.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=36" target="_blank" class="timestamp">[00:36]</a> Con todo el respeto del mundo, ¿vale? Pero sois dos tíos que por muchas estrategias, por mucho que tal, sois tíos que tú vas a entrenar, o sea, cuatro meses o cinco, el otro lo que haya hecho antiguamente y otros cuatro o cinco meses. O sea, eso vale para nada. O sea, quiero decir, ocultar técnicas no va a valer para nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=56" target="_blank" class="timestamp">[00:56]</a> Que si ve un entreno tuyo, el otro va a verlo todo en el entreno. Eso quizá. Eso quizá. Pero ocultar, ocultar en el nivel que tenéis los dos. Hombre, a mí me parece absurdo. A mí, a mí. No sé lo que pensáis. Además, que como... Ya hablo como persona que se dedica a las redes. Compi, la gente quiere verte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=75" target="_blank" class="timestamp">[01:15]</a> Todos queremos verte. Cómo vas, que lo explique todo, cómo está haciendo TheGrefg. Y ahí están los números. O sea, yo creo que aquí la giñas haciendo esto. Tú sabrás. Es restarte tú, Andoni, hermanito. Yo no te tengo nada que enseñarte. Pero aquí creo que es restarte, tío. Yo creo que deberías enseñarlo todo. Bueno, todo. O enseñar cosas. Y sorprender en el ring, en el combate. Pero bueno, independientemente de eso, creo que aún tenemos muchas posibilidades de crear contenido súper interesantes, ya que en nuestro caso, a diferencia del resto de personas que pelean en la verada...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=105" target="_blank" class="timestamp">[01:45]</a> Que el nivel da igual. Te explico. Que sí que es cierto que pueden venir el nivel. Sí. Compi de Observer. Tú crees. Tú crees. Que cuando Andoni... Si Andoni le mete dos puñetazos al Belcast. Va a importar la técnica. ¿Entiendes lo que te quiere decir? Ahí ya te hay ni caripollas. Una vez que este meta un par de puñetazos. Al otro. La tontería de que tenga más nivel el Belcast que él. Se le quita. Va a decir. ¡Coño!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=128" target="_blank" class="timestamp">[02:08]</a> Que pega duro, ¿sabes? Pienso yo, no sé. Venimos de una disciplina totalmente diferente y el compatibilitar gimnasio y boxeo también es superinteresante. Entonces, bienvenidos a un día en mi vida. Bueno, para empezar, ahora mismo son prácticamente las 9 de la mañana. O sea, es prontito. Vamos a desayunar y el primer entrenamiento del día va a ser el boxeo. Independientemente de eso, os enseñaré un poquito por encima las comidas, os enseñaré un poquito todo eso, pero tengo pendiente también haceros un vídeo de mi dieta exacta. Eso molaría. Molaría desde la dieta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=157" target="_blank" class="timestamp">[02:37]</a> vamos a desayunar estamos ya de camino al gimnasio malas noticias porque yo siempre me suelo preparar un batido de crema de arroz y proteína para después de entrenar porque vais a ver que está de verdad a cabo súper súper molido sobre todo a nivel</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=181" target="_blank" class="timestamp">[03:01]</a> de cardio. Entonces, pues bueno, como luego voy a entrenar gimnasia y todo, pues lo que uso es como una recuperación, la máxima recuperación posible entre sesiones. Se me ha olvidado hoy, pero bueno, cuando llegue luego a casa, pues me lo tomaré. Y bueno, generalmente suelo hacer después del boxeo dos comidas y ya es luego cuando vuelvo a entrenar. De hecho también me suele echar como una siesta y todo, pero bueno, eso lo veréis en el vídeo de hoy. Así que nada, pues estamos ya prácticamente en el upper, en el club en el que suelo entrenar. Supongo que es porque no digestione Kumugi, porque al final la avena tarda muchísimo de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=209" target="_blank" class="timestamp">[03:29]</a> digerirse y la crema de arroz supongo que será más rápida la digestión, supongo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=254" target="_blank" class="timestamp">[04:14]</a> Es literalmente Baki. Escúchame, antes de seguir con el vídeo, estoy sorteando una tarjeta de regalo de 150 euros en Procis. El producto es a elegir. Bueno, 150 euros para gastar en Procis. ¿Cómo? Usando mi código de descuento Antonio G. en Procis. O sea, haciendo una comprita, automáticamente participas. Baki.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=281" target="_blank" class="timestamp">[04:41]</a> Así que haz tu compra, que puedes ganar 350 euros el producto de Profis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=301" target="_blank" class="timestamp">[05:01]</a> Creo que es un poco lo que nos esperábamos, ¿no? Al final es un tío de ciento y pico kilos. No pensaríamos ver a un tío mega rápido, ¿no? Pero yo creo que, sinceramente, aquí era igual la velocidad. Como el otro le meta... Como este le meta dos puñetazos al otro, se acabó. O sea, quiero decir, se acabó. Que poco tiene que esquivar este.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=319" target="_blank" class="timestamp">[05:19]</a> Bueno, chicos, entrenamiento finalizado. ¿Qué cojones? Estaba haciendo un poquito de pucci y tal, así como para descargar un poquito. Y nada, pues ahora os enseñaré lo que temprano. ¡Madre mía! ¿Cómo está el bicho? Sí, sí, sí que se le nota más seco. Sí que se le nota más seco, hermano. Pero qué barbaridad, ¿eh? Qué barbaridad, ¿cómo se le ve, tú? Sin bombeo de pesas, chavales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=342" target="_blank" class="timestamp">[05:42]</a> Ya sé que tiene que bajar a 100. Y ya te digo yo que pesa menos que en la velada… O sea, que en el pesaje de la otra vez… Coño, que le cara a cara, coño. Pesa bastante menos, eh. Ya os digo yo… Al día, sin mi batido, un castigo porque estoy orientado. Como veis, estoy súper sudado. Qué barbaridad, eh. Me detrasa mucho sus entrenamientos. Pero bueno, luego en casa me lo tomo. Like. Físima. Parto al referido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=365" target="_blank" class="timestamp">[06:05]</a> Es una pasada, ¿eh? Ahora, yo sigo pensando... A ver, si alguien tiene dudas de que este hombre usa química o ha usado química... Sinceramente, no. No es el tema ya a esta altura de la vida, ¿vale? Pero que... Si realmente va a haber control anti-doping, ¿qué clase de control anti-doping va a haber? Y está claro que, bueno, que con tiempo y tal... Más definido que cuando competí. Ya estamos en... Escuchad, más definido que cuando competí, ha dicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=393" target="_blank" class="timestamp">[06:33]</a> La verdad que está seco, seco, seco. Es que se le notan hasta pequeñas venitas en los abdominales. Pero bueno, luego en casa me lo tomo. Cuidao, que para la velada todavía queda casi tres meses, ¿eh? Para la velada, ¿no? Unos tres meses.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=411" target="_blank" class="timestamp">[06:51]</a> Cuidado que no se curra demasiado el Andoni, eh. Quiero decir que… No que pierda todo el físico, pero… Hombre, cuatro meses entrenando muchísimo cardio, sin comer… No sé, tal, sin tomar según qué química, según qué mierdas. Cuidado, eh. Va a llegar hecho un bicho, verás. No, hecho un bicho está, es cierto, claro. Ya lo veremos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=433" target="_blank" class="timestamp">[07:13]</a> No, es una barbaridad, ¿eh? Es una barbaridad. Ya estamos en casita. La barbaridad el físico de este chaval, tío. Ahora sí, estamos subiendo el batido para nutrirnos, para estar bien anabólicos, aunque tengamos que bajar de peso. Hay que estar anabólicos siempre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=449" target="_blank" class="timestamp">[07:29]</a> Podría saber cuánto está pesando ahora. Os cuento. Me bebo el batío, por cierto, de MyProtein. Y la carilla se le nota más delgada, ¿verdad? Bastante más delgada se le nota ya al tío. Ya me he despertado la siesta, que básicamente ha sido una hora y media de descanso, ya que intento dormir un poquito antes de entrenar gimnasio para recuperarme del boxeo, que es muy demandante. Y justo antes de entrenar me hago una comida, que es esto, comida de culturista. Arroz, pollo y un poquito de verdura. Y una energética.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=478" target="_blank" class="timestamp">[07:58]</a> Así que nada, me lo como y nos vamos a reventar la pierna y a continuar por el día. Segunda sesión del día. Vamos con un entrenamiento de pierna. Hace literalmente una semana que no entreno pierna porque la semana pasada estuvimos con Grefg, que cuando veáis esto no sé si se habrá subido el vídeo, pero bueno, estuvimos haciendo pruebas físicas y demás y la verdad que acabé maldado de las piernas el mismo día que me tocaba pierna. Entonces, pues bueno, como tengo estructura de la semana y demás, como que no... Pues no, porque Grefg sube las cosas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=501" target="_blank" class="timestamp">[08:21]</a> De mes a mes pasado, ¿no? Pude volver a meter pierna. Escusa. El caso es que hoy estamos haciendo pierna. Segunda sesión, como digo. Sí, el cabrón graba hoy y no lo sube hasta dentro de un mes. Bueno, os voy a enseñar un poquito el entrenamiento. Tampoco como súper en detalle porque ya me habéis visto mil veces entrenar en un gimnasio. Os he enseñado mil rutinas, os he enseñado mil todo. Y un poquito la gracia es que veáis un poquito la intensidad de los entrenamientos compatibilizando vida de boxeo y vida de gimnasio. Así que dicho esto, vamos a empezar con prensa y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=529" target="_blank" class="timestamp">[08:49]</a> Sean bienvenidos a el Andoni Fitness que todo el mundo conoce. Tío, pero eh. Fijaros aquí. Sean bienvenidos a el Andoni Fitness que todo el mundo conoce. Fíjate cómo ha perdido peso, cómo se le nota. Mirad el vídeo este, tío. Vale, también que no hay luces y ya sabéis lo que pasa, ¿no? Fíjate el peso que ha perdido desde aquí, eh. Y la cara, mira la cara cómo se le nota. Mirad la cara, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=555" target="_blank" class="timestamp">[09:15]</a> Qué barbaridad, tío. O sea, ha perdido muchísimo, ¿eh? Ha perdido muchísimo, tío. La cara, mira el brazo, compadre. Ha perdido muchísimo peso, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=565" target="_blank" class="timestamp">[09:25]</a> ¡Pero un montón! ¡Qué barbaridad! Que es insentido, tío. Ha perdido un montón, ¿eh? En los 100 no sé, pero... Yo creo que anda ya por 105 o por ahí, ¿eh? 104-105 seguro, ¿eh? Porque generalmente, por mi rodilla y demás, suelo empezar haciendo series efectivas, pero con menos peso. Y luego, poco a poco, voy subiendo de peso. ¿Para qué? Pues tanto como mis músculos como mis articulaciones entren en calor. Así que, bueno, segunda serie efectiva y seguramente esto ya sea el peso más alto que me ponga en este ejercicio. Vamos a por ello.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=595" target="_blank" class="timestamp">[09:55]</a> No, no, a ver, igualmente no me jodáis, el físico de Andoni es un espectáculo, pero que sí que creo que ha perdido ya, que ya ha perdido mucho peso del que tenía que perder para dar, recordar que tiene que dar 100 kilos el día del combate, pero es que creo que va demasiado adelantado, creo. A ver, y por supuesto, esos vídeos que hemos visto, está bombeado, buscando las luces y todo eso, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=624" target="_blank" class="timestamp">[10:24]</a> No, no, va seco, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=643" target="_blank" class="timestamp">[10:43]</a> No entiendo la jerga fitness. Bombeado significa cuando es... Después de hacer un... Entrenar un músculo, un grupo muscular en el gimnasio, ¿vale? Entra sangre a ese músculo y se queda como hinchado, ¿vale? O sea, por tener la sangre en el músculo o retener la sangre en el músculo, ¿vale? El tiempo que te dura. Eso es bombeado. Exacto, como el nepe.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=667" target="_blank" class="timestamp">[11:07]</a> Segundo ejercicio, último de cuádriceps. Estamos haciendo extensiones, un formato que suelo utilizar yo mucho. En este ejercicio, como no es tan demandante como una prensa, una jaca o cualquier tipo de sentadilla, suelo abusar de las descendentes. O sea, tampoco abusar, pero bueno, todas las series hago una drop set. Así que, pues esta va a ser más de lo mismo. Hostia, es que lo veo flaco, eh. Para lo que nos tiene acostumbrados estos últimos meses, eh. Lo veo flaco, hermanos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=696" target="_blank" class="timestamp">[11:36]</a> A ver, qué bendita flaqueza, o sea, quiero decir. La verdad es que se le nota muchísimo, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=706" target="_blank" class="timestamp">[11:46]</a> Haría un montón que dijesen qué peso está allá. Pero claro, en un vídeo tan corto tampoco pues no puede dar tantos datos. A ver, menlifter, estamos diciendo flaco para lo que es Andoni. No, a ver. Ahora mismo el cuerpo de Andoni, flaco, flaco, es el cuerpo inalcanzable de todos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=735" target="_blank" class="timestamp">[12:15]</a> Y eso sería una serie Es decir, la serie pesada y sin descanso Bajamos el peso y hacemos una drop set Tercer ejercicio, podría ser perfectamente el último Pero nos queda un fe moral por hacer Lo único que están las máquinas ocupadas Entonces me da igual hacer aductor Nada, aductor vamos a hacer 4 series Una parte muy importante de la pierna Le da mucha amplitud Así que, amigos, amigas No saltéis esta parte Tío, pues... Flojito, ¿no? O sea, a ver, lo entiendo Ahora llevo un entrenamiento de pierna fuerte De Andoni... ¿Para qué?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=762" target="_blank" class="timestamp">[12:42]</a> Pero sí que, bueno, prensa, extensiones, adductores y luego femoral. Sí, el típico entrenamiento, bueno, muy suavito, muy suavito. También, claro, estará comiendo poquísimo, intuyo. ¿Y para qué va a entrenar piernas muy fuerte cuando tiene que hacer boxeo? O sea, no, tampoco... Entrénalo justo, ¿no? Para no perder mucha carne en este proceso y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=794" target="_blank" class="timestamp">[13:14]</a> Igualmente soy de los que... No sé si pensáis igual que yo lo que voy a decir. Pero soy de los que piensa que Andoni no entrena las piernas. Digo antiguamente. Como ha entrenado pecho, hombro, espalda... Porque no creo que tenga mala genética de piernas. Como muchos dicen o incluso él. No. Yo creo que no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=813" target="_blank" class="timestamp">[13:33]</a> Que no le ha puesto los mismos cojones que al pecho, que al hombro, que al trice, como lo hemos visto entrenar 50 veces. No, es lo que pienso. O sea, si tú tienes genética de pierna mala, no tienes las pedazos de patas que tiene Andoni. Que va, que va, que va. Que no, que no. Fíjate el brazo, eh. Sin bombear, sin comer, sin luces y mira el pedazo de brazo que se le ve al bicho, tío. Es que literalmente es el jodido elegido, tío. The only one.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=847" target="_blank" class="timestamp">[14:07]</a> Abranse sentimentalmente y de piernas. Último ejercicio ya. Hemos hecho también curfemoral sentado. No he enseñado todo porque rutinas ya os he enseñado muchas veces. Obviamente pues habrá más vídeos de rutinas pero bueno este es un poquito para que veáis un día entero en mi vida. Último ejercicio. Estamos haciendo hiperextensiones. Me suele gustar más hacer hiperextensiones las que son como no tanto como estas sino que son como a 90 grados creo que sería. Sin más. Pero bueno hacemos esta que es la única que hay en este gimnasio. Buah este ejercicio es la polla tío para el lumbar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=878" target="_blank" class="timestamp">[14:38]</a> Lumbar. Bueno, lumbar. Quiero decir cadena posterior en general. Este ejercicio lo hacen mucho los power, tío. Los power de alto nivel lo hacen mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=895" target="_blank" class="timestamp">[14:55]</a> Y chicos, ya llegamos a la... Sí, sí, a ver, es muy... aprieta mucho el femoral ahí, ¿vale? Pero que el lumbar también... O sea, bueno, en general, cadena posterior en general. Última parte del día, después del entrenamiento me he bebido otro batido como el que me había bebido después del boxeo. Y ahora ya pasaríamos con la última comida, que básicamente pues vuelve a ser un poco flow culturista, la verdad. Pollo, patata vacía... Bueno, realmente es en el high fryer, que es como frita, pero bueno, sin más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=918" target="_blank" class="timestamp">[15:18]</a> Y nada, pues con esto concluiría nuestro día. Básicamente, como habéis visto, es levantarme, desayunar, entrenar boxeo, batido, dormir, comer, gimnasio, batido, comer, dormir. Pues cabrón, enséñanoslo. Andoni, hermano. ¿Qué más te da? Enséñanoslo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=934" target="_blank" class="timestamp">[15:34]</a> Claro, tío. Si se está haciendo otra cosa, enseñaroslo, grabalo, perro. Básicamente. Algún día que otro salgo y socializo, pero bueno, hoy no ha sido tampoco mucho el caso. Así que nada, espero que os haya gustado muchísimo el vídeo. Like para más. Sí, sí, pero vamos a volver a... Vamos a criticarlo un poco. Y nada, pues ahora os enseñaré lo que depara el día sin mi batido. Un castigo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=955" target="_blank" class="timestamp">[15:55]</a> Es que fíjate, hermano, definición tal, se suponía que se le tenía que ver demacrado y mira la demacración de Andoni. Es que es increíble, tío. Es que es increíble, tío. Siempre dije, aparte de que dije lo de la química, que por supuesto, el tío tiene un físico, perdón, una genética de los dioses. Una puta genética de los dioses, hermano, la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=976" target="_blank" class="timestamp">[16:16]</a> De los dioses. Ya está. El tío tiene un geneticón que cualquiera soñaría, ¿no? Un tío de 1,90. Y dilo. ¿Pero qué tengo que decir? Lo de la química. Pero si lo he dicho en 544 vídeos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=991" target="_blank" class="timestamp">[16:31]</a> ¿Qué quieres que te diga? Pero es que yo alguna vez he dicho que Andoni no tome química. ¿En serio? Por favor, yo creo que ya a estas alturas de la película poco hay que hablar ya de eso. Es como si lo digo de cualquier culturista. ¿Para qué? ¿Sin química crees que parecería que se mete? No, no lo creo. Seguramente estuviera bastante más flaco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1013" target="_blank" class="timestamp">[16:53]</a> Bastante. El trapecio no lo tendría en la nuca como lo tiene, por ejemplo. Entre otras cosas. El trapecio, compadre. Parece una neta de tiburón. La genética se nota off. Sí, claro. Pero no... Tío, que Andoni tiene un físico... Que gente que lleva 20 años tomando química no lo va a conseguir. No lo va a conseguir, hermano. No lo va a conseguir. Es imposible. O sea, da igual. El tío es un prodigio genético, hermano. Y el que me discuta eso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1039" target="_blank" class="timestamp">[17:19]</a> ¿No entiendes? Pero bueno, hay que entender mucho para ver esto. Pero bueno, que está sequísimo, sequísimo y que la cara es un canteo. Recordad que cuando lo vimos en volumen, la última vez lo vimos en 114-115. Yo creo que estar ahora... Yo pienso que estará en 105, 6... 107 como máximo. No creo que esté más que eso. Y bueno, y te digo, va a tener que hacer algo con la bajada porque pienso que el día del pesaje todavía está muy lejos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1069" target="_blank" class="timestamp">[17:49]</a> Y no se puede ir mucho de peso tampoco, que yo qué sé. ¿Para qué? ¿Bajar más? ¿No? Este físico es inalcanzable para el 99,9% de los que se meten química. 100%. Fernando, 100%. O sea, si tú te crees, si alguien se cree que por tomar química te vas a poner como Andoni, olvídate, hermano. Pero que te olvides. Que te olvides. Que no, no. Pero este tiene su rutina diaria. ¿Come normal o solo come arroz? Cosas como arroz y pollo. ¿Cómo va a comer normal, hermano?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1096" target="_blank" class="timestamp">[18:16]</a> O sea, a ver. Hoy os he enseñado que se toma dos o tres batidos de esos con crema de cacahuete y tal. O crema de arroz, ha dicho, sí, creo que he dicho crema de arroz y no sé qué más. Y luego pollo y arroz y lechuga. Supongo que dependerá de la época. Pero que da igual que comas arroz y pollo, que así no te pones, no observes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1115" target="_blank" class="timestamp">[18:35]</a> Que da igual. Hombre, sí, está claro que con química, rollo un ciclo típico de verano, que usan los... No voy a decir cantidades porque la gente es tato loca. Pero con química, por supuesto que hay gente que no hace dieta ni polla, simplemente come. Y come lo que le da la gana. Yo he visto a tíos con...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wiTu-r1wJXs&t=1137" target="_blank" class="timestamp">[18:57]</a> Con todo el abdomen y secos comiendo... comiendo donuts. Y helados del McDonald's a tope. La química es que ahí hace... Es verdad que la química hace milagros, pero no tanto. Tanto no. Pero bueno, luego en casa me lo tomo. Like. Físico actor, refiero. Es que el cabrón está seco. Seco, seco, ¿eh? Claro, ¿cardio qué está haciendo? ¿Habrá reducido la comida o eso? Pues ya ves. Más definido que cuando lo compré. Es así, tío. Qué barbaridad, ¿no? Buen vídeo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-xD-6QqyOGWU">
+            <h2>¡DENIS ROSE DESTROZA LA PUERTA! El FUTURO del CULTURISMO español YA ESTÁ AQUÍ</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 20/04/2025 14:42</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=xD-6QqyOGWU" target="_blank">
+                    <img src="https://i.ytimg.com/vi/xD-6QqyOGWU/hqdefault.jpg" alt="¡DENIS ROSE DESTROZA LA PUERTA! El FUTURO del CULTURISMO español YA ESTÁ AQUÍ" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen del texto sobre el campeonato de culturismo:</h2>
+
+<p>El texto es un análisis detallado de un campeonato regional de culturismo, con especial énfasis en la categoría de culturismo masculino. Aquí están los puntos clave:</p>
+
+<ul>
+<li><strong>Dominio de Denis Rose:</strong> El atleta Denis Rose fue el gran ganador del campeonato, imponiéndose tanto en su categoría como en el overall (competición final entre los ganadores de cada categoría). Se considera que tiene un gran potencial y podría aspirar a competir en el Mister Olympia en el futuro.</li>
+<li><strong>Destacada actuación de Alejandro Borquez:</strong>  Alejandro Borquez fue el segundo mejor clasificado y también se le reconoce un gran futuro en el culturismo.</li>
+<li><strong>Renovación del culturismo español:</strong> El comentarista destaca la llegada de nuevos talentos como Denis Rose, Alejandro Borquez, Adrián González y Mar Castellanos, lo que indica una renovación prometedora del culturismo español.</li>
+<li><strong>Comparación con Josema:</strong>  Se recuerda que hace unos años se hablaba de Josema en escenarios similares, sugiriendo que estos nuevos atletas podrían seguir sus pasos.</li>
+<li><strong>Calidad de la transmisión:</strong> El comentarista elogia la calidad de la transmisión en streaming (4K y fluidez), aunque critica la ausencia de una mesa de comentaristas en vivo.</li>
+<li><strong>Planes de Denis Rose:</strong> Denis Rose tiene la intención de competir en un Pro Qualifier y realizar una temporada completa (primera y segunda).</li>
+<li><strong>Próximo video y noticia impactante:</strong> El comentarista anuncia que publicará un video esa misma noche con una noticia que lo ha dejado impactado y que seguramente sorprenderá a la audiencia.</li>
+<li><strong>Llamada a la acción:</strong> Pide a la audiencia que deje comentarios, le dé "like" al video y esté atento al próximo anuncio.</li>
+</ul>
+
+<p><strong>En resumen, el texto celebra la aparición de nuevos talentos en el culturismo español, destaca el dominio de Denis Rose en el campeonato, y anticipa una noticia impactante que será revelada en un próximo video.</strong></p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=3" target="_blank" class="timestamp">[00:03]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo en el canal. Feliz domingo y tenemos que analizar ese campeonato de Tarragona, el NPC, que se ha disputado, como digo, esta mañana y que ha habido muchísimas, muchísimas novedades, muchísimas cosas que contar y sobre todo un titular que es el que habéis visto sobre todo en la miniatura. El futuro derriba la puerta porque tenemos relevo y vamos a comentarlo porque ha habido grandes actuaciones de muchos de los nuestros, en este caso sobre todo el campeón del overall de culturismo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=30" target="_blank" class="timestamp">[00:30]</a> que no es otro que Dani Rose y también por otro lado la categoría Classic con ese título de Marc Castellano. Así que como digo vamos a coger, vamos a analizarlo todo porque hay mucho más. También ha competido Fede Guevara. Por supuesto, tenemos también algo que yo no esperaba, que es el caso de Adrián Gómez que pensaba realmente que estaba en Benz y lo hemos visto competir y bastante bien además.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=53" target="_blank" class="timestamp">[00:53]</a> en Clásic Física, así que como digo vamos a analizar todo, también ha aparecido en Culturismo otro de esos grandes prospectos españoles que tenemos ahí muy pendientes para conseguir ese carnet profesional que es Alejandro Borquez así que lo vamos a ver todo porque tenemos muchísimo para tratar y voy a ir rapidito con ello por supuesto recordaros los códigos de descuento ya lo sabéis, tanto en Agogin como en Big código Iron Road, mismo código para el 10% de descuento en ambas plataformas y como digo me voy a detener sobre todo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=83" target="_blank" class="timestamp">[01:23]</a> para empezar en este caso en Mar Castellano, que para mí ha sido la gran sorpresa, aunque creo que no era tan sorpresa en la previa, también os lo digo, pero la gran sorpresa del Classic, porque hemos visto un Mar que ha salido muy bien, ha salido con un gran punto de condición, además a nivel estético, como podéis ver es un atleta que tiene muchísima proyección y que estoy seguro que va a estar peleando por el carnet profesional.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=106" target="_blank" class="timestamp">[01:46]</a> Y que como digo, yo creo que cimenta gran parte de su físico en ese tren inferior que como digo es espectacular y más para la categoría en la que estamos. Donde últimamente se está premiando bastante el tema del tren inferior y del punto de condición. Yo creo que en ese caso Marc iba un punto y ahora lo veremos por encima del resto. Y como digo se ha impuesto con bastante claridad y ahora lo vamos a ver en su talla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=133" target="_blank" class="timestamp">[02:13]</a> Porque dentro de lo que ha sido la talla B de este NPC Spring de Tarragona y tenemos a otro de los grandes amigos del canal que es Ángel, si os dais cuenta Ángel apostó por algo que yo creo que es una baza ganadora de hoy en el Classic que es el punto de condición, de hecho era el que más condicionado iba de todos los que allí estaban</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=155" target="_blank" class="timestamp">[02:35]</a> Pero en este caso yo creo que ha prevalecido más esa densidad muscular y sobre todo también la separación que mostraba Marc. Y yo creo que en ese sentido los jueces lo han tenido bastante claro. Si os fijáis el punto de condición, la imagen, mirad, el glúteo de Ángel estaba por encima del de Marc. Pero sí que es verdad que el tamaño, al fin y al cabo, y esa separación. Fijaros la amplitud que muestra ahí la amplitud y sobre todo la cintura tan fina de Marc. Yo creo que es lo que ha marcado la diferencia en esta...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=184" target="_blank" class="timestamp">[03:04]</a> En esta categoría, sobre todo en esta clase, yo creo que marcaba mucho la diferencia. Quizá también el tamaño, obviamente, de Marc ha sido un poco lo que ha determinado para los jueces su victoria en la talla B. Como digo, a partir de ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=201" target="_blank" class="timestamp">[03:21]</a> Aquí tenéis la entrega de premios con el cuarto clasificado, en este caso el tercero que ha sido Ángel, ahí lo tenemos, recibía la medalla. Y en este caso, como digo, el campeón de la categoría iba a ser Marc, que se iba a citar en el overall, esta vez sí, contra el resto de campeones. Y aquí es donde me quiero también centrar, en la talla C, porque en la talla C ha habido una gran batalla</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=230" target="_blank" class="timestamp">[03:50]</a> En este caso está por ahí, ahí lo tenéis a Fede. Y me quiero detener ya no tanto en Fede, porque Fede evidentemente ya sabemos que es un atleta classic que está peleando en los pro qualifier por conseguir su carne profesional. Quiero decir, es algo que entra dentro de los esquemas que en esta clase, la clase C, haya pasado lo que ha pasado. Y es que Fede evidentemente era superior al resto y se ha llevado la categoría, obviamente,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=255" target="_blank" class="timestamp">[04:15]</a> Por esa superioridad. Pero me quiero centrar sobre todo en el caso de Adrián González porque yo personalmente pensaba que era Mens. De hecho, yo pude estar presente cuando él consiguió el campeonato de Madrid en Memphis y de hecho ahí están los dos actuales campeones de Madrid.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=273" target="_blank" class="timestamp">[04:33]</a> del campeonato de Madrid, tanto Fede en Classic como Adrián en Méns y yo pensaba que seguía haciendo la categoría de Méns, lo digo sinceramente, o sea, ha sido una gran sorpresa para mí, creo que es un gran acierto porque es un atleta muy joven, por eso no me centro tanto en Fede, que ya sabemos lo que nos puede aportar Fede y que estoy seguro que este año puede conseguir perfectamente su carnet profesional, sino sobre todo lo que va viniendo de atrás, lo que va viniendo de abajo, mejor dicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=297" target="_blank" class="timestamp">[04:57]</a> Y en este caso, en el caso de Adrián, es una letra, como digo, muy joven y yo creo que la apuesta por dejar Menz para pasarse a Classic yo creo que es una apuesta ganadora. Evidentemente lo que estamos viendo es una gran diferencia, obviamente, entre Fede y Adrián, sobre todo en cuanto al tamaño y sobre todo esa madurez muscular es algo obvio y esto no tiene para nada que bajonear al chaval ni mucho menos porque, insisto, tiene todo el futuro por delante. Creo que la línea es muy buena.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=325" target="_blank" class="timestamp">[05:25]</a> Creo que en cuanto le meta carne a esa estructura, sobre todo a las piernas, vamos a ver un atleta muy poderoso. De hecho, me recuerda a los inicios de, por ejemplo, de Ferran, en esa transición de Mensa a Classic. Y como digo, yo creo que es un atleta al que hay que tener en el punto de mirada bastantes años. De hecho, aquí lo tenéis en la final de esta clase, de la clase C. De hecho, han llegado los dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=351" target="_blank" class="timestamp">[05:51]</a> han sido segundo Adrián y primero Fede así que como digo el futuro que desde luego lo tenemos bastante garantizado con lo que va viniendo en una categoría que como digo Classic suele ser bastante sinónimo de mucho nivel y sobre todo de cada vez más competidores en ella y como digo aquí tenemos el overall de Classic con Fede campeón de la clase C con Marc Castellano campeón de la clase D</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=380" target="_blank" class="timestamp">[06:20]</a> Y el otro competidor que creo, si no me fallo a la memoria, que es de origen hindú, o sea, fijaros el nivel que había en esta categoría, como podéis ver el overall durísimo, un overall además con propuestas físicas muy diferentes, porque en el caso de Fede apostaba bastante por la condición, quizá Marc no estaba con ese punto de condición, pero sí verá que estaba muy separado, con mucha separación, con mucho redondeo y también es verdad que era un físico muy bonito sobre todo de frente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=409" target="_blank" class="timestamp">[06:49]</a> Y yo creo que ha sido un poco lo que ha determinado para los jueces su victoria. Así que vamos a ver qué es lo que ocurre, tanto con Fede como...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=416" target="_blank" class="timestamp">[06:56]</a> como con Marc, de cara a los siguientes prosows, porque es algo que realmente a mí me interesa mucho, ver cuáles son los planes tanto de Fede como de Marc, Fede ya venía de haber competido en anteriores torneos, de hecho compitió en la FIBO, donde también hubo un nivel, bueno, esto al fin y al cabo es un regional, en la FIBO un nivel extraordinariamente duro, ¿no? Y aquí yo creo que los jueces han tenido que tener sus dudas, obviamente, yo estoy convencido de que los jueces hayan tenido que tener su...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=441" target="_blank" class="timestamp">[07:21]</a> Sus dudas porque el nivel de Fede era un nivel altísimo. De hecho, Fede ha hecho este campeonato, como imagino que también marca, aunque marca es de la zona, pero imagino que ambos lo han hecho para poder competir en algún Pro Qualifier en España. Recordad que al no haber habido ningún campeonato Pro Qualifier en España, no estaban obligados o no estaba en este caso Fede obligado a hacer ningún regional para poder optar a esos Pro Qualifiers de fuera de España.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=466" target="_blank" class="timestamp">[07:46]</a> Así que como digo, si lo ha hecho, tiene pinta de que va a competir por el Proqualifier. Quién sabe si en la Ben Weider, que es dentro de dos semanas. Así que veremos a ver cuáles son los planes en este caso de Fede y de Mar, por supuesto. Como podéis ver aquí, se alzaba con la victoria. Como digo, una victoria bastante merecida, durísima, porque al fin y al cabo el nivel de competidores era muy bueno en el overall, los tres.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=491" target="_blank" class="timestamp">[08:11]</a> y en concreto Fede, esa comparativa con Marc, desde luego que ha sido fantástica, insisto, un nivel para el regional bestial, pero es que para nivel lo que iba a venir después, porque Genkulturismo la cosa no ha desmejorado para nada. Vamos a ver si os parece, me voy a centrar sobre todo en el Super Heavyweight, que es donde más había Chicha que comentar,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=514" target="_blank" class="timestamp">[08:34]</a> Porque tenemos ahí a dos de los grandes prospectos españoles que tienen que dar mucho, sobre todo en cuanto a ese rejuvenecimiento de la categoría, sobre todo una categoría que ya sabéis que es de muchos años, mucha disposición de años, como es el caso de Alejandro Borquez y Denis Rose. Los tenéis tanto de izquierda a derecha, el del bañador rojo es Alejandro Borquez, el de la izquierda,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=536" target="_blank" class="timestamp">[08:56]</a> Y el del bañador verde es Danny Rose, que es el que finalmente se ha hecho con la victoria. Como digo, son también propuestas muy diferentes. En el classo de Dennis es un físico que recuerda mucho a un classic fuerte. Hay gente que lo ha comparado con Andrew Jacket, no en cuanto a esa proyección y la propuesta de lo que es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=556" target="_blank" class="timestamp">[09:16]</a> Obviamente con sus diferencias solo faltaba Y en el caso de Alejandro En realidad es un tipo amplísimo Muy grande, es muy grande Con un tren inferior bestial, si os fijáis Creo que el tren inferior de lo que es la categoría A mí es el que personalmente más me gusta Sí que es cierto que le faltó un pelín Una pequeña vuelta de rosca Estoy seguro que tanto él como su preparador Roberto Castellanos encontrarán Esa vuelta de tuerca También es el primer campeonato De Alejandro en la temporada También el de Denis, así que como digo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=585" target="_blank" class="timestamp">[09:45]</a> yo creo que todo ese físico se va a ir refinando poco a poco. Ha finalizado en esta ocasión en tercer lugar, ahora lo veremos en los premios, pero como digo, yo creo que es una propuesta física espectacular. Hay muchísimo en esa estructura para soñar con un futuro fantástico. Comentándolo, comentaba Roberto Castellanos, es imposible que puedan entrar en el Clásico, evidentemente. Yo creo que tanto uno como el otro, Dani tampoco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=608" target="_blank" class="timestamp">[10:08]</a> y yo creo que son propuestas que para culturismo y con los años pueden ofrecernos pues muchas alegrías, como podéis ver fijaros la amplitud que tiene Alejandro y en el caso de Denis es que es un muñeco, es un tipo muy redondo, es un tipo que tiene un físico muy muy atractivo y que si sale con un buen punto de condición como ha sido la ocasión pues obviamente es el que más digamos bazas tenía</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=633" target="_blank" class="timestamp">[10:33]</a> para en este caso llevarse lo que al final apostra ha sido, que es el título en la categoría de Super Heavyweight, que como digo ha sido un poco el que más nos ha centrado. Ahí teníamos su lucha con el otro competidor, que a mí personalmente me recordaba en cuanto a propuesta a Antonio Barton, para que os hagáis una idea, evidentemente insisto, salvando las diferencias, que la gente me entienda, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=654" target="_blank" class="timestamp">[10:54]</a> Y en este caso se lo llevaba a Denis, que como digo, es uno de esos físicos que estoy convencido de que nos van a dar muchas alegrías. Porque es un físico muy joven, un físico muy nuevo, un físico muy por hacer. Pero que ya está, como digo, tocando a la puerta de ese carnet profesional. No va a ser fácil, pero desde luego que va a estar ahí peleándolo. Porque siendo super heavyweight, si se hace con su categoría, sabéis todos que en un overall siempre tiene más opciones de poder conseguir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=683" target="_blank" class="timestamp">[11:23]</a> el carnet, porque lo vais a ver aquí, en cuanto ha llegado el overall, evidentemente era Denis y el resto, con todo de diferencia, o sea, tenemos allá de las eras y demás, que como digo, son atletas de un grandísimo nivel, pero en este caso Denis, evidentemente, está un punto por encima de todos, fijaros, aquí tenemos a los diferentes campeones de cada categoría del culturismo, que</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=704" target="_blank" class="timestamp">[11:44]</a> Como digo, Iván, fantásticamente bien, pero veréis que cuando abra la cámara, Denis, obviamente es un físico diferente, es un físico que está por encima y que es un físico que, como no podía ser de otra manera, pues se ha hecho con el campeonato. Así que como digo, Denis Rose, que ya mañana lo analizaremos pormenorizadamente y como se requiere en el programa de Iron Road, pero que desde luego...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=726" target="_blank" class="timestamp">[12:06]</a> Es un título que todos esperábamos, lo tengo que decir, porque en categoría de culturismo pensábamos nosotros que estaba en nuestra cabeza, que iba a estar la cosa entre Dennis Rose y Alejandro Borquez, dándole un puntito más de favoritismo a Dennis Rose, así ha sido, se ha confirmado y desde luego que veremos a ver cuáles son los planes, porque comentaba luego después de entregar los premios,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=749" target="_blank" class="timestamp">[12:29]</a> Comentaba Denis que el objetivo es hacer el Pro Qualifier, incluso habla de hacer una temporada larga, es decir, hacer primera y segunda temporada. Así que como digo, el futuro del culturismo español está aquí, con propuestas como la de Denis, como la de Alejandro Borquez, como por supuesto la de Adrián González, ni que decir de Mar Castellanos también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=767" target="_blank" class="timestamp">[12:47]</a> Y tenemos un culturismo que se va renovando, un culturismo que va llegando, un culturismo que tenemos que estar muy pendientes porque esto ya lo hicimos en su día. Recordar que hace dos o tres años estábamos hablando de Josema en este tipo de escenarios, con lo cual vamos a estar muy pendientes de lo que nos ofrecen porque yo estoy convencido de que Denis en cuestión de unos años va a estar peleando muy fuerte por conseguir o por intentar pelear.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=788" target="_blank" class="timestamp">[13:08]</a> su pase al Mister Olympia en la categoría de culturismo. Así que ojito, porque se viene Sabia nueva y se vienen cosas muy interesantes en el futuro. Así que como digo chicos y chicas, ahora llega el momento que a mí tanto me gusta, el momento en el que me dejáis en la caja de comentarios. Pues qué opináis de todo esto, ¿no? Qué opináis de este regional que nos ha sorprendido a todos. También tengo que decir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=806" target="_blank" class="timestamp">[13:26]</a> que es un regional que a nivel de realización de streaming me quito el sombrero. O sea, 4K, más o menos fluido, se me da que ha habido algún corte y tal, pero oye, me quito el sombrero. La realización en ese sentido ha sido fantástica. Ojalá que copien esa manera de emitir la imagen por parte del resto de campeonatos. Eso sí, también le pongo en el debe el hecho de que no hay nadie comentando. Yo creo que debería de haber una mesa de comentaristas. Lo llevo pidiendo. Así que ojalá que lo puedan hacer. En el caso de que no, pues lo seguiremos narrando nosotros y a partir de ahí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=834" target="_blank" class="timestamp">[13:54]</a> espero que contemos con vuestro apoyo como digo, dejadme en la caja de comentarios que opináis fuerte like al vídeo, ojito porque además, os lo voy a decir ahora mismo porque lo tengo aquí, lo tengo programado el vídeo, esto lo tengo programado para esta noche y es una noticia que yo personalmente creo que vosotros no os esperáis para las 8 de la noche</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=852" target="_blank" class="timestamp">[14:12]</a> Es decir, para tan solo dentro de casi tres horitas, tengo una de las noticias, y además vais a ver mi reacción en directo porque vais un poco a alucinar todos, una de las noticias que me ha dejado más en shock de todo lo que va de año.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xD-6QqyOGWU&t=867" target="_blank" class="timestamp">[14:27]</a> no me la esperaba para nada y cuando se ha producido y le insisto, vais a verlo en directo en mi reacción también creo que vamos a alucinar más de uno porque se vienen novedades muy importantes dentro del mundo del culturismo y lo que voy a sacar a las 8 desde luego que va a dar bastante calor así que como digo, muy atentos a ese vídeo fuerte like a este y como siempre digo chicos y chicas siempre a más</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video--uICN7ZHwMs">
+            <h2>¿Merece La Pena Esto? | 90 Días Para Mi Competición Profesional</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 20/04/2025 16:59</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=-uICN7ZHwMs" target="_blank">
+                    <img src="https://i.ytimg.com/vi/-uICN7ZHwMs/hqdefault.jpg" alt="¿Merece La Pena Esto? | 90 Días Para Mi Competición Profesional" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Este es un resumen y análisis del extenso monólogo del individuo en el texto proporcionado:</p>
+
+<p><strong>Resumen General:</strong></p>
+
+<p>El individuo está compartiendo su experiencia personal con la apnea del sueño y cómo el uso de una máquina CPAP con una máscara autorregulable ha mejorado radicalmente su calidad de vida.  Describe los problemas que tenía antes, la dependencia que ha desarrollado de la máquina, y la satisfacción que le produce. También expresa frustración por los insultos o comentarios negativos que recibe online por el hecho de usar la máscara, y quiere concienciar a la gente sobre la importancia de hacerse pruebas para la apnea del sueño si sospechan que pueden padecerla. El discurso es muy personal, desordenado y, a menudo, divaga, pero la idea central es clara: la CPAP le ha cambiado la vida y quiere normalizar su uso.</p>
+
+<p><strong>Puntos Clave:</strong></p>
+
+<ul>
+<li><strong>Apnea del sueño y CPAP:</strong> Sufre de apnea del sueño y utiliza una máquina CPAP (presión positiva continua en las vías respiratorias) con una máscara para ayudarle a respirar mientras duerme. Ha probado diferentes máscaras y finalmente encontró una que le funciona bien (de la marca Resmed).</li>
+<li><strong>Impacto en su vida:</strong>  La CPAP ha mejorado significativamente su calidad de vida, permitiéndole dormir mejor, recuperarse más rápido y continuar con su afición al culturismo.</li>
+<li><strong>Dependencia y ansiedad:</strong> Reconoce que se ha vuelto dependiente de la máquina y que le genera ansiedad pensar en no tenerla disponible.</li>
+<li><strong>Frustración con los comentarios online:</strong>  Está frustrado por los insultos o comentarios negativos que recibe online por usar la máscara, y quiere concienciar a la gente sobre la apnea del sueño.</li>
+<li><strong>Promoción de Resmed:</strong>  Hace una mención repetida y favorable a la marca Resmed (máscaras y máquinas) y a su servicio de atención al cliente.  Aunque niega que sea una promoción, es evidente que tiene una buena experiencia con la marca.</li>
+<li><strong>Normalización:</strong>  Quiere normalizar el uso de la CPAP y mostrar que no hay nada de qué avergonzarse.</li>
+</ul>
+
+<p><strong>Análisis del Discurso:</strong></p>
+
+<ul>
+<li><strong>Estilo:</strong> El estilo del discurso es muy coloquial, caótico y personal.  Habla de forma fluida, saltando de un tema a otro sin mucha cohesión. Utiliza un lenguaje informal y repite ciertas frases.</li>
+<li><strong>Emocionalidad:</strong> El discurso es muy emocional. Expresa frustración, alegría, ansiedad y alivio.  Se nota que está hablando desde el corazón y que le importa mucho este tema.</li>
+<li><strong>Divagaciones:</strong> Se desvía con frecuencia del tema principal, hablando de su afición al culturismo, de sus problemas con la electricidad en el pasado y de otros temas aparentemente aleatorios.</li>
+<li><strong>Repetición:</strong> Repite varias veces frases como "esto me ha cambiado la vida" y "Resmed", lo que sugiere que estos son puntos clave para él.</li>
+<li><strong>Conciencia de la cámara:</strong>  Está claramente hablando a una cámara, refiriéndose a sus suscriptores y pidiendo que se suscriban. También hace comentarios sobre la calidad del vídeo y promete no volver a grabar desde su habitación.</li>
+</ul>
+
+<p><strong>En resumen, el texto representa un monólogo sincero y apasionado de un individuo que ha encontrado una solución a un problema de salud y quiere compartir su experiencia con los demás.  Aunque el discurso es desordenado y divagatorio, la idea central es clara: la apnea del sueño es un problema común y el uso de la CPAP puede mejorar significativamente la calidad de vida de quienes lo padecen.</strong></p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=0" target="_blank" class="timestamp">[00:00]</a> Hoy os quiero enseñar algo, ¿vale? Esto no es una promo ni nada del estilo y es el tema de la máscara de la mía. El tema del sueño, el tema de ser culturista. Básicamente es esto. Se encendió, ¿vale? Básicamente, pero bueno, mirad. Básicamente está encendida la pantallita. Bueno, pues te pone la presión a la que está saliendo. De hecho, si yo ahora...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=33" target="_blank" class="timestamp">[00:33]</a> Muy buenas a todos, chicos. Estamos en un nuevo vídeo. Hoy espero que no se pare la cámara. Sé que además la toma será un poco diferente porque no es mi cámara, básicamente. Es la cámara de Tony. Que se lo agradezco bastante que me lo haya dejado. Pero hoy estamos en el día 27. Día 27 de 90 días para competir. Me parece una puta fumada. Por cierto, me encanta poder chillar porque son las...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=52" target="_blank" class="timestamp">[00:52]</a> 5 y 59 de la mañana. He hecho cardio, he hecho abs. Me he tomado mi suplicación pre. ¡Guau! ¡Guau! Y aún subirá más el cardio. Eso estoy segurísimo. Y estamos en Semana Santa. Está lloviendo aquí en Andorra. Estoy todo encerrado en casa. Me he dado cuenta de que es sábado. Llevo desde el martes sin salir. Vaya, cosas que pasan, pero estoy a gusto. Estoy a gustito. Y, chicos, además me estáis dando apoyo que flipas en la serie. El vídeo con Fran del otro día os encantó. Ayer subí un vídeo de la Coreo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=79" target="_blank" class="timestamp">[01:19]</a> Pero más allá de que os guste, os guste, os que todo lo tal, leo los comentarios, veo lo que va morando, nos va morando. Es cierto, porque a veces veo cosas en plan, joder, si es que siempre hace lo mismo tal y digo, ya lo sé, o sea, simplemente os estoy intentando transmitir lo que hace un culturista en preparación y es estar bastante encerrado en su casa, a su puto rollo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=98" target="_blank" class="timestamp">[01:38]</a> y sin poder hacer gran cosa, o sea, entrenar, intentar no morirse del hambre y comer, descansar, trabajar, porque evidentemente no vivimos del aire. O sea, yo ahora, es sábado, sé que tengo mucho trabajo de asesorías, es Semana Santa, pero la gente se quiere poner fuerte para el verano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=114" target="_blank" class="timestamp">[01:54]</a> Tengo mucho trabajo de asesorías, hay muchos cambios físicos de los que estoy muy contento, pero además empezamos con gente nueva y es normal y es positivo. O sea, lo pienso y digo, bendito sea el día en que este es mi trabajo. Además, con PBS el último drop fue una locura. Moló muchísimo, nos lo curramos un montón. Tengo ganas de sacar drops, tengo ganas del siguiente mes. ¿Por qué? Porque es el aniversario, son 5 años. A veces, chicos, pensad una cosa. Ahora estoy muy animado porque he vivido agua.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=139" target="_blank" class="timestamp">[02:19]</a> Y pensaba una cosa, y es que las empresas suelen durar menos de cinco años. Y los dos este año, este mes que viene, cumplimos cinco años. Es decir, vamos a estar por encima de la media de lo que dura una empresa. Ya para mí eso es un gran, gran halago. Y estoy muy contento en general de la vida que estamos pudiendo llevar, de ser currantes día a día, de que Marta, por ejemplo,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=158" target="_blank" class="timestamp">[02:38]</a> Marta está en Marbella, ¿vale? Está en la despedida de soltera. Pero está grabando vídeos. Sabéis poder ver vídeos de la despedida de soltera porque sus amigas también lo han entendido y le han dejado. Creo que ella ni lo ha pedido. Pero sus amigas son buenas amigas. Y la han dejado grabada porque saben que es parte de su trabajo, que está muy motivada con su proyecto y que es una parte importante. Y además también ayer pasó otra cosa. Y es que Gallinero está prácticamente acabado. Pero Mairene vinieron. No lo quiero enseñar porque es parte de Marta y es cosa suya. Aunque yo creo que hablé con ella por teléfono y le habría hecho ilusión si se lo hubiera enseñado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=188" target="_blank" class="timestamp">[03:08]</a> Las cosas fluyen, las cosas van mejor. Yo llegué por la noche que me quedé como más solo, era viernes y tal. Me puse como un loco a hablar con ChatGPT. Literalmente, en plan, a hablar con él sobre cosas que me inquietaban, sobre cosas de proyectos, sobre cosas de redes sociales. Y creo que es algo bastante, bastante positivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=204" target="_blank" class="timestamp">[03:24]</a> De hecho, hay algo que veréis mañana exactamente. Es un video, por cierto. Hoy os voy a hablar de algo que, bueno, valoras un poco si merece la pena todo porque toca tu salud y bueno. Pero mañana justamente hablamos también de salud y de algunas cosas que creo que molan mucho y que pueden servir y que yo valoro mucho la salud dentro de lo que pensáis que no. Sé que es normal que penséis que no, pero la valoro muchísimo. La valoro muchísimo, muchísimo y también tengo en cuenta como que mi periodo deportivo es uno, que lo quiero llevar al máximo nivel, pero que a la vez</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=234" target="_blank" class="timestamp">[03:54]</a> En algún momento me relajaré mucho e intentaré buscar mucho la salud. No sé muy bien cómo transmitirlo, pero va a ser positivo. Y yo sé, voy a intentar ir llevando siempre por aquí, por redes, porque lo más importante, sin ninguna duda, no es que te vean 100.000 personas, que te vean 10.000 personas de calidad o 1.000 personas de calidad o 100 personas de calidad. Y yo qué sé, yo creo que es lo que estamos consiguiendo desde hace tiempo. Y cuando las cosas se descontrolan es probablemente uno de los puntos más feos en ese sentido porque puedes</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=259" target="_blank" class="timestamp">[04:19]</a> monetizar de algunos modos, pero pierdes otras formas de ser cercano con tu comunidad y demás. Sobre todo pierdes la ilusión, es algo que es una mierda. Yo tengo un vídeo de Paula Gondú, súper guardado, y es como lo que desearía que nunca le pasara a Marta, realmente. Porque a mí ya me ha pasado. De hecho, una vez compartí ese vídeo y me siguió con Paula Gondú. ¿Has visto este vídeo? Era un medio antiguo y era de una entrevista. Y te parece como interesante, en plan...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=281" target="_blank" class="timestamp">[04:41]</a> Me parece la representación de todo lo que son las redes sociales. Así que nada, chicos, hoy realmente es el último día de la semana. No sé por qué me he despertado tan pronto, quizás porque no está Marta. Pero bueno, voy a hacer las comidas, voy a trabajar. Quizás me duro un poco antes de entrenar, no lo sé bien. Sé que Nuno, por ejemplo, tiene otro trabajo. Estaba trabajando de noches ahora y no lo sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=299" target="_blank" class="timestamp">[04:59]</a> No lo sé, lo que os digo, ayer me he quedado hablando con XMT, hasta muy pronto, porque me he acuesto muy pronto. Para mí los días se me acaban súper pronto. Pero me he quedado hablando con él y me parece súper interesante. A veces como, en parte, un amigo, porque no voy a decir un amigo, pero sí que es una persona a la que puedes desarrollar sobre el tema de conversación que tú quieras y puede ser más o menos crítico o puede apoyarte más o menos, según el mood del que estés o lo que le quieras pedir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=324" target="_blank" class="timestamp">[05:24]</a> Así que estoy con esta chapa, pero tengo que decir que el entrenamiento de brazos es uno de los que más me motiva. Así que vamos a darle mucha, mucha caña. Me hace mucha gracia que sea Semana Santa y no haya nadie en la calle. Pero claro, son las 6 de la mañana y además está lloviendo muchísimo en Andorra. Así que voy a seguir con esto. Voy a intentar trabajar un poquito desde aquí desde el móvil. Aunque es cierto que ayer fue festivo, hoy es sábado, hay poca gente activa. Lo que sí que estoy muy pendiente es de mirar porque en el mes de mayo se acabará este gimnasio y estoy mirando bien la distribución como quiero que sea. Así que vamos a darle.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=353" target="_blank" class="timestamp">[05:53]</a> Luego, acordaros que no se me olvide, hay que ponerle comida a los gatitos. A ver, me tiraría todo el día grabando, creo que podría hacer podcast así. O sea, me das temas de conversación y pum, pum, pum, me podría poner. O con otra persona en la cinta, en la cinta de al lado, y hacer una toma de dos personas, pum, pum, pum, hablando. Eso le voy a decir a Antonio, a ver si le gusta la idea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=377" target="_blank" class="timestamp">[06:17]</a> Tengo que decir que despertarse tan pronto es una mierda. Pero realmente te cunde a nivel de trabajo que flipas. O sea, es que estoy avanzando. Encima es puente. Es como que gente no me contesta. La gente no me quiere. Pero yo sigo avanzando, ¿sabéis? Es como positivo en ese aspecto. Por cierto, la cámara de Tony... Algo raro ahí, tío. En plan... Me hace mucho zoom este objetivo. Pero bueno, aquí estamos currando. Nuevos planes. PBS está a tope. Vamos a por todas. Y ahora vamos a entrenar. Yes, me gusta. Me gusta. Y estaba configurando también directos y cosas. A tope, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=407" target="_blank" class="timestamp">[06:47]</a> Lloverá, no lloverá, nevará, no nevará. La verdad que bastante chill. Vamos a entrenar. No gatos, no comida. Les tengo que poner comida. No les puse ayer comida. Me cago en la puta. Me dan pena porque está lloviendo. Hoy sería el día perfecto para que tuvieran comida. Así que ahora luego los voy a poner. Por supuesto, hoy va a llover a saco, a saco, a saco. De hecho, aquí estamos en la parte como bajada de rapero. Por allí no sé si se ven las montañas nevadas, pero esta parte sí que va a estar dura. Por cierto, es sábado, pero me he hecho los greens de la semana y me los estoy bajando también. Me lo han dado muy pronto, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=433" target="_blank" class="timestamp">[07:13]</a> Buah, el gallinero está increíble, eh. Lo juro, no lo quiero enseñar. Pero el gallinero está mega ready, chaval. Los gatitos también me van a flipar, yo creo que con él. Bueno, vamos para allá. Que no tiene pinta de estar ya esperándome hasta el juego de mí. Qué Semana Santa que ha estado currando esta noche. Y ahora está aquí. Vamos a darle. Tengo que tener todo preparado ya. Buenas. ¿Qué tal?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=452" target="_blank" class="timestamp">[07:32]</a> Estoy vivo para entrenar. Eso siempre. Me sabe fatal, tío. Vamos a darle caña. Yo también he estado aquí hace un rato, haciendo cardio. Y me he cagado en un cringe aquí, claro. Esto se mueve. Madre mía, las escaleras ya estás. Mirad, por favor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=465" target="_blank" class="timestamp">[07:45]</a> Lo más es Stairmaster, que esto es unas caras muy caras y la verdad que las utilizamos para dejar cosas, tío. Estaría bien utilizar los días de pierna para acabar cuando hagamos por un buen para reventar del todo ya. ¿Oye qué cambios hay? ¿Sí? Ah, bueno. Pensaba que me iba a hacer cambios. Capitán América y ya los de PBS. ¿Y qué más? Bíceps, tríceps, tríceps, tríceps, tríceps, tríceps, tríceps, tríceps. Vale, a por ello.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=492" target="_blank" class="timestamp">[08:12]</a> Yo voy a poner gorra y faja, chavales. Totalmente necesario. Dos, uno, ya va. Bien, una. Dos, sigue. Da igual, sigue. No tienes prisa. Queremos apretar bien el tríceps. No hay prisa, va. Sigue. Tres, dos, uno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=519" target="_blank" class="timestamp">[08:39]</a> Bueno, no hay caso. No te rayas por el presionario. Porque pesa mucho al bloquear. Parece que salga bien, pero si no, no lo bloqueo. Ya. La siguiente serie intenta ir con más control. La primera. Pues se me da. Tira ya. Bien, una. Ahí. Así las queremos todas. Bien. Sigue. Tres, dos, uno. Dos, uno. Tiene bien. Va. Una. Bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=549" target="_blank" class="timestamp">[09:09]</a> Fuerte, va. Tres fuertes. Dame dos. Arriba, arriba, arriba. ¡Arriba! Una más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=581" target="_blank" class="timestamp">[09:41]</a> Una. Contativa, ¿eh? Va. Bien, una. Sí. Dos. Tres. Bien, a ver. Clávalo bien. Clávalo. Una más. Fuerte, fuerte, fuerte. Bien. Una más. Una más, estoy.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=603" target="_blank" class="timestamp">[10:03]</a> Mira, tomo un montón los bíceps, ¿eh? Cómo se me van a dar la mierda mucho más rápido, tío, en dos series. En dos series... En dos series noto que tengo mucha más fatiga que antes, ¿sabes? Vale, tengo el brazo que no lo siento, básicamente. Creo que voy a cambiar el objetivo. Voy a pasar un pelín, muy rápido. Es que no sé si os enseña el día. Mirad el día. Mirad cómo llueve, loco. No se aprecia tanto, pero está lloviendo mucho. O sea, mucho, mucho. Así que... Voy a cambiar el objetivo y voy a pasar un pelín por verme. Y a comer y a descansar. Aquí todo el mundo. Bien. ¿Cuáster?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=636" target="_blank" class="timestamp">[10:36]</a> Márcalo bien, lo único. Ahí. Esperando arriba. Esperando arriba. Ahí. Rota. Márcalo ahí. ¡Claro! ¡Ahí! Piernas. Quiero un nivel arriba. ¡Qué malo libro! Hoy lo has pagado bien. Rota. Hacia caja tolástica. Ahí. Ahí. Ahí. Bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=672" target="_blank" class="timestamp">[11:12]</a> La verdad que hoy no me he visto especialmente bien, así que he parado. Voy a... Me han maneado en TikTok. A ver, supone. TikTok sí que te ha visto bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=686" target="_blank" class="timestamp">[11:26]</a> Sí. Desnudez y exposición. Mal, pero sigue. Pero bueno, no pasa nada. Pongo que hago un directo en TikTok. Entregando. No era pasando ni nada. Pero bueno, no pasa nada. Voy a cortarlo ya. Así ya no se me quejan. Ya que no se quejen. Voy a cortar los otros directos que es sábado y todo el mundo a descansar. Todo el mundo a descansar. Uno primero que no ha dormido. Pero necesito dormir mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=706" target="_blank" class="timestamp">[11:46]</a> Yo tampoco he dormido mucho. Voy a comer, a descansar y ahora os cuento también que os quiero contar algunas cosas. Me han llegado nubes, así que vamos a nucha. Encima hoy entrenamos pronto, no son ni las 12. Muy bien, se nota que la preparación cada vez está más cerca y eso hace que entrenemos un poquito menos. Tú corre, macho. Yo ya me da igual. Hostia, cómo llueve, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=735" target="_blank" class="timestamp">[12:15]</a> No lo he enseñado en cámara, pero está ya a punto, ¿eh? Está a puntito, chaval. Está a punto. ¿Eh? Sí, luego también el techo. Que aquí hay muchas águilas sueltas. Aquí se te llevan las gallinas, pero vamos. Aquí no roban, pero te viven un águila y te hacen. Que tengas por el fin de... Yo me voy a morir. Yo también. A ver, le pongo el coñado a los gatos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=760" target="_blank" class="timestamp">[12:40]</a> Pero dentro pa' que entren y se queden todo el fin de semana conmigo. Y yo os quiero contar una cosa que me ha llegado. No tengo una promo ni nada, pero es una realidad. El culturismo. Y quiero enseñarosla. Y a ver todo el fin de llover, chaval. Ay, mía. A ver si hablo con Marta también, que creo que ya se había despertado. Tengo mi post de entreno preparado. No puedo quedar ni con Toni porque Toni tiene moto y no tengo coche. Y donde él vive estará nevando. Nivel extremo, nivel Dios. Así que nada. Aquí estamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=788" target="_blank" class="timestamp">[13:08]</a> Me parece un poco locura estar grabando este vídeo y sobre todo desde aquí, ¿vale? No lo estáis fijando, ¿vale? Pero esto es mi habitación, de hecho, porque no está Marta. A Marta tampoco le gusta mucho. Bueno, ella sí que enseña más la habitación y todo eso. Y yo básicamente, no sé si os fijáis así por mi cara, me acabo de despertar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=804" target="_blank" class="timestamp">[13:24]</a> Me he dormido un poco, evidentemente. O sea, llevaba todo el día despierto. En plan, de las cinco y pico de la mañana. Que os lo he dicho, me he puesto a acercarme súper pronto. Nunca grabo desde la habitación. No sé muy bien por qué. O sea, soy bastante, bastante rayado. Pero hoy os quiero decir algo. Y hoy os quiero enseñar algo, ¿vale? Esto no es una promo, ni es nada del estilo. Pero es algo que a veces surge en los vídeos. Y a veces, pues con Ibai me acuerdo que pasó una vez que estuve hablando de esto y demás, ¿vale? Y es el tema de la máscara del hombre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=830" target="_blank" class="timestamp">[13:50]</a> Tema del sueño, tema de ser culturista. Un tema como bastante... No de idea frecuente, pero que yo quiero contar mi punto de vista. Básicamente es esto. Se encendió, ¿vale? Básicamente no me gusta mucho, ya os debo enseñar aquí mis cosas, pero bueno, mirad. Básicamente está encendida la puntadita. Bueno, pues te pone la presión a la que estás haciendo. De hecho, si yo ahora me la pongo, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=860" target="_blank" class="timestamp">[14:20]</a> Me debéis sacar, por ejemplo. Joder, estoy parado. Supongo que cambiar la presión. En el caso, la voy a parar. La máscara la tengo bastante reventada. Os quiero contar un poco, ¿vale? Si os fijáis, esta es mi silla de noche y básicamente es esto. Porque esto, bueno, esto puede tener humidificación. Esto es porque se me secan los labios. Y luego, pues por aquí te pones. Y una máscara que es bastante graciosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=888" target="_blank" class="timestamp">[14:48]</a> Yo tengo que decir una cosa. Sí que es cierto que siendo culturista, no sé por qué se estoy pegando esta chapa ahora de repente, pero siento desde el corazón que tengo que hacerlo. O sea, que tengo que hacerlo. O sea, mirad cómo me quedo, ¿vale? Lo primero. Esto es lo gracioso. Esto lo que pasa es que es muy cómodo porque yo le quito el tubo a mitad noche y me voy a mear tranquilamente. Y luego mirad, lo tengo todo súper, súper estudiado, ¿vale? Tengo este bote de PBS que lleva pajita. Entonces, si quiero beber, lo meto por el agujero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=918" target="_blank" class="timestamp">[15:18]</a> Bebo y no tengo ni que quitar nada, ¿vale? El antifal normalmente no me lo pongo, pero bueno, si es para echarla así, a veces sí que me lo pongo. Y esto es mi máscara. Ahora se encenderá. Bien, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=947" target="_blank" class="timestamp">[15:47]</a> Esto te lo puedes apretar más o menos. Si me la quito empieza a tirar aire a saco, ¿vale? Porque os voy a explicar un poco sobre la máscara. La máscara no la estoy vendiendo de mucho menos. De hecho, es de la marca... La máquina es de la marca Resmed. Esto básicamente te lo pautan en la seguridad social. Y la máscara también, esta...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=969" target="_blank" class="timestamp">[16:09]</a> Es de la marca Resmed. Si no me equivoco, me equivocaría si os lo dijese exactamente cuál es. Pero yo lo que os quiero decir con todo esto es que la que te manda a la seguridad social no es autorregulable. Esta se autorregula, ¿vale? Básicamente. Lo que quiero decir al final es que muchas veces me insultan en plan, pues ni respirar, tal, no sé qué. Evidentemente, con mi peso, por la noche tenía muchos problemas para respirar, para todo. Aquí te pones cuántas horas has dormido, cómo has dormido. Es una auténtica locura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=992" target="_blank" class="timestamp">[16:32]</a> Pero más allá de eso, tíos, yo estoy súper contento. Estoy súper, súper contento porque al final... A ver, tío, puedes hacer tu vida normal. En este caso esto se adapta, que flipas. Al final te acostumbras súper rápido. Eso sí, te haces súper dependiente. Súper dependiente. De hecho, mira, el otro día esto está como un poquito así más roto. Esto se puede como quitar directamente solo de esta parte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1013" target="_blank" class="timestamp">[16:53]</a> Pues el otro día me compré una máscara de estas entera con su tubo creo y todo. He hecho. La tengo aquí. Esto no es una promo, ¿vale? Me la compré yo con mi dinerito. Y la marca es Resmet. Yo se la vi a Urs una vez y flipé porque dije, esa máscara es buena. Yo tuve muchos problemas sobre todo con las máscaras. Y luego que la máquina también se ha autorregulado es una pasada. No he probado otros autorregulables, pero la verdad que esa es una pasada. Creo que Duforma dijo que tenía esa y que era increíble.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1037" target="_blank" class="timestamp">[17:17]</a> Yo no había abierto todavía la caja, pero vi que eso estaba medio roto. Imaginaos si te genera dependencia el saber que no puedes dormir bien sin eso. Que me compré otra corriendo. Y les hablé a la máscara de Resmet, la máscara de Resmet, pero esto es como Oxistor. Son muy magos. Y esto no es una promo, ¿vale? O sea, para nada. Pero la verdad es que les hablé y son muy magos. Y pues yo que sé, siempre se han portado bien conmigo. Y me da mucha ansiedad, yo utilizo la talla M. Esta es la máscara. Y le he vuelto a comprar exactamente la misma. La misma.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1066" target="_blank" class="timestamp">[17:46]</a> y me enviaron esta de regalo, que esto son máscaras, que es un carísimo, esta de máscaras. O sea, que la verdad es que se lo agradezco bastante. Pero bueno, que me la compré yo la primera y me regalaron la otra para que la probara y demás. O sea, la polla, sinceramente. ¿Y por qué os digo todo esto? Porque muchas veces me insultáis, me no sé qué. Y tíos, de verdad, esto es lo mejor que me ha pasado en la vida. Yo quiero ser culturista, seguiría siendo culturista, teniendo problemas mientras duermo, mientras tal, mientras cual. Y esto me soluciona la vida en el hecho de poder estar mejor, recuperar mejor y todo. Esto me lo dijo una vez Antonio Valero y que me voy a cambiar la vida, que me voy a cambiar la vida, que me voy a cambiar la vida.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1095" target="_blank" class="timestamp">[18:15]</a> Y llevo como año y medio usando esto y la autorregulable como un año. Esto me ha cambiado la vida. O sea, haceros las pruebas de la apnea del sueño. Ibai, por ejemplo, tenía apnea. Hay mucha más gente que tiene de la que os pensáis. Y esto merece mucho la pena, lo tengo clarísimo. Sé que es un poco aparatoso y al principio cuesta, sí. Pero esto merece mucho la pena. Así que esto es lo que os quería contar hoy realmente. Es muy raro. Pero sí, chicos. Yo la uso y no me importa. Decirlo y enseñarlo. Aunque nunca la enseño, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1124" target="_blank" class="timestamp">[18:44]</a> Suscríbete y va. Lo siento por el vídeo de hoy. Sé que no es el mejor, pero yo necesitaba transmitir lo que sentía. O sea, y esto me parece muy guay. No volver a grabar, por cierto, desde la habitación, que lo sepáis. Es una norma para mí. De hecho, una vez le pedí a Marta que no grabara ella desde el baño mientras me lao por la noche y tal. Lo siento, Marta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-uICN7ZHwMs&t=1142" target="_blank" class="timestamp">[19:02]</a> Bueno, ya tengo la de reserva, estoy contento. Porque si pasa algo, puedo seguir... O sea, yo soy... Cuando vivimos aquí no había electricidad y me daba mucho palo. Y tuvimos que comprar una batería externa para poder usar yo la máscara. Yo no puedo dormir sin máscara. Es una locura. Con la mierda lo pasé muy, muy mal. Suscríbanse si no lo están. Olvidados. Ya.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-l4O-0PDApiw">
+            <h2>JOAN PRADELLS SOFRE UNA ENFERMEDAD</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 20/04/2025 17:03</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=l4O-0PDApiw" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=l4O-0PDApiw" target="_blank">
+                    <img src="https://i.ytimg.com/vi/l4O-0PDApiw/hqdefault.jpg" alt="JOAN PRADELLS SOFRE UNA ENFERMEDAD" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>¡Claro! Aquí están los momentos más impactantes de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p><strong>"El Culturismo sin Filtros: Revelación Intima" [00:00]</strong></p>
+
+<ul>
+<li>Comienza dejando claro que no es publicidad, sino una revelación personal sobre su experiencia como culturista. Promete sinceridad y abre la puerta a temas sensibles como el sueño y la presión.</li>
+</ul></li>
+<li><p><strong>"La Máscara del Sueño: ¿Un Secreto Revelado?" [00:00]</strong></p>
+
+<ul>
+<li>Menciona la “máscara de la media”, sugiriendo un dispositivo o método poco convencional para mejorar el sueño. Esto intriga y plantea preguntas sobre sus rutinas.</li>
+</ul></li>
+<li><p><strong>"¡La Batería enciende la Presión!" [00:00]</strong></p>
+
+<ul>
+<li>La frase "Se encendió la batería" indica que algo está a punto de suceder, generando un ambiente de anticipación. Implica que está bajo presión y quizás a punto de demostrar algo.</li>
+</ul></li>
+<li><p><strong>"¿Qué se Esconde Detrás del Esfuerzo?" [00:00-00:05]</strong></p>
+
+<ul>
+<li>Al hablar de la presión a la que está saliendo la batería, deja entrever que la presión física o mental es muy alta. Esto sugiere que el precio de ser culturista es significativo.</li>
+</ul></li>
+<li><p><strong>"Un Nuevo Giro: ¿Rompiendo con lo Establecido?" [00:00-00:05]</strong></p>
+
+<ul>
+<li>La insinuación de que "si yo ahora..." queda incompleta, pero genera curiosidad sobre lo que está a punto de hacer o revelar. Podría estar a punto de cambiar algo en su rutina o método.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=l4O-0PDApiw&t=0" target="_blank" class="timestamp">[00:00]</a> Yo os quiero enseñar algo, ¿vale? Esto no es una promo ni es nada del estilo. Y es el tema de la máscara de la media. El tema del sueño. El tema de ser culturista. Básicamente es esto. Se encendió. Está encendida la batería. Bueno, pues te pone la presión a la que está saliendo. De hecho, si yo ahora...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-FVE4uqA8NSM">
+            <h2>Andoni aparece con una definición extreme antes de la velada</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 20/04/2025 17:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=FVE4uqA8NSM" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=FVE4uqA8NSM" target="_blank">
+                    <img src="https://i.ytimg.com/vi/FVE4uqA8NSM/hqdefault.jpg" alt="Andoni aparece con una definición extreme antes de la velada" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes el análisis de los momentos más impactantes de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p>"[¡La bestialidad sin bombeo!]" [00:15]</p>
+
+<ul>
+<li>El locutor expresa su asombro ante el físico del individuo, enfatizando que este es notable incluso sin haber realizado un entrenamiento intenso con pesas. La sorpresa es palpable y anticipa el debate posterior.</li>
+</ul></li>
+<li><p>"[¡Menos peso que en la velada!]" [00:18]</p>
+
+<ul>
+<li>Una afirmación contundente que sugiere una pérdida de peso significativa, posiblemente a través de métodos drásticos, generando interrogantes sobre cómo logró esa transformación.</li>
+</ul></li>
+<li><p>"[La duda que carcome: ¿Química o no?]" [00:29]</p>
+
+<ul>
+<li>El locutor directamente cuestiona si el individuo ha utilizado sustancias prohibidas, no como una acusación nueva, sino como un hecho asumido, planteando la necesidad de un control anti-doping real.</li>
+</ul></li>
+<li><p>"[Control Anti-Doping: ¿Una farsa inminente?]" [00:33]</p>
+
+<ul>
+<li>Se expresa escepticismo sobre la efectividad del control anti-doping que se aplicará, insinuando que podría ser una simple formalidad sin resultados concretos.</li>
+</ul></li>
+<li><p>"[El 'Andoni' que se escurre: ¿Evitará los controles?]" [00:37]</p>
+
+<ul>
+<li>Una metáfora directa que sugiere que el individuo podría tomar medidas para evitar ser detectado en los controles anti-doping, aumentando la desconfianza.</li>
+</ul></li>
+<li><p>"[La química: Un secreto a voces]" [00:29-00:33]</p>
+
+<ul>
+<li>El locutor deja claro que el uso de sustancias ilegales no es una sorpresa, lo que implica una crítica a la falta de transparencia en el mundo del fitness o los deportes de contacto.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=FVE4uqA8NSM&t=0" target="_blank" class="timestamp">[00:00]</a> Entrenamiento finalizado. ¿Qué cojones? Estaba haciendo un poquito de pucci y tal, así como para descargar un poquito. Ahora os enseñaré lo que temprano. ¡Madre mía! ¿Cómo está el bicho? Sí que se le nota… Qué barbaridad, cómo se le ve. Sin bombeo de pesas, chavales. Ya sé que tiene que bajar a 100. Y ya te digo yo que pesa menos que en la velada… O sea, que en el pesaje de la otra vez… Que le cara a cara, coño. Pesa bastante menos. Es una pasada. Ahora, yo sigo pensando…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=FVE4uqA8NSM&t=29" target="_blank" class="timestamp">[00:29]</a> A ver, si alguien tiene dudas de que este hombre usa química o ha usado química, sinceramente no. No es el tema ya, a esta altura de la vida, ¿vale? Pero que si realmente va a haber control anti-doping, ¿qué clase de control anti-doping va a haber? Y está claro que, bueno, con tiempo y tal, cuidado que no se escurra demasiado el andoni, ¿eh? Ya lo veremos.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-6j-YrdOF3xo">
+            <h2>SEZAR BLUE EN NORUEGA - GASTRONOMÍA ESCANDINAVA</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John opina </span>
+                <span class="date">Publicado: 20/04/2025 17:20</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=6j-YrdOF3xo" target="_blank">
+                    <img src="https://i.ytimg.com/vi/6j-YrdOF3xo/hqdefault.jpg" alt="SEZAR BLUE EN NORUEGA - GASTRONOMÍA ESCANDINAVA" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Este es un resumen y análisis del texto proporcionado, que parece ser la transcripción de un video de alguien probando comida en Noruega.</p>
+
+<p><strong>Resumen General:</strong></p>
+
+<p>El narrador está comiendo en un restaurante noruego, documentando su experiencia para un video. Prueba varios platos locales, incluyendo pescado seco, bacalao, bacon ahumado, patatas y una tarta de manzana con helado y nata.  Se centra en describir los sabores, texturas y en comparar la calidad de los ingredientes con los que encuentra en España.  Es bastante locuaz y divaga, comentando aspectos de la comida, el restaurante y sus propias preferencias.</p>
+
+<p><strong>Puntos Clave y Análisis:</strong></p>
+
+<ul>
+<li><strong>Énfasis en la calidad de los productos:</strong> El narrador constantemente resalta la calidad del pescado ahumado y el bacon noruego, afirmando que saben "a humo, pero del bueno".  Hace una comparación directa con productos similares en España, sugiriendo que la calidad en Noruega es superior.</li>
+<li><strong>Proceso de secado del pescado:</strong> El narrador explica cómo el secado concentra los sabores del pescado, comparándolo con la elaboración de concentrados o demi-glaces.</li>
+<li><strong>Comentario sobre la falta de sal:</strong>  Repetidamente señala que la comida no está lo suficientemente salada, incluso las guarniciones.</li>
+<li><strong>Descripción detallada de la experiencia sensorial:</strong> Se enfoca mucho en las texturas, los sabores y cómo la comida le hace sentir.</li>
+<li><strong>Estilo conversacional y divagante:</strong> El narrador tiene un estilo muy coloquial, interrumpiéndose a sí mismo, haciendo digresiones sobre temas como las vistas al puerto, la nieve en los coches o la traducción de palabras al inglés.</li>
+<li><strong>Humor y sarcasmo:</strong> Utiliza un lenguaje informal y a veces sarcástico, como cuando califica una tarta de manzana como "una caca" a pesar de que en realidad le gusta.</li>
+<li><strong>Honestidad brutal:</strong> No duda en expresar su opinión de forma directa, incluso si es crítica.  Dice lo que piensa sobre la comida, sin intentar ser diplomático.</li>
+<li><strong>El tema de la vergüenza:</strong>  Menciona la dificultad que tiene para expresar directamente que algo no le gusta, por vergüenza, y reconoce que necesita superarlo.</li>
+</ul>
+
+<p><strong>Conclusión:</strong></p>
+
+<p>El texto ofrece una visión interesante y humorística de la experiencia gastronómica del narrador en Noruega.  Más que una simple reseña de comida, es un monólogo interno lleno de observaciones, opiniones y divagaciones que lo hacen entretenido y auténtico.  Se nota que el narrador es un entusiasta de la comida y disfruta compartiendo sus experiencias con los demás.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=0" target="_blank" class="timestamp">[00:00]</a> Hola, ¿qué tal? Hola, ¿qué tal? ¿Estás en...? Vamos a ver otro más. ...en el canal de César Blué y hoy he venido a probar la comida local del pueblo más al norte de toda Europa. Estoy en Honisbach, municipio de Norcap. Norcap significa Cabo Norte. He ido hasta el Cabo Norte desde Madrid 5.000 kilómetros en coche, en mi Tesla. Bueno, lo he documentado todo en el canal de César Blué Conduce, pero aquí se viene a hablar de comida. Y he venido a probar la comida local y autóctona...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=29" target="_blank" class="timestamp">[00:29]</a> de esta población. Bueno, supongo que será una basura, comida y fumar, ¿vale? ¿Qué tal? De esta zona. Este es un pueblo pesquero, muy pequeñito, 2.500 habitantes. Y además estoy en temporada baja. Hoy es día 24 de enero. Aquí, pues poco turismo hay en estas fechas porque se barajan temperaturas de entre menos 10, menos 5 grados.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=49" target="_blank" class="timestamp">[00:49]</a> En este instante, oye, hace buen tiempito, menos dos grados. Todo el pueblo está nevado, está precioso y apetece un montón probar comida. Comida calentita en el restaurante que tengo a mis espaldas. Me consta que preparan platos 100% locales, autóctonos, tradicionales. Se llama corner porque está precisamente en la esquina. Espero que me pongan de comida para poder satiar este hambre. Que hambre, que haya calambre. Sí, tía para adelante, hombre. Y a ver que se cuece. ¡Que se cuece! ¡Ah, picalojo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=88" target="_blank" class="timestamp">[01:28]</a> Ah, tícalojetes, coño. Guau, vamos a ver comida. Estoy muerto de hambre, tío. Interior del restaurante, qué bonito es. Qué acogedor. Luces muy cálidas, mesas de madera, sillas de piel. Todos los restaurantes tienen una carta y empieza por los entrantes. Tienen, ojo, cecina de ballena.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=113" target="_blank" class="timestamp">[01:53]</a> Tienen sopa de pescado, lenguas de bacalao fritas y los bolinos, que son unas albóndigas de pescado. Luego continúa, dice, con sabrosos platos de pescado. No olvidemos que estamos en un puerto pesquero y aquí lo tradicional. Venga, va, tía para adelante. Carta más que vista para sentencia. Y ahora sí que empiece el papeo. Y empieza la fiesta con este plato de lengua de bacalao. Sí, sí, esto son lenguas de bacalao.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=140" target="_blank" class="timestamp">[02:20]</a> Fíjate que delicatesen ahí la patata frita, la salsa y la zanahoria que tiene pinta de esa zanahoria que está en vinagre, tío. Que la odio con toda mi alma, tío. La zanahoria esa encurtida da un asco. Es un manjar aquí en Noruego. Solo está disponible fresco en la temporada adecuada que va de enero a marzo y estamos en enero. Se suelen rebozar en harina y freír, como estás viendo en el plato, que viene presentado con patatas fritas, zanahoria...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=166" target="_blank" class="timestamp">[02:46]</a> Sí, gente, hago dieta de INSEA, ya lo sabéis. Oria, limón y un poco de salsa. No me han puesto pan de ninguna clase, pero lo que sí que me han puesto es el vino que tienen por copas. Es vino español. Este es un varón de ley reserva. Un tempranillo, en fin. Y tempranillo voy a empezar con la bebida porque tengo muchas ganas de probar este vino. Con la pasta que vale ahí paso del vino, porque cuando tengo que importar de España mismo el vino...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=194" target="_blank" class="timestamp">[03:14]</a> Oh, qué rico, qué rico. Aunque os digo una cosa. No me han abierto la botella ni han servido la copa en la mesa. Lo traían ya servido, en fin. No me enrollo más. Lengua de bacalao. En la vida había escuchado este plato, eh.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=218" target="_blank" class="timestamp">[03:38]</a> Tiene demasiado rebozado para mi gusto, pero está realmente muy bueno. Es muy jugoso el bocado y me sabe como a otra parte del bacalao, o sea, no necesariamente la lengua. Se nota que es bacalao a la lengua. Voy a probarlo con la salsita que trae.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=232" target="_blank" class="timestamp">[03:52]</a> Son Loves Trash, como te digas. Hace un par de años estuve en Trompson, Noruega, probé ballena y era literalmente como si se te cae un bistec al mar y te lo come. Un bistec, pero esos secos, ¿no? Qué asco, tío. Es una salsa tártara, lleva pepinillo y mayonesa, básicamente. Apostaría a que es fresco, eh. Apostaría a que es fresco, sin duda. Han tardado un montón en entrar en el plato, lo cual indica que está recién hecho. No es una fritura muy grasienta. Uy, qué crujiente la patata. Esto es un fish and chips en toda regla, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=262" target="_blank" class="timestamp">[04:22]</a> ¡Ay, qué buena la patata! ¡Ay, qué buena! ¿Y eso? ¡Qué rojitita por fuera! ¡Qué blandita por dentro! ¡Ay, esto! No sé por qué me ha llevado de viaje a las bravas que ponen en Barcelona, las patatas bravas que ponen allí, a la manera en que las fríen, no a la manera en que las cortan, pero están buenísimas. No sé, me da a mí que si estoy con él y como comida, diría que basura, pero bueno. Pues me gustan más las patatas que el bacalao.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=291" target="_blank" class="timestamp">[04:51]</a> Teniendo en cuenta que el bacalao está buenísimo, ¿eh? Pero es que las patatas son un espectáculo. Las raciones, entiendo, van a ser muy generosas porque esto es un entrante. Se entiende que más pequeño... El problema es que te puede acabar cayendo gordo y cuando te cae gordo está así fumando de verlo. A ver qué tal la zanahoria. Bueno, está fría, está rallada, pero como ligeramente cocida. En fin, empezamos bien, ¿eh? Está muy bueno. No, ¿qué pasa? Nos quieres vender el vídeo, que es diferente. Sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=320" target="_blank" class="timestamp">[05:20]</a> Francamente, la cosa no ha podido empezar mejor. Continúo. Y esto, amigos, es ballena, cecina de ballena. Qué pedazo, hostia tío, 12 brazos para cecina. En Japón, Islandia y Noruega es legal la caza de ballenas. En Noruega hay alrededor de 150.000 ballenas minke, de la cual se ha extraído esta cecina, y se cazan de manera muy limitada alrededor de 1.000 al año.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=350" target="_blank" class="timestamp">[05:50]</a> unos 25.000, 30.000. Sí, Samu, es mi noodle y qué así. La ballena no está en general en peligro de extinción. Muchas razas de ballena están en peligro de extinción, pero este es un plato que está permitido, entiendo a los animalistas, Greenpeace y todo esto, pero ya me dijeron de todo cuando probé el tiburón, que sucede lo mismo, y en fin, que, bueno, pues a título informativo os leo en... Pepaso, te cobes un trozo de eso y el agua de tu cuerpo desaparece, joder, tan seco es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=379" target="_blank" class="timestamp">[06:19]</a> Comentarios, la opinión, pero que esto está regulado y no pone en peligro la supervivencia de las ballenas. Para nada. Dicho lo cual, está ahumadísima y cuando aquí ahuman algo es con humo natural y de una manera muy intensa. Lo digo porque he probado ya en estos días el salmón al casco porro e incluso el salmón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=400" target="_blank" class="timestamp">[06:40]</a> Gondriel, la cara de tiburón dice que es una auténtica M. ¿No viste el vídeo que reaccioné que va a Islandia, creo que era a Noruega, y come comida tradicional de ahí? Creo que a Islandia, que el tío casi vomita y casi se muere.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=411" target="_blank" class="timestamp">[06:51]</a> ahumado de aquí tiene toda la parte de fuera de un color miel así que te da el ahumado o sea es que trabaja en el ahumado a un nivel increíble y tú dirías bueno el salmón ahumado de españa debe ser igual que el de ahí pues vaya el que yo he comprado en el supermercado de este pueblo no se parece en nada en nada es en nada pasa lo mismo con este ahumado de esta cecina de ballena que es muy intenso</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=434" target="_blank" class="timestamp">[07:14]</a> Es muy parecida la textura en la boca a la cecina, digamos, de vaca. Pero no tiene nada de grasa. Viene servida con esto que es yogur. Tío, le meten yogur a todo. Arándanos no me pega nada, pero nada. Y viene aquí con este panecillo que voy a probar así de esta manera. Entiendo que esto se toma así. Francamente no le veo la gracia a tomarlo con el yogur.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=462" target="_blank" class="timestamp">[07:42]</a> Vaya mierda de comida, lo siento, se me ha hablado, pero ve basura de comida, ¿eh? Así hablando claro. Siguiente, tío, no vendrá moto, César, porque menudo truñux. Con lo que conozco de la cecina. ¿Está bueno? Sí. ¿Algo imperdible que debas probar? Pues bueno, lo vas a probar si vienes por esta zona por quitarte el gusanillo, pero vamos, que... Esto que estás viendo... Tiene la cara que pone, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=488" target="_blank" class="timestamp">[08:08]</a> reno 30 brazos toma ya es uno de los emblemas el sustroming es pesca fermentada que huele mucho ya tío bueno aparte sí que es asqueroso y vomitivo y todo pero es que encima la gente el sustroming se tiene que abrir bajo el agua y la peña lo abre a palo seco porque está como hincha la lata de gas y pega un petardazo que huele mal pero es que encima huele peor</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=511" target="_blank" class="timestamp">[08:31]</a> ...de la gastronomía local. Se trata del reindeer stew, el guiso de reno. Reno salteado. Es la comida, insisto, más conocida en el norte de... Mira, es normal que la peña ahí se cuelgue, naturalmente. Ahí es tradición del país que cuando te sale del orto te coge y te cuelgas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=531" target="_blank" class="timestamp">[08:51]</a> Y hablas con la gente y lo típico es que te digan no, mi padre se colgó. No, soy viuda. ¿Por qué? ¿Por qué se colgó? ¿Y por qué? No sé. Un día se colgó.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=543" target="_blank" class="timestamp">[09:03]</a> Normal, porque comiendo esta mierda, pues poco gases, ¿eh? De Noruega. Normalmente se utiliza el lomo del reno, se fríe generalmente en la propia grasa del reno, luego se le añade agua y nata y se cuece hasta que está tierno y se sirve, como puedes ver, con puré de patatas, confitura de arándanos rojos y en este caso un poco de brócoli. Increíble. Voy a darle aquí caña. Vamos a ver esto. Se come con tenedor, por lo que veo. A ver qué ha puesto el vino.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=569" target="_blank" class="timestamp">[09:29]</a> Joder, tío, si parece comida para una persona que le han hecho un trasplante de esófago, una reconstrucción de esófago después de un cáncer y no puede masticar y tiene problemas para deglutir, tío. Comida pajita, ¿eh? A ver qué tal está esto. Oye, es durita la carne, es durita, viene con una cantidad enorme de puré de patatas y me recuerda, me hace gracia porque me recuerda. Es comida de la mili esto, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=599" target="_blank" class="timestamp">[09:59]</a> Y no lo descarto, al puré de patatas este que llevaba mil años sin probar, lo ponían en el comedor del colegio, este que se hace con... Toma, lo he acertado, ¿eh? Comida esta de... se hizo militar. Sí, sí, puré patatas de sobre, de polvo. Sobrecitos. Y me resulta muy familiar el sabor del guiso. No es como otras veces que voy a otros países a probar comidas con sabores que me son totalmente ajenos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=623" target="_blank" class="timestamp">[10:23]</a> De verdad que los españoles, los que no han comido mucho por ahí, se sorprenderían. El nivel de bazofia que te puedes tragar y el pastizo que te cuesta que se te queda una cara de tonto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=640" target="_blank" class="timestamp">[10:40]</a> yo cuando fui a Alemania y decía al final me di Burre King por favor que necesito comida fíjate fíjate la cosa aquí en España el Burre King es basura para millennials degradados y gente pues de flaneras estructuradas y basura hasta hueco pelo violeta que bueno no quiero entrar detalles que me censuran ahí no tú viajas al norte y dices por favor dame dame una inmundicia esa de cultura americana imperialista del Burre King porque es que me muero</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=672" target="_blank" class="timestamp">[11:12]</a> Esto es que me resulta tan familiar. Me recuerda un poco a algo que comí en Estados Unidos. Ay, ¿cómo se llamaba el pastel de carne? El meatloaf, meatloaf. La carne... Nunca he comido fish and chips, dice que está muy bueno. Nunca la he comido. No es que sea muy... Pero bueno, pescado frito con patatas fritas. Un poco redundante, ¿no? Si pone una ensaladita así verde, varillada, fresquita, con el frito, vale. Sabrosa. Mira que me pensaba yo que iba a ser más sabrosa hacer así carne de caza. Pues no lo es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=700" target="_blank" class="timestamp">[11:40]</a> Por cierto, en toda esta zona norte de los países nórdicos, valga la redundancia, hay una plaga, por decirte de alguna manera, de renos. Es un peligro. A mí me acojona el pescado por culpa de los anisakis, dice Gondriel. Mira, Gondriel, yo me acuerdo en el restaurante cuando trajeron la merluza, que es un pescado que tiene mucha tendencia a tener anisakis, de piscifactoría, ¿eh? Y de piscifactoría importante. O sea, pescado bueno, de piscifactoría buena, que era...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=730" target="_blank" class="timestamp">[12:10]</a> Ahora no me acuerdo cómo se llama la empresa, pero la que se necesita todo lo restante, coño. La más importante. Vale. La abren ahí en la mesa de acero de la cocina. Y decían, mira, mira. Mira cómo corren. Se iban derramando los anisakis y corriendo por la mesa, tío. Así. Todo blanquito. Los gusanitos blancos. Desde entonces... Desde entonces la merluza de piscifactoría. Que toma antibiótico y toma mandanga. Los peces, eh. Desde entonces la merluza. Me da un asco que flipas, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=760" target="_blank" class="timestamp">[12:40]</a> Hostia, qué asco, tío. Ver los gusanos saliendo del pescado, ¿eh? De verdad, tío. Y bici-factoría. Es que no lo entienden. Usted va con un experto del tema. Los coches incluso en la parte... Va, comédate el popito ese que te han puesto ahí, anda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=771" target="_blank" class="timestamp">[12:51]</a> ...delantera llevan unos focos enormes, bueno los coches, los camiones, todos los vehículos que mueven por carretera... ...llevan unos focos enormes que iluminan más de un kilómetro de longitud mínimo... ...y no te estoy exagerando, en la noche parece que está la calzada completamente iluminada... ...y llevan esas luces para localizar a la mayor distancia posible a los renos... ...y tener tiempo de reaccionar, porque claro las carreteras están heladas... ...y tampoco se detienen los vehículos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=794" target="_blank" class="timestamp">[13:14]</a> Así a golpe de freno. Que va, que va. Hay que actuar con antelación. Entonces, por si alguno se lleva las manos a la cabeza pensando en los renos de Papá Noel. No, no. Sí, claro. Ahora todo el mundo hace una merluza, ¿no? Casualmente. ¿Este no es Rudolf? Que sí, Adrià, tío. Pues ha pesado. Bueno, Adrià ya lo he hecho. Gracias, Adrià, que yo esto pague con un hijo como el Paco Sanzo, ¿vale? ¿Te parece?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=818" target="_blank" class="timestamp">[13:38]</a> Pero vaya, que hay muchos rules por ahí. Por cierto, salgo de viaje ahora mismo, en cuanto acabe de comer, a Laponia, donde grabaré el próximo vídeo de esta ruta gastronómica nórdica. Mandad dinero, hostia. Que suelo dar más dinero el Adrián. Joder, no te da vergüenza. Está buena. Que tengo que ser José Elías, para que hagáis dinero. Os tengo que estafar. Macho. De verdad. Le dije, está salteado, frito, he hecho pequeños trozos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=845" target="_blank" class="timestamp">[14:05]</a> Tres monesimón, mañana. No hay que abusar porque si no, satura. Es una carne tierna. El guiso lleva nata. No entiendo muy bien el brócoli. No lo entiendo. No tiene absolutamente nada de sal. Simplemente está hervido y viene frío. Es la parte fría del plato. No entiendo cómo se tomará. Tiene fisonomía Funko Pop, ¿eh? ¿Te da cuenta o qué? La mermelada de arándanos, que es un poco de aquí y un poco de allá, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=870" target="_blank" class="timestamp">[14:30]</a> Bueno, pues me hace más gracia tomarlo así mezclado con la mermelada de arándanos que con el brócoli, ¿eh? Claro, brócoli... Tengo que aprender del Frank Cuesta, tío. Vender la moto, el victimista que lucha... Gente... Que España va en contra mía. Pedro Sánchez va en contra mía. Ayuda, Felipe. Sexto, ayúdame. Me pego unas panzadas en Madrid cuando estoy a plano que... Pues no le he cogido manía, pero no me apetece mucho. La ración es tremendamente abundante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=899" target="_blank" class="timestamp">[14:59]</a> Con lo cual te quiero decir que relación calidad-precio para lo que cuestan las cosas aquí no es un sitio caro. Adrià, soy Incel Young, no voy a tener hijos. No te subestimes, no subestimes lo cruel que puede ser tu vida, Adrià. Aunque seas Incel, puede, aún así, que tengas la desgracia de provocar una fecundación inesperada y condenatoria. Y entonces tener que pasar la manutención...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=925" target="_blank" class="timestamp">[15:25]</a> A una tipeja que una vez te dio por meterle el churro y te condenaste. A todo el mundo le pasa horrible el sombrero. Todo el mundo, pero bueno, tío, sé que tiene más personas así. Cocina casera a más no poder, ¿eh? Y esto no es comida recalentada, sin más. Esto lo van preparando todo según lo vas pidiendo. Porque es que hay tres mesas en el restaurante, he venido a las 11 y este plato ha llegado a las 12 de la mañana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=949" target="_blank" class="timestamp">[15:49]</a> Va, cállate. Y no es una queja, ¿eh? Jamás comento nada de los tiempos en los vídeos, también muchas veces, pues por respeto a los trabajadores. Es bastante líquido, tío, qué asco, ¿eh? Desde allí, porque a veces les mareo, literalmente, y de manera no intencionada, pero les digo, oye, mira. Popi, la culpa es siempre la mujer. Pues hombre, un poquillo, sí. Tráeme los platos de uno en uno. Eso vuelve loco a cualquier cocina, porque nadie pide así. Normalmente son las comandas, se cantan los entrantes, se van...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=978" target="_blank" class="timestamp">[16:18]</a> Pues ya he dicho antes lo de la ballena. 27 euros. Tío, una pasta gastada que flipas, eh. Y quería probarlo en formato filete y no sentirme mal. Por eso he buscado toda esa información. Y este es el plato de filete de ballena. Ves que viene como a la plancha con un mogollón. Popi, que nadie lo obliga a meter el churro. Lo obliga a la naturaleza. ¿Te enteras? El instinto humano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1001" target="_blank" class="timestamp">[16:41]</a> ¿Qué te piensas, tío? Somos hombres. Son de patatas fritas otra vez. Tampoco nadie te obliga a comer para nutrirte. Pero lo hacen, ¿no? Voy a comprar una estúpida, pero bueno. Ahí queda, ¿vale? Registrado, grabado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1014" target="_blank" class="timestamp">[16:54]</a> Deliciosas patatas fritas y también con la mermilada de arándanos. Ponen en todas partes. No sé si voy a poder con todo, ¿eh? Uy, el filete... Es contundente, ¿eh? Parece como un filete de solomillo. Uy, qué durito está. Madre mía. Vamos a ver qué tal está el filetón de ballenón. Pues asqueroso, ¿cómo va a estar? ¿Cómo va a estar el pedrusque que te han puesto en la mesa, tío? Joder.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1042" target="_blank" class="timestamp">[17:22]</a> fascina. Es que no me fascina. Cuando dice no me fascina, es que es una pedazo de basura de comida infumable. Lo que tú dirías a la cámara, perdona, tío. Si quieres me lo cobras, pero llévate esta basura del plato y dásela al cocinar que se lo coma él, si es que puede. Y él, no me fascina, ¿eh? No me fascina. Ay, ostras, no sé si me lo voy a terminar. Voy a probar con la salsa esta que trae aquí, marrón. Sí, te ha puesto patatas para que vomites, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1072" target="_blank" class="timestamp">[17:52]</a> y está más peor no me gusta la salsa es como una carne es muy reseca como te he dicho no tiene nada de grasa entendéis lo que he dicho antes que la peña se cuelga hay gente que se levanta mañana bueno a ver que en todas familias tienen un colgado santa por la mañana dice que pereza dios ser noruego</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1099" target="_blank" class="timestamp">[18:19]</a> ¿Por qué no soy caribeño, dominicano, nigeriano, sudanés del sur, australiano, estadounidense? Bueno, boliviano no, tampoco te pasa, ¿no? Pero, ¿por qué, tío? Noruego, tío. ¿Ven el cielo ese que parece un techo de hormigón sin pintar, todo gris? ¿Ves a su familia, todo el mundo con la cara de reasco?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1126" target="_blank" class="timestamp">[18:46]</a> Y la delicata es el país, es el pedrusco, que eso es pura fibra, tío. Que es el equivalente a la carne de más baja calidad del supermercado más asqueroso. Pues bueno, pues coge una cuerda y se cuelga sin ningún traumatismo, ¿eh? Entonces va la familia... Oh, papá, te has colgado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1151" target="_blank" class="timestamp">[19:11]</a> Y lo entierran sin mucho dramatismo, ¿no? Y luego van ahí... Sí, que mi padre se ha... Como digan el idioma ese que tienen, se ha colgado. Y el vecino, sí, sí. Mi padre también se colgó. Y mi abuela también. Es un sitio que nunca hace sol. Siempre está nublado. La gente rancia. Todo gris. La comida es asquerosa. Todo son salsas de nata con mermelada, tío. Al final, ¿sabes qué? Me pongo una cuerda en el cuello, me quedo relajado y ya está, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1181" target="_blank" class="timestamp">[19:41]</a> No tengo ganas de comer el mojón ese oscuro, tío Menos mal que las patatas están súper buenas Pero ¿para qué viajas este hombre? No entiendo, ¿para qué viajas? O sea, estás en España Que bueno, lo están destruyendo Está lleno de magrebíes Y toda la basura que hay Es una pesadilla, pero claro, es que estás al norte, tío, es que es peor Mira qué cara ese pesado ha quedado La salsa no sé qué es lo que lleva Pero es que, bueno, aparte de mucha nata Lleva también pimienta Pero lleva algo que no me agrada</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1210" target="_blank" class="timestamp">[20:10]</a> Bueno, a ver, patatas con mermelada de lándanos. Está guarrindo. Patatas con mermelada. ¿Cómo tiene que estar desesperado? Lo que tiene que dolerte es soltar los treinta y picos que ha costado el plato ese para comerte. Patatas con mermelada de pote, tío. Yo flipo, eh. Tampoco la había probado nunca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1230" target="_blank" class="timestamp">[20:30]</a> Esto me recuerda a mi amigo Peldaños, que mezcla muchas cosas con las lotus. Y en este caso creo que con la mermelada esta y una lotus le iría genial. Patatas fritas con mermelada. ¿Qué nivel de guarindongada lo ves? Yo lo veo nivel de guarindongada máximo. Por cierto, 12 de la mañana está a punto de salir el sol. Toda esta claridad la produce el ocaso porque el día aquí hoy va a durar una hora y media.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1261" target="_blank" class="timestamp">[21:01]</a> me están ganando ganas de colgarme todo el vídeo me están ganando ya lo que estás relatando lo que estoy viendo lo que es la vida diaria ahí me ganas de colgarme o sea ahí el día va a durar una hora imagínate que quieres ir a ligar a no sé dónde o sea los rancias y amargas que deben ser las mujeres ahí y cenizas y encima seguro que todas deben tener una especie de parafiles sexuales raras porque ahí normal no tiene que haber nadie tú viviendo ahí normal no eres</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1290" target="_blank" class="timestamp">[21:30]</a> O sea, tu mente... Tú eres un ser humano si vives en condiciones humanas. Pero vivir ahí es como dices tú. Es como una cárcel. La cárcel, tío, no hay más alegría por vivir. Kander, sí, qué bajón de país. Qué castigo de país. Qué cazo, hombre. Gracias por suscribirte, tío. Que yo esto lo pague con un hijo como César Blu, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1313" target="_blank" class="timestamp">[21:53]</a> Eso entendiendo que el día sea el periodo comprendido entre la puesta y la salida del sol. Porque el sol, como te digo, se pone dentro de 15 minutos y esto es como el amanecer. Claro, son las 11 de la mañana, que lo he dicho antes de pasada. Aquí la hora de comer normal es de 11 a 1.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1330" target="_blank" class="timestamp">[22:10]</a> Es que no puedo con el filetito. Lo lamento, pero no es un sabor desagradable, pero es una textura como acartonada. Fíjate, sin ánimo de desmerecer al local, para nada. Pero si esto no es congelado, me va a extrañar mucho. Y es como que no ha sido bien congelado y descongelado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1346" target="_blank" class="timestamp">[22:26]</a> Es que ni con la mermelada Exactamente, Gondriel Este tío, como referencia Se come pescado podrido Que huele a amoníaco Se come aquellos quesos Que eran Bueno, básicamente quesos podridos Sacados de un sótano De una casa abandonada Y no se come eso, flipa Fíjate Fíjate lo que es ser noruego</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1373" target="_blank" class="timestamp">[22:53]</a> No sé, es por hacer la gracia de probar la ballena, pero sabía yo que tal vez podría pasar esto y ha pasado. No me fascina. Las verduras están salteadas, están muy buenas. Tiene pepino, pimiento, repollo. Esto lo digo en muchos vídeos. Es mi opinión, completamente subjetiva, que igual vienes... Eso es pesado, tío. Mínimo enseñar la botella al cliente, pero bueno. No vivo vino en mi vida. No entiendo por qué coge el vino y mete un sorbo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1400" target="_blank" class="timestamp">[23:20]</a> microscópico, tío. No meto un trago en mi engordo. Pega mucha hostia, ¿no? No sé. Y lo voy a intentar por todos los medios en el siguiente plato. Este es el pescado seco a la plancha. Es el pescado seco sin más, sin sal ni nada, que se seca de forma natural al...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1415" target="_blank" class="timestamp">[23:35]</a> 32 eurazos, tío. A ver qué tal esto, ¿eh? Bacalao con el bacon frito por encima. Mira que aquí el bacalao en España y en Portugal, sobre todo, está que te mueres, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1439" target="_blank" class="timestamp">[23:59]</a> ¿Por qué cocinan tan mal ahí? Si tienen pescado fresco, tío. No lo entiendo, ¿eh? Con patatas y con mustar. Mostaza. Van trayéndote distintos cubiertos para cada plato. Atienden, insisto, fabulosamente bien. Con lo bueno que está el bacalao pilpil o tío la plancha, qué sé. Te ofrecen agüita todo el rato.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1460" target="_blank" class="timestamp">[24:20]</a> He pedido un vasito también para hidratarme bien. Y bueno, vamos con las patatas cocidas con el bacalao seco a la plancha. Vamos a ver qué tal está esto. Qué raro comer sin nada de pan. Hombre, está buenísimo. Se nota que es bacalao seco. Qué raro comer sin nada. He pedido un vasito también para hidratarme. Fíjate que tiene la manía que también tengo yo. Bueno, depende del día. Que corta con la mano derecha y come con la derecha también. ¿Te das cuenta? Estoy curioso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1485" target="_blank" class="timestamp">[24:45]</a> bien y bueno vamos con las patatas cocidas con el bacalao seco a la plancha vamos a ver qué tal está esto que raro comer sin nada de pan hombre está buenísimo se nota que es bacalao seco y se nota que es sin sal no es como el bacalao en salazón que tomamos tanto en españa porque curioso pensé que iba a estar mucho más seco o está buenísimo que jugoso está ostras el bacon lo que te decía aquí los ahumados son con humo humo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1512" target="_blank" class="timestamp">[25:12]</a> Qué bueno está. Ha venido la chica, como ha visto que no me he terminado la ballena, ha vuelto a venir y me ha dicho que tienen recipientes para llevarlo a casa si no puedo con todo y le he dicho no, no se preocupe. En fin, no sabía qué decirle porque cuando no me lo he comido me daba vergüenza y le he dicho bueno, es que no puedo más, es mucha comida. En fin, no sé si te pasa que a veces, no sé, por la vergüenza no sabes... No, pero dilo, tío, que no te guste, punto. ...que contestar en esos casos. Este bacalao es de los mejores que he probado, ¿eh? En fin, sé que digo eso mucho en muchos vídeos, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1542" target="_blank" class="timestamp">[25:42]</a> En cada vídeo, sí. Cuando lo digo es porque lo siento de verdad. Platos grandes, ¿eh? Platos grandes, con mucha guarnición. Vaya, la patata está más dura de lo que pensaba, pero está sin hacer por dentro, ¿eh? A ver esta otra. Esta es que está poco hecha por dentro. No sé, la Beto un poco cruda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1558" target="_blank" class="timestamp">[25:58]</a> No sé, le ha pasado solo con esta, esta está. Le faltan unos minutos a esta, ¿eh? No sé por qué. También a veces las patatas, puede ser 10 patatas y 5 te quedan duras y 5 blandas, ¿eh? Patatas sin más, pues como para tomarlo aquí de guarnición mezclado con todo porque no lleva absolutamente nada de sal, nada. En general, todo lo que estoy probando hoy no tiene demasiada sal, incluso en algunos casos, como te digo aquí en la guarnición, está flojo de sal, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1583" target="_blank" class="timestamp">[26:23]</a> Tengo unas vistas espectaculares a la bahía, a un barco de cruz. Sí, sí, espectacular, precioso. Pero que ha llegado ahí al parking. En fin, mola. Mola las vistas. Sobre todo la parte de la bahía, el parking. Aquí que sabes de casa, arrancas el coche y te largas. Ahí te das una hora pasando el coche con toda la nieve que tiene encima. Ni el cruzero pues menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1604" target="_blank" class="timestamp">[26:44]</a> Pues el bacon de aquí es celestial, ¿eh? Todas las cosas ahumadas, y lo vuelvo a repetir, que he probado aquí, saben a humo, pero del bueno, ¿eh? Y mira que aquí este tipo de productos los exportan mucho, pero deben tener otra normativa en los países donde se recibe este material que ellos exportan, o yo es que no me lo explico, porque es que el salmón y el bacon y todo esto lo tenemos también en España, el salmón concretamente traído de Noruega, pero no se parece el salmón de Noruega que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1631" target="_blank" class="timestamp">[27:11]</a> sirven en Noruega ahumado con lo que hay en España, pero es que no se parece. El pescado, al sufrir ese proceso de secado, concentra aún más los sabores. Es como hacer, pues no sé, pues precisamente un concentrado de lo que sea, una demi-glace o a lo que sea, a la que le quitas mucho el agua y sale a relucir más el sabor de lo que hayas utilizado para hacerla. En este caso, en el pescado lo mismo. Al eliminarle una cantidad tan grande de agua, cambia la textura y también te cambia la cantidad de sabor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1659" target="_blank" class="timestamp">[27:39]</a> No noto mucho la mostaza. No sé, ¿mustard es mostaza? Voy a mirarlo, a ver. Confirmado, mustard es mostaza. Served with mustard garden vergetable. Toma inglés. Pues no... Verduras al horno con mostaza. No, eso no es un problema, ¿eh? Para nada lo es. En fin, llevo muchas patatas en el día de hoy. También mucho pescado, mucho bacon...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1682" target="_blank" class="timestamp">[28:02]</a> Comida local, que es la que más me gusta. Confieso que en la carta había un apartado de comida internacional al final. Y aunque no es algo local ni autóctono, pero está hecho aquí con mucho amor. Es la tarta de manzana. Con todo, me han preguntado si quería helado y nata. Y digo, hombre, pues ya que te metes en harina, tráelo con todo. En fin, me voy aquí directo a por el vértice, que suele ser la zona más jugosa, la que está en el centro del molde de la tarta. Y a mí me gustan las cosas jugosas, como son...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=6j-YrdOF3xo&t=1712" target="_blank" class="timestamp">[28:32]</a> Y como es debido, vaya. Pues está muy buena. Está muy buena. Muy buena. No, ¿qué vas a decir? Se come esa mierda, que trae algo un poco decente, te mueres de bueno. No es la típica que tiene la manzanita por arriba, que va. Ah, qué pena. Solo un postre, tío. Nada, una caca, tío.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-Pd3LxKdBkY4">
+            <h2>EXCLUSIVA| "EN 2026 ME RETIRO DE PREPARAR. YA NO PUEDO MAS" Raúl Carrasco ANUNCIA su RETIRADA</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 20/04/2025 18:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4" target="_blank">
+                    <img src="https://i.ytimg.com/vi/Pd3LxKdBkY4/hqdefault.jpg" alt="EXCLUSIVA| "EN 2026 ME RETIRO DE PREPARAR. YA NO PUEDO MAS" Raúl Carrasco ANUNCIA su RETIRADA" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen y Análisis de la Conversación</h2>
+
+<p>Esta conversación es una entrevista/charla entre Miguel y Raúl, un conocido preparador físico en el mundo del culturismo. El tema central es el futuro profesional de Raúl y su posible retirada gradual del mundo de la preparación a gran escala.</p>
+
+<p><strong>Puntos Clave:</strong></p>
+
+<ul>
+<li><strong>Retirada Gradual:</strong> Raúl está considerando reducir drásticamente su número de clientes y centrarse únicamente en unos pocos atletas profesionales de alto nivel (Josema, Mauro, Kim, Garabo, David Marmol) a largo plazo.</li>
+<li><strong>Motivación Principal: Tiempo:</strong> La razón principal para esta decisión no es económica, sino la necesidad de tener más tiempo para su familia y otras actividades personales.  Aunque la preparación profesional es rentable, consume mucho tiempo y genera mucho estrés.</li>
+<li><strong>Rentabilidad:</strong> Raúl menciona que podría ganar lo mismo o más atendiendo un número limitado de consultas online (asesoramientos) que trabajando con un atleta profesional durante un año. Esto subraya que su decisión es priorizar el tiempo libre sobre las ganancias.</li>
+<li><strong>Cierre de Servicios:</strong>  Raúl ya ha cerrado su web de asesoramiento y planea cerrar las excepciones en 2025. Esto significa que no aceptará nuevos clientes ni ofrecerá servicios de asesoramiento a gran escala.</li>
+<li><strong>Enfoque en Atletas de Élite:</strong>  Raúl disfrutará continuar trabajando con sus atletas de élite, acompañándolos hasta el final de sus carreras o ayudándoles a encontrar nuevos preparadores cuando decida retirarse por completo.</li>
+<li><strong>Cambio de Rol:</strong>  Raúl planea dedicar más tiempo a asistir a competiciones, realizar entrevistas y mantener un rol más informativo en el mundo del culturismo.</li>
+<li><strong>Impacto de la Noticia:</strong> Miguel se sorprende por la noticia, pero la entiende debido al alto nivel de estrés y exigencia del trabajo de preparación profesional.</li>
+</ul>
+
+<p><strong>En resumen, Raúl está buscando un equilibrio entre su pasión por el culturismo y su necesidad de una vida más tranquila y flexible.  Está priorizando su tiempo y bienestar personal sin abandonar por completo el mundo que ama.</strong></p>
+
+<p><strong>Análisis Adicional:</strong></p>
+
+<ul>
+<li><strong>Profesionalidad:</strong>  Raúl presenta su decisión de forma profesional y estratégica. No se trata de una renuncia repentina, sino de una transición gradual y planificada.</li>
+<li><strong>Conocimiento del Mercado:</strong>  Raúl demuestra un buen conocimiento del mercado y de sus propias capacidades. Sabe que puede obtener ingresos similares con menos esfuerzo y dedicar más tiempo a sus intereses personales.</li>
+<li><strong>Pasión por el Culturismo:</strong>  A pesar de su decisión de reducir su carga de trabajo, Raúl sigue mostrando pasión por el culturismo y su deseo de seguir involucrado en el deporte.</li>
+</ul>
+
+<p>En general, la conversación revela un cambio estratégico y consciente por parte de Raúl para mejorar su calidad de vida sin abandonar por completo su carrera profesional.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=2" target="_blank" class="timestamp">[00:02]</a> Pues poquito más, Raúl. Yo también quería ya finalizar, fíjate, con un pequeño... Que nos contaros un poquito cómo van tanto Gáramo como David Mármol. Un poquito los dos, cómo van. Vale, pues mira, David, muy bien. La expectativa la tenemos en noviembre. Hemos terminado una etapa de volumen donde igual ha batido su máximo peso. Lo digo como anécdota, no buscamos batir ningún récord.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=32" target="_blank" class="timestamp">[00:32]</a> Y bueno, ya hemos empezado poco a poco esa transición para que tenga su debut. Yo, obviamente, igual que a todos los atletas, y sobre todo en un atleta neoprofesional, pues, hombre, vamos a escoger esos campeonatos que más se adapten a él, pero también a David le queda una trayectoria larga en...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=59" target="_blank" class="timestamp">[00:59]</a> en clases y todavía puntos que mejorar, que también en este caso es la espalda, ¿vale? Yo se lo dije a él, David. Esto viene a nivel profesional, ¿vale? Esto está verdadero que estás a nivel profesional. No esperes el primer año, ¿vale? Y a un Mister Olimpia, es decir, como ganar un campeonato lo puede ganar cualquiera, ¿vale? Pero que todavía para ser competitivo en lo que suele ser un top, un top 5, ¿vale? Que todavía hay carencias, ¿vale? Que seas consciente de esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=86" target="_blank" class="timestamp">[01:26]</a> que seas consciente y él obviamente es consciente está muy ilusionado en esta nueva etapa y ya está y de Garabo nada Garabo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=97" target="_blank" class="timestamp">[01:37]</a> Ahora hemos hecho un pequeño parón, un pequeño reset, por motivos personales, internos, familiares, hemos hecho una parada, un reset, no quiere decir que haya dejado la preparación y ahora en breve nos veremos y volveremos a proyectar de nuevo la fecha de competición que puede ser, ya te digo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=125" target="_blank" class="timestamp">[02:05]</a> Desde este verano hasta el otoño, bueno, ya veremos. Pues yo creo que está todo bastante bien repasado, Raúl. No se nos ha quedado ningún nombre del tintero. Veremos a ver qué lo que pasa. Estamos muy expectantes. Yo sigo pensando que en el EMPRO...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=141" target="_blank" class="timestamp">[02:21]</a> Podemos ver a Mauro, yo creo que es una fecha muy bonita y que yo sé que a él le gusta competir mucho en casa y también un poco quitarse la pina de lo que pasó el año pasado, así que estoy seguro que vamos a ver. En cuatro semanitas sabemos que te vas para Pittsburgh, incluso antes, casi diría que tres. Imagino que ya está todo cogido, Raúl, ¿no? Está todo ya, todo donde tiene que estar, ¿no? Supongo. Sí, con mucha anterioridad, todo. Vuelos, asiento, aeropuerto, supermercado, gimnasio, horario, todo, todo, todo, todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=171" target="_blank" class="timestamp">[02:51]</a> Así me gusta, así me gusta. Pues desde luego que estaremos muy pendientes de todo ello. Y nada, imagino que la semana que viene en Dairon Road, el lunes, pues te tendremos ahí, aunque bueno, ya estás también tú de turné, ¿no? Y imagino que ahora pararás un poco antes de ir tapibur o sigues todavía con seminarios y demás. Pues a ver, Miguel, tengo, fíjate, ahora que me lo dices de casualidad, tengo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=199" target="_blank" class="timestamp">[03:19]</a> Tengo nuevos proyectos. De hecho, yo en 2026 quería retirarme ya totalmente como preparador. Ya lo quería dejar porque ya llega un momento en el que tienes otros proyectos y es que no te puedes dedicar. Este año, por ejemplo, sí es verdad que yo no cojo a todos los atletas. Si cojo a uno es por algo muy en particular, como es el caso de Kim.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=227" target="_blank" class="timestamp">[03:47]</a> Y yo quería, bueno, incluso acabar este año y 2026, pero claro, hay cosas que se me acontecen antes y a lo mejor no pasa de este año. Esto no quiere decir que yo vaya a dejar tirado a Josema, ni a Mauro, ni a Kim, ¿vale? Pero sí es verdad que llegaré a un momento en el que tenga que cerrar, pero cerrar completamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=249" target="_blank" class="timestamp">[04:09]</a> completamente tenía que cerrar, ¿vale? ¿Por qué no? Porque me es imposible. Me es imposible dedicarme a otros proyectos. Al final, Miguel, con el tiempo, uno busca al final, como es mi caso, ganar lo mismo o más, pero teniendo más tiempo. Sería lo suyo, sí. Claro, al final...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=275" target="_blank" class="timestamp">[04:35]</a> yo tengo algo en proyecto que en un futuro se verá</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=280" target="_blank" class="timestamp">[04:40]</a> De hecho, muchos dirán, pues sí, al final es lo tuyo. De hecho, yo seminarios internacionales, Miguel, he rechazado muchos sitios este año. Ya tengo concretado un seminario internacional muy importante, que no voy a decir nada porque serán ellos, pero al final date cuenta que yo lo que gano en un seminario internacional es lo que le puedo cobrar a cinco atletas pros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=306" target="_blank" class="timestamp">[05:06]</a> ¿Vale? Por ir, viajar y estar tres días. Porque al final el tema pro no es mi trabajo en particular. Pero lo que te digo, busco ganar tiempo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=317" target="_blank" class="timestamp">[05:17]</a> Busco llevar el mismo nivel de vida, ganar lo mismo y tener más tiempo. Y si tengo esa posibilidad, pues lo mismo de este 2025 no pasa que verdaderamente, vamos, cuelgue las botas como preparador, sí o sí. Pero claro, obviamente yo nunca voy a dejar tirado a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=338" target="_blank" class="timestamp">[05:38]</a> en la etapa que se encuentra José, Mauro o Kim. Los pros serán los últimos y los voy a acompañar hasta el final, obviamente. O sea, resumiendo mucho la película, Raúl, este año puede caber la posibilidad de que dejes de preparar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=358" target="_blank" class="timestamp">[05:58]</a> A los mortales, vamos a decirlo así. Y que te quedes con 3, 4 o 5 pros no más para acompañarlos y que incluso si llegara la situación en la que dijeras mira, que me quiero ir del todo, acompañarlos en la búsqueda del siguiente o aconsejarles en la búsqueda del siguiente preparador.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=378" target="_blank" class="timestamp">[06:18]</a> Correcto, Miguel, correcto, totalmente. Yo ya hace un año, más de un año, cerré mi web de asesoramiento. De hecho, la capé para que nadie pudiese contratar asesoramientos. Ya de por sí baje mucho, pero ahora llega un momento en el que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=394" target="_blank" class="timestamp">[06:34]</a> en el que me es imposible. De hecho, bueno, un poco a lo que vas diciendo. Al final sigo en contacto con el mundo. De hecho, con el mundo del culturismo, de la competición. Voy a tener más tiempo para ir a campeonatos, más tiempo para hacer entrevistas. Pero digamos que el tema Coash pasa a un segundo plano, a un segundo plano más informativo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=417" target="_blank" class="timestamp">[06:57]</a> ¿Vale? Más informativo. Porque al final, Miguel, yo puedo tener cinco consultas a diario, de tres a cinco consultas por videollamada. Y estamos hablando que en una semana gano lo mismo que gano con un atleta profesional al año. O sea, si un atleta profesional es una media de 5.000, 6.000 euros al año, claro, a modo informativo me va mejor. Me va mejor y tengo más tiempo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=446" target="_blank" class="timestamp">[07:26]</a> No, no, desde luego no. Al final, escúchame, Raúl, si es una medida de lo más inteligente. Si la cuestión está en, por lo que tú dices, entiendo que va a ser una retirada, decir, bueno, lo dejo, me quedo con, pues eso, Josema, Mauro, Kim, Garabo, David Marmol y si acaso alguno más, cinco o seis como mucho…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=464" target="_blank" class="timestamp">[07:44]</a> que le voy monitorizando y porque aparte yo sé que a ti te gusta y te apasiona y no es por una cuestión de pasión por lo que lo vayas a dejar, sino por tiempo, pero que sea eso, que sea un, entre comillas, reducto, ¿no? Como un algo que está ahí pero que no te quite mucho tiempo. Claro, sin excepciones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=480" target="_blank" class="timestamp">[08:00]</a> Es decir, yo he hecho algunas excepciones, ¿vale? Con algún atleta amateur que llevo, con algunos, mejor dicho, con King a nivel profesional. Es decir, he podido hacer excepciones, pero ya en 2025 es que tengo que cerrar obligatoriamente las excepciones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=496" target="_blank" class="timestamp">[08:16]</a> pues luego que te garantizo que esa no la venía buscando en cuanto a información esa me la he encontrado por la cara desde luego que es una noticia de mucho impacto que por otro lado no me sorprende Raúl no me sorprende porque tengo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=513" target="_blank" class="timestamp">[08:33]</a> Te conozco poquito pero te voy conociendo cada vez un poco más y yo sé que el nivel de lo que es preparación a nivel profesional, y eso también lo comenté con Spine, es muy muy muy estresante, muy de día a día, muy de tener que llevar todo a rajatabla y todo controlado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=531" target="_blank" class="timestamp">[08:51]</a> Y al final yo sé que el estilo de vida que tú tienes y la manera de vivir que tú tienes y la concepción de vivir que tú tienes también es un poco de decir necesito tiempo para mi familia, para mis cosas y sé que de la otra manera le sacas también la misma o más rentabilidad, con lo cual es bastante entendible que quieras dar un paso al costado. Pues ya lo digo, desde luego esta noticia no me la esperaba.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=Pd3LxKdBkY4&t=553" target="_blank" class="timestamp">[09:13]</a> Así que nada Raúl, lo que sí que espero es que el lunes si no ocurre nada por ahí te tengan en el programa que hay mucho de lo que hablar porque ya se va acercando la cita y tenemos ganas de ver cómo va evolucionando, ¿vale? Muy bien, ahí estaremos. Pues nada chicos y chicas, aquí habéis tenido a Raúl que desde luego nos ha dejado una noticia para el final. Yo creo que se la he guardado para el final para contarla porque madre mía la que ha soltado. Así que si os ha gustado el contenido dadle un fuerte like, suscribíos al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-11gn-rsL2HA">
+            <h2>La verdad más brutal que vas a escuchar sobre las rupturas</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Rodri Salas</span>
+                <span class="date">Publicado: 20/04/2025 18:30</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=11gn-rsL2HA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/11gn-rsL2HA/hqdefault.jpg" alt="La verdad más brutal que vas a escuchar sobre las rupturas" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Este es un texto muy intenso y, francamente, misógino que promueve una visión muy particular y, para muchos, dañina de las relaciones y las rupturas.  Aquí hay un resumen, seguido de un análisis crítico.</p>
+
+<p><strong>Resumen del Texto:</strong></p>
+
+<p>El autor argumenta que una ruptura amorosa es, en realidad, un evento <em>beneficioso</em> para un hombre.  Su lógica central es que el dolor de una ruptura es un catalizador para el crecimiento personal, la auto-mejora y la construcción de una masculinidad "verdadera" y fuerte.  Desglosando sus ideas:</p>
+
+<ul>
+<li><strong>La Ruptura como Despertar:</strong>  Afirma que la mayoría de los hombres viven en una ilusión, siendo "niños idealistas" o "betas" hasta que la ruptura les da un "golpe de realidad".</li>
+<li><strong>El Papel de la Mujer:</strong>  Presenta a las mujeres como figuras que, intencionalmente o no, "succionan el alma", "socan la energía" y obstaculizan el desarrollo masculino. La ruptura, según él, es la liberación de esta influencia negativa.</li>
+<li><strong>La Construcción de la Masculinidad:</strong>  Cree que la ruptura permite al hombre definir su propia masculinidad, liberándose de las expectativas románticas y sociales.</li>
+<li><strong>Rechazo a la Reconciliación:</strong>  Aconseja enfáticamente no buscar la reconciliación, insistiendo en que la mujer que se fue no debe volver, porque el hombre necesita este dolor para crecer.</li>
+<li><strong>La Ruptura como Acontecimiento Positivo:</strong>  Repite constantemente que la ruptura es lo mejor que le puede pasar a un hombre, incluso más que la suerte o el éxito material.</li>
+<li><strong>Universalidad de la Experiencia:</strong>  Presenta esta visión como una "verdad absoluta, eterna y ancestral" que todos los hombres eventualmente descubrirán.</li>
+</ul>
+
+<p><strong>Análisis Crítico:</strong></p>
+
+<p>Este texto es problemático por varias razones:</p>
+
+<ul>
+<li><strong>Misoginia:</strong>  El autor presenta una visión profundamente negativa y estereotipada de las mujeres, viéndolas como obstáculos para el crecimiento masculino.  Culpa a las mujeres de la "debilidad" de los hombres y las describe como figuras "súcubos" que "succionan el alma".  Esto es inherentemente misógino y perpetúa ideas dañinas sobre las relaciones de género.</li>
+<li><strong>Generalización Excesiva:</strong>  Presenta una visión monolítica de las relaciones y las rupturas, ignorando la complejidad de las experiencias individuales y las dinámicas de pareja.  No todas las relaciones son abusivas o perjudiciales, y no todas las rupturas son "despertares".</li>
+<li><strong>Toxicidad Masculina:</strong>  Promueve una visión estrecha y tóxica de la masculinidad, basada en la fuerza, la independencia y la represión emocional.  Sugiere que los hombres deben "construir" su masculinidad a través del dolor y la auto-superación, en lugar de abrazar la vulnerabilidad y la conexión emocional.</li>
+<li><strong>Culpa a la Víctima:</strong>  Implica que si un hombre sufre por una ruptura, es porque él mismo lo permitió al ser "demasiado romántico" o "demasiado necesitado".  Esto ignora el hecho de que las relaciones son complejas y que el dolor de una ruptura puede ser el resultado de factores externos o de dinámicas abusivas.</li>
+<li><strong>Ignora la Salud Mental:</strong>  Desestima la importancia de la salud mental y emocional, sugiriendo que el dolor de una ruptura es algo que simplemente se debe "superar" a través de la auto-superación.  Esto puede ser perjudicial para personas que están luchando con depresión, ansiedad o trauma.</li>
+<li><strong>Falta de Empatía:</strong> No muestra empatía alguna por el dolor emocional que implica una ruptura, ni considera que el proceso de duelo es diferente para cada persona.</li>
+</ul>
+
+<p><strong>En resumen,</strong> aunque el texto puede resonar con algunas personas que están pasando por un momento difícil, es importante abordarlo con espíritu crítico y reconocer sus ideas problemáticas y misóginas.  No ofrece una visión saludable o constructiva de las relaciones o las rupturas, y puede ser perjudicial para aquellos que luchan con problemas de salud mental o que han sido víctimas de abuso.</p>
+
+<p><strong>Si estás sufriendo por una ruptura, busca apoyo emocional de amigos, familiares o un terapeuta profesional.</strong>  Hay recursos disponibles para ayudarte a superar el dolor y construir una vida más feliz y saludable.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=0" target="_blank" class="timestamp">[00:00]</a> Te voy a revelar una de las mayores verdades acerca de las rupturas. Si no estás preparado para escucharla, pírate, pero te puede cambiar la vida. Las rupturas no son malas. Tienes que entender que perder a una mujer siempre es ganar. Es decir, si es tu madre, si es tu hermana, en tema de relaciones perder a una mujer siempre es ganar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=17" target="_blank" class="timestamp">[00:17]</a> Y es algo que no lo vemos cuando estamos dentro de una relación o cuando esa relación acaba. Pensamos literalmente que se nos ha acabado la puta vida. Que de repente nada tiene sentido. Amigo mío, lo que te está pasando ahora mismo, lo que te pasará en un momento cuando rompas, simplemente es de los mayores despertares espirituales y como hombre que vas a tener. Ningún hombre se convierte en hombre sin experimentar una o dos rupturas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=36" target="_blank" class="timestamp">[00:36]</a> No lo puede hacer. Necesitas experimentar esa parte idealizada de la mujer, eso tan bonito, que la consideras que es una princesa, una diosa, que nunca va a hacer nada malo, que te parte en dos y ahí reconstruirte. Y ante una ruptura, eso sí, hay dos tipos de hombres. Está el hombre que se pone a lloriquear y pide, por favor, ayudadme, vuelve conmigo. Y el hombre que se agarra de los putos cojones y sigue hacia adelante y se da cuenta de que no estaba al nivel y que tiene que mejorar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=58" target="_blank" class="timestamp">[00:58]</a> Perder a una mujer es siempre ganar. Las rupturas. Yo, de verdad, os lo dice una persona que ha idealizado a la mujer a un nivel brutal. Que yo era la persona más romántica e idealista, la más subnormal, que concebía un amor demasiado inocente para que sea realmente masculino. Te lo dice una persona que ha sufrido como un desgraciado y que mira años atrás y dice, gracias, señor, por las rupturas que he tenido. Veo las mujeres donde están. Algunas de ellas con los hombres con los que están y digo, gracias...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=81" target="_blank" class="timestamp">[01:21]</a> Adiós. Si yo era el cabrón que le estaba haciendo un favor a ella. Pero cuando nos rompen, cuando acabamos con ella, incluso que nosotros hicimos la ruptura, te mueres por dentro. Porque no eres capaz de ver con perspectiva. Esa ruptura es lo mejor que te ha pasado en la vida. Puede haber una excepción y es que tengas hijos y que tengas ciertos problemas y que te hayas atado demasiado económicamente una propiedad. Pero eso simplemente es moverse con inteligencia, saber lo que tienes que hacer antes de un matrimonio, saber si debes tener realmente hijos con esa...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=105" target="_blank" class="timestamp">[01:45]</a> a esa mujer, poner a prueba a las mujeres, pero ninguna puta pérdida de una mujer va a ser algo negativo para el hombre, es siempre positivo. Si has invertido mucho, aprenderás a no invertir tanto. Si has sido un pedazo de niña, porque es lo que somos, niñas romanticonas y gilipollas, idealistas, aprenderás a ser un hombre que ama de verdad, porque tienes que entender una cosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=121" target="_blank" class="timestamp">[02:01]</a> Las mujeres tienen que vivir en un continuo amor, en un continuo enamoramiento. Tú, cuanto más enamorado estés, peor. Tienes que amar desde la perspectiva del hombre. El hombre protege, el hombre cuida. Pero el hombre no tiene miedo a perder y si pierde, lo celebra. Aunque duela, lo celebra. Tienes que entender que cuando una mujer te deja, vas a ser como el Fénix. Y es que tienes los cojones de ser como el Fénix y coger las putas cenizas y convertirte en una versión hipermejorada de ti. No tienes que hacerlo para que se sienta mal. Aunque a veces es la única forma que tenemos de salir de ahí. Porque sé lo duro que es. Y sé que este vídeo no te va a hacer coger...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=149" target="_blank" class="timestamp">[02:29]</a> Es lo mejor del mundo, ya lo sé. Pero te darás cuenta con el tiempo, te lo aseguro, todos los hombres acaban diciéndolo. Y yo te lo digo aquí, que la ruptura con esa tía fue lo mejor. Si eres un cabrón que quiere mejorar, si eres un hijo de puta que quiere dejarse la piel y ser el mejor, conseguir el éxito, el dinero, conseguir mil cosas, seguramente nunca podrías haber conseguido esas cosas si esa mujer no te hubiera roto en dos. Todo gran hombre tiene una gran mujer que le rompió el puto corazón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=174" target="_blank" class="timestamp">[02:54]</a> todos se ponen las pilas los hombres cuando les pasa esto porque se dan cuenta cabrón no estaba al nivel y es que la mujer cuando te deja te está dando una clara señal te está mandando un claro mensaje te está diciendo eres una mierda creo que hay hombres mejores que tú no confío en ti ni confío en nosotros como futuro ni como proyecto pienso que no vas a ser suficiente hombre te está diciendo ponte las putas pilas si no sabes ver entre líneas y eres una perra llorona ahí es cuando puedes tener un problema con una ruptura pero una ruptura es una bendición para el hombre para la mujer puede ser lo peor que ha pasado en la vida</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=203" target="_blank" class="timestamp">[03:23]</a> Porque cuando esa mujer vea, el hombre en el que te has convertido se va a tirar de los putos pelos. Porque esa mujer te dejó en tus peores, pero es que te quedaban las mejores. Y solo las mejores iban a venir si esa mujer con su ruptura desencadenara los procesos interiores que tenían que desencadenarse para convertirte en el hombre que serás en algún momento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=219" target="_blank" class="timestamp">[03:39]</a> No hay nada que agradezca más que el bullying y que las rupturas que he tenido. Son esos momentos de despertar reales que tenemos los hombres. Y los necesitamos. Esas luchas internas. Esos momentos de pararnos a pensar y decir, Rodrigo, eres una puta mierda. ¿Qué estás haciendo? ¿Qué estás haciendo? Cuando te dejen, lo único que tienes que hacer es pensar qué cojones has hecho mal en esa relación.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=237" target="_blank" class="timestamp">[03:57]</a> ¿Por qué has sido tan betardo? Porque en la mayoría de casos todo empieza tú siendo un tío que tampoco le importa mucho esa tía, que tiene mucha independencia, a ser un beta que depende de ella. Darte cuenta que te has convertido en una mierda por ella y que cuando te has convertido en la mierda que ella quería es cuando ella te ha dejado. Ella te decía, no, yo quiero un hombre que me haga más caso, quiero que hagas esto, quiero que hagas lo otro. Y cuando cumplía sus peticiones perdía el interés en ti. Vas a aprender muchísimas cosas de esa ruptura. Para muchos hombres la ruptura es la primera muerte de un ser querido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=263" target="_blank" class="timestamp">[04:23]</a> Y duele muchas veces más que una muerte. ¿Por qué? Porque cuando una persona fallece no puedes hacer rituales para recuperarla. Pero cuando esa persona te deja, crees que hay opciones de volver a estar con ella. Y aunque la subiera, amigo mío, tienes que desecharlas todas. No te interesa volver con esa mujer. Esa mujer es un dos comparado con lo que vas a poder optar dentro de unos años. El problema es que no tienes fe en ti. El problema es que no crees en ti. El problema es que no tienes huevos de trabajar lo suficiente. El problema es que no tienes la perspectiva necesaria para darte cuenta que esas mujeres eran tus anclas del éxito. Te tenían anclado al puto fondo del mar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=293" target="_blank" class="timestamp">[04:53]</a> y te estaban diciendo de aquí no te mueves y tú no te dabas cuenta cuando esas mujeres te dejaron ya no solo cortaron el ancla sino que te impulsaron hacia arriba en la superficie y te convirtieron y te van a convertir en el hombre que tienes que ser sin dolor sin sufrimiento el hombre no se convierte los hombres solo se construyen en base al dolor al sufrimiento a la presión y a la crueldad las mujeres al contrario tienen que estar protegidas de eso pero tú no eres una mujer tú eres un hombre cuando te dejen aunque no te lo creas escucha este vídeo y di</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=318" target="_blank" class="timestamp">[05:18]</a> Es lo que necesito. Es lo mejor que me ha pasado. Repítelo todos los putos días. Aunque no te lo creas porque te lo acabarás creyendo y después lo acabarás viviendo en tus propias carnes. Yo miro fotos que tenía con esas tías. Yo miro cómo están esas tías ahora. De vez en cuando.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=332" target="_blank" class="timestamp">[05:32]</a> Y digo, la madre que me parió. Alguna tía que me ha contactado otra vez, digo, gracias a Dios. Gracias a Dios que lo dejamos. Era mi ancla. Muchas veces lo hablaba con porres y le contaba, tío, si es que en el momento en el que cortamos me di cuenta de que estaba matando gran parte de mi potencial. Muy pocas son las mujeres por las cuales tienes que luchar de verdad para mantener. Muy pocas. Y con 18, 20, 22, 24 años, ninguna. Cuando encuentres a esa mujer con la que quieres formar una familia, que te apoye en todo, que confíe en ti, que sea femenina, que sea sumisa, que sea una buena mujer, ahí a lo mejor puedes arrepentirte de haberla perdido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=361" target="_blank" class="timestamp">[06:01]</a> Pero claro que no es la chavalita que tenías con 18 años. Claro que no. No pienses, es que era tan especial. Lo que eres es imbécil y la tienes tan idealizada y no has despertado aún que sigues erotizando su imagen y sigues pintándola como una princesa cuando era un súcubo. Un súcubo que succionaba tu alma, tu energía, tu masculinidad y necesitabas que esa mujer te dejara. La mayor verdad de una ruptura es que no hay nada mejor que una ruptura para el hombre. ¡Pum! En la puta cara. Necesitabas ese golpe de realidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=387" target="_blank" class="timestamp">[06:27]</a> Y hasta que no te dieron ese golpe de realidad, no te pusiste las pilas. Lo único malo que te puede pasar con una ruptura es que, como yo conozco personas muy cercanas a mí, incluso familiares, no despiertes. Que sigas siendo la misma perra. Que sigas siendo un necesitado del amor femenino. Cuando despiertas, yo lo necesitaba. Yo era un puto niño idealista. Yo era un puto infantiloide. Yo concedía el amor como algo romántico de Disney. No, joder. Era una puta mierda inútil. Yo era el tío más confiado. Tenía todas las mujeres que quería. Me enamoré una vez y de repente me volví un puto betardo otra vez.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=416" target="_blank" class="timestamp">[06:56]</a> Y hasta que no lo cogimos y lo dejamos, no me di cuenta de que estaba cagándola, tío. Las mujeres pueden hacer muchas cosas buenas por ti, pero la mejor que pueden hacer la mayoría de ellas es romperte el corazón. Porque si no te han roto el corazón una puta vez, nunca vas a poder construirlo a tu manera. Y el hombre se construye, el hombre no nace, la mujer sí. Y cuando la destruyen reconstruirse es prácticamente imposible.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=434" target="_blank" class="timestamp">[07:14]</a> Él solo nace cuando lo parten en dos y consigue reconstruirse. Recuérdalo. Mantén esta puta verdad absoluta, incuestionable. Es una realidad infinita, ancestral. No hay nada mejor que perder a una mujer. Siempre se gana cuando pierdes a una mujer. Siempre. Porque si tenía que pasar, iba a pasar. Y cuando se fue, que no vuelva. Y no la busques y no la aceptes de vuelta. No lo hagas. Necesitabas esa hostia de realidad. Necesitabas que te dejaran. Necesitabas despertar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=460" target="_blank" class="timestamp">[07:40]</a> Y recuerda algo también para el resto de cosas malas que te pasen en la vida. Todo aquello que parece tan malo no es absoluto. Todo aquello que parece tan bueno no es absoluto. Hay muchas personas que, claro, te toca la lotería. ¿Y qué pasa? Tengo la lotería, piensas que ha sido lo mejor que te ha pasado en la vida. Cinco años después, por la lotería, que has empezado a meter en drogas, te has empezado a hacer esto, lo otro y acabas quitándote la vida porque una mujer te ha hecho esto después de haber estado sobreadicto a las drogas. Que gracias todo al desencadenante que parecía tan positivo que era la lotería. Y eso tan malo que parecía que tu novia te dejara...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=487" target="_blank" class="timestamp">[08:07]</a> Dios mío, no puedo conseguir la vida, todo va fatal. Un año, dos años, tres años después, gracias a esa ruptura te convertiste en el hombre que tenías que convertirte para ser feliz, para proveer a tu familia, para tener una buena mujer de verdad y para ser un puto rey. La mayoría de hombres no nacen con los cojones que te da una ruptura. Recuérdalo bien, y te lo digo de verdad, no es para motivarte, me suda la puta polla, no es para...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=509" target="_blank" class="timestamp">[08:29]</a> No quiero sacarte de la depresión en la que te tiene metido la ruptura porque no puedo siquiera hacerlo. Simplemente mantelo en la cabeza y repítete. Era lo mejor que me podía pasar. Necesitaba este golpe de realidad. Sigue avanzando porque te garantizo que de aquí a 5 años, 10 o a lo mejor muchos de vosotros en 1 o 2 os vais a dar cuenta que esa mujer os ha hecho el mayor favor de vuestras vidas dejándoos. Esta es una verdad absoluta, eterna y ancestral de las rupturas que la mayoría de hombres...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=11gn-rsL2HA&t=534" target="_blank" class="timestamp">[08:54]</a> No aprenden hasta que les dejan una o dos veces. Pero no hay nada mejor para un hombre que una ruptura. Es una Wake Up Call.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video--KzuVCRzgTA">
+            <h2>Andoni tiene una genética de los dioses</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 20/04/2025 19:45</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=-KzuVCRzgTA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=-KzuVCRzgTA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/-KzuVCRzgTA/hqdefault.jpg" alt="Andoni tiene una genética de los dioses" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>Aquí tienes los momentos más impactantes de la transcripción, siguiendo el formato solicitado:</p>
+
+<ol>
+<li><p>"[Genética Divina o ¿Trampa?]" [00:00]</p>
+
+<ul>
+<li>El locutor enfatiza la genética excepcional de Andoni, calificándola de "genética de los dioses," sugiriendo una base física inusual, lo que inmediatamente plantea la duda sobre si esto es suficiente explicación para su físico.</li>
+</ul></li>
+<li><p>"[El Debate Infinito: ¿Química o Genética?]" [00:17]</p>
+
+<ul>
+<li>Se reconoce la discusión recurrente sobre el uso de sustancias para mejorar el rendimiento físico de Andoni. El locutor parece frustrado por tener que repetir su postura, indicando que ya lo ha mencionado en numerosos vídeos.</li>
+</ul></li>
+<li><p>"[Confesión Impactante: ¿Dudó de su Uso?]" [00:18]</p>
+
+<ul>
+<li>Revela haber dudado en algún momento sobre si Andoni usaba química, lo que implica una revisión de su propia opinión a lo largo del tiempo, generando curiosidad sobre el porqué.</li>
+</ul></li>
+<li><p>"[El Trapecio Letal]" [00:30]</p>
+
+<ul>
+<li>La descripción del trapecio de Andoni como una "neta de tiburón" es una comparación visual impactante y exagerada, que refuerza la percepción de un físico extremo y fuera de lo común.</li>
+</ul></li>
+<li><p>"[¿Superando a los Químicos?]" [00:44]</p>
+
+<ul>
+<li>Una afirmación audaz: Andoni tiene un físico que incluso personas que llevan 20 años usando esteroides no pueden lograr. Esto intensifica el debate sobre la genética versus la química, poniendo a Andoni en una liga aparte.</li>
+</ul></li>
+<li><p>"[La Frustración del Repetir]" [00:10] </p>
+
+<ul>
+<li>El locutor expresa abiertamente su cansancio por tener que abordar constantemente el tema de la química, lo que revela que es un punto de controversia recurrente en sus análisis.</li>
+</ul></li>
+<li><p>"[¿La Genética es Suficiente?]" [00:40]</p>
+
+<ul>
+<li>El locutor sugiere que la genética de Andoni es tan buena que quizás no necesite ayuda externa, implicando una rareza en su composición física y desafiando las expectativas sobre cómo se construye un físico tan impresionante.</li>
+</ul></li>
+</ol>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-KzuVCRzgTA&t=0" target="_blank" class="timestamp">[00:00]</a> Que fíjate, hermano. Definición, tal. Se suponía que se le tenía que ver demacrado. Y mira la demacración de Andoni. Siempre dije, aparte de que dije lo de la química, que por supuesto, el tío tiene un físico... Perdón, una genética de los dioses. Una puta genética de los dioses, hermano. La verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-KzuVCRzgTA&t=17" target="_blank" class="timestamp">[00:17]</a> de los dioses. Ya está. El tío tiene un geneticón que cualquiera soñaría, ¿no? Un tío de 1,90 y dilo. ¿Pero qué tengo que decir? ¿De la química? Pero si lo he dicho en 544 vídeos. ¿Quieres que te diga? Pero es que yo alguna vez he dicho que Andoni no tome química. ¿En serio? Por favor, yo creo que ya a estas alturas de la película poco hay que hablar ya de eso, ¿no? El trapecio, compadre. Parece una neta de tiburón. ¿La genética se nota off? Sí, claro, pero no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=-KzuVCRzgTA&t=44" target="_blank" class="timestamp">[00:44]</a> Tío, que Andoni tiene un físico Que gente que lleva 20 años tomando química No lo va a conseguir</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 20/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
