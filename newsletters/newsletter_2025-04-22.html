@@ -1,0 +1,421 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 22/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">22/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ul>
+                    <li><a href='#video-bXUfKJsXMeg'>¿DEBES comer DIFERENTE si eres NATURAL?</a></li>
+                </ul>
+            </div>
+            
+            
+        <div class="video-section" id="video-bXUfKJsXMeg">
+            <h2>¿DEBES comer DIFERENTE si eres NATURAL?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Benlliure Reacciona</span>
+                <span class="date">Publicado: 22/04/2025 13:34</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=bXUfKJsXMeg" target="_blank">
+                    <img src="https://i.ytimg.com/vi/bXUfKJsXMeg/hqdefault.jpg" alt="¿DEBES comer DIFERENTE si eres NATURAL?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>De acuerdo, analizando el texto proporcionado, este se enfoca primordialmente en la importancia de la técnica, la intensidad y la adherencia a largo plazo en el entrenamiento de fuerza, tanto para personas que utilizan como las que no utilizan ayudas farmacológicas (esteroides, etc.). Aquí te dejo un resumen de los puntos clave, abordando específicamente la pregunta implícita sobre si la diferencia entre entrenar natural o con ayudas es tan grande como se cree:</p>
+
+<p><strong>Puntos Clave del Texto:</strong></p>
+
+<ul>
+<li><strong>Prioridad en la Técnica y la Intensidad:</strong> El autor insiste en que una técnica correcta y llegar al fallo muscular real (no creer llegar) son fundamentales. Enfatiza que muchos se detienen antes de alcanzar el verdadero fallo.</li>
+<li><strong>Sobrecarga Progresiva:</strong> La clave para el progreso es aumentar gradualmente la carga (peso) en los ejercicios a lo largo del tiempo.</li>
+<li><strong>Adherencia a Largo Plazo:</strong>  La constancia y seguir un plan de entrenamiento a largo plazo es crucial.  El autor rechaza la idea de soluciones rápidas o "trucos".</li>
+<li><strong>Adaptación a las Circunstancias Individuales:</strong> La alimentación y el entrenamiento deben adaptarse a las necesidades y circunstancias de cada persona.</li>
+<li><strong>El Fallo Muscular Real:</strong> El autor explica cómo diferenciar entre "creer" llegar al fallo y realmente agotarse muscularmente. Pone un ejemplo de si se ofrecieran recompensas por cada repetición adicional, ¿podrías hacer más? Si la respuesta es sí, no llegaste al fallo.</li>
+</ul>
+
+<p><strong>¿Es tan grande la diferencia entre entrenar natural o con ayudas farmacológicas?</strong></p>
+
+<p>El autor claramente argumenta que <strong>la diferencia no es tan grande como se cree, en términos de los principios fundamentales del entrenamiento</strong>. Subraya que la técnica, la intensidad, la adherencia y la sobrecarga progresiva son esenciales para <em>todos</em>, independientemente de si utilizan o no ayudas farmacológicas.</p>
+
+<p><strong>Lo que sí cambia con las ayudas farmacológicas:</strong></p>
+
+<ul>
+<li><strong>Velocidad de Progreso:</strong> Las ayudas farmacológicas obviamente permiten una mayor tasa de síntesis de proteínas y recuperación, lo que puede acelerar el proceso de ganancia muscular y fuerza. Sin embargo, esto no significa que los principios básicos del entrenamiento sean menos importantes.</li>
+<li><strong>Potencial de Recuperación:</strong> Las ayudas farmacológicas pueden mejorar la capacidad de recuperación, lo que permite entrenar con mayor frecuencia o volumen.</li>
+<li><strong>"Margen de Error":</strong>  Quizás las personas con ayudas puedan permitirse un "margen de error" ligeramente mayor en la dieta o el descanso, ya que su cuerpo puede recuperarse más eficientemente.</li>
+</ul>
+
+<p><strong>En resumen:</strong></p>
+
+<p>El autor cree que los principios fundamentales del entrenamiento de fuerza son universales. Las ayudas farmacológicas pueden <em>acelerar</em> el progreso y permitir una mayor adaptación, pero no <em>sustituyen</em> la necesidad de técnica correcta, intensidad, adherencia y sobrecarga progresiva.  Critica la idea de que los entrenamientos para personas que utilizan ayudas son radicalmente diferentes, afirmando que la base siempre es la misma.</p>
+
+<p>El texto implica que mucha gente que usa ayudas farmacológicas comete el error de pensar que pueden descuidar los fundamentos del entrenamiento, lo cual es incorrecto.  Y también que mucha gente natural cree que los entrenamientos con ayudas son muy distintos, cuando en realidad, los principios básicos son los mismos.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=0" target="_blank" class="timestamp">[00:00]</a> Muy buenas a todos chicos, aquí estamos en un nuevo vídeo para mi canal. Hoy tenemos un vídeo diferente y siempre, no sé por qué, tratamos de diferenciar respecto a la gente que usa farmacología, respecto a la gente que no lo usa. Ya hice un vídeo de forma práctica y porque podéis ver que realmente no hay tanta diferencia. Lo único que puede haber diferencia más a nivel del volumen de entrenamiento, pero la forma de entrenar debería ser desde mi punto de vista la misma. Pero ahora vamos a ver por qué...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=28" target="_blank" class="timestamp">[00:28]</a> se lleva la alimentación y a ver que nos expliquen un poquito y voy a intentar tratar de... no he visto el vídeo pero voy a dar mi punto de vista y si estoy de acuerdo lo iré y si no pues rebondiré y daré mis explicaciones pertinentes así que empezamos</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=58" target="_blank" class="timestamp">[00:58]</a> que estás buscando así que en este vídeo te voy a explicar qué es esto de la alimentación y la no por nada pero está bien que bueno está bien o no no lo sé pero bueno que no me parece mal que sea este tipo de vídeos pero ya siempre te damos con comentarios deja de entrenar como un ciclado o un chulado es como si yo una persona que no deja deja de ser un flaque sabes meterse con otra persona</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=85" target="_blank" class="timestamp">[01:25]</a> Creo que se pueden decir las cosas en un término diferente. Pero bueno, que no pasa nada. El problema es que si luego yo digo algo negativo de otra persona o ya empezamos con la falacia de autoridad o con otros términos. Pero por el otro bando se puede decir lo que jagan los huevos. Ok. Yo adelanto ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=114" target="_blank" class="timestamp">[01:54]</a> Que seas natural o no, si estás en un superávit y entrenas, habrá una ganancia de masa muscular. Si no, no habrá una ganancia de masa muscular. Eso es válido para todo el mundo. Pero bueno, vamos a ver. Probablemente te sirva para ponerte tanqueta, ¿no? Para ponerte hermoso, sobrealimentado, que se ve que vives en el capitalismo y no en el capitalismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=142" target="_blank" class="timestamp">[02:22]</a> sin perder años de progreso. Como me pasó a mí y como seguramente te esté pasando. Y es que algo que será por hecho. Claro, me pasó. Al principio, joder. Cuando empecé en el gimnasio, que es verdad que cuando inicié, pues sí que buscaba perder peso, perder peso, perder peso. Muy rápido, muy mal, sin comer. Bueno, perdí mucha gracia, pero también perdí mucha masa muscular, mucha fuerza. Y luego dije, bueno, voy a hacer lo contrario. Me veo muy flaco, quiero ganar masa muscular. Los cracks estos ciclados del gimnasio me han dicho que hay que comer 6 veces al día y arroz y pollo y tal. Para ganar masa muscular entonces había</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=176" target="_blank" class="timestamp">[02:56]</a> muchísimas cámaras pero disculpa que ni quien sea que tú hagas eso que culpa tiene eso de que lo haga o sea que te diga un ciclo quiere decir problema tuyo que no te administra bien la cantidad que te comen o sea máquina o sea quiere decir si no sabes adecuar las cantidades en base a tus requerimientos que tiene que ver una cosa con la otra pregunto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=198" target="_blank" class="timestamp">[03:18]</a> infinitas cagadas es que es para flipar o sea tú decías de seis comidas bueno pues seis comidas pero probablemente la cantidad que tengas que hacer sea menor en base a lo que tú necesitas si haces seis comidas pero con la cantidad de las tres cosas de ver el problema pero bueno para flipar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=242" target="_blank" class="timestamp">[04:02]</a> es que yo me he tragado todos los mitos. No, qué bueno que después de entrenar tienes ahí 45 minutos en donde tu cuerpo va a ser infinitamente más eficiente absorbiendo los nutrientes y por lo tanto ganarás más masa muscular, más fuerza, recuperarás antes, etc. Y yo me acuerdo que en el gimnasio yo me llevaba plátanos y mi batido de proteína y lo tenía ahí en la bolsa para nada más acabar de entrenar. Antes de bañarme me comía los plátanos y el batido. En vez de tranquilamente bañarme, limpiarme bien el escroto y irme a casa y comer normal. Llevarte el tamper o batido de proteínas al gimnasio para tomártelo en el vestuario</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=275" target="_blank" class="timestamp">[04:35]</a> Que si arroz con atún y de repente el crack, arroz con atún y huevo, y de repente el crack abre el tapper y todos ahí, ¿qué mierda es esto? O sea, estáis locos. Y por cierto, recordad que todos los meses hago dos sorteos de 150 euros en Live Pro con mi código JordiBen y pidiendo cualquier cosa ya entras en el sorteo. Pidiendo una simple crema de arroz ya entras directamente en el sorteo y no hace falta hacerle captura. A tope.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=302" target="_blank" class="timestamp">[05:02]</a> Cuelgo los ganadores siempre por Instagram. Está dependiente. Pero eso será más de un problema de desinformación, ¿no? No de si eres natural o no eres natural. Digo yo, ¿no? Porque se imagino que ya se tiene bastante claro que no eres...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=334" target="_blank" class="timestamp">[05:34]</a> La ventana anabólica realmente no existe. Incluso días. O sea, a ver, después de un entrenamiento tienes varios días donde tu cuerpo va a ser más eficiente utilizando la comida. Es lógico, ¿no? Si nuestro cuerpo de un entrenamiento muy intenso puede durar recuperándose de 48, 72 horas o incluso un poco más, dependiendo de la intensidad y el volumen, pues nuestra lógica nos dice que en todo ese tiempo también nuestro cuerpo será más eficiente absorbiendo nutrientes, ¿no? Sí, que está directamente correlacionado también con el tema de la sintesis proteica.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=380" target="_blank" class="timestamp">[06:20]</a> Y mi pregunta es, ¿por qué si no eres natural, sí? Pregunto. Yo prefiero llevar un ritmo de comidas normal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=419" target="_blank" class="timestamp">[06:59]</a> está con la síntesis de proteína muscular 24 7 365 días del año no le hace falta tanto el estímulo a la musculatura para tener eso nosotros la única forma que tenemos de producir esas síntesis de práctica muscular es con el estímulo entrenado entonces pues es diferente de momento lo que estoy diciendo estoy totalmente de acuerdo pero no entiendo o sea yo pienso el título respecto lo que están diciendo y no lo acabo a entender</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=451" target="_blank" class="timestamp">[07:31]</a> bueno tiene tiene importancia comer más en general entonces claro si tú tienes que comer porque habría visto muchos ciclados que comer mucho muchas calorías a día necesitan hacer más comidas de más cantidad porque si no van a llegar a las calorías que necesitan muy bien muy bien claro en base a la cantidad de masa muscular que tú tienes en base al gasto calórico que tú tienes pues obviamente tendrás que tomar una serie de calorías o no por supuesto muy bien</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=478" target="_blank" class="timestamp">[07:58]</a> que son mentiras que al igual que naturales no marca la diferencia en gente que emplea farmacología tampoco marca la diferencia muy bien pues los naturales igual pensando que así va a ganar músculo cuando luego no hay</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=509" target="_blank" class="timestamp">[08:29]</a> el entrenamiento yo ya lo he dicho 30.000 veces y luego repetir que el entrenamiento es la base de todo que es más importante en entrenamiento o la nutrición en entrenamiento tú comer pizzas y entrenar fuerte evolucionas come muy bien y no entrenas y no evolucionas por tanto el entrenamiento es lo más importante es importante la alimentación el entrenamiento o el descanso en un natural 100% el entrenamiento</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=536" target="_blank" class="timestamp">[08:56]</a> Sin el estímulo. Y es un natural. También. No te equivoques. También. El entrenamiento no vas a lograr absolutamente nada. Luego es evidente que todo lo que rodea al entrenamiento es importante. Alimentación, descanso, control del estrés.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=561" target="_blank" class="timestamp">[09:21]</a> para maximizar la ganancia de masa muscular. También lo dice cada dos horas y media y de verdad que estaba excesivamente obsesionado. Yo tenía una novia que vivíamos bastante lejos, a 350 kilómetros y la veía cada dos fines de semana. No me hacía la distancia que yo tuve cuando tenía unos 19-20 años. Y estaba tremendamente obsesionado. Y mi suegra en aquel tiempo, su madre, era...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=584" target="_blank" class="timestamp">[09:44]</a> muy buena persona ella porque me compraba un montón de comida para que yo comiera cada dos horas y media, cada tres horas. Tanto así que a lo mejor yo cenaba a las nueve y si yo me acostaba a las doce yo tenía que comer antes de irme a dormir porque yo pensaba que si no perdía masa muscular. De verdad que era un tremendo inútil. ¿Cómo? Sí, la verdad que... Bueno, tampoco inútil. O sea, te faltaba información.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=605" target="_blank" class="timestamp">[10:05]</a> Pero bueno, no pasa nada. Todos hemos hecho cosas. Yo también he comido hidratos hasta las 6 de la tarde porque pensaba que hasta las 6 de la tarde ya te tapaba eso. Entonces, si comías a partir de las 6, te tapas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=630" target="_blank" class="timestamp">[10:30]</a> Mentira, o sea, mentira. Vuelvo a repetir, si un culturista, vale lo natural...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=636" target="_blank" class="timestamp">[10:36]</a> come cada tres horas, es porque, en mi caso, ¿vale? Yo hago cinco comidas al día. Hay etapas que seis. Actualmente estoy diciendo cinco, pero la mayoría de veces hago seis. ¿Vale? ¿Qué pasa? Que obviamente yo necesito comer tantas veces al día porque yo necesito una gran cantidad de comida. Entonces, a nivel de absorción, a nivel digestivo, no es óptimo meter igual por comida 300 gramos de arroz en seco. Y de ahí, que lo reparta y tenga que comer</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=666" target="_blank" class="timestamp">[11:06]</a> más veces durante el día pero insisto todo va a depender de la cantidad de calorías que tú requieras si eso se te puede distribuir tienen cuatro comidas a cuatro comidas si todavía vienen tres a tres secretos con menos de tres tampoco recomiendo porque creo que la cantidad sería muy elevadas pero dicho si te va bien tres a tres si todavía en 55 si todavía bien 66 lo único insisto que ciertas personas</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=694" target="_blank" class="timestamp">[11:34]</a> tendrán que hacer una mayor cantidad de comidas por el volumen de comida, como digo, que tienen. Sencillo, ¿no? Me ponía mal, me ponía nervioso, si no lograba comer cada dos horas y media, tres horas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=721" target="_blank" class="timestamp">[12:01]</a> si tampoco lo veo correcto este mensaje para mí no es adecuado no veo que sea positivo hacer dos comidas al día por lo dicho porque a nivel de absorción a nivel digestivo a nivel de inflamación va a suponer mucho mayor que con un mayor reparto pero aquí también lo que tenemos que buscar y yo lo que trato siempre es de adaptar el plan a la circunstancia de cada uno</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=749" target="_blank" class="timestamp">[12:29]</a> Si a una persona por lo que sea le va bien hacer mejor tres comidas, pues tres comidas. Sí que es cierto que si igual estamos en un volumen y esa persona tiene que comer más, tiene que comer más, pues igual ya las comidas son demasiado copiosas para estar en tres, igual es interesante meter una cuarta. Pero lo que tenemos que priorizar siempre es en general la adherencia de cada uno. Y lo dicho, si estamos en una fase de volumen, priorizar que haya un superávit y ya está. Pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=776" target="_blank" class="timestamp">[12:56]</a> Yo intento eso, que las cantidades que tengamos tampoco sean excesivamente elevadas. También está desmentido lo de que tienes que hacer varias comidas al día para que haya una mejor síntesis de proteínas. Que si te pones a pensar realmente si esto fuera necesario, nos habríamos extinguido. Literal. No, pues es que hay que comer varias horas al día porque es que si no la síntesis proteína es mucho peor y hace la diferencia. Ya nos habríamos extinguido si nuestro cuerpo fuera tan analfabeto de no poder...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=821" target="_blank" class="timestamp">[13:41]</a> mecanismo llamado homeostasis por ejemplo por mucho que te hayan dicho que darte una ducha de agua fría va a elevar tu testosterona esto es parcialmente cierto ya que efectivamente puede que lo haga pero durante un tiempo muy corto y enseguida tú lo que te puede ayudar a lo mejor y no después del entrenamiento es tú te echas ahí tu agua calentina y al final te echas un poco de agua fría esto puede ayudar a estimular el sistema nervioso parasimpático que es el sistema nervioso que nos ayuda con el tema de la recuperación ¿que habrá una diferencia brutal? no pues no tanto, pruébalo si ves que después de esa ducha estás más relajado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=858" target="_blank" class="timestamp">[14:18]</a> y está hablando de los picos agudos de hormonas. Pues es que yo hago pierna y muy intenso y de repente me sube muchísimo la hormona del crecimiento y por eso lo hago porque es increíble. Un entrenamiento muy metabólico va a aumentar mucho mi hormona del crecimiento. Eso no te sirve para una mierda. Lo que también serviría es mantener esa hormona muy elevada crónicamente en el tiempo y eso solo se consigue pinchándote. No hay otra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=887" target="_blank" class="timestamp">[14:47]</a> Hay un youtuber ahora que se llama Tony Lloret o Maritone. Sí, Toyo, Toyo. Que te habla muy claro y muy conciso de los efectos secundarios de las hormonas. Yo veo sus vídeos para luego replicarlo. Para decirte a ti, retrasado, no te pinches. Cuida tu salud y cuida tu pito porque también te va a afectar a las elecciones. Y yo no quiero que te afecte a las elecciones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=915" target="_blank" class="timestamp">[15:15]</a> Seguro que muchísimas personas lo siguen haciendo a día de hoy y puede ejecutar. ¿Toxicidad en el cerebro? Honestamente, yo ya lo he dicho muchas veces, pienso que cuando una persona decide usar o no usar, que se plantee no usar o no usar por el tema de elecciones, o sea, eso te pasará si hacer las cosas muy mal. Pero creo que el problema o la gravedad es a nivel de enfermedades cardiovasculares, a nivel de enfermedades renales,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=945" target="_blank" class="timestamp">[15:45]</a> a nivel de enfermedades incluso hepáticas. Eso, eso es lo verdaderamente preocupante. Lo otro, bueno, si te pasa eso es porque realmente no hacen las cosas bien. En el hígado, en el riñón, en el corazón... También lo siguieras creyendo. Pero bueno, por lo menos, aunque lo sigas pensando, podrías ganar masa muscular igualmente. Eso sí, serías un esclavo de la dieta sin ningún tipo de sentido. Vale, pues estos dos mitos son completamente ridículos con la siguiente creencia, o mito que te voy a decir ahora, el cual hoy en día te aseguro que lo sigue creyendo la gran mayoría de personas que van al gimnasio y lo único que te está provocando</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=983" target="_blank" class="timestamp">[16:23]</a> que yo también pensaba que esto era cierto. Me refiero a lo típico que</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=995" target="_blank" class="timestamp">[16:35]</a> Aquí ya me parece que patina, honestamente. O sea, para ganar masa muscular tienes que estar en el ligero superávit. Obviamente no te tienes que poner gordo, ¿vale? Porque no, porque un volumen no es ponerse gordo. El objetivo de un volumen es ganar masa muscular, no ganar grasa. ¿Que como consecuencia ganar grasa? Sí, por supuesto, pero no es el objetivo principal. Entonces, tienes que estar mínimo en un ligero superávit para maximizar las ganancias de masa muscular. No sé, subir 200 gramos por semana, 300 o mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1026" target="_blank" class="timestamp">[17:06]</a> ¿Hace falta subir un kilo? No, ni de coña. Demasiado y está haciendo las cosas mal porque te vas a poner cebolleta. ¿Alguien como Plex? Sí, sin duda. ¿Alguien así? Pues a lo mejor te conviene más empezar por un ligero déficit. Depende del contexto. Si te sobra grasa, si te sobra chicha, con un ligero déficit vas a poder seguir ganando masa muscular porque la energía que le falta al cuerpo para crear músculo te la va a agarrar de aquí, del tocino que ya tienes en el cuerpo. ¿Lo va consiguiendo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1074" target="_blank" class="timestamp">[17:54]</a> es mucho más pequeña de la que te crees. Te la vamos a ver ahora para que la sepas exactamente. Si cada vez que empiezas una capa de volumen o ganancia de músculo, siempre terminas muy tapado o incluso gordo, es porque estás haciendo algo mal. Porque lo peor de todo es que luego te va a tocar hacer una fase de pérdida de grasa. Muy bien. Yo estoy totalmente de acuerdo, pero vuelvo a repetir que tú hayas hecho eso, es tu problema. O sea, las cosas no las has hecho bien, pero no le eches las culpas a nadie. O sea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1097" target="_blank" class="timestamp">[18:17]</a> Interesa realmente en el mayor de los casos siempre estar en un ligero superávit. Pero un ligero superávit es hacer las cosas muy paulatinas. Si tú haces un volumen exagerado, coges demasiado peso, inevitablemente luego, para cuando tengas que hacer una recomposición, vas a tener que hacer un déficit. Y el problema de eso es que ese déficit es tiempo que no está ganando baja muscular. Es una putada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1118" target="_blank" class="timestamp">[18:38]</a> y vas a tener que estar muchísimos más meses definiendo y mucha gente le puede la ansiedad y quiero verme definido rápido y empiezas a acelerar el proceso de definición porque en volumen te pusiste gordo y de repente empiezas a perder masa muscular y fuerza y acabas igual que al principio y frustradísimo y dices no esto es que mi cuerpo no respondería yo no te voy a pegar unos pinchazos yo creo que con un gramo de terzo a la semana esto se arregla y año tras año a pesar de todo el esfuerzo terminas viéndote igual porque siempre vuelves al mismo punto de partida</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1157" target="_blank" class="timestamp">[19:17]</a> Pues dependiendo del tiempo que lleves entrenando, de la respuesta que tengas, del contagio de arriesgando el que partas, depende de muchas cosas. Si eres muy, muy, muy, muy, muy, muy, muy, muy principiante, así que está iniciando, a lo mejor un kilo al mes. Cuando ya tienes algo de experiencia, medio kilo al mes o menos. Y luego ya, cuando ya llevas la experiencia entrenando, estaríamos hablando de 250 gramos al mes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1189" target="_blank" class="timestamp">[19:49]</a> Eso es cierto. Por lo general, cuando empezamos en el gimnasio, no sabemos casi nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1219" target="_blank" class="timestamp">[20:19]</a> calorías a la semana de superávit. A la semana, semana, estaríamos hablando de unos 60 calorías de superávit al día, respecto a tu mantenimiento. Entonces, si mantienes el peso con 3.000, 3.060. Líquidos. Y ahora te puedo preguntar, sabiendo esto, ¿cuánto superávit calórico tendríamos que tener al día para ganar al mes esta cantidad máxima de masa muscular? Pues si sabemos que cada gramo de proteína son 4.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1241" target="_blank" class="timestamp">[20:41]</a> Al día, no sé, por la semana, pues yo calculo que, pues sí, unos 200 gramos, según un poco el contexto, estaría bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1269" target="_blank" class="timestamp">[21:09]</a> muy bien y luego habrá semanas que igual tengas un superávit de 500 500 gramos y otra semana que igual tengas de 100 pero al fin y al cabo lo importante es ver la tendencia porque tu cuerpo obviamente no es un reloj como comentan y tiene fluctuaciones</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1298" target="_blank" class="timestamp">[21:38]</a> 200 calorías, a lo mejor pierdes peso. Porque, no sé, mejoraste el entrenamiento, o ese día estabas automotivado e hiciste más volumen, no sé, de todo lo que sea. Entonces, tienes que estar pesándote constantemente para ir subiendo la velocidad de peso corporal que tú busques en ese momento. Tal como grasa, esta es una creencia que tenemos completamente arraigada, proveniente de los chuzados. Y yo incluyo, por lo típico que se decía, de que cuanto más comías, más creías. Y es que precisamente los que tomas estancia topantes... Eso es totalmente cierto, que cuanto más comes, más creces. Pero a lo ancho. Se benefician muchísimo de este</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1329" target="_blank" class="timestamp">[22:09]</a> Es que esto sí que puede ser diferente, básicamente porque una persona que emplea farmacología y otra que no emplea, teniendo en cuenta que inicia una terapia y la cantidad de comida que come es la misma, una persona, como te digo, que utiliza farmacología, va a subir de peso, básicamente porque inevitablemente va a tener más retención, va a tener más inflamación, pero también, obviamente, subir de peso eso no implica cuantos de músculo. Entonces, vale la pena...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1359" target="_blank" class="timestamp">[22:39]</a> En todos los casos siempre hacer las cosas de forma progresiva, pero, lo dicho, una persona natural va a subir más exponencial que una persona natural, pero como digo, por todo lo que conlleva y por lo que comento. También obviamente un no natural va a ganar más masa muscular, o sea que también es lógico que suba algo más el peso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1384" target="_blank" class="timestamp">[23:04]</a> Es que alguien que se empieza a pinchar, a lo mejor al principio, pues no necesita muchas más calorías que un natural, pero conforme va ganando masa muscular y va ganando rendimiento en el gimnasio y puede con cargas más elevadas y puede con más volumen de entrenamiento y aparte de que está subiendo de peso corporal, llega un momento que al final la diferencia es muy grande de calorías. Una capacidad de ganar muchísima más cantidad de masa muscular. ¡Pero mira! ¡Pero mira! ¡Pero mira! ¡Estamos muy fuertes!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1414" target="_blank" class="timestamp">[23:34]</a> ver no por nada pero es que a veces criticar a ron y coleman criticar a jay calder cuidado en ocho vidas tú vas a ser jay calder ni ron y coleman ni en ocho vidas tienes que volver a nacer diez veces para intentar ser ron y coleman o jay calder o sea que qué</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1438" target="_blank" class="timestamp">[23:58]</a> con tu comentario de gimnasio ronica lo van con dos y estaba más fuerte no nos confundamos vamos a mantener un poquito respect por favor vale es como no sé si nos metemos con ciertas personas que estamos hablando de la élite ron y coleman era un portento utilizando química y sin utilizarla para la gente top de la olimpia seguirían siendo top a nivel de físico usarán o no usarán</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1467" target="_blank" class="timestamp">[24:27]</a> ¿Vale? O sea, vuelvo a repetir, la química es un multiplicador. ¿Vale? Pero, no sé, meterse con Ronnie Coleman o Jay Cutler me parece un poco osado. Pero bueno. Siempre os terminéis pasando y ganéis constantemente mucha más grasa que masa muscular. Y os toca pasar por una fase de pérdida de grasa en la que no solo no ganáis músculo, sino que encima lo perdéis. Y como te digo, pasan los años...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1514" target="_blank" class="timestamp">[25:14]</a> Yo creo que lo más fácil es que vayas controlando la media de peso corporal que vas ganando en el tiempo y ya está, ya a raíz de ajustar calorías. Mayor exactitud posible, perfectamente podías tener un error de estimación de más de 300. El peso, por supuesto que no lo es todo, pero obviamente es un indicador de cómo van las cosas. O sea, si realmente esto es una fase de ganancia de la baja muscular, el objetivo obviamente no es que el peso suba, es la consecuencia. El objetivo es ganar baja muscular, pero como he dicho, como consecuencia el peso subirá. Eso es lógico. Por eso mi recomendación para la gran mayoría de personas que quieren ganar músculo es simplemente encontrarse en un mantenimiento caliente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1551" target="_blank" class="timestamp">[25:51]</a> Pero eso es mentira, no sé qué es para flipar. O sea, yo no sé en qué te basas. Yo no sé quién dice esas cosas, ¿sabes? Porque lo digan tres notas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1567" target="_blank" class="timestamp">[26:07]</a> Que utilizan farmacología. O sea, es que estás equivocado. Es que es al revés. O sea, vuelvo a repetir, el entramiento es lo más importante de todo. Es que yo no sé de dónde... No sé, estaría bien que pusiera la referencia o la gente que dice estas cosas. Pero quien lo diga, está equivocado. O sea, está equivocado, lo siento. Es que no... Es que por ejemplo es que no... No es así, no es así. Es que son algunos donde te estables, la verdad es que es así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1601" target="_blank" class="timestamp">[26:41]</a> Es entrenando. Ya está. Entrenando. Entrenando. Lo más importante. Entrena. Esfuérzate. Ve al fallo. Mete intensidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1641" target="_blank" class="timestamp">[27:21]</a> lo mismo, para ellos la alimentación es incluso más importante</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1663" target="_blank" class="timestamp">[27:43]</a> Esto, por ejemplo, una persona que emplea farmacología, si entrena no con una intensidad adecuada, obviamente el hecho de emplear química puede parchear esas cosas, pero eso no implica que sea lo ideal. O sea, obviamente puedes paliar esa falta de intensidad que tú tienes entrenando, esa falta de esfuerzo, esa falta de actitud, ¿vale? Obviamente utilizando farmacología, pero es que no implica que sea lo ideal, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1690" target="_blank" class="timestamp">[28:10]</a> desde mi punto de vista, o sea, eso no tendría sentido, ya que estás haciendo algo que es un ocivo para tu salud, por lo menos trata de sacar el máximo partido y ya que tienes ese multiplicador, aprovéchalo. Entrena a muerte y obviamente, pues si puedes mejorar más, aprovéchalo y sácale partido a ello. Pero como estoy utilizando farmacología, me relajo entrenando, eso es de una persona mediocre y que no tiene una buena actitud. ¿Qué quieres que te diga?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1719" target="_blank" class="timestamp">[28:39]</a> Levantando pesado, crack. Olvídate desde ya de cosas que no son tan importantes como por ejemplo cuál es la mejor rutina de entrenamiento, de los mejores ejercicios para ganar músculo o de todos los suplementos como incluso la que da ti. Mucha gente todavía cree que existe una rutina perfecta y la realidad es que no. La rutina perfecta para ti es la que te hace progresar. No, pero es que yo creo que si cambiara esto progresaría más rápido y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1737" target="_blank" class="timestamp">[28:57]</a> Ese es el error que cometen muchas personas. Buscando la rutina que más le va a hacer progresar, entonces constantemente empiezan a cambiar la metodología que usan para poder progresar en fuerza de masa muscular y al final, dando tantos cambios, el cuerpo no se adapta a nada y por lo tanto te estancas y no progresas. Y pues que realmente el entrenamiento...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1763" target="_blank" class="timestamp">[29:23]</a> Es lo que le trato de explicar yo a cada uno de mis clientes. Cuando vas al gimnasio, el objetivo siempre es hacer lo mismo que la sesión anterior. Y sobre todo esforzarte. Mejorar ya sea o en técnica, o en repeticiones, o en carga. Eso tiene que ser una de las variables. Pero tampoco, también digo que en ciertos ejercicios tampoco nos tenemos que obsesionar con el tema de la carga. Pero la dinámica general es eso. Progresar y llevarlo año tras año tras año y es lo que te va a permitir evolucionar. Es mucho más aburrido de lo que la gente cree.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1793" target="_blank" class="timestamp">[29:53]</a> Es que agarras unos ejercicios, progresa en carga en ellos y a lo mejor te puedes echar, si quieres, años casi con los mismos ejercicios. A lo mejor cambias alguno que otro o una variante similar, pero es que los patrones de movimiento siempre van a ser muy similares y debes de buscar tirar kilos, kilos, kilos, kilos, kilos y kilos con la sobrecarga progresiva.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1835" target="_blank" class="timestamp">[30:35]</a> Obviamente una buena técnica es correcto, pero yo ya dije y pienso que en ciertos ejercicios, en ciertas series en concreto, no hace falta ser tan tan estricto con la técnica. Sobre todo, pues hablaba por ejemplo de un remo con barra, o igual principalmente de algunos ejercicios de espalda, o los empujos por ejemplo, sí que veo complicado no ser estricto con la técnica, pero imagínate que tú coges por primera vez unas mancuernas de 40 kilos, pues igual el recorrido que haces no es el más adentro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1866" target="_blank" class="timestamp">[31:06]</a> has perdido el miedo y poco a poco ya mejorar esa técnica mejorar el recorrido etc o sea que también hay que saber que es momento para todo y que si en ciertos ejercicios no hacer la técnica perfecta sobre todo igual un momento en concreto no pasa nada incluso te pueda venir bien para ayudar a desbloquear ciertas cargas</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1894" target="_blank" class="timestamp">[31:34]</a> Esto parece muy ya repetitivo el tema de llegar al fallo, fallo, pero sí que es verdad que hay mucha gente que cree que está llegando al fallo y no está llegando al fallo. En el momento en que le empieza a costar un poco, dejan la serie. Literal, dejan la serie.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1910" target="_blank" class="timestamp">[31:50]</a> Cuando te plantees el hecho de si realmente estás yendo al fallo o no, ¿vale? Si tú, por ejemplo, has hecho 12 repeticiones en la prensa y tú la dejas porque has ido al fallo, yo ahora te hago una pregunta. Si te dieran a partir de la treceava repetición 100 euros por cada repetición que hagas de más, ¿crees que te cabe alguna repetición más? Si la respuesta es que sí, que igual podrías hacer 3 o 4 repeticiones más, por supuesto es que no estás yendo al fallo. Entonces, es eso. Dar...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1937" target="_blank" class="timestamp">[32:17]</a> Una intensidad adecuada en cada serie que es muy jodido. Sobre todo en ejercicios de pierna. Llegar al fallo. Los ejercicios de la misma. Y por desgracia, de nuevo. Lo que primero hay que aprender a llegar al fallo para después, si quieres, utilizar medidores de intensidad. Como el RIR en el RPD. Pero si no has estado un buen tiempo llegando al fallo y más allá del fallo, no vas a ser bueno calculando un mediólogo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1966" target="_blank" class="timestamp">[32:46]</a> No es nada fácil. Y es que además hay máquinas que como puedes luchar tanto las repeticiones es como que crees que ha llegado al fallo pero realmente le das, le das, le das así y a muerte y todavía me sacas tres, cuatro más, cinco más. Es duro, claro, es duro. Ni se aprente de la noche a la mañana. Por eso, si realmente quieres empezar a ver cambios de verdad en tu físico y aplicar todo esto correctamente sin perder meses o incluso años en el gimnasio sin resultados.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=1986" target="_blank" class="timestamp">[33:06]</a> Pues eso chicos, hasta aquí el vídeo de hoy. Yo ya he rebatido, ya he comentado por qué una vez más se intenta diferenciar una cosa con la otra cuando realmente hablamos de adherencia, hablamos de sentido común y de adaptar realmente la alimentación a las circunstancias de cada uno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=2003" target="_blank" class="timestamp">[33:23]</a> Y todo lo que he comentado se podría aplicar para ambas, para tanto farmacología, tanto para natural como para no natural. Que luego haya ciertas personas no naturales que digan ciertas cosas, perfecto, seguro que hay gente natural también que dice cada tontería por ahí que no tiene ningún sentido. Pero eso no implica que sea correcto. Así que dentro de la gente no natural...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=bXUfKJsXMeg&t=2029" target="_blank" class="timestamp">[33:49]</a> hay como digo gente formada que se preocupa que hace las cosas adecuadamente y no seguimos de contexto ni no no digamos cosas que realmente hay mucha mucha gente que no opina lo mismo y que no es correcto así que vuelto decidís lo dicho espero que os haya gustado el vídeo y nos vemos en siguientes un saludo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 22/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
