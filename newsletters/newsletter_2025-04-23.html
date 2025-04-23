@@ -1,0 +1,716 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 23/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">23/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-BU9K-IQ9FDE'>GYMSROKA DESTROZA A JORGE TABET INJUSTAMENTE</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-7tYlguHcuPc'>WILLYREX DESVELA EL PLAN AMERICANO DE PRADELLS...¡Y ESPIN CONTRATACA CON MERLUZA! ¿LLEGARÁ a TIEMPO?</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-BU9K-IQ9FDE">
+            <h2>GYMSROKA DESTROZA A JORGE TABET INJUSTAMENTE</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 23/04/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/BU9K-IQ9FDE/hqdefault.jpg" alt="GYMSROKA DESTROZA A JORGE TABET INJUSTAMENTE" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>RESUMEN GENERAL:</p>
+
+<p>La conversación parece ser sobre el mundo del poderlifting, específicamente sobre un atleta llamado Jorge que está trabajando para mejorar su condición física y competir en futuros campeonatos. A lo largo de la conversación, se discuten temas como:</p>
+
+<ul>
+<li>La importancia de tener una dieta equilibrada y saludable para mejorar el rendimiento en el poderlifting.</li>
+<li>El sistema de selección para concursar en Olimpia y cómo se puede mejorar para dar más oportunidades a los atletas.</li>
+<li>La necesidad de trabajar duro y perseverar para lograr mejoras significativas en la condición física y habilidades del atleta.</li>
+<li>La importancia de la disciplina y el compromiso en el entrenamiento y la dieta.</li>
+<li>La comparación con otros atletas y competidores para entender qué se necesita para alcanzar un nivel superior.</li>
+</ul>
+
+<p>También hay mención a algunos atletas específicos, como Iván, que son conocidos por su dedicación y esfuerzo en el poderlifting. La conversación también toca sobre la importancia de ser profesional y mantener una buena forma física, incluso después de haberse convertido en un campeón.</p>
+
+<p>En general, la conversación parece ser una discusión en vivo entre expertos y seguidores del poderlifting, donde se comparten consejos y experiencias para mejorar el rendimiento y alcanzar el éxito en este deporte.</p>
+
+<p>MOMENTOS CLAVE:</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=101"</strong> target="_blank">[01:41]</a> "¿Dónde las has sacado, cabrón?" - En este momento, Jorge Tabet hace una referencia humorística y sarcástica a las piernas de los competidores que lo rodean, destacando la injusticia de que él tenga que competir con piernas tan débiles.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=126"</strong> target="_blank">[02:06]</a> "La teoría de que Tabet se hizo pro en un momento en el cual era más fácil hacerse pro" - Jorge Tabet defiende su logro al convertirse en profesional, argumentando que fue una época diferente y que no puede quitarle méritos a los que lo precedieron.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=154"</strong> target="_blank">[02:34]</a> "La categoría en los últimos tres años ha crecido a unos niveles que tampoco tienen mucho sentido" - Jorge Tabet reconoce la evolución de la categoría en el culturismo, pero también destaca que no es lo mismo que lo que se pedía anteriormente y que hay una falta de estética.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=178"</strong> target="_blank">[02:58]</a> "Frank Spin ha hablado de Tabet. ¿Dónde?" - Jorge Tabet hace un comentario sobre Frank Spin, quien había expresado opiniones negativas sobre él, lo que muestra la tensión y la crítica hacia otros competidores en el mundo del culturismo.</p>
+
+<ul>
+<li><strong>"El culturismo es un deporte tremendamente genético"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=230" target="_blank">[03:50]</a> El presentador destaca la importancia de la genética en el culturismo y afirma que no hay nada que se pueda hacer para superarla.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"Tabet ya no marca la diferencia lo más que entrenes, comas o tomes química"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=245" target="_blank">[04:05]</a> El presentador enfatiza que en el nivel de competencia, la genética es determinante y que no importa lo mucho que se trabaje para mejorar.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"De verdad, no penséis que tomar un poquito más de texto le va a hacer llenarse las piernas"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=261" target="_blank">[04:21]</a> El presentador cuestiona la idea de que la química puede mejorar significativamente el físico en el culturismo.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"El talento se esfuerza, se acabó. Esto es cierto si comparas a una persona que pone el trabajo frente a otra que no pone nada"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=279" target="_blank">[04:39]</a> El presentador enfatiza la importancia del trabajo y el esfuerzo en el culturismo.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"Tabet tiene mejor genética que yo al final, pero en el tren inferior le va a limitar"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=303" target="_blank">[05:03]</a> El presentador reconoce que Tabet tiene una buena genética, pero afirma que no puede superar los límites de su genética natural.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"La gente se cree que Arnold ni tomaba química, o tomaba solo un poco"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=409" target="_blank">[06:49]</a> El presentador critica la forma en que algunas personas romantizan a Arnold Schwarzenegger y sus métodos de entrenamiento, lo que puede llevar a una mala percepción del culturismo.</li>
+</ul>
+
+<!---->
+
+<ul>
+<li><strong>"Nadie duda de que Tabet va a salir con el mejor físico que pueda"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=381" target="_blank">[06:21]</a> El presentador enfatiza la confianza en el talento y la preparación de un atleta, como Tabet.</li>
+</ul>
+
+<p>La confesión inesperada sobre su dieta en el minuto 03:12</p>
+
+<p>Jorge Tabet admite que puede haber cometido errores en su dieta, lo que podría afectar su rendimiento en la competencia.</p>
+
+<p>¿Por qué rompe su rutina de entrenamiento a las 07:41?</p>
+
+<p>Tavec expresó su frustración por los comentarios sobre sus piernas, sintiendo que se le está comparando injustamente con otros atletas.</p>
+
+<p>La verdad detrás del culturismo en el minuto 08:34</p>
+
+<p>Jorge Tabet critica la idea de que el culturismo es solo una cuestión de trabajo y dieta, destacando la importancia de la genética en el éxito de un atleta.</p>
+
+<p>El secreto para ser un gran culturista al final del camino en el minuto 10:19</p>
+
+<p>Tavec reflexiona sobre si vale la pena seguir siendo culturista, considerando que ya tiene todo lo que puede desear y se siente abrumado por la presión y la fatiga.</p>
+
+<ul>
+<li><p>"La confesión inesperada sobre su dieta en el minuto 11:13" 
+Jorge Piensa admite haber utilizado química para mejorar su salud y evitar el deterioro muscular durante sus competiciones.</p></li>
+<li><p>"¿Por qué rompe su rutina de entrenamiento a las 07:45?" 
+No hay una respuesta explícita, pero se menciona que ha estado utilizando química para mantener su condición física.</p></li>
+<li><p><strong>"El ejemplo del hombre de los sueños"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=776" target="_blank">[12:56]</a>
+Jorge Piensa cuestiona si Tabet realmente quiere competir en la categoría más alta y sugiere que debería cambiar su estrategia para tener éxito.</p></li>
+<li><p><strong>"La verdad sobre Josema"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=869" target="_blank">[14:29]</a>
+Jorge Piensa duda de que Josema pueda mantenerse en la categoría abierta durante más de dos años y predecirá que dejará la competición dentro de ese plazo.</p></li>
+<li><p><strong>"¿Por qué no ha competido nunca?"</strong> <a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=776" target="_blank">[12:56]</a> 
+Jorge Piensa admite que no tiene experiencia en competiciones de categoría abierta y se pregunta cómo podría hacerlo.</p></li>
+</ul>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=911"</strong> target="_blank">[15:11]</a> La confesión de Gil Roca sobre cómo podría haber cambiado el destino de Josema Vist si hubiera competido en Classic Physique.</p>
+
+<p>La ironía y sarcasmo que utiliza Gil Roca para criticar la falta de inteligencia de algunos culturistas, como Josema Vist, al cambiar de categoría sin considerar las consecuencias.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=967"</strong> target="_blank">[16:07]</a> La crítica de Gil Roca a Josema Vist por no haber logrado superar a William Bonek en la competición Open y su incapacidad para ganar un pro show.</p>
+
+<p>La defensa de Gil Roca del comportamiento de Josema Vist, que cambió de categoría para competir en Classic Physique, y su opinión de que esto fue una decisión inteligente.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1034"</strong> target="_blank">[17:14]</a> La crítica de Gil Roca a la falta de comprensión de algunos culturistas sobre cómo funcionan las categorías y los sistemas de competición.</p>
+
+<p>La especulación de Gil Roca sobre cómo podría haber funcionado si Tabet hubiera competido en Men's Physique, donde considera que tiene más posibilidades reales de llegar al Mister Olimpia.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1125"</strong> target="_blank">[18:45]</a> La reflexión de Gil Roca sobre la posibilidad de que Classic Physique no sea el camino correcto para Tabet y su deseo de explorar otras opciones.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1154"</strong> target="_blank">[19:14]</a> "La genética del fracaso" 
+Jorge Tabet, considera que su forma de ver el culturismo es clásico y no cambia de categoría para llegar a la tarima del Mistro Olimpia.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1170"</strong> target="_blank">[19:30]</a> "El desafío de cambiar de categoría" 
+Jorge se pregunta por qué no se cambia a Men's Physique, lo que le daría más oportunidades de ganar y clasificar en una competición.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1186"</strong> target="_blank">[19:46]</a> "La verdadera intención de Tabet" 
+Se discute si Jorge realmente quiere llegar al Olimpia o si está dispuesto a hacer lo necesario para lograrlo, incluyendo posibles modificaciones en su entrenamiento y dieta.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1208"</strong> target="_blank">[20:08]</a> "La razón detrás del rechazo de Men's Physique" 
+Se analiza por qué David no sugiere que Jorge cambie de categoría a Men's Physique, considerando que podría ser más favorables para él.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1237"</strong> target="_blank">[20:37]</a> "El precio de la ambición" 
+Se pregunta si Jorge está dispuesto a hacer todo lo necesario para llegar al Olimpia, incluyendo posibles riesgos para su salud y bienestar físico.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1279"</strong> target="_blank">[21:19]</a> "La conclusión compartida" 
+Se llega a una conclusión generalizada de que Jorge ha mejorado en el año pasado, pero que su categoría clásica no es lo suficientemente competitiva para entrar en la Olimpia.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1321"</strong> target="_blank">[22:01]</a> "La visión de Fran Spinn" 
+Frank Spinn, ex preparador de Jorge, analiza las imágenes y se sorprende por cómo bien ha mejorado el físico de Jorge.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1392"</strong> target="_blank">[23:12]</a> "La crítica constructiva sobre la espalda de Jorge" 
+Jorge critica a su propio entrenador por no haber mejorado en la espalda, una zona clave para un futuro éxito en la escena del poderlifting.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1418"</strong> target="_blank">[23:38]</a> "Gemelos o mens? La discusión sobre la categoría" 
+Jorge discute con el entrenador sobre si debe competir como gemelo o mens, una decisión crucial que afectará su categoría y oportunidades de concursar en futuros campeonatos.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1432"</strong> target="_blank">[23:52]</a> "La falta de habilidad en posiciones de fuerza" 
+Jorge expresa su preocupación por la falta de habilidad en posiciones de fuerza como la espalda, una zona crucial en el poderlifting, y cómo esto podría afectar su desempeño en futuros campeonatos.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1472"</strong> target="_blank">[24:32]</a> "El entrenamiento es individual y no hay reglas" 
+Jorge defiende que el entrenamiento es individual y que cada persona debe hacer lo que considera mejor para su propio éxito, a pesar de las presiones de los seguidores.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1508"</strong> target="_blank">[25:08]</a> "La realidad del poderlifting y la decepción" 
+Jorge habla sobre la realidad del poderlifting, en la que no todos pueden alcanzar el mismo nivel de habilidad y éxito, y cómo esto puede ser decepcionante para algunos.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1534"</strong> target="_blank">[25:34]</a> "El desafío de competir con los pros actuales" 
+Jorge analiza la competencia con otros culturistas experimentados y establece que a pesar de su mejora, todavía no tiene el nivel necesario para competir con ellos en un campeonato profesional.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1571"</strong> target="_blank">[26:11]</a> "La lealtad y el apoyo a los entrenadores" 
+Jorge expresa su firmeza en apoyar a sus entrenadores y no envidiar la suerte de otros, estableciendo una distinción clara entre lo que realmente importa en el mundo del powerlifting.</p>
+
+<ul>
+<li><p>"La confesión inesperada sobre su dieta en el minuto 26:41" - El locutor admite que la dieta de Kim puede ser un espejo para los demás, ya que también busca mejorar su condición física.</p></li>
+<li><p>"¿Por qué rompe su rutina de entrenamiento a las 07:45?" No se menciona específicamente en esta parte del video. </p></li>
+<li><p>"La principal victoria, en eso es verdad que concuerdo mucho contigo, es intentar salir mejor que el año pasado" - El locutor y Raúl coinciden en que la principal meta para mejorar.</p></li>
+<li><p>"Yo creo que el sistema habría que tantearlo" - El locutor sugiere que se necesita ajustar el sistema de selección para mejorar las oportunidades de los atletas.</p></li>
+<li><p>"Coño, no sé si algún día llegará a tener… No creo, ¿no?" - Frank admite dudas sobre la capacidad de Tabet para llegar a equilibrar sus piernas con su torso.</p></li>
+<li><p>"¿Cuántos culturistas hemos tenido Classic? Me acuerdo, me venía a la mente ahora Francis Benfato" - El locutor menciona que algunos atletas han mejorado y pueden tener posibilidades de clasificar para Olimpia.</p></li>
+</ul>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1814"</strong> target="_blank">[30:14]</a> La impresión de Jorge como profesional es cierta, pero su trayecto puede ser más largo que el resto de profesionales.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1834"</strong> target="_blank">[30:34]</a> La parte inferior de Jorge es notoria y se ve súper atrás en comparación con otros profesionales.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1885"</strong> target="_blank">[31:25]</a> El caso de Iván muestra que incluso después de hacerse profesional, hay un camino de mejora y preparación para llegar al máximo nivel.</p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=BU9K-IQ9FDE&amp;t=1906"</strong> target="_blank">[31:46]</a> La comparación entre el campeonato de Portugal y la Procar es polémica y hace debate sobre la calidad de los amateurs en estos torneos.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=0" target="_blank" class="timestamp">[00:00]</a> Y no, no me refiero a lo típico de que no, es que Jorge Tabet tiene la pierna mal y no sé qué. Y digamos que tiene que ver con eso, pero no es eso, porque al fin y al cabo, pues todos lo sabemos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=15" target="_blank" class="timestamp">[00:15]</a> El problema, y de lo que he venido a hablar aquí, mejor dicho, es el problema que acarrea tener ese problema, ¿vale? Es decir, las consecuencias de que el tío tenga ese tren inferior, digamos, tan genéticamente poco privilegiado. ¿Y qué ocurre? Que es que me he dado cuenta de que George Stavitz</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=32" target="_blank" class="timestamp">[00:32]</a> debe de dejar el culturismo. ¿Qué coño? ¿Y por qué pienso esto? Pues básicamente porque con este tren inferior tan malo que tiene, por desgracia no va a poder hacer absolutamente nada en la categoría Classic Physique. A ver, estoy de acuerdo. Estoy de acuerdo, pero sí que es verdad que ojalá lo pudiese mejorar como para que pueda tener el nivel para competir. Sí que es verdad que... Ya no sé si el problema lo tiene Tabette encima o es que el nivel es tan alto...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=60" target="_blank" class="timestamp">[01:00]</a> tan duro en clase y físique, que para lo que hay que hacer para estar al nivel, no sé si le renta esta vez o si realmente puede esta vez. Ya que los físicos que estamos viendo últimamente, y ya no os hablo de los top, porque eso ya es una barbaridad. Los top mundiales, vamos, no me jodas, realmente son como open, pero un poco más recortados. O sea, la puta pierna que me llevan no tiene ni sentido. O sea, tú ves el bombeo de cuádriceps que tiene el Sommerfield, que es el... No, el Sommerfield es una pasada, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=89" target="_blank" class="timestamp">[01:29]</a> Top 2 de cuando fue la última competición de Ceboom, que técnicamente ahora sería el 1, ¿no? Porque claro, Ceboom se ha retirado. Entonces, Mike Sommerfield sería el número 2. Tú le ves las pads al tío y dices...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=101" target="_blank" class="timestamp">[01:41]</a> Pero esas piernas, loco, ¿dónde las has sacado, cabrón? Bueno, le viene las piernas a él, le viene las piernas a Dino, a Josema, a Urs, a cualquiera. Es que no te vayas al top. Al top, top. Es que el top 10, que no... Pues sí, sí. Y parece open, tío. Fuera coñas, ¿eh? Pero, bueno, sea como sea, pues eso, que los top mundiales tienen piernas ya que no tienen ni sentido. Pero es que estamos viendo que los amateurs que se clasifican a hacerse pros, ¿vale? Tienen unas piernas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=126" target="_blank" class="timestamp">[02:06]</a> que tampoco tienen ningún tipo de sentido mucho mejores que las de Tabet y eso que son amateurs que se acaban de hacer pros imagínate ahora Tabet pues con sus piernas siendo pro y la verdad es que con todo esto la teoría de que Tabet se hizo pro en un momento en el cual era más fácil hacerse pro pues cobra fuerza que yo igualmente no le voy a quitar méritos a hacerse pros yo tampoco le voy a quitar méritos al final era una época diferente y ya está y él jugaba con las almas de la época quitarle méritos no me parece</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=154" target="_blank" class="timestamp">[02:34]</a> Correcto. La categoría en los últimos tres años ha crecido a unos niveles que tampoco tienen mucho sentido. Y luego yo le voy a dar la razón en parte a Jorge Tabé también. Lo que se pedía en Classic no es lo que se pide ahora en Classic. No es lo que se pide ahora en Classic. Eso es una realidad. Eso creo que no lo podemos discutir. ¿Vale? Ahora piden otra cosa. Ahora piden tíos más grandes, más...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=178" target="_blank" class="timestamp">[02:58]</a> Más todo. Más todo. Y antes pues predominaba mucho la línea, la estética. Ahora eso ya no... No. Hacerse pro y costarse más o costarse menos es pro. Ya está. Eso es así y pues... Yo no le quito méritos, pero Frank Spin sí. Frank Spin ha hablado de Tabet. ¿Dónde? Escúchame, antes de seguir con el vídeo. Estoy sorteando una GIFCAD, una tarjeta de regalo de 150 euros en Procis. El producto es a elegir. Bueno, 150 euros para gastar en Procis. ¿Cómo? Usando mi código de descuento Antonio G en Procis. Saciendo una</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=211" target="_blank" class="timestamp">[03:31]</a> Así que haz tu compra, que puede ganar 350 euros el producto de Profis. Al César lo que es del César. Ahora bien, en la práctica lo que observamos es que a través no le va a ir muy bien, ¿vale? Da igual cómo entrene, da igual cómo coma, da igual los esteroides que se meta, da igual la suplementación que consuma, da igual el preparador que tenga...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=230" target="_blank" class="timestamp">[03:50]</a> Hostia, pues lo voy a mirar ahora, ¿vale? Que haga lo que haga, esa genética que tiene el tren inferior le va a limitar. Y esto es así. Y es que por desgracia, señores, el culturismo es un deporte tremendamente genético. Yo sé que mucha gente... En el nivel que está tal vez sí que es genético puro, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=245" target="_blank" class="timestamp">[04:05]</a> Por desgracia, en el nivel que está Tabet ya no marca la diferencia lo más que entrenes, lo mejor que comas o la cantidad de química que tomes. Eso es una realidad. Eso no se puede discutir. No, no, ni aunque suba dosis. El problema de Tabet no es la dosis. A día de hoy ya no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=261" target="_blank" class="timestamp">[04:21]</a> De verdad, no penséis que tomar un poquito más de texto le va a hacer llenarse las piernas. No lo creo. ¿Las puede mejorar? 100%. No, pero tú, por muy buena genética que tengas al final, pues tienes que poner el trabajo y muchas veces el trabajo duro, supera el talento y no sé qué y no sé cuánto. Mentira. En el culturismo mentira.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=279" target="_blank" class="timestamp">[04:39]</a> Y es en plan, si el talento se esfuerza, se acabó. Esto es cierto si comparas a una persona que pone el trabajo frente a otra que no pone nada. Por ejemplo, Jorge Tabet, aunque genéticamente tenga peores piernas que yo mismo, es mejor culturista. Efectivamente, porque yo al final pasé de competir y él ha seguido. Y al final, aunque técnicamente, por poner un ejemplo de alguien que yo a mí mismo me conozco,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=303" target="_blank" class="timestamp">[05:03]</a> Y por eso pongo aquí a un servidor de ejemplo. Además, es mi pudo canal y pongo ejemplo a quien me sale de la verga, coño la madre. Entonces, aunque yo tenga mejor genética que Tabet, en el tren inferior al menos, pues no me vale nada. Algunos piensan que Tabet no tiene el físico de Cebam, que no es posible tampoco, por el hecho de la química, de no tomar química.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=323" target="_blank" class="timestamp">[05:23]</a> de no tomar química. De no tomar más química. Como si supierais lo que Tabet toma. Como si lo supierais. Daís por hecho de que Tabet va con muy poca química encima. Eso es muy loco, ¿eh? Es muy loco cuando él nunca ha hablado de química. Nunca. A mí eso me choca, tío. Porque si no lo exprimo, pues ahí me quedo y Tabet, pues con trabajo duro, efectivamente sí que sale adelante y ha sido mejor culturista que yo. Ya que yo al final ni he competido, como bien sabéis. Pero, claro, esto como veis, sólo se cumple en este caso. En caso de que uno haga cosas y el otro no haga nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=352" target="_blank" class="timestamp">[05:52]</a> Pero en el caso de que ambas personas que están ahí en la tarima han hecho su trabajo, la genética va a ser determinante. Porque sí, señores, lo que te lleva a estar en la tarima no es la genética. Yo podría ser Ronnie Coleman, pero si no me preparo para competir y no entreno, pues nunca ganaría una competición de culturismo. No obstante, como digo, lo que te lleva a la tarima es hacer la preparación, es decir, entrenar, hacer tu dieta, hacer tus historias con la química, ya sabéis, y después de ese cúmulo de cosas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=381" target="_blank" class="timestamp">[06:21]</a> Harás la prepa, la puesta a punto, etc. Y saldrás a la tarima lo mejor posible. Entonces, ese... ¿Veis? En ese punto, yo creo que nadie duda de que Tabet va a salir con el mejor físico que pueda. O sea, lo bueno... ¿Veis? Aquí Tabet hay que decirlo. Es un tío que sabemos que va a salir trillado. Con la piel como papel de fumar. Eso lo sabemos todos. Pero el nivel sigue estando demasiado alto, tío. Para las cartas que tiene Tabet ahora mismo. Hoy día.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=409" target="_blank" class="timestamp">[06:49]</a> Cúmulo de cosas que son ciertas acciones que podemos... Como Arnold que dicen que no abusaba tanto. Ya. Y yo soy corredor de maratón. Arnold te voy a decir una cosa, el chichonator. Lo tienen súper romantizado. Súper romantizado. O sea, la gente se cree que Arnold... Algunos piensan que ni tomaba química. Otros que tomaba... Nada, un poquito. Lo justo. Lo tienen súper romantizado. Es una cosa... Una cosa de locos, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=432" target="_blank" class="timestamp">[07:12]</a> Ah, ese no tomaba la química. Por favor. Todos los seres humanos, ¿vale? Pues eso sí que puede llevar a cualquiera a competir. No obstante, una vez que tú juntas a varias personas que han hecho eso, ¿vale? Que ya están ahí arriba, que ya han hecho el trabajo, que ya han hecho la dieta, que ya han hecho todo el tema con la química, que ya han hecho todo. Cuando tú te pones a comparar a diferentes manos entre sí... Es que mirad, mirad el top 5 este, tío. ¿Vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=461" target="_blank" class="timestamp">[07:41]</a> Miradlos, tío. Qué puta barbaridad, tío. Qué puta barbaridad. Mirad las piernas que tienen todos, tío. ¡Eh! No quiero comparar a Tabez con estos cinco. No sería justo. No sería justo. No lo sería. Pero es que no hablamos de esto. Es lo que ha dicho Jim Roca. Es que el nivel de la gente que clasifica de amateur a pro por primera vez es que las piernas de esos chavales son criminales, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=485" target="_blank" class="timestamp">[08:05]</a> Que ya han hecho todo eso es cuando empiezan los problemas para Jorge Tabet, ¿vale? Porque, ¿qué sucede? Que si tú haces todo eso, pero tienes una peor genética que otro, ese que tiene una mejor genética que tú te va a ganar, ¿vale? Claro, porque asumimos que todo el... A ver, si tú llegas a ser profesional en el culturismo es porque pones el trabajo, la dieta y todo perfecto. Creo que eso es de cajón. Yo es lo que creo, ¿eh? Creo que todos intentan hacer todo al máximo posible. Todos. ¿Qué es lo que determina que estés arriba del todo o no? La genética.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=514" target="_blank" class="timestamp">[08:34]</a> en un porcentaje muy alto y luego bueno pues va sumando pequeños porcentajes preparadores tal cual pero lo principal la genética qué pasa a jorge távez da igual lo definido que salga da igual los redondos que sean sus músculos al final simplemente por tener ese tren inferior tan digamos desbalanceado con la parte superior y pues tener esas carencias en el tema de femorales gemelos y bueno pues se tolten inferior en general aunque el cual dices lo tiene bastante bien pero en general alterar las piernas tan finas para esa categoría</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=543" target="_blank" class="timestamp">[09:03]</a> También te digo, ¿eh? Yo no voy a decir, Jorge, tal vez deja el culturismo. Yo no lo voy a decir. La verdad, ¿por qué? Porque si es su pasión, si es lo que le gusta, si es quién somos nosotros para decirle que deje el culturismo. ¿Entendéis? Que haga lo que tenga que hacer. No, no tiene por qué dejarlo. ¿Por qué, psicopatón? Hay gente en el culturismo que se tira 20 años y saben que no van a ser profesionales nunca. Tal vez ya es pro. Tal vez ya es pro. Y hay muchos que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=568" target="_blank" class="timestamp">[09:28]</a> Son culturistas, 20-30 años y saben que su nivel es una mierda, pero siguen haciéndolo porque es su pasión y es lo que les gusta hacer. Yo no voy a decirle a alguien que deje de hacer su deporte que le encanta. Yo no lo voy a hacer. Que Giroca lo haga es otro tema. Pero si para tal vez el culturismo es algo secundario, ¿no? Hombre, yo eso no lo sé. Yo creo que mucha gente asume...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=589" target="_blank" class="timestamp">[09:49]</a> Que Tabet en lo económico le va bien, como si supierais lo que gana. O lo que tiene, o lo que sea. Aquí me hace mucha gracia cuando la gente asume cosas que no tienen ni puta idea. Que supongo, que intuyo como vosotros, que sí. Pero también asumís que él es como que lo del culturismo lo hace rollo modo afición. ¿Modo afición? ¿El culturismo que lleva Tabet modo afición? Hombre, no, por Dios. ¿Estáis tontos? Tú no compites al máximo nivel. Como hobby. Eso no puede ser en la vida, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=619" target="_blank" class="timestamp">[10:19]</a> Con la fatiga que tiene que pasar uno. Siento, entonces al final yo lo pienso y digo, ¿pero realmente a esta vez le merece la pena seguir siendo culturista? O sea, ¿para qué?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=629" target="_blank" class="timestamp">[10:29]</a> realmente pensémoslo, ¿para qué? Si el tío ya es millonario, ya tiene sus empresas, ya es famoso, seguro que tendrá su pareja por ahí, aunque no la enseñe, pero creo que una vez comentó que la tiene, así que el tema del amor, digamos que va servido, o eso se supone. Pues con más motivos, tiene cubierto muchas partes de su vida, pero esta le gusta hacerla. Imagino que también estará bien, o todo lo bien que pueda, ¿no? Entonces, a ver, salvo que haya pasado alguna cosa traumática, otra...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=658" target="_blank" class="timestamp">[10:58]</a> A ver Jim Broca, que no todo el mundo compite por hacerse famoso o ganar dinero. Porque si no, yo he desperdiciado 7-8 años de vida por haber desperdiciado. Los haber desperdiciado porque sinceramente me he tirado desde el 2020... No.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=673" target="_blank" class="timestamp">[11:13]</a> desde el 2013 al 2019 compitiendo con un cabrón todo lo que había de Strongman lo competía y luego competí en 2020 nos pararon, cortaron todas las competiciones y yo creo que compití en 2021 si no me confundo más, 2022 competiciones de peso muerto y todo eso</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=690" target="_blank" class="timestamp">[11:30]</a> Y ya luego pasó lo del bíceps. Entonces, ¿he perdido el tiempo? No, son etapas. Es mi pasión, la fuerza. Me encanta, lo disfruto. Y a día de hoy, yo tengo dinero, tengo esa parte cubierta. La fama me importa poco o nada. Tengo mi pareja que está aquí a mi lado. Tengo mi casa, que no es mía, la de Aquiles, pero bueno. Y me va bien la vida. ¿Por eso no puedo competir en Strongman? Pues tener por cuenta que si no me rompo, voy a volver a competir en Strongman. Pero vamos, 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=718" target="_blank" class="timestamp">[11:58]</a> Ahora, ¿cuándo? Ya veremos. Pero creo que no, ¿no? Entonces, pues eso, que en esos aspectos, pues está bien. A nivel de salud, de momento al menos, aunque use química, pero de momento está bien. Tiene el tiempo, porque al fin y al cabo ya, pues teniendo el dinero, pues puedes tener más tiempo disponible. Entonces, tío, Jorge Talvez es una persona que literalmente lo tiene todo. Por lo tanto, no sé qué gana exactamente tratando de seguir, pues siendo culturista. Tío, porque su vida, tío, esto no está bien. Esto no vale, el ejemplo, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=748" target="_blank" class="timestamp">[12:28]</a> Yo lo entiendo porque me podéis decir, bueno, Jim Roca, pero es que hay en la vida más cosas que el dinero, el tiempo, la salud, el amor y esas cosas. Y bueno, sí, supongo que alguna cosa más habrá que estas cosas que acabo de mencionar. Jim Roca, hermano. Cada vez, como digo, las tiene todas, de momento. Lo que pasa es que realmente hasta qué punto le compensa y de todos modos supon... Claro, es que está suponiendo mucho, tío. Está suponiendo que Jorge Piensa piensa como tú.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=776" target="_blank" class="timestamp">[12:56]</a> que eso no va así aquí se nota mucho el manito mira que yo te aparece un montón que provoca que tú no has competido nunca ni sabes lo que se siente el competir entonces ya ahí sí que se te nota bastante es que si tú vas a competir si tú vas a competir en algo por dinero eso nunca va a salir bien nunca nunca yo te digo que nunca suponiendo que realmente Tabet tenga como un sueño que no que es el hombre de los sueños aquí suponiendo que Tabet realmente tenga un sueño así bien potente para pues llegar al Mr. Olimpia sea como sea</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=805" target="_blank" class="timestamp">[13:25]</a> Pues yo digo, ¿no sería mejor si realmente ya por tus cojones quieres eso, cambiar la estrategia? Fíjate que han hecho los demás. Todos los que son españoles y compiten en niveles altos, absolutamente todos se han tenido que cambiar de categoría</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=823" target="_blank" class="timestamp">[13:43]</a> Esta sería muy buena, la de irse a Menz. Yo pienso que Tabet en Menz tendría bastante nivel. En Menz tendría mucho nivel. Yo creo que todos queremos que vaya a Menz. Porque en Menz yo sí pienso que puede ir a la Olimpia. Sí que lo pienso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=842" target="_blank" class="timestamp">[14:02]</a> Y las personas así famosillas que compiten, los únicos que no se han cambiado son Mauro y Madelman. Que bueno, Madelman sí se ha cambiado ahora a 2.12, pero Madelman igualmente ya clasificó tres veces para la Olimpia. Lo que pasa es que no pudo ir por el tema del visado, pero lo que es clasificado estaba. Así que, salvo Madelman y Mauro Fialjo, o como coño se diga, por los demás, todos, todos han cambiado...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=869" target="_blank" class="timestamp">[14:29]</a> Bueno, y si os creéis que Josema en no más de dos años va a cambiar de categoría, lo lleváis claros, ¿eh? Yo creo que Josema, sinceramente, este año y el que viene en Classic y se pira para Open, ¿eh? Josema lo pasa muy mal para entrar en la categoría. Josema no va a aguantar más de dos años en Classic. Ya os lo digo yo que no. Aparte, Josema es culturismo. Josema no se va a quedar en Classic. Yo lo creo claramente, ¿eh? No, no, no, no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=895" target="_blank" class="timestamp">[14:55]</a> Yo creo que no, eh. Yo creo que Josema, estos dos años, sí. Este y el que viene, sí. Pero yo creo que... 2027, ese tío... 100%. De categoría. Y, por ejemplo, en el caso de Kim Ángel, si no se llega a cambiar a Classic Physique, a lo mejor nunca hubiese ido...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=911" target="_blank" class="timestamp">[15:11]</a> al Mister Olimpia, de la misma forma que Josema. Si Josema Vist no hubiese sido inteligente y no hubiese dejado de ser open y hubiese sido Classic Physic, ¿sabéis que hubiese pasado? Que a día de hoy seguiría sin haber pisado nunca en la tarima de la Olimpia. No lo tengo yo tan claro eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=930" target="_blank" class="timestamp">[15:30]</a> Kim Roca. No lo tengo yo tan claro eso. Eso de que Josema no podría haber ganado un ProShow, no lo tengo yo tan claro. Como Open. No lo tengo yo tan claro. No sé. Eso de que no podría... No sé. No sé. No sé. No sé. No sé. No sé. No sé. No sé. No sé. Yo creo que os estáis equivocando bastante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=947" target="_blank" class="timestamp">[15:47]</a> Y es que es más, seguramente Josema, fijaos lo que os voy a decir, seguramente ni siquiera habría ganado un pro show, ¿vale? Siendo open, y no me vengáis ahora con lo de, no tío, ¿pero qué dices Jims Rock? No tenéis ni idea, a ver si Josema ya ganó a Joan Pradels, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=967" target="_blank" class="timestamp">[16:07]</a> Sí, lo que tú quieras. Pero ganar a Joan Pradels no significa que vayas a ganar un pro show. No es así. Porque tú, por muy José Mavist que seas, en Open te sale un crizo, te sale un gutuito, te sale un quien cojones sea William Bonek, ¿vale? Te sale un man de esos. ¿Y qué?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=983" target="_blank" class="timestamp">[16:23]</a> ¿Y qué haces? ¿Eh? ¿Eh? ¿Y qué haces? ¿Eh, Champion? ¿Qué haces? Nada. Automáticamente te vas al segundo puesto, tercero, cuarto o el que sea. Porque Open es otra historia, señores. Entonces, Josema hizo muy bien, como podéis observar por los resultados que ha tenido, en cambiarse a Classic. Entonces, en mi opinión, tal vez no debería competir en culturismo porque a estas alturas de la vida, teniendo todo asentado, es tontería. Pero si realmente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1006" target="_blank" class="timestamp">[16:46]</a> A mí, yo... Ese motivo no me gusta. De verdad, Gil Roca. No me gusta nada. Si tal vez no quiere competir, que sea por otro motivo. Pero si el motivo para dejar de competir tiene que ser. Porque ya tiene dinero, tiene empresas, tiene novia y le va bien en la vida. Si es el motivo... Vaya mojón, compadre. Vaya zurullo de motivo, tío. Digo yo, lo inteligente al menos no sería coger y cambiarse de categoría a una que le encaje más. Por mucho que él no quiera. Eso sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1034" target="_blank" class="timestamp">[17:14]</a> Es que a veces no entiendo la cabezonería que tienen algunos culturistas. Tío, ¿no te estás dando cuenta de que literalmente para llegar a la Olimpia todo Dios prácticamente ha tenido que cambiarse a otra categoría porque en la suya que quería salir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1050" target="_blank" class="timestamp">[17:30]</a> A ver, está claro que tal vez sería sorpresa de todos que pueda ir a la Olimpia en Classic. Yo no lo creo, pero vamos, en mucho tiempo, en mucho tiempo. No está para ganar un Open, perdón, un Campeonato Pro Classic. Pero oye, siempre existen campeonatos como el de Tupelo Pro y compañía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1069" target="_blank" class="timestamp">[17:49]</a> Cualquier cosa se podría dar. Yo me creo cualquier cosa del culturismo. Igualmente le apoyaría y le aplaudiría. Pero ya sabéis, ¿no? Al final no sería lo normal. En una competición de nivel normal no tendría nada que hacer. Pero oye, con el sistema que hay nuevo, ya te digo. Te puedes ir a competir a la India y llevarte el pro. O sea, llevarte el pro show. Podría ser. No llegaba. Y salvo unas pocas personas, pues el resto sí o sí ha tenido que cambiarse.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1097" target="_blank" class="timestamp">[18:17]</a> Entonces, coño, si yo fuese Tabet... Dios, qué cruel. Puede ser, Kim clasifica en tu pelo pro y Tabet en tu pierna pro. Joder... Realmente me plantearía incluso mirar lo de Men's Physique o cualquier cosa. Que ojo, en Men's Physique también está complicada la historia, pero hostia... Yo en Men's sí le veo más futuro a Tabet, ¿eh? En Men's, ahí sí que pienso que podría tener ciertas posibilidades reales de llegar al Mister Olimpia...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1125" target="_blank" class="timestamp">[18:45]</a> Y hacerlo bien. En vez de en Classic Physique. Que sí, que ya sé que Tabet no quiere ir a Men's Physique y lo que vosotros queráis. Si ya lo sé, ya lo sé. Si él ya lo ha dicho. Él ya lo ha dicho que quiere ir en Classic. Pero es que al final, tío, si Classic no es tu camino para llegar a Olimpia, ¿qué? O sea, lo digo en serio. ¿Y si no es Classic el camino que...? Bueno, si no es Classic y él ve que no quiere cambiar de categoría porque considera que su manera de ver el culturismo es Classic, a lo mejor no va. Nunca a Olimpia, ¿quién sabe? A lo mejor sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1154" target="_blank" class="timestamp">[19:14]</a> ...que tiene que usar Tabet para llegar a esa tarima. Que es que, bueno, evidentemente no lo es, por la genética que tiene. Por lo tanto, sinceramente, yo no sé a qué espera Jorge Tabet. Porque si realmente tanto desea ir a la tarima del Mistro Olimpia...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1170" target="_blank" class="timestamp">[19:30]</a> ¿Por qué no se cambia a Men's Physique? Al fin y al cabo, lo vería mucho más probable ganando allí y clasificando palo limpia que en Classic Physique, que seguro que no va a ganar nunca simplemente por las piernas. Entonces, al final, la pregunta... Lo está destrozando, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1186" target="_blank" class="timestamp">[19:46]</a> Está retorzando al Tabet. La pregunta es, ¿Tabet qué coño quiere? ¿Simplemente no bajarse del burro y competir porque patata? ¿O realmente quiere llegar a esa tarima del Mr. Olimpia y está dispuesto a hacer lo que sea necesario para llegar a ella? Y oye, si dentro de esas cosas que tiene que hacer para llegar al Olimpia... Creo que David ha comentado algo sobre eso, de por qué no se pasa medfisic.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1208" target="_blank" class="timestamp">[20:08]</a> No sé si dijo por el tema de las poses y tal, que no le molaban. Y a él le gusta la tarima y posar, creo recordar. Es cambiarse categoría y pasarse a men's physique. ¿Por qué no hacerlo, tío? Porque, fíjate tú, está dispuesto a entrenar hasta casi desmayarse. Está dispuesto a pasar hambre como un cabrón y tener ansiedad, insomnio, impotencia, o sea, falta de líbido, me refiero. Tener de todo a la vez, que eso lo provoca el tema de la falta de comida.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1237" target="_blank" class="timestamp">[20:37]</a> ¿Está dispuesto a hacer todo eso? ¿Está dispuesto a jorobarse la salud con el tema de la química, utilizada ya en cantidades serias? No, no, porque tal vez no toma química casi, según la gente. ¿Está dispuesto a todo eso, pero el cabrón no está dispuesto a irse a Men's Physique? ¿En serio, tío? ¿De verdad?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1256" target="_blank" class="timestamp">[20:56]</a> Joder, tío, pues no sé. Yo, sinceramente, creo que le vendría a David darle una vuelta a eso porque creo que le iría mejor así. La verdad, o sea, es que es lo que hay. O sea, el tío no tiene la mejor pierna, ¿vale? Eso es lo que hay. Es así. Sin embargo, de torso es espectacular. Es que es espectacular las cosas como son. Y fíjeme que Frank Spinn también lo ha trayao.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1279" target="_blank" class="timestamp">[21:19]</a> Yo creo que todos más o menos llegamos a la misma conclusión. Y es que en el caso de Jorge, sí que ha habido mejoras respecto al año pasado, pero que el Classic Physics se ha puesto a tal nivel para directamente entrar en el Olympia</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1291" target="_blank" class="timestamp">[21:31]</a> que en el momento en el que se te queda un grupo muscular tan rezagado como puede ser el caso de las piernas, canta mucho de cara a la posibilidad de, no de competir, competir por ser competitivo en un torneo y puedes, de hecho el año pasado incluso saliendo muy mal, quedó séptimo en alguno, en fin, puedes competir. La cuestión está en conseguir entrar a lo mejor en una final de un torneo profesional o incluso ya ni te quiero contar clasificar a la Olimpia. Entonces, tú que has sido ex preparador de Jorge, que lo conoces bien evidentemente y conoces bien su físico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1321" target="_blank" class="timestamp">[22:01]</a> ¿Se va a mojar, Frank? No creo, ¿no? Viendo estas imágenes, ¿cuál es tu valoración? A ver, sinceramente ha mejorado. Ha mejorado. El tren inferior lo ha mejorado bastante. Ahora se le ve mucho mejor. Sí que de espaldas aún se le ve un poco vacío el femoral, el gemelo y tal. De frente bastante bien, la verdad. Me sorprende bastante bien para bien el tamaño de la pierna que ha conseguido. Ya te digo que de espaldas es cuando le veo un poquito más flojo y sí que es verdad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1350" target="_blank" class="timestamp">[22:30]</a> Cuando Fran Spindice un poquito más flojo es que está mucho más flojo. Fran no es un tío que vaya a dar un mazazo a nadie, pero eso sí. Tiene que ser muy estratégico porque el nivel que está en Classic… Es que cada vez… El nivel Classic está enorme. Cada vez va mejor. Ha pegado como un tirón. Hace unos años ha pegado un tirón muy fuerte. Cada vez tenemos más competidores.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1372" target="_blank" class="timestamp">[22:52]</a> Pero claro, el nivel está muy fuerte y el físico de él no está nada mal, pero va a tener que ser estratégico a la hora de seleccionar los campeonatos porque claro, es que el nivel es tan fuerte que llegas ahí… Vamos, que va a tener que seleccionar un tupero por oro. Y son cuerpos que dices tú, ¿pero a quién le puedo dar? Si le podría dar este primero y al tercero le podría dar el primero y al cuarto también porque están…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1392" target="_blank" class="timestamp">[23:12]</a> Están muy bien hechos, ¿sabes? Cuando hay un físico con ciertas cambiancias musculares, pues lógicamente tiene menos posibilidades. Pero hay que ver el resultado final, con la condición, con todo. Aquí sí es donde yo lo encuentro un poquito más flojo. No la espalda, la espalda es muy buena. La espalda larga. Es que es mens, tío. Es que tiene cuerpo de mens. Sí, me refiero al femoral, al glúteo. O sea, bueno, glúteo no te dará suena mal. Gemelo, hermano, todo. Todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1418" target="_blank" class="timestamp">[23:38]</a> sino gemelos. Se le ve como un poquito descarnado, no le falta masa muscular. Así como de frente lo hace mucho mejor. Yo por mucha fe que tenga, tal vez no puede clasificarse así a la Olimpia en la vida. O sea, en la vida, quiero decir, actualmente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1432" target="_blank" class="timestamp">[23:52]</a> Y como que igual, incluso cambiar la forma de posar, aunque bueno, teniendo a Dufour, que es un gran posador, me imagino que estarán también trabajando en ello. Pero ahí es cuando yo le encuentro que le falla un poquito, ¿no? La parte baja, la parte de arriba, la parte de la espalda. Así que yo creo que en ese caso va a tener que ser un poco estratégico. Que hay mejoras, por supuesto, y eso es lo más importante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1451" target="_blank" class="timestamp">[24:11]</a> ¿Vale? Además, gente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1472" target="_blank" class="timestamp">[24:32]</a> Y que la línea ya importa poco de clásica antigua de toda la vida. Entonces, si tú no quieres, si quieres seguir compitiendo y quieres ir a tu sueño, que es ir a la Olimpia, lo mismo tienes que ir jugando tus cartas. Que yo no entiendo... Para mí no sería un paso atrás que esta vez fuese a mens.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1487" target="_blank" class="timestamp">[24:47]</a> ¿Por qué? Para mí un paso atrás es quedarse en la categoría, perder años de vida, perder salud, perder calidad de vida. Querer competir en una categoría en la que tu físico no llega. Eso es lo que sí que me parece triste. Que cada uno haga lo que quiera, faltaría más. Pero eso es triste. Ay, y si a él no le gusta el mens, ¿qué va a hacer? Nada. Que siga compitiendo ahí y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1508" target="_blank" class="timestamp">[25:08]</a> Claro, cada uno hace lo que quiere. Que luego vaya y no quede entre los 10 primeros, entre los 6 primeros, entre los 5 o lo que sea. Yo sé que muchos estáis esperando que Jorge llegue y que nos dé un zasca a todos. Pero es que no es un zasca, sinceramente. Que solo hay que ver lo que hay. Y no te estoy hablando de un top 10 Olimpia. Solo hay que ver lo que hay en general. Y veis que el chaval de arriba está muy bien. De frente se puede defender con las piernas, aunque para mí también de frente le falta carne.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1534" target="_blank" class="timestamp">[25:34]</a> Pero es que se da la vuelta y no llega al nivel de los pros actuales. No llega. O sea, los pros actuales tienen mucho nivel. ¿Tiene nivel pro? Sí. ¿Tiene para pelearse con los pros por una buena posición en un campeonato pro? Yo pienso que no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1549" target="_blank" class="timestamp">[25:49]</a> Lo más importante es que del año pasado a este ha mejorado y ha subido al cenario con una mejor versión. Si no, el siguiente sigue luchando hasta que lo consiga. Si lo consigue, si no, mira, por lo menos la evolución es con lo que se va a quedar, con ese físico más evolucionado. Desde luego que sí, porque claro, es un poco lo que yo te comentaba con el tema de Joan. Esta gente... Nadie quiere hundir a la de... Ah, está bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1571" target="_blank" class="timestamp">[26:11]</a> Nadie, hermanos. Nadie quiero tirar a Tabet. Yo creo que hay mucha gente empeñada de que se cree que todos queremos ver caer a alguien. ¿En serio? ¿De verdad? ¿De verdad creéis que hay alguien de los que hacemos vídeos de fitness que queremos que caiga algún culturista? Te pueden caer mejor, te pueden caer mejor, pero con eso no se juega, hermanos. Con eso no se juega, tío. O sea, yo voy a querer que Tabet vaya a un campeonato y quede el último. Claro que no, hombre. Eso es la vida, hermano. Es la vida. Al revés. Al revés. Yo prefiero que el tío gane. Ojalá.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1601" target="_blank" class="timestamp">[26:41]</a> haga lo que haga, lo van a machacar. Lo traigo bastante claro esto ya. De hecho, lo pudimos ver un poco, porque también es un poco un cierto espejo y más incluso dentro de la categoría con el caso de Kim. Se clasificó en este caso en el Tupelo Pro y en el Tupelo Pro la gente se pensaba que era un torneo de ancianos o de todos saberes de qué era y no deja de ser un torneo profesional. Sí, de un nivel más bajo, por supuesto, pero un torneo profesional al fin y al cabo. De hecho, yo recuerdo haber visto el año pasado en Olympia</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1629" target="_blank" class="timestamp">[27:09]</a> y había como unos 20 classic fácil de un perfil bastante bajo gente que juega en otra liga y que se han clasificado con todos los méritos entonces claro, es un poco lo que yo comento que al final y lo comentaba de hecho Raúl</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1644" target="_blank" class="timestamp">[27:24]</a> La principal victoria, en eso es verdad que concuerdo mucho contigo, es intentar salir mejor que el año pasado. Luego ya veremos a ver. Yo, sinceramente, creo que el sistema que tienen para ir a la Olimpia, tú no puedes mandar a 40 tíos o 50 tíos a Classic o 70 tíos a Men's.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1661" target="_blank" class="timestamp">[27:41]</a> Yo creo que el sistema habría que tantearlo. O sea, no sé. ¿Dónde quedas? Tienen que daros la vuelta, tío. Sobre todo que esto es un periodo y más cuando hay un músculo rezagado con respecto al resto. Es una cuestión de años, de trabajo de años para intentar ponerlo en sintonía. Exacto, totalmente. Estamos hablando de unas piernas. Y ojo, que la parte frontal…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1682" target="_blank" class="timestamp">[28:02]</a> Aparentemente se ha mejorado muchísimo, por lo menos en el vídeo se ve. Que solo yo veo más eficiencia la parte de trasera porque, ya te digo, si consiguiese mantener un ritmo de evolución tan bueno como este,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1692" target="_blank" class="timestamp">[28:12]</a> Coño, no sé si algún día llegará a tener… No creo, ¿no? Porque también estructuralmente no tiene la misma estructura en la pierna que en el torso, pero yo creo que… Frank acaba de decir elegantemente una realidad como un castillo, que no le va a dar. Que no va a tener el nivel en las piernas que tiene el torso. No va a poder llegar a equilibrarlo igual al 100%, pero sí a un 90%, 85% o 90%, que eso ya es la hostia, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1718" target="_blank" class="timestamp">[28:38]</a> ¿Cuántos culturistas hemos tenido Classic? Me acuerdo, me venía a la mente ahora Francis Benfato, no sé por qué. Pero Francis Benfato siempre tuvo un torso superpoderoso y la espina no era en su mejor punto, por así decirlo. Pero el tío estaba ahí, ¿sabes? Estaba luchando y acababa el supermestre Olimpia. O Inge también ha cambiado un poquito también. Los físicos han cambiado un poco, ¿no? Y sí que es verdad que la actividad Classic es un poco más dura. O sea, es dura porque el hecho de que hay muchos competidores. Pero bueno, ya te digo yo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1744" target="_blank" class="timestamp">[29:04]</a> Si es estratégico, sabe a dónde ir, pues es muy posible que lo pueda hacer muy bien. Entonces la posibilidad sí que está de clasificar para la Olimpia, claro. Si te pones a buscar competiciones así donde ni nadie, o sea, entonces Frank dice un poco que si es estratégico, estratégico es buscar una competición donde no hay mucho nivel, sí que podría ir a la Olimpia. Oye, pues a lo mejor sí que puede ir. ¿Sería una sorpresa para todos o sí?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1768" target="_blank" class="timestamp">[29:28]</a> Bueno, en el programa ya sabes tú que está con nosotros Alexis. Alexis, la verdad es que sí que fue un poquito menos timorato que Raúl, las cosas como son. Ah, pero Alexis siempre maduro con todos. Sí, sí, sí. Y Alexis comentaba algo que de hecho se ha hecho también un poquito viral, ¿por qué no decirlo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1784" target="_blank" class="timestamp">[29:44]</a> que es el tema de que ve que hay amateurs que están más fuertes que Jorge en categoría Classic. Esto ya… Igual ahí le pegamos al palo, no te voy a decir que no. Pero sí que es verdad que… No, yo no voy a decir que haya amateurs mejor que Tabet, que puede ser que los haya, pero sí que voy a decir que hay amateurs que ahora ya son pros, que ya no son amateurs, recién clasificados que tienen mucho más nivel que Tabet. Hay pros nuevos que tienen mucho más nivel que Tabet. Eso es una realidad como un castillo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1814" target="_blank" class="timestamp">[30:14]</a> Esa impresión, ¿no? Como que Jorge es profesional, por supuesto, con todo derecho, pero que sí que es verdad que va a tener un trayecto más largo que el resto de profesionales para ser competitivo. No sé si a ti te lo parece también. Sí, sí, sí. Yo entiendo porque tiene que mejorar esa parte inferior, ¿no? Y porque ha tenido unos años en los que la producción no ha sido tan poderosa, por así decirlo, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1834" target="_blank" class="timestamp">[30:34]</a> Es que la parte de atrás está súper atrás. Las piernas están súper atrás, tío. Tan… Tan notoria, sí. Exacto. Pero, coño, es que… Yo también veo constantemente amateurs que están más fuertes que muchos profesionales actuales que están en el top 5. O sea, he visto alguno que ha dicho que es profesional. Aún no es profesional, pero vaya mía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1857" target="_blank" class="timestamp">[30:57]</a> Y no por eso le vas a quitar mérito a los demás. El chaval llegará y cuando llegue, pues igual pica un petardazo y lo sube arriba enseguida. O bueno, igual es gente que, como el caso de Jorge, pues llegó a hacerse profesional y bueno, y ahora como profesional tiene un camino de trabajo, de mejora, pues un poquito como le pasó también a Iván. Se hizo profesional muy pronto y es que no sé si Iván se hizo profesional en un año o dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1885" target="_blank" class="timestamp">[31:25]</a> Sí, sí, antes que Yoal. Sí, porque yo, cuando lo hice profesional, creo que fue en el Portugal Pro. No se llama Portugal Pro, no me acuerdo cómo se llama Big Mag. Mister Big, exacto. Y conmigo llevaba, sí, creo que fue un año lo que llevamos trabajando. Un año de preparación más el de la competición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1906" target="_blank" class="timestamp">[31:46]</a> Hizo un regional, luego un nacional y luego se fue directamente a por el campeonato de Portugal. Ya, pero ahora todo ha cambiado. Coño, es un campeonato… Todo ha cambiado. Y amateur tiene cierto nivel. Que hubiese menos. Bueno, no lo sé. Yo estaba en México en aquellos momentos, pero ganó la Procar con tres competiciones. ¿Quién gana la Procar con tres o cuatro competiciones?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=BU9K-IQ9FDE&t=1928" target="_blank" class="timestamp">[32:08]</a> que es un poca gente entonces normal que es un físico que está todavía pues por madurar por hacerse pues hay que darle tiempo hay que darle tiempo y con el tiempo entonces ya veremos si realmente tiene el nivel para saber con los demás confirman un poco y bloca y frank que no está el nivel</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-7tYlguHcuPc">
+            <h2>WILLYREX DESVELA EL PLAN AMERICANO DE PRADELLS...¡Y ESPIN CONTRATACA CON MERLUZA! ¿LLEGARÁ a TIEMPO?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 23/04/2025 14:02</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=7tYlguHcuPc" target="_blank">
+                    <img src="https://i.ytimg.com/vi/7tYlguHcuPc/hqdefault.jpg" alt="WILLYREX DESVELA EL PLAN AMERICANO DE PRADELLS...¡Y ESPIN CONTRATACA CON MERLUZA! ¿LLEGARÁ a TIEMPO?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>RESUMEN GENERAL:</p>
+
+<p>El video presentado trata sobre la situación incierta del atleta Joan Pradels y su posible participación en competiciones de ganadería. El propio Joan ha expresado que está considerando participar en una competición en Estados Unidos, lo que genera especulación entre los seguidores.</p>
+
+<p>Se confirma que Joan va a estar en verano en Estados Unidos y que Fran Espina ha establecido fechas para las competiciones de Merluza. Sin embargo, la situación sigue siendo incierta debido a la falta de información sobre el destino exacto de Joan Pradels.</p>
+
+<p>El canal anuncia la colaboración con Big y el lanzamiento de nuevos productos relacionados con la definición, lo que genera entusiasmo entre los seguidores. Además, se discute la posibilidad de grabar un nuevo episodio del programa y la incertidumbre sobre la fecha del viaje de Joan Pradels.</p>
+
+<p>Entre las noticias más importantes se encuentran la confesión inesperada de Merluza sobre su dieta baja en hidratos, el rompimiento de su rutina de entrenamiento debido a sus necesidades individuales y la crítica a la competencia en Tampa. El objetivo principal de Joan para la temporada es llegar a las finales del campeonato y medir su competitividad en la liga profesional.</p>
+
+<p>En resumen, el video presenta una situación incierta y emocionante en la que Joan Pradels parece estar considerando participar en competiciones de ganadería en Estados Unidos. La situación está aún sin resolver, pero se espera que se revele más información a medida que avance la temporada.</p>
+
+<p>MOMENTOS CLAVE:</p>
+
+<p><strong>La situación es incierta: ¿donde está Joan Pradels?</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=20"</strong> target="_blank">[00:20]</a> sobre cuál tomar si Estados Unidos o la vía europea.</p>
+
+<p>El propio Johan comunicó hace unas semanas que había dos opciones, lo que genera especulación sobre dónde se encuentra actualmente Joan Pradels.</p>
+
+<p><strong>La confirmación de Willyrex</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=36"</strong> target="_blank">[00:36]</a> en este caso Willy Reyes parece que lo confirma.</p>
+
+<p>Willyrex anuncia que Joan va a estar en verano en Estados Unidos, lo que genera un cierto grado de certeza.</p>
+
+<p><strong>El tema de las competiciones y la condición</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=80"</strong> target="_blank">[01:20]</a> merluza eso es lo que ha contestado Fran Espina</p>
+
+<p>Fran Espina confirma la información sobre las fechas de las competiciones y el tema de la condición, generando curiosidad por saber cómo se desarrollará esto.</p>
+
+<p><strong>La promoción del suplemento Iron Road</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=108"</strong> target="_blank">[01:48]</a> aprovechadle de cara al verano porque además están lanzando un montón de productos</p>
+
+<p>El canal anuncia la colaboración con Big y el lanzamiento de nuevos productos relacionados con la definición, lo que genera entusiasmo entre los seguidores.</p>
+
+<p><strong>La especulación sobre la fecha del episodio</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=142"</strong> target="_blank">[02:22]</a> Si queréis hacer algo como invitado, lo hacéis. Pero, en general, los cuatro vivís cerca</p>
+
+<p>Los miembros del grupo discuten sobre la posibilidad de grabar un nuevo episodio y cuándo será este evento.</p>
+
+<p><strong>La incertidumbre sobre la fecha del viaje</strong></p>
+
+<p><a href=<strong>"https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=189"</strong> target="_blank">[03:09]</a> con este delir de Willyrex ya no va valiendo</p>
+
+<p>El canal se ríe de la situación de que no saben dónde está Joan Pradels, lo que genera una cierta inseguridad en cuanto a su próximo movimiento.</p>
+
+<ul>
+<li><p><strong>"Necesito un plan para mi competición en clave"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=246" target="_blank">[04:06]</a> El atleta expresa su necesidad de tener un plan para su competición, lo que indica que está buscando una orientación y apoyo para lograr sus objetivos.</p></li>
+<li><p><strong>"Fran, tengo 13 semanas de preparación, necesito saber a qué competición voy a ir"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=266" target="_blank">[04:26]</a> El atleta se siente nervioso y busca la opinión de Fran para decidir su siguiente competencia, lo que muestra su inseguridad y necesidad de confianza.</p></li>
+<li><p><strong>"Siento que no hay muchas competiciones para Open este año"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=282" target="_blank">[04:42]</a> El atleta critica el calendario de competencias para Open, argumentando que es caro y hay pocas opciones, lo que puede influir en su motivación y preparación.</p></li>
+<li><p><strong>"Creo que la primera fecha que se han podido poner el equipo de Fran y Joan es Chicago Pro"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=369" target="_blank">[06:09]</a> El atleta ofrece una posibilidad de competencia para Joan, sugiriendo que el Chicago Pro podría ser un buen punto de partida para una cadena de competiciones.</p></li>
+<li><p><strong>"Yo creo que pueden encadenar Chicago, Tampa y Texas, y Texas sobre todo"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=395" target="_blank">[06:35]</a> El atleta argumenta que las tres competiciones podrían formar parte de un calendario lógico y rentable para él y Joan, lo que sugiere una planificación a largo plazo.</p></li>
+<li><p><strong>"Fran tiene pinta de haber establecido una fecha cercana para el Chicago Pro"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=444" target="_blank">[07:24]</a> El atleta observa la actitud de Fran hacia la planificación de una competencia en Chicago, lo que puede implicar que se están tomando medidas concretas para lograr sus objetivos.</p></li>
+</ul>
+
+<p>La confesión inesperada sobre su dieta en el minuto 03:12. El entrenador Nuno revela que Merluza tiene una dieta muy baja en hidratos, lo que podría afectar su rendimiento.</p>
+
+<p>¿Por qué rompe su rutina de entrenamiento a las 07:40? Nuno explica que él no puede seguir la rutina de Merluza debido a sus propias necesidades y objetivos individuales.</p>
+
+<p>La crítica a la competencia en el Tampa en el minuto 08:42. Nuno afirma que la competencia es muy fuerte y que Joan necesita tener un buen apretón físico para poder competir.</p>
+
+<p>El objetivo principal de Joan para la temporada en el minuto 09:31. El entrenador afirma que el objetivo principal de Joan es llegar a las finales del campeonato y medir su competitividad en la liga profesional.</p>
+
+<p>La decisión de Johan de competir en Estados Unidos en el minuto 10:21. El entrenador revela que Johan ha decidido competir en Estados Unidos, lo que podría ser un desafío interesante para él.</p>
+
+<p>El tema de Andrew Jacket y su posible conexión con Texas Pro en el minuto 10:48. Nuno menciona que Andrew Jacket era un fijo del Texas Pro y que esto puede influir en la decisión de Joan de competir en Texas.</p>
+
+<ul>
+<li><p><strong>"La noche del programa especial de PCA"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=600" target="_blank">[10:00]</a> 
+El anfitrión anuncia el programa especial de PCA para esa noche, lo que genera expectación entre los espectadores.</p></li>
+<li><p><strong>"Un desafío inesperado"</strong> <a href="https://www.youtube.com/watch?v=7tYlguHcuPc&amp;t=630" target="_blank">[10:30]</a>
+No se proporciona más información sobre el desafío.</p></li>
+</ul>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal y tenemos que hablar de Joan Pradels, porque Joan ha publicado algunas cositas y otras por otro lado, quizás se han filtrado, porque Willyrex que ha sido su último contenido, uno de sus últimos invitados,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=20" target="_blank" class="timestamp">[00:20]</a> Pues igual se le ha ido un poquito de la lengua eso de cuando vuelvas de Estados Unidos grabaremos ese podcast. Estados Unidos, Tampa, bueno ya sabemos todos que había dos opciones, dos grandes vías que se abrían. De hecho lo comunicó el propio Johan hace unas semanas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=36" target="_blank" class="timestamp">[00:36]</a> sobre cuál tomar si Estados Unidos o la vía europea. En este caso yo creo que todos pensábamos que iba a ser Estados Unidos y en este caso Willy Reyes parece que lo confirma. Así que bueno, de la manera más tonta podemos decir así, de la manera más casual, pero da toda la sensación de que Joan va a estar en verano en Estados Unidos. Y también se moja sobre el tema de las competiciones, se moja sobre las fechas. Ya ha hablado con Fran...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=61" target="_blank" class="timestamp">[01:01]</a> Y le ha comunicado que estaría bien fijar alguna fecha sobre todo para ponérsela entre ceja y ceja y apretar sobre todo en algo que en el caso de Joan era bastante necesario, que es el tema de la condición, que es un poco lo que se está persiguiendo ahora. ¿Quién estampa?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=80" target="_blank" class="timestamp">[01:20]</a> merluza eso es lo que ha contestado Fran Espina así que vamos a ver lo que lo que tenemos por delante con Joan porque es desde luego bastante curioso por supuesto no sin antes no olvidarme en el código de descuento Iron Road en toda la web de Big ya sabéis que estamos ahora con nuestros amigos de Big y que tienen una suplementación espectacular así que aprovechad de cara al verano porque además están lanzando un montón de productos sobre todo para el tema de la definición y demás con nuevas fórmulas y todo eso así que aprovechadlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=108" target="_blank" class="timestamp">[01:48]</a> y utilizar el código desconte en el road porque ya os digo yo estoy entre varios quemadores que tengo ahí el diablo que últimamente está funcionando bestial y ahora han sacado una nueva fórmula también de digamos un quemador de grasas en cafeína además muy interesante así que aprovechadlo entrar en la web y utilizar el código porque está de nuevo genial vamos a escuchar a Joan que es lo que lo que invita porque tiene tiene bastante tiene bastante</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=135" target="_blank" class="timestamp">[02:15]</a> Porque partimos de esta especie de revelación de Willyrex y a partir de ahí llegará todo el contenido después. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=142" target="_blank" class="timestamp">[02:22]</a> Si queréis hacer algo como invitado, lo hacéis. Pero, en general, los cuatro vivís cerca, podéis hacerlo y está muy interesante. Sabéis que sea interesante entre vosotros. Que te vengas a un episodio. Cuando quieras. ¿Quieres grabar? Sí. Y te diría que sí. Está aquí todo y que me ayuda mucho y Marta con las decisiones. Pero sí que me gustaría. Pero sí que me gustaría porque me gusta. Y porque lo veo, sobre todo. Pero es cierto que intento no meterme tu cocina.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=171" target="_blank" class="timestamp">[02:51]</a> ¿Antes o después de Estados Unidos? Como queráis. ¿O qué? A ver, como queráis. A ver, estamos aquí, ¿sabes? Si va a ser en mi gimnasio... Bueno, si no lo ves, si no lo puedo borrar en otro sitio. Yo prefiero si grabamos aquí. Ah, vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=189" target="_blank" class="timestamp">[03:09]</a> Pues ahí teníamos, ¿no? Antes o después de Estados Unidos. Yo creo que, bueno, si faltaba algún tipo de confirmación, yo creo que con este delir de Willyrex ya no va valiendo. No va valiendo para saber dónde va a estar Joan Pradence en este caso en verano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=206" target="_blank" class="timestamp">[03:26]</a> A colación de esto, yo no sé si a lo mejor incluso hasta un poquito como respuesta que no lo sé, no sé si esto ha venido justo y lado en cuanto a los días, Joan se mojaba sobre el tema de las competiciones, también quiero que lo escuchemos y vamos a valorar porque aquí sí que hay un punto muy interesante para lo que luego va a hacer Fran, vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=224" target="_blank" class="timestamp">[03:44]</a> Competiciones, estamos a final de abril, empieza mayo, PSB Pro, New York Pro, ahí vienen las grandes competiciones ya, luego llegar el verano, hay también muchas competiciones, más allá en las que yo esté, estoy bastante nervioso, de hecho lo he dicho a Fran, necesito, esto se lo he dicho literalmente, necesito que te hacemos un plan, necesito saber a qué competición voy a ir, sé que estoy ya pocas semanas, porque son pocas semanas,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=246" target="_blank" class="timestamp">[04:06]</a> Pero necesito saber un poco por dónde van los tiros. O sea, llevo 13 semanas de preparación ahora. Quedan pocas semanas de preparación para empezar a competir, luego ya compitiendo es otra cosa. Y le he dicho, Fran, de verdad, es que por mí, por cómo soy, necesito que vayamos a por una competición en clave. Necesitamos que vayamos a por esto. Luego se puede amagar, no se puede amagar, no hace falta decirlo. Pero necesito que entre tú y yo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=266" target="_blank" class="timestamp">[04:26]</a> tengamos ese vínculo y vayamos a por esa competición porque me pone bastante bastante nervioso Fran es muy pausado yo soy muy muy de querer saberlo todo está bien la combinación pero es cierto que se empieza a acercar y a mí me pone muy nervioso y yo confío en él confío al cien por cien en él pero también algo que me raya</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=282" target="_blank" class="timestamp">[04:42]</a> Es que siento que no hay tantas competiciones. Sí hay competiciones, pero en Open este año se ha puesto muy caro el tema. Se ha puesto muy, muy caro el tema. Hay pocas competiciones. Andrew Jack ya se clasificó, que es algo bastante positivo. Pero aún así, hay muy pocas competiciones. Así que teniendo en cuenta que el New York Pro y el PSU Pro no los voy a hacer. Y aparte, están carísimos. Después de esas competiciones sí que empieza mi época. Pero tíos, lo que les decía, ponme a Merluza. Fran Fran, ponme a Merluza. No, no le he dicho eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=308" target="_blank" class="timestamp">[05:08]</a> Pues ahí lo teníamos, evidentemente, el Pittsburgh Pro y New York Pro no está, no llega para estar obviamente, eso quedan tan solo 3 y 4 semanas para que se realicen, pero sí que es cierto que todos lo hemos comentado, el tema de la posibilidad de hacer Chicago, Tampa, Texas, un poco en esa trazabilidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=329" target="_blank" class="timestamp">[05:29]</a> que por otro lado sería, y lo digo sinceramente, sería la herramienta o sería un poco la hoja de ruta más clara en el tema de Joan. Yo insisto en que creo, creo, que tal y como va el físico</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=344" target="_blank" class="timestamp">[05:44]</a> Y teniendo en cuenta un poquito lo que ha desvelado sin querer Willy Rex, que yo creo que era un secreto a voces, tampoco es que haya desvelado el santo grial. Pero sí que es cierto que hablando de eso, yo creo que la primera fecha que estoy convencido que se han podido poner en este caso, esto ya sé lucurar demasiado, pero yo creo que la primera fecha que se han podido poner el equipo de Fran y Joan,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=369" target="_blank" class="timestamp">[06:09]</a> Puede ser perfectamente el Chicago Pro, más incluso que el Tampa, ¿vale? Porque estamos hablando de 18 y 19 de julio, mitad de mes de julio quedan al final, pues fijaros, cuatro semanas de mayo, cuatro semanas de junio, ya son ocho semanas. Ponerle que queden otras dos de abril ahora, que son ya diez, y esto dejan de ser mediados, podemos estar hablando de otras dos semanas más, ponerle 14-15 semanas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=395" target="_blank" class="timestamp">[06:35]</a> yo creo que puede ser un buen momento para arrancar ese Chicago Pro, es un torneo, todos van a tener un gran nivel, pero si os dais cuenta en lo que es en el Open, tenemos aquí la posibilidad de encadenar Chicago, Tampa y Texas, y Texas sobre todo, por eso yo creo que también ha metido a Andrew Jacket en la ecuación, el hecho también de que Andrew Jacket era un fijo de Texas, con lo cual yo creo que pueden ser estos tres campeonatos, el de natural obviamente lo quito porque ese Joan ahí no pinta mucho,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=422" target="_blank" class="timestamp">[07:02]</a> pero el de Chicago, Tampa y Texas, desde luego que creo que son buenas opciones, opciones que están en el calendario y que yo creo que serían un poco las que más se ajustan a lo que él está buscando. Hablando en este caso del nuevo check de Fran, yo imagino que aquí, que es un poco lo que ha comentado en el cardio,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=444" target="_blank" class="timestamp">[07:24]</a> Él le habrá dicho de establecer una fecha y Fran tiene pinta de que ha contestado. Bueno, pues si quieren marcar una fecha y la fecha está cercana, lo que va a haber son recortes. Y recortes en los que aparece Merluza. Por eso también el titular de la miniatura de Tampa. Sí, Merluza. Así que vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=460" target="_blank" class="timestamp">[07:40]</a> En el vídeo me ha dicho que muy bien y tal, pero de lo que me ha puesto. Así como yo le he dicho, Frank, quiero estar a tope ya, tal, no sé qué. Pero es que yo no le he leído lo que te ha puesto. Bueno, pero da igual. La prepa sí. Te he contado la prepa. Sí, pues me parece bien ya que apretéis. O sea, a ver, que tampoco es que... Pero es un buen apretón, eh. Ya, pues es que en algún momento iba a verlo, la verdad. Para que os hagáis una idea, tengo. Menos arroz en todas las... O sea, menos hidratos en todas las comidas. Merluza en vez de salmón. Pollo en vez de ternera. Ternera solo creo que al final del día.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=488" target="_blank" class="timestamp">[08:08]</a> Se va a pasar mal. Se va a pasar mal, eh. Te va a poner la cara de merluza y todavía... Y el olor a merluza. Ya, loco, en verdad, no me acordaba que te solía sudor a merluza y todo. Sí, me ha dicho hoy, Nuno, guau, te veo muy focus entre las notas. Sí, sí, tío, estoy como a lo que toca, a lo que toque, a muerte. En el vídeo me ha dicho que es muy bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=506" target="_blank" class="timestamp">[08:26]</a> Pues él lo teníamos, ¿no? Evidentemente Fran, que como él ha comentado en el anterior vídeo, pues es más pausado, más tranquilo. También os digo que será más pausado, más tranquilo, pero Fran va full, ¿eh? O sea, eso ya lo digo yo. Da la sensación de que Fran...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=522" target="_blank" class="timestamp">[08:42]</a> pues habrá dicho que hay que establecer una fecha y la fecha es quizá un poco más temprana o más cercana a lo que a lo mejor él podía tener en mente, que no lo sé, esto ya lo hablaremos con Fran la semana que viene, pues obviamente hay que apretar y obviamente va a haber que cambiar según qué cosas y hacer una serie de ajustes porque la competición, como digo, pues estaríamos hablando de 14-15 semanas para que Joan pueda sacar la condición que se requiere, que por otro lado, y esa es otra de las cuestiones,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=550" target="_blank" class="timestamp">[09:10]</a> Yo insisto y lo he venido diciendo durante bastante tiempo, la cosa no está tampoco a años luz de lo que debería de estar. Vimos el otro día los rivales que va a tener en el Tampa en el caso de participar, que tiene toda la pinta. Y yo insisto que Joan puede ser competitivo. A mí me da la sensación, viendo un poco la trazabilidad de la temporada, que si hace Chicago, Tampa y Texas, que serían tres competiciones...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=571" target="_blank" class="timestamp">[09:31]</a> y este año finaliza ahí, yo creo que puede ser un buen año para Joan, sobre todo para medir su físico, para medir la competitividad de su físico, que yo creo que puede ser competitivo en la liga profesional, y puede ser un hueso duro de rober, puede meterse en unas finales, yo creo que es el objetivo principal que tienen que tener en mente, al margen del físico que quieran presentar y del posicionamiento de ese físico, sobre todo en Estados Unidos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=595" target="_blank" class="timestamp">[09:55]</a> También ver un poquito el hecho de lo que os estoy comentando, de ver si es un físico que se ajusta a poder entrar en unas finales de campeonatos tan prestigiosos como estos tres que os estoy diciendo. Así que vamos a ver porque desde luego que hay bastante. Así que como digo chicos y chicas, esta es la noticia del entorno, de la realidad de Joan. Un pequeño deslí de Willyres que desde luego que nos confirma algo que ya sabíamos todos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=621" target="_blank" class="timestamp">[10:21]</a> Y es que entre estas dos vías que se abrían, que abría el propio Johan, de competir en Europa y competir en Estados Unidos, Johan ha decidido competir en Estados Unidos, que es algo que más o menos sabíamos todos, y tiene previsto, al menos parece, dar la sensación de que sería Chicago, Tampa y Texas. Serían esos tres. Chicago porque yo creo que encaja dentro de lo que puede ser el inicio en Estados Unidos. Tampa porque es un campeonato del que siempre se lo hemos escuchado mucho decir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=7tYlguHcuPc&t=648" target="_blank" class="timestamp">[10:48]</a> y sobre todo en este caso Texas, porque ha metido en la ecuación lo del tema de Andrew Jacket, y Andrew Jacket era un fijo del Texas Pro, y porque aparte yo creo que tres campeonatos es un poco lo ideal dentro de una preparación. Así que como digo chicos y chicas, dejadme en la caja de comentarios que opinan de todo esto, fuerte like al vídeo, suscribíos al canal, recordad que esta noche a las 10 y media tendremos programa especial de PCA, y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 23/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
