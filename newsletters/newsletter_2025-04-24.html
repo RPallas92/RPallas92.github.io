@@ -1,0 +1,578 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 24/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">24/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Joelus communis 2.0</strong>: <a href='#video-XaekzdErYg0'>DIRECTO PREGYM</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-XaekzdErYg0">
+            <h2>DIRECTO PREGYM</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joelus communis 2.0</span>
+                <span class="date">Publicado: 24/04/2025 11:42</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=XaekzdErYg0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=XaekzdErYg0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/XaekzdErYg0/hqdefault_live.jpg" alt="DIRECTO PREGYM" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>RESUMEN GENERAL:</p>
+
+<p>Este video es una ventana cruda y multifacética a la vida y la mentalidad de un creador de contenido digital, revelando sus luchas internas, contradicciones y controversias. A lo largo de la transmisión, el individuo navega por problemas personales, incluyendo dificultades digestivas, una batalla con hábitos saludables y la frustración con relaciones pasadas, todo mientras interactúa con su audiencia de una manera directa, a veces insultante, pero siempre honesta.</p>
+
+<p>El video explora la compleja relación entre imagen pública y realidad. El creador reconoce cómo es percibido, a menudo como una víctima, y se muestra consciente de la paradoja entre sus acciones y la narrativa que se construye sobre él. También analiza críticamente el panorama digital, distanciándose de figuras que promueven el “hate” y denunciando la hipocresía de algunos “gurús” del bienestar y el autoayuda, acusándolos de priorizar el beneficio económico sobre el genuino apoyo a sus seguidores.</p>
+
+<p>Gran parte del contenido se centra en la denuncia de prácticas manipuladoras y engañosas dentro de la comunidad de influencers y la industria del bienestar. Se exponen estrategias de marketing cuestionables, el uso de la fe ciega para controlar a los seguidores, y la contradicción entre el discurso desinteresado y la acumulación de riqueza personal. El creador no duda en criticar a aquellos que considera hipócritas o explotadores, y en defender su propia labor, aunque esto implique enfrentarse a la controversia y las críticas.</p>
+
+<p>Finalmente, el video pinta un retrato de vulnerabilidad y autenticidad. A través de confesiones personales, momentos de frustración y la aceptación de sus propias contradicciones, el creador se presenta como un individuo complejo y en constante evolución, buscando su lugar en un mundo digital cada vez más competitivo y superficial. La transmisión se convierte en una mezcla de introspección, crítica social y un intento de definir su propia identidad en medio del ruido mediático.</p>
+
+<p>MOMENTOS CLAVE:</p>
+
+<p><strong>"[¡Ataque intestinal en directo!] <a href="</strong>https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=115" target="_blank">[01:55]</a>" 
+El streamer confiesa repetidamente que le duele la barriga y está sufriendo problemas digestivos, admitiendo que el yogur que se comió le ha sentado mal. A pesar del malestar, intenta continuar con la retransmisión.</p>
+
+<p><strong>"[Insultos y sinceridad brutal a la audiencia]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=329" target="_blank">[05:29]</a></p>
+
+<p>El streamer no se corta al agradecer el apoyo, recurriendo a insultos cariñosos ("hijos de puta", "cabrones") para conectar con su audiencia. Este lenguaje directo, aunque controvertido, crea una atmósfera de familiaridad y autenticidad, revelando su estilo sin filtros.</p>
+
+<p><strong>"[En la batalla contra su TCA: Confesión impactante]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=670" target="_blank">[11:10]</a>
+Yolus revela que le quedan 4.000 pasos por completar un reto, y confiesa que la motivación inicial (“la magia”) se ha acabado. Reconoce que su pareja, Jennifer, le ha “normalizado” después de meses sin verse, lo que implica una lucha interna para mantener la disciplina en sus hábitos saludables.</p>
+
+<p><strong>"[Pánico tecnológico y confesión sobre antojos]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=1079" target="_blank">[17:59]</a>
+En medio de la desesperación por no saber cómo descargar un logo en su Mac, el creador de contenido confiesa abiertamente que se permite comer dulces incluso en definición (cuando está intentando perder peso), pero que es importante controlar la frecuencia. Este momento expone la vulnerabilidad y honestidad del creador, contrastando con su aparente control sobre la dieta.</p>
+
+<p><strong>"[El misterio de la entrevista vetada]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=1276" target="_blank">[21:16]</a>
+El creador revela que Deluxe le invitó a un podcast con una propuesta "salseosa" que finalmente no pudo salir adelante y que "nunca se podrá desvelar", dejando entrever una posible polémica o contenido explosivo que se quedó en el tintero.</p>
+
+<p><strong>"[El dardo al amor no correspondido]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=1623" target="_blank">[27:03]</a> 
+El entrevistado confiesa haber consumido gran cantidad de contenido de "fuckmen" y se siente merecedor de una entrevista con el creador. Revela que, aunque éste no se la conceda, lo acepta con resignación, equiparándolo al amor no correspondido. Este momento desvela una mezcla de ambición, frustración y una particular autopercepción.</p>
+
+<p><strong>"[¿Dónde está la deshumanización?] <a href="</strong>https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=1813" target="_blank">[30:13]</a>"
+Carto exige que le señalen el momento exacto en el que supuestamente deshumaniza a alguien, mostrando su frustración ante acusaciones sin fundamento. Este estallido verbal revela una fuerte defensa personal y un desafío directo a sus críticos, escalando la tensión del debate.</p>
+
+<p><strong>"[La hipocresía del 'amor' y la publicidad del odio]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=2135" target="_blank">[35:35]</a>
+El hablante admite que las críticas, aunque las califique de "hate", son en realidad publicidad para él, permitiéndole difundir su mensaje. Esta contradicción entre predicar amor y prosperar con la controversia resulta impactante y revela una estrategia de marketing astuta, pero cuestionable.</p>
+
+<p><strong>"[El estallido contra los 'haters' y la defensa de su labor]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=2524" target="_blank">[42:04]</a> 
+En un momento de fuerte carga emocional, el orador explota contra aquellos que envían comentarios de odio, tachándolos de "gilipollas, subnormales y retrasados mentales" por atacar a "Cartoon". Defiende con vehemencia su trabajo y sus valores, afirmando que jamás ha incitado a ese tipo de comportamientos y siente repulsión por ellos.</p>
+
+<p><strong>"[La confesión impactante sobre su imagen pública]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=2734" target="_blank">[45:34]</a>
+Ferrán revela que le ven como "el pobrecillo de la historia", la víctima, a pesar de sus acciones y polémicas. Admite que le "alucinan" con sus excentricidades, pero insiste en que la percepción general es la de alguien que ha sufrido, cayendo en la red de figuras como Yados, a quien acusa de querer "sacarle las tripas". Esta reflexión expone su conciencia sobre cómo le percibe la audiencia y la paradoja entre su imagen pública y su realidad.</p>
+
+<p><strong>"[Distanciamiento radical del 'hate' y defensa de su estilo]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=2921" target="_blank">[48:41]</a>
+Carton se desmarca explícitamente de figuras como Joelus y Antonio Gutiérrez, quienes se dedican a analizar y criticar con dureza a otros creadores. Afirma que no se siente parte de ese grupo y que sus críticas, aunque directas, no son "hate", sino intentos de ayudar, dejando claro su postura y diferencias en el panorama digital.</p>
+
+<p><strong>"[Flexiones antes del podcast: ¿Superstición o locura?]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=3244" target="_blank">[54:04]</a>
+El entrevistador, visiblemente impactado y divertido, no puede creer que el invitado haya hecho flexiones <em>antes</em> de comenzar el podcast. Esta revelación desata una cascada de comentarios sobre la excentricidad y la incomprensibilidad de la acción, planteando si es una práctica consciente para mejorar el estado de ánimo o simplemente algo absurdo.</p>
+
+<p><strong>"[La verdad incómoda sobre el gurú del fitness]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=3558" target="_blank">[59:18]</a>
+Se revela que el líder de Ayodos Fitness aumenta el precio de sus programas para limitar el acceso a experiencias más personalizadas (mentorías, viajes), sugiriendo que prioriza el beneficio económico sobre la accesibilidad real al bienestar. Se plantea la pregunta de si esto se debe a un genuino deseo de ayudar o a una estrategia de manipulación basada en la fe ciega de sus seguidores.</p>
+
+<p><strong>"[La escalofriante justificación del sufrimiento]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=3629" target="_blank">[60:29]</a>
+El participante expresa una creencia perturbadora de que si este líder religioso quisiera, podría "descuartizarlo" y estaría bien, argumentando que sería "por el bien". Revela una entrega total y una lógica distorsionada donde el sufrimiento es aceptable, mostrando un alto grado de manipulación y control mental.</p>
+
+<p><strong>"[La hipocresía del gurú materialista]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=4039" target="_blank">[67:19]</a>
+El ponente denuncia la contradicción de un "gurú" que promueve el desapego material mientras ostenta una vida de lujo y riqueza obtenida, según él, a través de la "estafa" a sus alumnos. Denuncia que este líder mantiene a sus seguidores pagando y en una "fe ciega" mientras se beneficia de su dinero.</p>
+
+<p><strong>"[¿Empanadillas o Pescado al Horno?]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=4283" target="_blank">[71:23]</a></p>
+
+<p>El locutor expresa su frustración con la supuesta desconexión entre lo prometido y lo entregado en un curso. Señala que si paga por aprender a hacer empanadillas, espera aprender a hacer empanadillas, no ser desviado hacia otra cosa, como pescado al horno, lo que ilustra su escepticismo sobre la autenticidad del contenido y su utilidad práctica.</p>
+
+<p><strong>"[La cruda realidad tras la fachada]"</strong> <a href="https://www.youtube.com/watch?v=XaekzdErYg0&amp;t=4525" target="_blank">[75:25]</a>
+El creador admite abiertamente que “esto va un poco mal” y expresa su frustración por la situación actual, revelando que está deseando volver a su entorno habitual para funcionar correctamente. Esta confesión desmiente la imagen de optimismo constante que suele proyectar.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=8" target="_blank" class="timestamp">[00:08]</a> Ahora me pilla más fluido. ¿No habías cerrado antes el wifi? Cuando te lo he dicho, ¿sí? Antes iba súper mal. Ahora va mejor. Ahora sí. ¿Y de tu móvil la has quitado? Ahora sí se puede. Ay, me duele la barriga. Sí, no está. Solo está esto y esto. Pero en teoría debería de ir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=35" target="_blank" class="timestamp">[00:35]</a> ¿Hola? ¿Se escucha? ¿Se ve bien? ¿Funciona? Hostia, me he comido el yogur y ahora me ha sentado mal. Ahora sí que va. No se oye. Debería de oírse. Hola, Patimicola. Debería de oírse. Además, debería de oírse bien. Que me traigo el micro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=60" target="_blank" class="timestamp">[01:00]</a> Paga el internet. Se ve a frames. Lo que sí que va fatal es el chat. Esto no funciona. Así que lo quito. ¿Se escucha bien? ¿Funciona? ¿Sí se oye? Vale. ¿Y cómo va de fluido? ¿Lo veis bien fluido? ¿Cómo lo veis?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=89" target="_blank" class="timestamp">[01:29]</a> Va bien fluido. Claro, la putada es que YouTube va con delay. No es tan directo como Twitch. Se ve bien. Se ve bien y se escucha bien. Vale. Pues nada, gente. Bitcoin, el código luz 10. Te veo fuerte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=115" target="_blank" class="timestamp">[01:55]</a> Verazo de 35 literal, eh. Hostia, gente. Me duele un poquito la barriga. Vamos a hacer lo que podamos, ¿vale? Vamos a estar de charlita tranquilos. Pero me duele un poquito la barriga. El balibeli a tope. A ver, os cuento. Se ve perfecto y se oye. Muchísimas gracias. Os cuento. No he podido... O sea, no se puede hacer retransmitión en Twitch aquí en el extranjero. Porque, claro, he cambiado de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=146" target="_blank" class="timestamp">[02:26]</a> He cambiado de sim para poder tener internet aquí y no tengo la otra sim. Y entonces Twitch te envía un código de verificación, de autificación en dos pasos. Total, que no podía hacerlo. No podía hacerlo, así que estamos aquí en YouTube. ¿Para cuándo la reacción de Carton? Pues deberíamos de reaccionarla ahora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=169" target="_blank" class="timestamp">[02:49]</a> deberíamos de reaccionar la hora, lo que pasa es que no sé si va a ir bien el directo o no, la verdad, me da un poco de cosilla, es que por ejemplo yo aquí lo estoy viendo todo en negro, o sea no veo absolutamente nada, entonces esa es la cuestión, a ver que Jennifer ha dejado esto aquí, aquí es de noche ya,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=196" target="_blank" class="timestamp">[03:16]</a> Aquí es de noche ya. Estoy reventado, eh. Mucha calor hace aquí, eh. La verdad. ¿Cómo van las cagaleras? Pues ahora mismo debería de irme otra vez a intentarlo, eh. Porque estoy que... Soy cagasagua. Soy cagasagua, gente. Estoy bastante... Sí, para la barriga arroz, pollo y manzana. Estoy en ello. Me he comido un yogur también. A ver si me afecta y me da un como... Flora prebiótica, probiótica. Pero, buah...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=224" target="_blank" class="timestamp">[03:44]</a> Estoy reventado, eh. Estoy reventado. A ver, lo malo, gente, es que yo no me he traído focos. Me he traído la cámara, por eso lo veis también, a pesar de la poca luz que hay aquí. Y también el micro y el portátil y tal. O sea que directo se está podiendo hacer. Eso es bueno. Eso es muy buena señal. Lo malo, que como no he podido entrar en Twitch, no tengo la configuración hecha. Entonces falta toda la promo de Big, de no sé qué, de no sé cuánto. Así que lo diré verbalmente. Big, con el código de luz 10.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=247" target="_blank" class="timestamp">[04:07]</a> Pero sí que al menos hemos conseguido que funcione. Así que eso es medianamente bueno. En teoría, si yo hago esto, se cambia de... ¿No se cambia? Fuck. ¿Se cambia esto? Sí, en teoría se cambia. Hola, hola, hola. Esto en teoría debería estar bien configurado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=274" target="_blank" class="timestamp">[04:34]</a> Esto fuera que no funciona. Está puesto el chat de Twitch, pero no el de YouTube. Así que de puta madre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=288" target="_blank" class="timestamp">[04:48]</a> Yogurica, la galera mal va el tema. Pues, por lo mejor, eso es lo que me ha sentado mal, ¿no? Yo pensaba que me vendría bien. Eh... Cantarabit de Proto. ¿De dónde estás? ¿Tocó viaje? Sí, estoy en Bali. Estoy en Changú, ahora mismo. Y mañana vamos a Uluwatu. Y ese es un poco el plan de ruta. Luego, pues, más tarde iremos a Lombok y a más sitios. Estamos viendo, pues, si nos gusta esto o no. De momento, Changú, gente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=310" target="_blank" class="timestamp">[05:10]</a> Ya os contaré más en los blogs que están a punto de llegar, están saliendo los últimos blogs ya de Adigi y de Tarragona, ya llevo una semana grabando aquí y están a punto de salir los blogs nuevos, creo que os va a gustar mucho y Changu tiene pues sus cosas buenas y sus cosas malas, para mí resuenan más las malas, la verdad, o sea las malas son...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=329" target="_blank" class="timestamp">[05:29]</a> Son más... Bueno. ¿Cómo se encuentra el señor? Qué grandes. Oye, tío. Sois los mismos hijos de puta de siempre de Twitch, pero en YouTube. Muchas, muchas gracias, cabrones. Muchas, muchas gracias. Y eso que no he avisado. Cuando vuelva allí a Tarragona, volveremos a reactivar los directos aquí en YouTube. Así que suscríbete, dale like si no estás suscrito. Haremos doble directo en Twitch y en YouTube. Pero de momento solo los vamos a hacer en YouTube porque no puedo entrar en Twitch aquí en Indonesia. Así que de putísima madre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=358" target="_blank" class="timestamp">[05:58]</a> Fídele consejos de Noticiana Camper. Vamos a ver un poco de a Carton, eh. Llego un poco tarde a la entrevista, pero es lo que vamos a ver hoy. Vamos a ver a Carton y también a Andoni, ¿vale? Hostia, putada también, que se lo decía Jenny porque iba justo a cortarme el pelo para estar bien bello para vosotros. Pues bien bello para vosotros. Claro, aquí en YouTube tiene mucho copyright, entonces el canal de Joelus va a quedar separado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=385" target="_blank" class="timestamp">[06:25]</a> Putada. No vamos a poder ver First Dates ni nada. Así que... Un poco... Un poco fuck, men. Un poco putadón. ¿En Twitch no estás? No. Porque no puedo entrar en Twitch. No puedo entrar en Twitch, gente. Muchísimas gracias a todos por estar aquí. Llevo una semanita desaparecido, en realidad. Solo me veis por Instagram. Donde... Pues cuelgo mis cositas y mis fotitos. Espero que le deis like, hijos de puta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=408" target="_blank" class="timestamp">[06:48]</a> Pero estoy bastante desaparecido. Al menos hoy ya me encuentro bien. Yoluz, ¿qué haces? Ahí te vas a morir de hambre. Nada, hay buenas cosas. Hay buenas cosas. Realmente está bastante bien. Pensaba que iba a ser peor el tema de la comida. Pero está bastante bien. Sí que es cierto que... Claro, depende de dónde vayas... Hay sitios donde yo no comería ni que me pagasen 5 millones de euros. ¿Sabéis los vídeos típicos que hemos visto de la India y tal?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=437" target="_blank" class="timestamp">[07:17]</a> Pues va por ahí la cosa. Pero hay otros que, oye, tienen muy buena pinta. La verdad que está bastante turisteado esto. Y hay muchos sitios como para turistas, como para guiris, que están de puta madre. Tienen muy buena pinta. Están bien, ¿sabes? Cuidado con hacer Twitch y YouTube a la vez. No sé, pero creo que te pueden banear en Twitch. ¿Sí? No tengo ni idea, la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=459" target="_blank" class="timestamp">[07:39]</a> ¿Kick funciona ahí? Pues no lo he probado. No lo he probado. No lo he probado. Yo diría que no, ¿eh? Yo diría que no. Aquí está prohibido la pornografía y las apuestas. Así que yo diría que Kick debería estar prohibido aquí. O sea, no creo que trabajen con una plataforma de streaming que está hecha a base de apuestas, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=476" target="_blank" class="timestamp">[07:56]</a> Besar más al váter que a nosotros. Hostia, de verdad, muy mal. Lo peor es que, claro, no es... Bueno, no vamos a entrar en detalles, pero que lo pasó un poquito mal, la verdad. Llevo ya...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=491" target="_blank" class="timestamp">[08:11]</a> Pille tu VPN Pero no, va con ubicación O sea, da igual que cambies tú la VPN La ubicación de tu dispositivo te prohíbe Eso Da igual la VPN Eso gente, que lo peor es que llevo 5 días sin entrenar Entonces me siento un poco culpable Y yo ayer hablaba con Juca de que Pues me siento un poco culpable porque no estoy entrenando</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=510" target="_blank" class="timestamp">[08:30]</a> Y ya siento como que voy a perder el físico, como voy a perder el físico, como voy a perder el físico. Como que debería de hacer mejor las cosas para competir, no sé qué. Pero es lo que hay, o sea, si estoy malo, estoy malo. ¿Qué tal el cumple de Jenny? Pues súper bien. Fuimos a una pizzería que la verdad tenía mejor pinta de lo que sabía realmente. Pero estuvimos súper a gusto y súper bien. Fuimos a dormir a un avión. Estuvo muy chulo. Es un hotel avión. Le salió competencia en la de recorte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=539" target="_blank" class="timestamp">[08:59]</a> ¿Debería de ir a entrenar pierna? Por supuesto. O sea, estás tardando. Panquerina. Estás tardando. Como técnica para la definición. No, no, no. Definición express. Mira, yo vine aquí pesando 79 kilos. ¿No? 79,3 o así. 79,6.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=558" target="_blank" class="timestamp">[09:18]</a> Y peso ya 78,78 con 15. Depende de cuando me... Me... 4 o 5 días, ¿sabes? Me estoy pesando cada día para ver el deterioro. Pero vamos, que estoy en la mierda. Estoy en la mierda. Bueno, gente, vamos a ver a Carton. Que ha hablado en el podcast, ¿vale? Tengo que buscar el minuto y todo. Tengo que comprobar que todo se ve bien. Putadón. Putadón. No tengo cascos. ¡Jennifer!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=583" target="_blank" class="timestamp">[09:43]</a> A lo mejor Jenny tiene cascos. Claro, no había caído en esto. No me he traído los cascos del stream. Si los escuchará doble, no lo sé. ¡Jenny! Jenny estará con sus propios cascos. No sé si podremos conectar aquí los cascos. ¿Puedes saludar a Roberto Galán? Le encantan tus vídeos. Roberto Galán, un saludo y un abrazo. Muchísimas gracias por el apoyo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=612" target="_blank" class="timestamp">[10:12]</a> esa es la buena mujer trae las cosas mujer que salude la mano a ver si se pasa está arriba es que hemos cogido un apartamento que la verdad está bastante bien tiene cocina ya os lo enseñaré por los blogs la villa entera no quiero mover mucho esto que no se me destaza vale y tiene el piso de arriba con la de esto para que no le moleste por si me quedo hasta tarde porque aquí ya son las aquí ya son las 7 casi así que es un poco el plan</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=641" target="_blank" class="timestamp">[10:41]</a> Yo voy a ir a entrenar sobre las 9, o sea, tenemos hasta las 9 o así. Porque aquí entrenar por... Aquí entrenar... A la hora que yo voy normalmente es locura absoluta. O sea, ir al mediodía a entrenar es una locura absoluta. O sea, hace muchísima calor. Jennifer, ¿tienes cascos? Ah, ¿y de cable? No hay. Es que no había caído, claro. Si voy a poner un vídeo... Uy, que se cae esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=670" target="_blank" class="timestamp">[11:10]</a> Si voy a poner un vídeo... Lo hemos traído todo menos los cascos, gente. A lo mejor se escucha doble. Bueno, ahora probamos. Tranqui. Hola, Yolus. Tengo 16 años y tus vídeos me ayudan mucho a superar mi TCA. Grande. Gracias por sacar una sonrisa siempre. Ole, Paula. Tú puedes. Poquito a poquito. Y buena letra. Se te ve mejor. ¿Cómo se nota que Jenny te hace muy bien? Pues justo se va y me abandona. Se va ahora mismo a hacer los pasos. Porque esta mañana...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=697" target="_blank" class="timestamp">[11:37]</a> Le quedan 4.000. Dice, bueno, pero esta mañana yo iba a salir a hacerlo solo. Se ha acabado la magia ya. Tres días y la magia... Las tres días la magia es muy bien, pero la magia ya se ha acabado. Ya me ha normalizado. Yo se lo digo. Me tiene normalizado ya. Hacía un mes y medio, ocho o cinco meses que no nos veíamos. Y ahora ya me ha normalizado y no pasa nada, ¿sabes? Pero bueno, es lo que hay.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=724" target="_blank" class="timestamp">[12:04]</a> Yo soy aquel flaquito de gimnasio municipal Hola Yolu, solo se puede contactar contigo a través de Insta No, también a través del email Pero actualmente el email está bastante parado No lo estoy revisando porque estoy como de vacaciones O sea, he desconectado bastante estos días Solo me he dedicado a amar a mi mujer A amar a mi mujer Y a querer a mi mujer Y a adorar a mi mujer Adorar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=752" target="_blank" class="timestamp">[12:32]</a> Adorar al váter y también a ir al váter. Me he dedicado a ir al váter también. Hostia, es que es muy incómodo encima porque, claro, menos mal que tenemos dos baños, pero claro, a Jenny no le gustan los ruidos de caca. Entonces... Entonces, claro, menos mal que hay dos baños y arriba hay otro bajo, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=772" target="_blank" class="timestamp">[12:52]</a> Ánimo y fuerza con tu proyecto. Y a pesar de los malitos obsesionados contigo. Hostia, muchas gracias. Audítete. Muchas, muchas gracias. Justo aquí. A lo mejor en el directo de hoy algún tontito cae. Porque como es YouTube. Hay más público retrasado. Pero bueno. Porque normalmente en Twitch somos un nicho tranquilito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=794" target="_blank" class="timestamp">[13:14]</a> Y abrazar la taza y levarte literal, tío. Literal. Es mejor descansar. Sí, estoy descansando estos días. Desconectando un poquito. Voy haciendo cositas y tal. Pero con las asesorías. Pero vaya. Estoy bastante tranquilito. No estoy haciendo mucho. De todas formas, el canal de vlogs. El Joelus 2.0. Este no. El amarillo. El otro. Este es el azul. Adiós. Te quiero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=817" target="_blank" class="timestamp">[13:37]</a> El amarillo. Estamos subiendo los blogs, así que ahí sí que estamos a tope, ¿vale? Vale, gente, vamos a intentar reaccionar. Necesito vuestro feedback, necesito vuestro amor, necesito vuestra condición sine qua non de apoyo incondicional, ¿vale? Para ver si esto se ve bien o no se ve bien o qué pasa, ¿vale? Así que, por favor, os quiero lo más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=845" target="_blank" class="timestamp">[14:05]</a> activos en el chat posible para ver si calibramos el tema de niveles de audio y demás para que estéis a gusto vale vamos a reaccionar a cartón que me habéis bombardeado con ello y vamos a ver si se escucha bien el vídeo que pongo conmigo si se escucha doble si no etcétera vale sin miedo al éxito es lo que vamos a ver</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=875" target="_blank" class="timestamp">[14:35]</a> Aquí está. Claro, no sé cómo se escuchará, gente. Eso es putada, ¿eh? No sé cómo se escuchará. A ver. A ver, a ver, a ver, a ver, a ver. Dame un segundo. Hostia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=902" target="_blank" class="timestamp">[15:02]</a> Vale. Hay que modificar una cosa. Hay que modificar una cosa. Un segundo. Es que encima estoy en Mac y no tengo ni puta idea. Encima estoy en Mac, gente. Y no tengo ni puta idea. Hay que capturar ventana y no pantalla. Un segundo, un segundo, un segundo. Es que está todo desconfigurado aquí. Está todo desconfigurado. Me duele la barriga como su puta madre. Me duele la barriga como su puta madre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=933" target="_blank" class="timestamp">[15:33]</a> Me duele la barriga como su puta madre. Vale, esto fuera. Y ahora este lo voy poniendo aquí. Pon otro Joelus, no con otro Joelus, ¿sabes? Claro, esto como pollas. Lo dejo así, ¿no? Y yo me pongo... Y esto lo abro un poco más, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=962" target="_blank" class="timestamp">[16:02]</a> Vale. Estamos nice. Pongo un poco aquí. Que se me vea el hombrito, ¿no? Que para algo lo trabajo. Que se me vea ahí el hombrito. Reacción así. ¿Vale? ¿Os parece bien que reaccione así? Voy a estar así todo el rato. ¿Vale? Se me vea el hombrito, coño. Directo en el váter, directo. Cuidado, eh. Cuidado con directamente estar en el váter y ya está. Me gusta esa, eh.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=989" target="_blank" class="timestamp">[16:29]</a> Me gusta mucho esa, eh. La verdad. Me estoy cagando. Cagandu. Cagandu es 42 en francés. Vale, lo voy a poner así y así. Vale, yo creo que está bien. Y ponemos aquí abajo un big cutre. Ok, gente. Ponemos aquí abajo un big cutre. Espérate. Ahora sí lo veis, ¿no? Vamos a ver esto que es cartón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1016" target="_blank" class="timestamp">[16:56]</a> ¿Cómo va el Mac? Es que no tengo ni idea encima de cómo va el Mac, tío. ¿Cómo abro una pestaña nueva? ¿Cómo abro una pestaña nueva? Dios mío. Vamos a ver a Andoni también si nos da tiempo. Por la madre que me parió. El nombre padre espiritual. ¿Esto? ¡Epa! ¡Crack! Big. Logo. ¿Esto qué es? Estos son Bigs que no son mi Big. Big subs.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1047" target="_blank" class="timestamp">[17:27]</a> Ahí está. Descargamos el logo. Big subs. What else? ¿Cómo me descargo? ¿Cómo hago? ¿Cómo hago clic derecho? ¿Cómo hago clic derecho aquí? La madre que me parió, tío. Se ve rarete. Ya, gente. Es que no tengo el... No estoy en el setup de siempre. Pero se escucha bien, ¿no? Y todo. Tu primer mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1079" target="_blank" class="timestamp">[17:59]</a> Mi nueve y yo empezamos a verte desde hace bastante Y nos ayudaste a bajar de peso ¡Grandes! Pero, ¿cómo haces para lidiar con los antojitos de dulce en definición? Pues me los doy, ya está, pero hay que controlar No dáselos siempre, sin más No sé cómo se hace clic derecho, gente Doble clic No No</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1108" target="_blank" class="timestamp">[18:28]</a> A ver si me lo puedo descargar. Guardar. ¿Es descargar o guardar? Crear colección. ¿Qué está pasando? ¿Qué está pasando? ¡Por Dios mío! A lo mejor es la imagen que no se puede. No. Pues lo dejamos así, ¿no? ¿Se ve tan mal? Pues un poco, ¿no? Me pongo más grande.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1144" target="_blank" class="timestamp">[19:04]</a> Me pongo aquí. Y esto aquí. Intentaré configurar esto para los próximos directos. No voy a hacer muchos aquí. Me quedan dos o tres semanas aquí. No voy a hacer muchos. Pero que esté más chulo. No había caído en esto. Mantén la tecla de control apretada. Apletada. Apleta. La tecla control apretada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1173" target="_blank" class="timestamp">[19:33]</a> ¡Epa! ¡Epa, epa, epa! ¡Sí, señor! ¡Sí, señor! ¡Sí, señor! ¡Sí, señor! ¡Súbanle el sueldo a ese hombre! ¡Súbanle el sueldo a ese hombre! Vale, vale, vale. Y ahora aquí quiero meterle fuente, imagen, agregar fuente, imagen, buscar... ¿Dónde pues ya se habrá guardado? No lo sé. Coño, que ese es el ordenador de Jenny. Me mata. Descargas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1211" target="_blank" class="timestamp">[20:11]</a> Solo me deja esto. Cuidado con el correo de Jenny, no jodas. Me mata, eh. Por favor, no hagáis cosas malas con eso, eh. Nada, no sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1239" target="_blank" class="timestamp">[20:39]</a> Lo dejamos así, ¿eh? No me voy a rayar, la verdad. O lo podemos poner postproducción. Luego Quique que lo ponga, ¿no? Pues lo dejamos así. Lo voy a grabar. Estoy aquí. Vale. Voy a hacer una introducción, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1257" target="_blank" class="timestamp">[20:57]</a> Damas y caballeros, estoy en Bali, como habéis visto en la mini introducción, van a salir dentro de poco, si no han salido ya, los pedazos de vlogs allí en Bali, haciendo un poco de cartón también, viendo dónde como, dónde duermo, cómo entreno y demás, así que creo que es muy interesante, muchísimas gracias, me habéis bombardeado, estoy de vacaciones con el tema de la entrevista de Delox</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1276" target="_blank" class="timestamp">[21:16]</a> Con Carchon. Por cierto, Deluxe nos invitó a su podcast a hacer unas cositas. Primero era bajo una cosa que me parecía muy salseoso y que creo que iba a venir muy bien, pero finalmente no podrá ser. Nunca se podrá desvelar, pero qué gracia me hacían algunas cosas. Y finalmente va a ser para otra cosa en teoría, así que súper guay. Yo me presto. Fue bajo conmigo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1297" target="_blank" class="timestamp">[21:37]</a> En cuanto a la entrevista, no he podido traerlo antes, vengo a traeros lo que queréis. Sí que es cierto que he visto algún clip que me habéis pasado, donde se me menciona y donde directamente se apela a mi nombre y él da su opinión. Así que vamos a verlo, nos enfrentamos a ello. Muchísimas gracias, estamos en plena definición. Fijaos qué hombritos de Chufelus. ¡Vamos a ello!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1319" target="_blank" class="timestamp">[21:59]</a> Gente, aquí no están los spams. Es mi setup habitual. Disculpadme cómo soy y tal. Estoy en medio de la selva. Suficiente que estamos haciendo stream. ¿Vale? Así que gracias. Sobre todo mis aventuras están en el canal de YouTube y en Instagram. ¡Vamos a ver! Vamos a ver, vamos a ver, vamos a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1336" target="_blank" class="timestamp">[22:16]</a> Vale, gente, ahora necesitaré que me digáis cómo se escucha. También, Quique, pondremos esto, lo adornaremos, ¿vale? Adornaremos... Esta escena la adornamos, no sé cómo, pero aquí ponemos arriba cosas y aquí también cosas, pues de Vic o de otras cosas, ¿vale? El Instagram, no sé qué. Y así yo la aprovecharé también para luego ponerlo a diferentes otros directos, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1362" target="_blank" class="timestamp">[22:42]</a> Vale. Eh... Saludos de Canarias. Grande. Pedazo de hombros. Grande. Ojo, que está aquí... Quique. Grande. Eh... Tefidia Reika. Literal. O sea, estoy que me cago. Estoy que me cago. Vale. Eh... Un pedazo de cabezón se me ve con la cámara tan arriba, tío. Esto es así. Y esto es así, ¿no? Vale, me tenéis que decir, por favor, os lo pido. Os suplico. Os impero a que me digáis qué tal se ve. Vale. Vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1395" target="_blank" class="timestamp">[23:15]</a> ¿Qué tal se ve y qué tal se escucha? Muy importante ¿Dónde vas a descubrir en qué consiste exactamente esta profesión? ¿Cuáles son sus beneficios? Vale ¿Cómo se escucha?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1425" target="_blank" class="timestamp">[23:45]</a> Se escucha doble, se escucha bien. ¿Lo escucháis guay? Se escucha flojo. Vale, a ver. ¿Lo puedo subir? ¿Lo puedo subir? ¿Lo puedo subir? ¿Lo puedo subir? ¿Lo puedo subir? ¿Qué difícil que es el Mac, Dios mío? ¡Está al tope! Ah, porque no empilla el audio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1449" target="_blank" class="timestamp">[24:09]</a> No me pilla el audio. Me pilla el audio del micro. Ojo, pues lo pongo más fuerte, ¿no? Esto. A ver. Si está al tope. ¿Cómo se sube el audio en...? ¿Cómo se sube el volumen en un Mac? Esto es muy complicado, gente. No sé. Aquí, aquí, aquí. Lo tengo, lo tengo. Vale, a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1471" target="_blank" class="timestamp">[24:31]</a> Eso material que tanto desea O tanto les da miedo perder Por eso Yo sé que puedo ayudar a esas personas Pero no es algo que he querido hacer Porque sé que esas personas al no ver eso en mí ¿Qué tal ahora? ¿Bien? ¿Qué tal ahora? ¿Bien? En el teclado, pero voy a reiniciar ¿Alte F4? Grande, muchas gracias Elvira ¿Qué tal? F12, sí, ahí he estado ¿Se escucha mejor?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1503" target="_blank" class="timestamp">[25:03]</a> Mejor que no te pille el audio porque no se escuchara doble. Hemos tenido suerte. O sea, me viene bien y todo que no pille el audio. Hemos tenido suerte. Bastante bien. Mejor. Mejorable. No sé cómo hacerlo mejor, gente. No sé cómo hacerlo mejor. A ver...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1523" target="_blank" class="timestamp">[25:23]</a> No quieren eso. Por supuesto, en un futuro puedo ayudar a las personas, pero primero siento que tendrán que ver cómo he ido escalando y cómo he logrado eso que creen ellos que les va a dar la felicidad. Yo creo que bien, ¿no? A ver...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1544" target="_blank" class="timestamp">[25:44]</a> Vale, sí que es cierto que se escucha como un poco de eco, porque claro, pilla el sonido del ordenador, el micro. Ya lo mejoraremos, ¿vale? Pero de momento lo vamos a dejar así. Yo creo que está bien, yo creo que está de lujo, se entiende y se está guay, ¿no? Yo creo que guay. Nunca le vi la entrevista a Joelus. Me da pena, pensé que tenían vínculos de frecuencia. Yo creo que soy de los que más frecuencia exacta tiene con Cartoon. ¿Por qué? Por varios motivos. Por varios motivos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1574" target="_blank" class="timestamp">[26:14]</a> Por varios motivos. La verdad. Si me preguntan. El primero. Los dos vamos al gimnasio. El segundo. Las entradas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1595" target="_blank" class="timestamp">[26:35]</a> Yo no soy calvo, yo no me rapo por aprovechar el pelo que me queda, pero más o menos. El cuarto, proteína, mundo fitness, tal. De las entrevistas que ha tenido, soy creo que el que mejor frecuencia tiene con él. De los mejores. Tiparraco, mente humana, ahora Deluxe, yo creo que soy el más fac-men. Yo creo que soy el más fac-men.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1623" target="_blank" class="timestamp">[27:03]</a> He mamado fuckmen, no sé cuántos vídeos hay en el canal De fuckmen, he mamado fuckmen por un tubo Entonces, en movimiento Y lenguaje fuckmen Estamos bastante iguales Él lo practica más, yo lo odio más Pero en movimiento fuckmen estamos bastante iguales Por lo tanto, yo me merecía esa entrevista ¿No me la quiere dar? Bueno A veces El amor no es correspondido A veces el amor no es correspondido No pasa nada ¿Vale? No pasa nada</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1662" target="_blank" class="timestamp">[27:42]</a> Hablando de gente que no se cree tu mensaje, yo te conocí, sobre todo, y más tu historia, por una reacción que hizo Antonio Gutiérrez en YouTube, que me quedé bastante loco. Dije, hostia, esta persona... O sea, bueno, ya la gente que está... Eh, le descubrió por Antonio Gutiérrez. Le tiro hate ahora, se supone, ¿no? En cada nombre que sale Antonio y yo siempre dice que voy a de huello. Aquí le tiro hate, ¿no? Me toca aquí ahora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1682" target="_blank" class="timestamp">[28:02]</a> todo lo que has hecho, creo que estarán impresionados, es la primera vez que te escuchan. Y me gustaría preguntarte qué opinas de personas como Antonio Gutiérrez, como Joelus, que también he visto que hace muchas críticas, Forocoches también, que ahí te mete en caña. Cuando tú ves que ese tipo de personas te hacen críticas de forma constante, ¿cómo te afectan?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1701" target="_blank" class="timestamp">[28:21]</a> Antes de que responda Cartoon, quiero decir, ¿vale? Este... Yo, las críticas que hago son constructivas. Creo que en forocoches serán más bien destructivas. Yo no sé Antonio lo que hace. Me la suda bastante también. Pero cuanto a mí, sí que es verdad que le ponemos el mote...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1718" target="_blank" class="timestamp">[28:38]</a> para mí cariñoso, como si fuese mi colega Carton, pero a partir de ahí yo, o sea, le intento aconsejar como si fuese mi colega, le intento sacar de esa mierda, le intento dar mi punto de vista, le intento decir la locura que está padeciendo, le intento hacer abrir los ojos, lo que le diría a mi hermana, lo que le diría a mi primo, lo que le diría a mi colega.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1736" target="_blank" class="timestamp">[28:56]</a> más allá de eso algunas cosas evidentemente pues hago un poco de risa o me río de cosas inverosibles o hacemos un poco chistecito de tu primer cartón o de yo que sé la tienda de campaña y tal pero no creo que sea con malicia no creo que sea algo como para que le llegue a ofender y es más le he escrito en más de una ocasión que una está invitada a venir al canal que dos si le molesto por favor que me lo diga</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1764" target="_blank" class="timestamp">[29:24]</a> Yo eso se lo he dicho. Le he escrito por privado. Si esto te molesta, Ferran, yo dejo de hacerlo. Pero no es el caso. O al menos... O no lo ha visto, que lo dudo que no lo vea. O sea, tendrá muchos mensajes, pero dudo que no lo vea. O... De verdad, no somos tan dañinos para su persona. Quiero pensar. O sea, yo no creo que sea tan... Dios mío de mi vida. Bullying, ¿no? Para nada. Si tú te paras a ver un vídeo... Porque aquí mucha gente viene...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1793" target="_blank" class="timestamp">[29:53]</a> con la opinión de otro, sin haber visto nada. O viene con el prejuicio de otro, o con los pensamientos ya de otras cosas, ¿no? Y realmente, si tú te paras a ver un vídeo, ¿no? A un comentario del anterior vídeo de Carto le dije, ¿cómo deshumanizas? No me dijo, ¿cómo deshumanizas? Increíble. Dime dónde pollas yo deshumanizo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1813" target="_blank" class="timestamp">[30:13]</a> ¡Ponme el minuto, loco! O sea, no me digáis cosas sin fundamentos y sin argumentos. ¡Ponme el puto minuto donde yo deshumanizo! ¡Ponme el puto minuto donde yo le tomo de subnormal y de objeto de burla máxima y de no sé qué! Yo estoy viendo lo que pone el internet y con alguna cosa flipo, con otras cosas me hacen gracia. Pero ponme el minuto donde yo le deshumanizo. ¿Sabéis lo que significa deshumanizar? Hostia, tío. No sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1843" target="_blank" class="timestamp">[30:43]</a> Bien, aquí entra mucho el desarrollo personal de una persona y al final yo soy una persona que yo me podría enfocar o todos nos podemos enfocar en el amor, en el miedo y tú decides cuál de esas dos te enfocas. Otra cosa, hablando de él de enfocarse en el amor o en el miedo, yo siempre digo que le mandéis amor a mi queridísimo Skarcha.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1864" target="_blank" class="timestamp">[31:04]</a> mi queridísimo camper anteriormente, a Ferran. Siempre, siempre ha alentado en casi todos los vídeos a que no le mandéis hate, sobre todo en los que han sido muy complicados. Porque hemos visto aquí situaciones que yo no sé si otra persona hubiese aguantado lo que está aguantando este hombre, este chaval. Por gusto, por menos gusto, pero son situaciones duras. Y yo siempre lo he dicho, ante estas situaciones, por favor, lo que más necesita es amor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1886" target="_blank" class="timestamp">[31:26]</a> Como mucho, pues algún consejo, alguna crítica constructiva, pero jamás he incitado al hate, jamás he incitado a que se le vaya a tirar mierda. Siempre en todos los vídeos he recalcado y he dicho, por favor, mándale amor a mi clip y su cartón. Siempre. Están ahí los vídeos. Están ahí los vídeos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1901" target="_blank" class="timestamp">[31:41]</a> me enfocara en el miedo, yo podría estar mirando lo que la gente dice de mí, lo que la gente critica de mí, pero al final, si nos escuchamos a nosotros mismos, las personas, cuando criticamos a otra persona, da igual a quien sea, nos baja la frecuencia. Tengo la frecuencia baja. Tengo baja frecuencia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1929" target="_blank" class="timestamp">[32:09]</a> A ver, al final si te dediques al mundo de internet, sobre todo también colindante al fitness, colindante al movimiento Yados, si lo has tocado alguna vez, inevitablemente te van a preguntar por ti, Ferran. Estás siendo uno de los nombres más destacados de los alumnos de Yados, la universidad de Yados.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1946" target="_blank" class="timestamp">[32:26]</a> Entonces uno opina. Uno opina. Y yo creo que opinar y criticar siempre bajo el respeto y de forma constructiva y aportando a momentos no es malo. Podemos entrar en debate. Siempre te he invitado. Puedes entrar aquí a debatir conmigo si quieres. O incluso estaba en Tenerife y he dicho tal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1963" target="_blank" class="timestamp">[32:43]</a> Pero y sin cámaras incluso, o sea, me da igual, no es por dinero, me da muy bien. Es simplemente por gusto. Estoy aquí en internet, estoy en streaming tranquilito, estoy haciendo streaming hasta en vacaciones porque me apetece y me gusta. Y inevitablemente sale tu nombre, pues uno opina, ¿no? Pero no creo que por eso te baje la frecuencia, vaya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1985" target="_blank" class="timestamp">[33:05]</a> Y yo al final, una persona que me critica a mí o critica a quien sea, esa persona no se está escuchando a ella misma. Son personas que vibran bajo, están vibrando bajo porque están criticando a otra persona.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=1998" target="_blank" class="timestamp">[33:18]</a> Claro, aquí me imagino que Ferran se olvida que el primero que critica también es Yados, criticando a los panzas, a los mileuristas y demás. Ya no es ni siquiera con un caso concreto, con todo el contexto y con todas las verdades o siendo objetivo. No, no, directamente coge un colectivo entero y le dice que no respetes o no escuches a tu padre porque va en un SEAT. Porque va en un SEAT León.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2022" target="_blank" class="timestamp">[33:42]</a> Y eso es de pobres y no tienes que escucharle. Apártate eso. Hostia, Ferran, a mí eso me parece peor que que yo opine de los vídeos que vosotros subís a internet. De las estafadas que te meten ya dos a ti o el colorado a ti o de las que tú ahora más o menos vas a hacer mentorías de nutrición o no sé qué, que bueno, pues también estaremos ahí al tanto, ¿no? Mi canal es fitness, es de dietas y entrenamiento, pues si tienes algún cliente, hostia, me gustaría ver también la evolución y las cositas, ¿no? Si las subes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2050" target="_blank" class="timestamp">[34:10]</a> Entonces, hostias, si de verdad tú crees que la frecuencia baja por criticar al resto, el primero que la tiene bajísima es ya dos. Criticando a los panzas, criticando a la gente que tiene obesidad, que tiene sobrepeso, que son mileuristas y que no tienen labios. Y cuando más una persona, cualquier persona que se escuche a ella misma y haya crecido emocionalmente, sabe eso, no tengo que contárselo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2079" target="_blank" class="timestamp">[34:39]</a> Cada persona que haga lo que quiera con ella. Por supuesto, yo respeto a todo el mundo. Y yo, a esas personas que me critican a mí, lo que les mando es amor. Amor de vuelta. Amor de vuelta para ti. Siempre lo he dicho, siempre lo mantendré. Amor de vuelta. O sea, es un tipo... O sea, a mí Ferran me cae bien. Ya os digo, lo trato como mi colegón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2100" target="_blank" class="timestamp">[35:00]</a> o sea de verdad me cae bien no me cae mal no estoy de acuerdo con lo de no sé si está preparado para hacer lo que tiene pretendido con lo de la nutrición y tal no estoy de acuerdo para nada con que siga tan a ciegas el movimiento de llados y demás pero es que lo he visto tanto ya es mi colgón o sea a mí me cae bien no me cae mal o sea me parece un buen tipo me parece de hecho el más potable de toda la lacra que tiene llados como alumno o sea me parece de lo más potable de verdad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2125" target="_blank" class="timestamp">[35:25]</a> a una persona odiarla o sea mandar que vas a recibir odio de vuelta yo les mando amor les mando a que si quieren escucharse más a ellos mismos lo hagan</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2135" target="_blank" class="timestamp">[35:35]</a> Si lo miro desde el punto frío mío, para mí es bueno, para mí es publicidad. Es publicidad que me dan y para poder llevar mi mensaje a más personas de, hey, escúchate, rompe miedos, yo lo tomo simplemente como publicidad. Que hay hate, perfecto. El hate al final, hay canales de televisión, puede ser Telecinco, muchos sabemos que son los más vistos. ¿Por qué? Porque uno critica a otro y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2159" target="_blank" class="timestamp">[35:59]</a> Y todo lo que tú quieras. Precisamente la viralidad que consiguió Yados en su momento también, criticando a los fucking croissants, panza, panza, panza, o sea, estos dogmas de Dalai Lama que se monta para sí mismo, tío, aplícaselos a tu mentor y a tu todopoderoso Dios Jesucristo Jesús Yados, Yadios, ¿sabes? Y vuelvo a repetir, yo no te mando hate para nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2185" target="_blank" class="timestamp">[36:25]</a> de vídeos míos, si tú te pones en Google, en YouTube, hay montones de críticas. ¿Sabéis cuántos he visto? Cero. No he visto ninguno. ¿Creéis que no se ha visto ninguno, gente? ¿Creéis que no se ha visto ninguno? No sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2214" target="_blank" class="timestamp">[36:54]</a> Yo el cabrón no sabía que el directo era en YouTube. Perdón que no aviso por Instagram. Soy un desastre, tío. Soy un desastre. ¿Se escucha mal, gente? ¿Se escucha mal? Yo creo que sí los ha visto. Si bloquea a todo el mundo. Yo creo que sí, alguno lo habrá visto. Ni de coña lo ha visto. Hombre, yo creo que alguno no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2244" target="_blank" class="timestamp">[37:24]</a> Es raro que no te vea ninguno, ¿no? Es raro. O sea, no sé. ¿Qué es positivo no haber visto ninguno? Por supuesto, porque no estoy enfocado en la crítica, estoy enfocado en mí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2260" target="_blank" class="timestamp">[37:40]</a> que para mí es lo correcto. ¿No crees que puede haber algo de verdad dentro de la crítica? Muy soberbio. La crítica, cuando es crítica constructiva, no destructiva, cuando es abordar el punto, el tema o el movimiento desde el respeto y simplemente aportando tu punto de vista...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2278" target="_blank" class="timestamp">[37:58]</a> me parece guay es interesante al final pues yo agradeceré si alguien me da su punto de vista por parte de la preparación que estoy haciendo o de como entreno siempre sin el objetivo de destruirme obviamente a mi me parece bien claro si tu no te paras a escuchar a nada ni a nadie solo pones foco en ya Dios pues te deseo suerte</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2308" target="_blank" class="timestamp">[38:28]</a> Te deseo suerte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2313" target="_blank" class="timestamp">[38:33]</a> Claro, yo en mi pasado lo que he tenido es... Yo miraba muchos coaches, tenía muchos referentes y lo que he visto es que cuantos más referentes o cuantas más personas escuchaba, más liado estaba conmigo mismo. Menos me escuchaba a mí mismo porque más voces, entre comillas, tenía en mi cabeza de este haría eso, este haría lo otro y cada uno podemos crear nuestras creencias y nuestra realidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2339" target="_blank" class="timestamp">[38:59]</a> Cuando más he puesto foco en dejar de estar escuchando a tantas personas y he puesto más foco en mí y escuchar a menos personas, es cuando mejor y más feliz me he sentido conmigo mismo. Ojo, una frase muy repetida a lo largo también de los vídeos de Cartoon. Si él es feliz, siempre lo digo, si él es feliz, a mí me sirve. Si él va bien, si él se gusta, si él es feliz, a tope. Comparto, like 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2365" target="_blank" class="timestamp">[39:25]</a> Claro, ahí está la cosa de si es feliz de verdad o no, pero yo creo que eso, vamos, es que está en casi todos los vídeos. ¿Y qué respuesta tenemos mejor que cuando nosotros mismos nos sentimos felices? Si ahí nos sentimos mejor, no hay equivocación.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2381" target="_blank" class="timestamp">[39:41]</a> Y tanto que te gusta romper miedos, ¿no crees que un miedo puede ser el miedo al rechazo, al hate? Por supuesto. Es un miedo que tenemos todos. Todo el mundo. ¿Y tú crees que ignorar ese miedo, que es ignorar el hate, es la manera de combatir o de romper ese miedo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2396" target="_blank" class="timestamp">[39:56]</a> Más que miedo, o sea, no es miedo a que haya ese hate. Yo podría estar leyendo ese hate. No es el miedo a que estén diciendo ahí, sino es en qué me enfoco. Yo me enfoco en personas con una mentalidad positiva, con una mentalidad de tirar para arriba, o con una mentalidad de crítica, de criticar a otras personas. Yo es que esto... Yo creo que sí que tengo mentalidad de tirar para arriba, ¿no? O sea, a mí me sorprende. Yo creo que vaya por mí o no sé, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2425" target="_blank" class="timestamp">[40:25]</a> precisamente aquí, somos súper positivos, siempre estamos abogando por entrenar, por cuidarse, por estar bien, creo que tenemos buenos valores en este canal, precisamente, hostias, no sé, me sorprende, la verdad, yo no creo que vaya por mí esto, no sé en quién se estará enfocando, pero no me siento por lo que digo aquí, yo creo que estoy muy orgulloso de los valores, que no solo hablo, sino además predico, o sea, vamos, me estoy poniendo como un puto toro, macho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2454" target="_blank" class="timestamp">[40:54]</a> Y os enseño a comer en el otro canal, 2.0, y a seguirlo. Tenéis el comentario fijado. Os enseño a entrenar. O sea, yo qué sé. Estamos haciendo una gran labor. No me siento por la luz de aquí, la verdad. ¿Se te ve muy oscuro? Lo sé, amigos, lo sé. Lo sé. Es que es la numeración que tenemos. Estoy en un apartamento. No estoy en el setup. Lo siento, gente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2477" target="_blank" class="timestamp">[41:17]</a> Por supuesto a mí me afectará y yo creo que a todas las personas en este mundo si están escuchando o leyendo a personas que vibran alto, que te hacen subir la energía para arriba o están criticando que te hacen estar bajando para abajo. Porque al final la felicidad es espontánea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2500" target="_blank" class="timestamp">[41:40]</a> ¿Por qué me estoy enfocando yo en ese momento? Pues decido enfocarme en personas que vibran alto, que están felices y demás. Y en personas, por ejemplo, que vibran bajo, como pueden ser los comentarios de hate, ¿por qué enfocarme en eso cuando puedo enfocarme en otras cosas? Me sabe mal de verdad que hayas recibido comentarios de hate si son de mi parte. Por favor, gente, os lo vuelvo a repetir. Crítica constructiva, punto de vista de apoyo y de amor o...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2524" target="_blank" class="timestamp">[42:04]</a> O yo qué sé. Creo que mucha gente, mucho público de mi parte ha sido trasladado al suyo. Y ojalá que todo, sobre todo, haya sido positivo. Yo no os aliento a que hagáis esas mierdas. Me parecéis unos gilipollas, unos subnormales, unos retrasados mentales. Si es que vais a insultar al pobre cartón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2542" target="_blank" class="timestamp">[42:22]</a> ¿sabes? y por ahí Ferran Lloveras tío no sé me sabe mal o sea yo no comparto para nada lo que hace me parece una locura absoluta pero jamás os he dicho que hagáis esas mierdas ni creo que he incitado a esas mierdas ¿sabes? todo lo contrario así que bueno me sabe mal de verdad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2557" target="_blank" class="timestamp">[42:37]</a> Ya para cerrar este bloque, hay como muchas personas, un Antonio Gutiérrez, un yo, de los que te han escrito, me comentas para entrevistarte a hablar contigo. Sí. Y tú les has ignorado. ¿Por qué? ¿Por qué no aceptas hablar con ellos? ¡Ojo! ¿Por qué? ¿Por qué? Mi queridísimo Carton me ha rechazado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2580" target="_blank" class="timestamp">[43:00]</a> Cuidado. ...entrevistas de... ¿Por qué? ¿Por qué no aceptas hablar con ellos? He recibido entrevistas de... O sea, oportunidades de entrevistas de muchas personas y me he escuchado mucho a mí mismo a nivel de decir que sí, a nivel de decir que no, a nivel de entrevistas. Sobre todo al principio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2603" target="_blank" class="timestamp">[43:23]</a> Lo que veía es que a nivel de entrevistas, algo que no me gustaba mucho era como aprovechar de otras personas, ver que yo podía hacer crecer mis redes desde el punto de solo mirar para mí y aprovecharme simplemente de esa audiencia que tenía esa otra persona. O sea, que les había mal aprovecharse de mi audiencia. Pero cabrón, y a los otros podcast no te ha dado si los otros son más grandes que yo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2628" target="_blank" class="timestamp">[43:48]</a> Ha sido a Mente Humana que es mucho más grande, a Tiparrago que es mucho más grande y a Delox que es mucho más grande. O sea, por esa regla de tres, ¿no? Esa no me sirve. Esa no me sirve. Salir en esos canales. No es congruente. Cada vez también me fui dando más cuenta de que, hostia, mucha gente me venía a mí a través del hate diciéndome, hey, Ferran, te he conocido a través de esa persona que habla mal de ti, no sé qué, te tira hate. Hostia, es que te tira hate.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2659" target="_blank" class="timestamp">[44:19]</a> Hostia, es que te tira hate. Es que este podría ser uno de los míos, ¿no? Hostia, Fernández, te he conocido, tal. Me parece un buen tipo, no sé qué. Yo siempre lo digo. Me parece buen tío. Me parece que está un poco ennubilado, ¿no? Abducido por el movimiento Yados. Pero me sabe mal porque puede ser uno de los míos. Gente, yo no creo que él tire hate. Siendo autocrítico, el apodo de Carton está mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2681" target="_blank" class="timestamp">[44:41]</a> el de camper yo trato así a mis colegas no va malas la intención no es mala hasta mi padre tiene apodo hasta mis hermanos tienen apodo eso sí que no debería de quitarlo pero quitando eso no sé</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2704" target="_blank" class="timestamp">[45:04]</a> Al final vi que era eso, ¿no? Publicidad. Ya tenía eso, pero me lo fueron confirmando. Y dije, bueno, pues por eso también te dije a ti. Y empecé a abrirme a entrevistas, como he hecho alguna, un par antes. Y empecé a abrirme en ese punto porque personas me decían, Ferran, me estás ayudando mucho, aunque te he conocido a través de personas que te tiraban hate o canales de hate. Y ahí es cuando me dije, hostia, Ferran. Hostia, es que canales de hate, tío. O sea, yo sí que hateo hallados.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2734" target="_blank" class="timestamp">[45:34]</a> A Yados le hateo. Al máximo fuckmen le hateo. Me parece una barbaridad. Pero es que yo a Ferran siempre lo he visto como más rol de víctima, ¿no? Más rol de, de verdad, persona que no lo ha pasado bien o no está bien. Y ha caído en la red clienteral, en la red del arácnido, Yados. El cual solo quiere sacarte las tripas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2760" target="_blank" class="timestamp">[46:00]</a> Yo lo veo así, siempre ha sido ese el enfoque Lo siento y pido perdón Si en algún vídeo no ha aparecido eso Pero es que yo lo veo como El pobrecillo de la historia, Ferran Luego alucinamos con las cosas que hace Y tal, ¿no? Porque es que es alucinante Pero nunca O sea, no sé Me sabe mal, tío Que lo vea así</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2787" target="_blank" class="timestamp">[46:27]</a> Si te está saliendo la oportunidad de poder ayudar a personas a las que llegas a través de las entrevistas, empieza a abrirte a eso y a ver cómo te sientes, a ver qué experimentas. Y ahí es cuando empecé a decir que sí a gente que yo me sentía más conectado, me sentía más cómodo hablando con ellos y por eso hay aquí por la cara. ¿Cómo sabes si te sientes más cómodo o conectado hablando con Tiparraco si no has hablado nunca?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2815" target="_blank" class="timestamp">[46:55]</a> o con mente humana bueno claro supongo que aquí entonces de alguna manera si habrá visto algún vídeo para tu saber a lo mejor no los suyos pero si otros míos para saber si se va a sentir cómodo hablando conmigo o no entonces o esta es mentira o la que ha dicho anteriormente era mentira si no no le veo congruencia o me has visto y entonces te genera rechazo o incomodidad porque no comparto tu movimiento</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2844" target="_blank" class="timestamp">[47:24]</a> O porque sabes que te voy a debatir. O... Pues esto que dices... No es cierto, no sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2853" target="_blank" class="timestamp">[47:33]</a> ¿A quién le ha ayudado? Ni idea, ni idea, gente. Yo le creo, yo creo que a lo mejor a alguien le ha podido ayudar, ¿por qué no? Yo qué sé. De verdad, hay gente que vive con miedo y pues a lo mejor no al nivel de irse a vivir a la calle, ¿no? Pero yo qué sé, pues alguien que está pensando en abrirse YouTube, pues diría, hostia, pues mira, el queridísimo Carton lo ha hecho, pues yo también. O alguien que tiene fobia al ejercicio, Carton va siempre a entrenar y le parece que tiene una disciplina que flipas. Yo podría pasar, ¿por qué no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2878" target="_blank" class="timestamp">[47:58]</a> ...hablando tú y yo. Te lo he agradecido antes y te lo vuelvo a agradecer y yo sé que esta oportunidad va a ayudar también a que más gente te conozca y diga, ostras, este tío que yo lo veía en Instagram que es un meme, que no sé qué, no sé cuántos, pues hay una persona detrás que incluso puedo conectar con él, ¿no? Pero justamente por esto que yo mismo he sentido y que creo que la audiencia estará notando,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2899" target="_blank" class="timestamp">[48:19]</a> ¿por qué no abrirte a eso? Es decir, yo pienso, tú eres una persona que yo creo que cuando se habla contigo, caes bien. Es difícil que tú caigas mal a alguien. Luego ya pueden pensar que tan engañado que esto, cada quien obviamente tendrá sus opiniones y sus prejuicios y todo, pero claro, ir por ejemplo a la raíz del hate, que pueden ser estas reacciones más duras, como puede hacer Joelus, Antonio Gutiérrez o perfiles de este estilo, que es... ¡Uf!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2921" target="_blank" class="timestamp">[48:41]</a> Yo me desmarco, ¿eh, gente? Lo siento. O sea, tiro balones fuera. Lo siento. No me meto dentro. No me meto dentro. Lo siento. Y esto no es hacerme el diferencial, no es hacerme el bueno, no es hacerme... Es deciros la verdad. No me siento dentro de ese grupo. O sea, no creo que mis críticas vayan con hate. Hallado sí. A Ferran, nunca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2940" target="_blank" class="timestamp">[49:00]</a> Nunca. O sea, siempre lo he tratado y están ahí los vídeos, están ahí las pruebas. O sea, no hablo en vano, no hablo ahora... Es que están ahí, los podéis ir a ver como si fuese mi colegón, con un aire de intentar ayudar, de no entender las cosas y de aconsejar, ¿sabes? Evidentemente estamos en stream y hago un poco de fuck man y un poco de mofa y tal, pero no hate. O sea, hay una diferencia muy grande, creo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2969" target="_blank" class="timestamp">[49:29]</a> también a reaccionar a tu contenido y decir, ah, mira, no sé qué, guau, esto, lo otro, quizás si vas ahí y haces una charla con ellos, podría ser que mucha de esa audiencia que te conoce porque te reaccionan, pero que no dan el salto a ir a tu canal e investigar porque sabes que la gente es muy vaga, te lo sabemos todos, a la gente nos quedamos con el titular, este tío le han timado, este tío no sé qué y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=2989" target="_blank" class="timestamp">[49:49]</a> Entonces quizá el abrirte a hablar con ellos haría no solo que ellos puedan cambiar la opinión que tienen de ti y de ahí que las reacciones luego vayan en otro tono, sino incluso que su audiencia te conozca o conozca una parte de ti que todavía no conocen.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3000" target="_blank" class="timestamp">[50:00]</a> ¿No has logrado eso en algún momento? ¡Ojo! Lo que hago es escucharme mucho a mí mismo, vivir el presente, y ahora mismo, en el punto, a día de hoy que estamos grabando esto, mi interior no me está diciendo que ese ahora mismo sea el camino. Igual que hace un tiempo, pues grabar entrevistas no es lo que me decía, pues me escucho a mí. Que en algún momento me dice, hey, tira para adelante hacia ahí, pues vamos fluyendo. Los que hacen bullying tampoco consideran que hagan bullying. Lo siento, pero te equivocas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3030" target="_blank" class="timestamp">[50:30]</a> Puede ser que me equivoque, gente. Yo no creo que haga bullying a Ferran. Es más, yo le he intentado hablar en dos ocasiones a Ferran. Dudo que no lo haya visto. Hostias. Si vosotros sabéis lo que significa la palabra bullying...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3054" target="_blank" class="timestamp">[50:54]</a> Son cosas heavy, ¿eh? Como para que... Yo no lo veo así. Y os podéis ver cualquier vídeo, insisto. Hay unos cuantos, además, porque estoy enganchado a la telenovela. Estoy enganchado a su contenido. A mí me dan ganas de verlo. O sea, de verdad, yo estoy enganchado a ver cuál es el siguiente paso. O sea, es tan surrealista, es tan inverosímil que es como una serie, literalmente, de televisión. Pero yo al personaje no le hateo, tío. O sea, yo estoy enganchado a la trama, a ver por dónde sale y tal, pero... Hostias...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3084" target="_blank" class="timestamp">[51:24]</a> Lo siento, pero no. O sea, más bien alguna vez que le he dicho, tío, pareces tonto. Pero coño, porque hay algunas cosas que... Pues como le diría a mi hermano que le digo también, tío, pareces tonto, pero no creo que... Hostias, es que no sé. No sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3105" target="_blank" class="timestamp">[51:45]</a> calle algo que me ha ayudado mucho es estar viviendo pues vamos fluyendo pero el estar en la calle algo que me ha ayudado mucho es estar viviendo el presente y he visto que cuando dejas de pensar a futuro y empiezas a solucionar los problemas que tienes ahora y vives ahora tal cual el momento es cuando realmente eres feliz y fluyes y ahora pues siento esto y estoy haciendo esto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3127" target="_blank" class="timestamp">[52:07]</a> Muy bien. No, yo al final, yo te digo, yo hago las preguntas porque quiero saber también un poco cómo piensas, pero me tiene mucho sentido. También es verdad que tienes una manera de pensar que se sale mucho de la norma. Totalmente. Entonces es probable que a veces las respuestas que des la gente como que no le acaban de encajar o le hagan ruido porque claro, al final tu mentalidad ya se ha visto muy diferente. Mentalidad, fuck man. Hablando de mentalidad, ¿cómo definirías Haya 2 Fitness en una sola palabra? Ojo. Disciplina. Eso es lo que para ti es Haya 2 Fitness.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3158" target="_blank" class="timestamp">[52:38]</a> disciplina y a dos fines una persona que ha conseguido el físico con esteroides que las redes se las llevan otros y que los cursos son de verdad os lo digo como persona que ha entrado dentro no yo sino de haber visto de otros</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3186" target="_blank" class="timestamp">[53:06]</a> Hostias. Me sorprende. Había muchas palabras para describir hallados. No porque todas malas. Pero disciplina. No lo sé. Ojo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3217" target="_blank" class="timestamp">[53:37]</a> Ah, se estaba leyendo un poquito. Primero que me ha venido en la mente en flash lo que digo, me escucho a mí, disciplina. Disciplina. Quería preguntar sin que te la esperases para que me dieras la palabra más real. Disciplina. Si es verdad que, a ver, eso no se lo podemos quitar. Disciplina, si me decías burpees, flipaba. Por cierto, te has hecho unas flexiones antes de empezar el podcast. ¿Cómo es esto? Las personas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3244" target="_blank" class="timestamp">[54:04]</a> A ver, gente, esto, ¿ves? Pues este, por ejemplo, podría ser un momento de los anteriores vídeos en los que ha pasado algo inverosímil y yo no doy crédito y entonces pongo esta cara y yo me río porque no le encuentro sentido. Pero esto no es hate. Es que me choco con una realidad que no la entiendo y me sorprende. Pero esto no es hate. Se han hecho unos fucking burpees antes de la entrevista. Grande. Grande.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3273" target="_blank" class="timestamp">[54:33]</a> A ver por qué se las ha hecho. ¿Para estar bombeadito o qué? Por cierto, te has hecho unas flexiones antes de empezar el podcast. ¿Cómo es esto? A las personas cuando hacemos deporte, al final nos sube nuestro estado de ánimo. Cuando estamos un rato sentados o estamos parados, suele tender a bajarnos el estado de ánimo. Lo que digo es escucharnos a unos mismos. Cuando más nos escuchamos, somos nuestros mejores psicólogos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3296" target="_blank" class="timestamp">[54:56]</a> Y lo que sentía, pues que estábamos aquí tranquilamente y digo, hostia, pues quiero hacer unas flexiones antes para entrar un poco más en movimiento. Mira, algo tan simple es como a veces estás sentado cenando con alguien y simplemente el hecho de irte al baño y volver a la conversación es como... todo fluye más. Pues es un poco eso. Es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3320" target="_blank" class="timestamp">[55:20]</a> Yo no me lo creo, no lo comparto. Me parece una gilipollez soberana. Si al menos fuese a sentir antes lo hubiese entendido un pre-bambeíto, ¿no? Eso lo puedo llegar a entender. También me parece ridículo y tontería. Pero... Para subirte la frecuencia, ¿no? Yo no entiendo. He acordado a una cosa que hacía ya dos que era... Te decía, si tienes algún problema, burpees, tienes no sé qué.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3352" target="_blank" class="timestamp">[55:52]</a> El estudio psicológico, ¿no? El análisis psicológico que se hacía detrás de todo esto era... Lo hace porque de esta manera no puedes pensar en tus problemas. Si estás enfocado en el deporte, te evades de tus problemas. Entonces, ¿crees realmente que el deporte y todo este cambio físico que hacen todos los alumnos de Ayodos Fitness y que tú mismo también estás haciendo, que estás en forma, es porque te beneficia a nivel de salud o es para huir de esos problemas, para no pensar en ellos? Vale. Juli...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3376" target="_blank" class="timestamp">[56:16]</a> El vivir en la calle, como decía hace un momento, me ha permitido vivir el presente porque cuando estás con cero euros no tienes opciones muchas veces de A o B y eso te ayuda a vivir el presente. ¿Qué pasa cuando haces deporte a un nivel y lo haces, por ejemplo, los burpees que te puedes llevar al extremo, a lo que te puede dar o sientes que puede dar tu cuerpo? Que te hace estar presente. ¿Tu mente? Tu mente lógica que muchas veces piensa en irte de viaje o me falta...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3405" target="_blank" class="timestamp">[56:45]</a> esta comida o quiero tomarme ese antojo, tu mente está pensando y ha llegado un punto en... Es algo tan absurdo en realidad, si te paras a pensarlo. Bueno, pues si tienes ganas de darte ese antojo o estás pensando irte de viaje o qué sé, en vez de barpees, pues también, mira. Pues coges un bachelo y te quemas, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3425" target="_blank" class="timestamp">[57:05]</a> O te das un tortazo contra la pared. Es otra forma de maltratar a tu cuerpo. Qué estúpido, qué absurdo tener que hacer barpees durante todo el puto día a la mínima que tu mente se sale un poco del plano. Precisamente qué poca disciplina. Ante otras opciones que no son tan buenas para ti y que te pueden llegar a perjudicar, pues tomas la que mejor te viene porque tienes disciplina. No tienes que hacerte unos barpees o hacer esas gilipollezas, hacer esas tonterías. Yo esto no lo compro, no lo veo, la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3454" target="_blank" class="timestamp">[57:34]</a> qué tontería buenos hombros máquinas se están entrenando gente están entrenando es que hago elevaciones laterales cada vez que quiero comer gordo y como soy un gordaco pues casi por supervivencia está pensando en deja de hacer lo que lo sea no puedes ya pensar en otra cosa solo en una repetición más una repetición más y ese ejercicio te hace vivir el presente si nunca hacéis burpees</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3484" target="_blank" class="timestamp">[58:04]</a> O sea, si os hacéis 100 burpees, vais a ver cómo acabáis los 100 burpees y estáis en el presente. Y si ya estáis haciendo deporte y estáis acostumbrados, iros a 300. Vais a ver cómo tenéis una energía y estáis viviendo el presente y os vienen unas respuestas a un nivel increíble. Te vienen respuestas a un nivel increíble también, de verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3505" target="_blank" class="timestamp">[58:25]</a> Guau, está muy abducido, eh, por el movimiento Fagmel. O sea, me parece espectacular. Jenny, sí, va un poco para largo, eh. Va un poco para largo. Me queda otra horita o así. Me parece espectacular que de verdad se crea todas estas mierdas. Hostias, hay muchas maneras también de poner tu cuerpo al límite. Como entrenando de calidad, ¿no? Como yo qué sé. No sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3527" target="_blank" class="timestamp">[58:47]</a> Creo que no hace falta, ¿no? Para tener pensamiento crítico y tomar buenas decisiones, meterte a hacer 100 burpees, 300 burpees, es que me parece absurdo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3538" target="_blank" class="timestamp">[58:58]</a> experimentarlo para sentirlo. Y hablando de experimentar, una cosa que hablaba con Claudia Nicolasa cuando vino aquí, que es la psicóloga que te comenté antes, que también me dijiste que la conocías, ella decía que Yados una cosa que hace, y entiendo que no es el único, es cobrarte cada vez más para estar más cerca de él. Es decir, que realmente todos los programas que tiene</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3558" target="_blank" class="timestamp">[59:18]</a> Cada vez que son más caros es porque ya no es a lo mejor un Zoom con más gente, sino que ya es una mentoría más personal o ya es incluso ir a Miami y conocerlo en persona. ¿Tú percibes que esto es así?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3569" target="_blank" class="timestamp">[59:29]</a> Claro, es que todo depende de las creencias que uno tiene por dentro. ¿De dónde parte eso? Si tú partes desde que es una mala persona o desde la estafa, tú puedes ir encajando todo en base a eso. Pero si partes desde la base que confías y tienes la fe en él... Hostia, justo iba a decir eso. Justo iba a decir, si tienes fe ciega en él, todo eso no lo ves.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3595" target="_blank" class="timestamp">[59:55]</a> Te has respondido a ti mismo aquí... Ferran... Te has respondido a ti mismo aquí... O sea... Es una cuestión de fe... Ciega... Y la fe ciega no es buena... En absolutamente nada en la vida... Hostia... Me fascina como él lo ve... Desde fuera... Como para justificarse a sí mismo... Pero no está viendo que es una justificación... ¿Sabes? ¡Guau! Estás entendiendo todo lo que estás haciendo... Y le encuentras la lógica... Al final...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3629" target="_blank" class="timestamp">[60:29]</a> Claro, si estás en la creencia de que ya dos es tu Dios Que haga lo que quiera conmigo Que me descuartice que será bueno Que me descuartice Que es por el bien Me va a venir bien que me descuarticen Hostia, vale, tío Hostia, vale, tío</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3648" target="_blank" class="timestamp">[60:48]</a> cambiar la perspectiva a cada uno que opine lo que quiera. Por eso hay colores, hay coches diferentes porque cada uno opinará su opinión. Por supuesto la mía es de que tengo fe, lo he conocido, confío en lo que está haciendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3662" target="_blank" class="timestamp">[61:02]</a> Y no siento para nada que esa sea la intención de estafa. Es más, entiendo el por qué lo hace eso. ¿Pero tú crees que cuando le pagas, por ejemplo, para ir a Miami, le estás pagando porque te va a dar unas enseñanzas que superan con creces el valor que tendrías en una mentoría grupal o es porque lo quieres conocer en persona? En ese caso fue por diferentes cosas. O sea, yo estar en Miami para mí ya era un sueño. Era la ley de exposición de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3690" target="_blank" class="timestamp">[61:30]</a> La del exposición, eso lo repiten mucho, ¿no? Es que me parece increíble. Tiene la cabeza muy comida, tío. Tiene la cabeza muy, muy comida, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3700" target="_blank" class="timestamp">[61:40]</a> sin pagarle el curso. No quiero decir que eran varias cosas. Era eso, era el reunirme con muchas personas porque de la misma formación nos íbamos a conocer, que teníamos una mentalidad de disciplina, de hábitos y demás. ¿Y de qué te sirvió? No has sacado a nadie de colegi. Es que no sirve de nada. Todos van para lo mismo. Para ver al Dios. ¡Adiós! Para nada más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3727" target="_blank" class="timestamp">[62:07]</a> Y además también el poder estar en su casa, esos lujos o coches, ¿no? Que a mí me gustan los coches, ¿vale? Lo que digo, ha cambiado mi prioridad, pero me gustan los coches. Poder estar ahí viendo esos coches, poder verlo a él, lógicamente también era algo que me gustaba porque yo lo he ido viendo pero no lo había visto realmente. Claro, es que, bueno, o sea, estamos hablando de una religión</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3751" target="_blank" class="timestamp">[62:31]</a> Estamos hablando de una especie de secta, estamos hablando de un personaje, porque es que a mí ya no me suscita ningún respeto, el cual, justo suena la música esta de que me ha seguido alguien, el cual sin escrúpulos le da igual que a pesar de entrevistas como esta, siga con la misma mierda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3772" target="_blank" class="timestamp">[62:52]</a> Tío, yo soy Yados y veo la entrevista de este pobre hombre que se ha dejado el dinero, que se está dejando la vida, que se está dejando la espalda durmiendo en el suelo, que está a ojos de su familia. Yo veo este podcast siendo Yados y se me cae la puta cara de vergüenza, tío. Se me cae la puta cara de vergüenza de ser verdugo de este pobre hombre que estamos viendo en pantalla. Querísimo Carton, tío. O sea, es bestial. Está ciego. Está totalmente absorbido. Es increíble, tío. Es increíble, tío. Es increíble.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3803" target="_blank" class="timestamp">[63:23]</a> Para mí también era algo que me gustaba. Recibir sobre todo esa exposición de todo eso para mí era un valor muy grande. Solo por verle. Solo por verle y ver los coches. Es un meet and greet. Es un meet and greet de estos. Ojo, se para el directo. ¿Gente va bien el directo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3833" target="_blank" class="timestamp">[63:53]</a> ¿Va bien el directo, gente? ¿Me confirman? ¿Me confirmáis por fin si va bien el directo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3870" target="_blank" class="timestamp">[64:30]</a> ¿Sí va bien? ¿Sí? Ahora mismo sí, pero a veces se ha cortado. Fuck. Si no hay muy bien internet, eh. Se había cortado un poco. Putada. A ver, es que estoy en un portátil. Supongo que se está sobrecalentando. Veremos esto y me marcharé, ¿vale? Me voy a entrenar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3899" target="_blank" class="timestamp">[64:59]</a> Va un poco PowerPoint a veces. No jodas, tío. Va a trompicones. Putada, tío. Ahora sí, ya. Mira que solo está esto conectado. Se ha ido Jennifer y todo para dejarme el wifi al completo, tío. Va bien, todo ok. Seguimos, ¿no? A ver si puede salvar algo, Quique. Vamos a acabar con el podcast. Eh...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3932" target="_blank" class="timestamp">[65:32]</a> Ver cómo conocerlo a él, conocer al resto de gente, es más la experiencia. Totalmente. Que no tanto el valor que pueda haber de te voy a enseñar el método para ganar más dinero. Exacto. No es la palabra en sí que me podía decir así, sino la experiencia global. Hay una cosa aquí que me hace un poco de ruido y quiero saber tu opinión.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3949" target="_blank" class="timestamp">[65:49]</a> Y es, siento que tanto tú, que creo que eres un ejemplo clarísimo, como muchos otros alumnos de IA2, si habéis hecho esta transformación personal de decir, voy a tener un desapego material, quizá entraba buscando coches, mujeres, etc., pero ahora me doy cuenta de que la importancia está en mi interior.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3964" target="_blank" class="timestamp">[66:04]</a> Y te digo, esto me parece la polla. Esto me parece que ojalá más personas pudieran llegar a esa conclusión. Quizá gratis, no sería mejor aún, pero bueno. Entonces me parece muy bien. Pero date cuenta de que justamente el gurú o la persona que os guía y que os ayuda en esta transición es alguien que prácticamente se valida con lo material.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=3983" target="_blank" class="timestamp">[66:23]</a> Mira mis coches, tengo el coche que me decías de un millón, de tres con ocho millones, la mujer polioperada, tengo otra mujer, tengo no sé qué. ¡Ojo! ¡Bif aquí, eh! Me explico, es decir, es como, no es una contradicción en sí mismo que la persona que os ayuda a dar esa transformación personal es alguien que se valida en lo material. Lo es. Muy buena pregunta aquí, eh. Muy bien expuesto. Me ha gustado mucho por parte de Deluxe. Que muchos me decís que también tiene un pasado tal, no tengo ni idea, la verdad. Algún día, pues si tenéis algún vídeo, lo que sea, lo vemos. Eh...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4014" target="_blank" class="timestamp">[66:54]</a> Claramente, el reclamo es la vida que él tiene, y supongo que el cuerpo que él tiene, aunque yo, la verdad, a mí no me llama la atención. Y son los tatuajes y los coches y no sé qué. Y la gente entra por eso, por el éxito de él, ¿no? Por el resultado. Ese resultado lo has acabado de estafar a gente como a ti.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4039" target="_blank" class="timestamp">[67:19]</a> Y a ti te contenta y te mantiene en la estafa diciéndote que los resultados no son tan importantes, que ya llegarán. Pero hermano, ¿no ves que así solo te está manteniendo en la secta, te está manteniendo en el pago, te está manteniendo en la fe esa ciega? Él no tendría esos resultados si a ti no te hubiese estafado. O probablemente sería alguien normal y corriente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4066" target="_blank" class="timestamp">[67:46]</a> Pero no tendría todo eso que tiene si no estafa a tanta gente. Yo lo veo bastante evidente. Claro. Fíjate cómo entramos a conocerlo a él, todas estas personas que me comentabas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4080" target="_blank" class="timestamp">[68:00]</a> lo que me has dicho, entramos porque vimos esas cosas que él tenía a nivel material. No hubiéramos podido hacer el cambio si primero no hubiéramos visto eso que tiene a nivel material. Es como lo que... O sea, en realidad es un reclamo para transformarte a Dalai Lama de no tener posesiones, ¿no? Venga, hombre, conme la polla. Y de mientras él te cobra mil pavos cada mes o lo que sea. O sea, tío, no, estás... Por favor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4107" target="_blank" class="timestamp">[68:27]</a> o la atención pero si él seguramente en ese punto en el que yo estaba y en los que están muchos o han pasado muchos alumnos nos hubiera hablado simplemente de espiritualidad y no hubiéramos visto en ese punto el dinero o cosas materiales posiblemente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4123" target="_blank" class="timestamp">[68:43]</a> no hubiéramos hecho caso del mensaje que estaba lanzando. Pero ahora, después de ver eso, es cuando la gente está haciendo caso, como lo que decía antes, de que la gente no ve en mí eso que ellos quieren, y por eso muchas veces no tendrán a hacerme caso. Y lo entiendo, porque he pasado por ahí. A mucha gente no podría llegar porque no les llamaría la atención con todas esas cosas materiales. O sea, a ver, que a mí me quede claro...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4152" target="_blank" class="timestamp">[69:12]</a> Lo de llados, los coches, la mujer recuperada, las mansiones, el jet ski, el yate, el jet privado y todo, es una estratagema para ayudar a las personas y para cambiarles, ¿no? O sea, toda esa ostentación es simplemente una fachada para poder ayudar a seres perdidos, perdidos en la búsqueda de la misma ostentación, mientras él ostenta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4181" target="_blank" class="timestamp">[69:41]</a> Esto es... Esto es increíble, tío. Esto es cine. O sea, es la justificación de la justificación de la justificación. No. Yados es una persona. Es más fácil, ¿no? Esto es la navaja de Ocam. Mi queridísimo Camper. Que hizo Carton. La navaja de Ocam. Lo más simple probablemente es lo que está pasando. ¿Tú qué crees? Eso que tú te has dicho...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4200" target="_blank" class="timestamp">[70:00]</a> ¿O lo que tú te justificas? ¿O que simplemente es un tío que está manteniendo todo lo que tiene porque está gente como a ti? Yo la respuesta la veo bastante fácil, la verdad. Y claro, y luego veo... Claro, yo compruebo, ¿no? Contrasto lo que digo. No es una acusación al aire. Contrasto con qué es lo que ofrece, qué es lo que dice, cuáles son sus prácticas, si predica cuál ejemplo o no. Y no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4227" target="_blank" class="timestamp">[70:27]</a> Y todo huele a mierda, todo huele a basura, todo está fatal. Entonces, a ver, no sé. Domando son cuatro siempre. Y pregunto, ¿no sería esto vender humo? Porque te están vendiendo una imagen para venderte luego otro producto. Ojo, bien, bien, bien. O sea, ¿sería vender humo si tú realmente no te enseñara el camino para tú realmente si tú quieres conseguir cosas materiales?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4253" target="_blank" class="timestamp">[70:53]</a> Pero es que te enseña el camino para poder conseguir las cosas materiales. Lo que pasa que de camino ahí, tú aprendes a conocerte más a ti mismo y aprendes a que hay cosas mucho más importantes que esas cosas materiales. Y es cuando realmente ahí tu camino puede que empiece a cambiar y tú decidas, hey, no voy directamente a esas cosas materiales. Cuando tengan que venir ya vendrán, pero siento que no es lo que ahora mismo me hará más feliz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4283" target="_blank" class="timestamp">[71:23]</a> Guau, tío. O sea que yo me meto en un curso para saber hacer empanadillas y al final, oye, que al final no vas a hacer empanadillas, vas a hacer pescado al horno. No, mi brother, he pagado por empanadillas. Quiero empanadillas. No sé, yo alucino, tío. No sé, eso es raro. ¿Cuál es ese camino? Es decir, ¿cuál es la clave del éxito que te vende ya dos para ser rico? No hay una clave de éxito como tal, sino es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4313" target="_blank" class="timestamp">[71:53]</a> Romper miedo, entender qué te gusta a ti, cómo tú te sientes bien, cómo tú te sientes feliz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4322" target="_blank" class="timestamp">[72:02]</a> Y a partir de ahí, pues ayudar a otros a que puedan también solucionar este problema por el que tú has pasado. Al final lo que te ayuda es a mejorar tu ser, a mejorar tú como persona. Simplemente si haces lo que él comenta muchas veces, de levantarte temprano, reflexionar, o sea, los diferentes hábitos que hace. Los diferentes hábitos que hace. ¿Tienes que pagar 3.000 euros para eso? ¿Tienes que pagar 3.000 euros para eso?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4351" target="_blank" class="timestamp">[72:31]</a> Tú ya mejoras en el campo que tú estés, tú das más. Da igual si eres psicólogo, eres dentista, da igual lo que hagas. Ahí ya mejoras. Porque tu mentalidad, tu disciplina, tus hábitos, tu fortaleza mental, mejora. Ahí ya mejoras, da igual. Vas a mejorar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4367" target="_blank" class="timestamp">[72:47]</a> Y a partir de ahí te enseña, si tú quieres hacer tu coaching, te enseña cómo hacerlo. Tienes una formación donde lo enseña. Abre tu coach, enseña a las personas, haces un coach semanal, les haces una formación, lo que tú quieras, pero te enseña cómo hacerlo. Es más, tú te formas con él y tú ves cómo él lo hace. Y gracias a que tú ves que has aprendido con él, eso te refuerza que tú puedes también ayudar a otras personas con</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4395" target="_blank" class="timestamp">[73:15]</a> Bueno, la entrevista es bastante larga, sobre todo quería ver esta parte de las acusaciones, dura dos horas, evidentemente no lo vamos a replicar aquí, tenéis el canal de Sin Vida del Éxito, creo que se llama, para poder ir a verlo. Os agradecería de verdad, muchísimas gracias por el apoyo, un comentario, diciéndome qué opináis y demás, y os mando un abrazo, por favor, también, para los que me hatean y que de verdad me hatean.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4419" target="_blank" class="timestamp">[73:39]</a> Y que de verdad están ahí al de esto. Contrastad las cositas, ¿vale? Si me vais a acusar de algo, por favor, poned el argumento. Ponedme ahí las cositas. Yo las leeré encantadísimo. Un abrazo, un besazo, like, suscríbete y código LUTEDEMPIC. Y no saben las cosas de Bali. Espabilad. Vamos. Ok. Ok. No sé si se ha parado el directo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4450" target="_blank" class="timestamp">[74:10]</a> No sé si seguimos en directo o no. Esto va un poco mal, eh. Esto va un poco mal, eh. ¿Te falta disciplina para ver el vídeo completo? Va bien, ¿no? Va bien, gente. Ok, ok, ok, ok. Ok, ok, ok. Ah...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4478" target="_blank" class="timestamp">[74:38]</a> Más cositas. No, hoy no habrá más cositas, gente. Me voy a entrenar precisamente hombros. A ver si me crecen. Fijaos que estamos flaquelus totalus. A ver si esta mierda crece de alguna manera. Me voy a ir a entrenar. Muchísimas gracias por el apoyo. Os mando un abrazo enorme. Voy a colgar. Esperad, esperad, esperad. No os vayáis. No os vayáis. No os vayáis. No os vayáis. Esperad un momento. Esperad un momento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4505" target="_blank" class="timestamp">[75:05]</a> Voy a colgar una cosita en Instagram, ¿vale? Y quiero veros cómo dais apoyo máximo e incondicional, ¿ok? Quiero veros. Le doy a publicar, ¿vale? Unas fotos muy chingonas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4525" target="_blank" class="timestamp">[75:25]</a> Unas fotos muy buenas. ¿Sigues en directo? Grandes. A ver, es que esto va un poco mal, eh. Qué putada. Estoy deseando llegar al setup y a mi gimnasio y a mi todo para poder hacer las cosas como de normal. Uno cuando está afuera aprecia de verdad lo que tiene. Qué barbaridad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4540" target="_blank" class="timestamp">[75:40]</a> Mira, es que no puedo ni colgar las fotos. Bueno, ahora cuando llegue a otro spot con mejor cobertura, colgo unas fotitos en Instagram, gente. Denle amor por ahí. Denle amor al código YOLUS10. Estamos a punto de batir récord en este mes. Muchísimas gracias a todos por el apoyo. Y bueno, pues eso, que voy a subir unas fotos muy chulas. Así que... ¡Spamelus nos hemos comido! Así que muchísimas gracias por el apoyo. Os espero ahí, en los comentarios, que os iré respondiendo, os iré viendo mientras entreno. Y os mando un besito y un abrazo. Muchas, muchas gracias.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=XaekzdErYg0&t=4567" target="_blank" class="timestamp">[76:07]</a> Mañana no sé si ahora habrá directo A lo mejor abro otra horita, horita y media Porque estoy en un portátil y esto no aguanta mucho Ya sabéis que no me dio tiempo a comprarme un buen portátil Pero me gustaría reaccionar a los de Andoni Ver cositas y estar de chachara, ¿vale? Así que eso Muchísimas gracias, os mando un besito Siempre fuertes Y me voy a entrenar Fucking empujes, let's go Let's go, let's go, let's go, let's go, let's go Let's go</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 24/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
