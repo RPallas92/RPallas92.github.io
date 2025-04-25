@@ -1,0 +1,498 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 25/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">25/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-J8gVkhBvohk'>EL CAMPEONATO MÁS PESADO DE LA HISTORIA DEL STRONGMAN</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-CxK7Q9kWkt4'>¡KRIZO ANUNCIA A FARAH Y ESTARÁ EN EL NY PRO! El eslovaco BUSCA REVANCHA tras un 2024 ACIAGO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-J8gVkhBvohk">
+            <h2>EL CAMPEONATO MÁS PESADO DE LA HISTORIA DEL STRONGMAN</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 25/04/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=J8gVkhBvohk" target="_blank">
+                    <img src="https://i.ytimg.com/vi/J8gVkhBvohk/hqdefault.jpg" alt="EL CAMPEONATO MÁS PESADO DE LA HISTORIA DEL STRONGMAN" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>RESUMEN GENERAL:</p>
+
+<p>El video se centra en una competición de fuerza, desmitificando algunas ideas preconcebidas sobre este deporte. Se cuestiona la falta de representación de atletas negros, argumentando que la fuerza reside en la eficiencia del sistema nervioso y la estructura ósea, no solo en la masa muscular.  El video rompe con la imagen popular del "hombre fuerte" con abdominales marcados, explicando que un alto porcentaje de grasa corporal es esencial para el rendimiento en este tipo de competiciones extremas.</p>
+
+<p>Un elemento de controversia surge con la revelación de que uno de los competidores, presentado como lesionado, tiene una lesión visible y aparentemente preexistente en el bíceps, lo que genera dudas sobre la veracidad de su estado físico y la integridad de su participación.</p>
+
+<p>El núcleo del video, sin embargo, se centra en la intensa competición, destacando momentos cruciales como las impresionantes cuatro repeticiones con la pesada mancuerna de circo, que amenazan el récord existente. La tensión aumenta a medida que los competidores se esfuerzan al máximo, poniendo en riesgo sus límites físicos.</p>
+
+<p>Finalmente, el video culmina con la victoria de un atleta, quien consigue ganar el campeonato por séptima vez tras una última repetición llena de drama y esfuerzo, evidenciando la dedicación y la fuerza necesarias para triunfar en este exigente deporte. La narrativa, además de mostrar la competición, busca desmitificar la imagen superficial del "hombre fuerte" y resaltar la verdadera ciencia detrás del rendimiento en la fuerza.</p>
+
+<p>MOMENTOS CLAVE:</p>
+
+<p><strong>"[¿Por qué solo blancos en la fuerza?]"</strong> <a href="https://www.youtube.com/watch?v=J8gVkhBvohk&amp;t=149" target="_blank">[02:29]</a>
+El comentarista cuestiona la aparente falta de atletas negros en las competiciones de fuerza, explicando que la fuerza no depende únicamente de la musculatura, sino también de la capacidad del sistema nervioso central y la estructura ósea, rechazando la idea de una superioridad genética racial en este deporte.</p>
+
+<p><strong>"[El cuerpo de un 'verdadero' hombre fuerte]"</strong> <a href="https://www.youtube.com/watch?v=J8gVkhBvohk&amp;t=495" target="_blank">[08:15]</a>
+Se rompe con el mito del hombre fuerte con abdominales marcados, explicando que, de hecho, un alto porcentaje de grasa corporal es crucial para la fuerza. Revela que los cuerpos que vemos en revistas no son los de los más fuertes, sino los más expuestos, y que los verdaderos atletas acumulan grasa como mecanismo de defensa en pruebas extremas como el yugo.</p>
+
+<p><strong>"[El 'lesionado' y su bíceps roto]"</strong> <a href="https://www.youtube.com/watch?v=J8gVkhBvohk&amp;t=877" target="_blank">[14:37]</a></p>
+
+<p>El comentarista revela que uno de los competidores, presentado previamente como 'lesionado', en realidad tiene el bíceps derecho roto y visiblemente más corto que el otro. La revelación, acompañada de un tono escéptico y un comentario sobre la aparente falsedad de la lesión, añade un elemento de controversia y drama a la competición, cuestionando la integridad de uno de los participantes.</p>
+
+<p><strong>"[¡Cuatro repeticiones con la mancuerna de circo!] <a href="</strong>https://www.youtube.com/watch?v=J8gVkhBvohk&amp;t=1182" target="_blank">[19:42]</a>"
+La tensión aumenta a medida que el competidor realiza cuatro repeticiones con la pesada mancuerna de circo, superando las expectativas y poniendo en peligro el récord de Thor. La locura y la fuerza desplegada en esta prueba son palpables, generando un momento crucial en la competición.</p>
+
+<p><strong>"[¡El Éxtasis de la Victoria en la Última Repetición!] <a href="</strong>https://www.youtube.com/watch?v=J8gVkhBvohk&amp;t=1355" target="_blank">[22:35]</a>"</p>
+
+<p>La tensión es palpable mientras el competidor lucha por levantar el peso en la última repetición, con la victoria del campeonato en juego. El comentarista grita "¡Ojo! ¡Ojo! ¡Ojo!" y la explosión de alegría al lograrlo es inmediata, confirmando que ha ganado el campeonato por séptima vez.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=0" target="_blank" class="timestamp">[00:00]</a> Señores, lo que os gusta, lo que os encanta, lo que me encanta, vamos a ver fuerza, Strongman, el campeonato más pesado probablemente, me gustaría confirmarlo, pero creo que sí, de los que yo haya visto más pesado de la historia, de la historia del Strongman.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=16" target="_blank" class="timestamp">[00:16]</a> ¿Qué quiere decir eso? Que te suscribas al canal, que le des me gusta a este vídeo y que me comentes. Me encanta la fuerza. Nos encanta la fuerza. Más fuerza. Más, más. Dale, al lío. Vamos a empezar por la primera prueba. Empezamos por peso muerto con ruedas gigantes de camión. Epiquísimo. Con leyendas, como las que vais a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=38" target="_blank" class="timestamp">[00:38]</a> Robert Oberst. Este chaval nunca ha sido bueno en peso muerto. Digamos que este peso muerto es un peso muerto parcial, un poquito más bajo de lo normal. Normalmente un peso muerto parcial se hace desde esta altura, no desde aquí tan abajo. Pero bueno, vamos a ver. Estos son 380 kilos. Este tío nunca ha sido bueno en peso muerto. Pero no está nada mal. Para no ser su fuerte, nada mal. Este hombre más bueno en los preses. Michael Sivnikov. 400 kilos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=67" target="_blank" class="timestamp">[01:07]</a> ¡Ruso! Están calentando, ¿eh? Están calentando. Ah, bueno, y también tengo que decir que es un fantasma de los de manual. Siempre está lesionado. Lo digo porque lo vais a ver haciendo un poco de... Como que está débil, cojeando... Mentira, ¿vale? Mentira. En todas las competiciones hace lo mismo. En todas. Ahora hace como que está cojo y tal. Pero ahora veréis. No más cuento. Este... Dimitar Sabatinov. Oliendo sales de amoníaco. Con 410 kilos en barra. Muy seriosa competición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=98" target="_blank" class="timestamp">[01:38]</a> Fácil. Muy bien. Jerry Pritchett. Una leyenda del peso muerto. Muy fácil. Mike Burke. 415 kilos. Este ha sido el compañero de Brian Shaw durante muchísimos años. Muchos años ha sido el compañero de Brian Shaw. Muy bien. Muy fácil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=126" target="_blank" class="timestamp">[02:06]</a> Aquí está, Hafthor Julius Bierzon. 961 libras. Este peso ya... Esto es otra cosa, ¿eh? 435 kilos. Por supuesto, para que entendáis, en este peso muerto se mueven más kilos que un peso muerto convencional, ¿vale? Ahí va el bicho. Un Thor bastante más joven, ¿eh? Muy bien, muy fácil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=149" target="_blank" class="timestamp">[02:29]</a> Dimitar Sabatinov, con 440 kilos. Antonio, y si los negros suelen ser genéticamente más fuertes y más musculosos y dominan muchas competiciones, ¿por qué en la fuerza todos son hombres blancos? Porque tú estás dando por hecho que los hombres negros son más fuertes y musculosos que los blancos. Eres tú el que lo estás dando por hecho. Igualmente, te explico. La fuerza no solo vale la musculatura, sino los culturistas serían los más fuertes. En la fuerza hay otro factor. Primero, tu capacidad de reclutar las máximas fibras musculares.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=178" target="_blank" class="timestamp">[02:58]</a> Sistema nervioso central. Eso lleva mucho tiempo entrenarlo. Segundo, la estructura, ¿vale? La estructura. Si tú eres un tío, digamos lo que siempre se ha dicho, ¿no? De huesos anchos, que no es huesos para mí, es articulaciones, ¿vale? Un tío con las articulaciones grandes, cintura muy ancha, ¿vale? Esa persona aguanta mejor los kilos, ¿vale? Encima.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=204" target="_blank" class="timestamp">[03:24]</a> Y probablemente tenga menos riesgo de lesión. Eso sí que es genético, ¿vale? Y eso sí que es un factor importante en la fuerza. Escúchame, antes de seguir con el vídeo, estoy sorteando una gift card, una tarjeta de regalo de 150 euros en Procis. El producto es a elegir, bueno, 150 euros para gastar en Procis. ¿Cómo? Usando mi código de descuento Antonio G en Procis. O sea, haciendo una comprita, automáticamente participas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=227" target="_blank" class="timestamp">[03:47]</a> Así que haz tu compra que puedes ganarte 150 euros en productos de Profis. ¡Aquí va! 472 kilos. Dimitar… Perdón. ¡Mijael Sibregaot! ¡Misa! ¡Oh, my God! ¡Ahí va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=242" target="_blank" class="timestamp">[04:02]</a> Se supone que estaba lesionado, ¿sabes? ¿Qué opinas de Mark Henry? Nada, un strongman… Pseudo-strongman, aunque en verdad era strongman, era heterófilo. En la WWE os vendieron la moto a todos diciendo que era el hombre fuerte del mundo y nunca fue el hombre fuerte del mundo ni se acercó. Ganó un Arnold, el primer Arnold Classic, creo que ganó de strongman y ya está. Ahí va Thor. 450 kilos, acaba de mover. Sabicas todavía no ha aparecido. Brian Shaw todavía no ha aparecido. Lo bueno de verdad viene ahora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=267" target="_blank" class="timestamp">[04:27]</a> Ahí va. Y Lalas. Vitautas Lalas. Vitautas Lalas. Un tío de 1,75m. Bueno, eso dice él. Yo creo que de 1,72m no pasaba. Pero bueno, para Stroman, pequeño. 460kg. En el primer intento. Vitautas Lalas. Ahí va el bicho, el lituano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=288" target="_blank" class="timestamp">[04:48]</a> Dejad a los grandes que vienen ahora. Ahora sí. 480 kilos. Primer intento. Brian Shaw. Ahí va. 480 kilos. ¡Qué barbaridad! ¡Qué barbaridad! ¡Uf!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=311" target="_blank" class="timestamp">[05:11]</a> Dios. Aquí va. Mismo peso en barra. Mismo peso en barra. El hombre más fuerte de la historia. Cidrunas sabicas. Madre mía de mi vida. ¡Qué barbaridad! Jerry Pritchett. Muy fácil también. ¡Sí, señor! Mismo peso en barra ha sido. 480. Los tres lo han levantado. 485 kilos para Thor. ¡Ahí va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=339" target="_blank" class="timestamp">[05:39]</a> Ahí va, ahí va, ahí va, ahí va, ahí va, ahí va, ahí va, ahí va, ahí va, ahí va, ahí va… No. No ha dicho el peso y habrá pensado. A ver, a ver, a ver, a ver, a ver… 486 kilos. Madre mía, madre mía. ¡Ahí va! ¡El único! ¡El inigualable! ¡El papá de todos! 524 kilos en barra para romper el récord del mundo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=370" target="_blank" class="timestamp">[06:10]</a> ¡Venga! ¡Dale, dale, dale! ¡Dale! ¡Dale! ¡Dios, qué fácil, tío! ¡Qué mal! ¡Mira, mira, mira! ¡Y se queda aguantándolo! ¡Y se queda aguantándolo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=392" target="_blank" class="timestamp">[06:32]</a> ¡Qué burrada, tío! ¡Nuevo récord del mundo! ¡Puede más, puede más! ¡Qué barbaridad, tú! ¡Qué barbaridad, tú! Venga, vamos a ver ahora el yugo. El yugo más pesado de la historia. El yugo más pesado de la historia. Cuidado los kilos que van a mover aquí ahora. 1.227 libras. 556 kilos de los que tienen que andar con él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=416" target="_blank" class="timestamp">[06:56]</a> Levantarlo y andar. Tienen que andar, creo que son 5 metros, si no me confundo. Ahí va. Thor es muy bueno en esta prueba. 556 kilos. Es mucho peso, ¿eh? Mucho peso. Muy bien. Y él es muy bueno. Aquí va, Robert Roberts. Robert Roberts. Ahí va. Ah, muy bien. Muy buen ritmo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=442" target="_blank" class="timestamp">[07:22]</a> Sí, señor. Ahí va Brian Shaw. Brian Shaw es criminal en esta prueba. Brian Shaw en esta prueba es criminal, de los mejores de la historia. De los mejores de la historia en esta prueba. Ahí va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=461" target="_blank" class="timestamp">[07:41]</a> Antonio, ¿tú en tu experiencia dirías que esta prueba duele mucho o no es tanto como parece? Yo te digo que es de la prueba... Es la prueba de las pruebas. De verdad, para mí el yugo es donde se demuestra cuánto de fuerte eres realmente. Aquí la mayoría de los Strongman o muchos de los Strongman en esta prueba pinchan. Es de las pruebas más chungas, con peso quiero decir, que hay. Es una de las pruebas más chungas que hay. Que por cierto, a mí me encanta. Aquí vas a vicas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=495" target="_blank" class="timestamp">[08:15]</a> Buen ritmo también. Y ahora le van a subir las cargas, creo. Bueno, este se ha puesto a sangrar ya por la nariz y todo. Pregúntame desde la ignorancia, ¿por qué están tan gordos? Porque... Te explico, porque nos han vendido la moto a todos desde chiquitito que estar fuerte es tener abdominales fuera y que se te marquen los músculos. Y eso es todo lo contrario. O sea, a ti, realmente, contra menos porcentaje graso tengas, menos fuerte estás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=522" target="_blank" class="timestamp">[08:42]</a> O sea, lo normal, que sepáis que las personas fuertes, de verdad, tienen este tipo de cuerpos. Digamos que son gordifuertes, para que lo entendamos. O sea, realmente los músculos, que se le ven todos los músculos, esa persona, en ese momento, es cuando menos fuerza tiene de su vida. ¿Vale? Es así. Pero nos han vendido que, bueno, que se nos noten los abdominales y que se nos noten todos los músculos, nos han vendido como que eso es símbolo de estar fuerte, ¿no? Bueno, mejor dicho, está fuerte, pero no es fuerte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=551" target="_blank" class="timestamp">[09:11]</a> ¡640 kilos pesa eso! ¡640 kilos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=561" target="_blank" class="timestamp">[09:21]</a> Aquí muchos no van a poder ni despegarlo del suelo. Rover Overs, 640 kilos. Mira, otra cosa que os tengo que decir, la mayoría, muchos Strongman en el cogote, aquí atrás, les aparece un bulto, ¿vale? Por culpa de esta prueba. Es un mecanismo de defensa de tu cuerpo, ¿vale? Empiezas como a acumular ahí una especie de callo barra grasa, justo aquí atrás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=582" target="_blank" class="timestamp">[09:42]</a> ¿Vale? En Andalucía se dice el morrillo, morrillo de costalero. ¿Vale? Que muchos costaleros lo tienen. Es como una especie de callo que se deforma ahí por culpa de esta prueba. Lo digo por si alguna vez veis a alguien así con una cosa ahí atrás. Que esté fuerte, no un gordo. Como tal, pues eso pasa, ¿vale? ¡640 quilazos, eh! O sea, para mí el hecho de que lo despegue del suelo ya me parece una barbaridad, ¿eh? ¡Qué loco, tío!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=609" target="_blank" class="timestamp">[10:09]</a> 640 kilos. Ahí va el lesionado. El lesionado. Míralo. El que estaba lesionado. Un embustero este, ¿sabes? ¡Hostia! ¡Cómo sangra! ¡Mira y se lo chupa! Y se lo chupa. Ha sangrado por la nariz y ha dicho… Esto para adentro. Que no se nos escape ni un poquito de texto. Proteína pura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=638" target="_blank" class="timestamp">[10:38]</a> ¡7,50! Buen tiempo, ha sido rápido. Lalas, 11,57. Es una locura, tío. Es una verdadera locura, tío. Aquí va a Brian Shaw. Brian Shaw lo ha hecho en 5,79. ¡No te creo! ¡En 5,79! ¡Hostia sabicas! ¡Mira, mira, mira!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=663" target="_blank" class="timestamp">[11:03]</a> ¿Pero dónde va? ¿En 387 el Sabica? ¡Qué barbaridad! Otra prueba que gana. Este tío era inhumano. Era inhumano, no, sobrehumano. Sabica se ha ganado. Míralo la prueba. Quien sepa lo que es, es levantar un cilindro superpesado por encima de la cabeza. 200 kilos a repeticiones. Desde el suelo y por encima de la cabeza. Sabica. A ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=692" target="_blank" class="timestamp">[11:32]</a> 2 va a ser difícil de superar 3 va a ser muy difícil de superar esto a ver robert robert carga bien muy bien</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=723" target="_blank" class="timestamp">[12:03]</a> Va por una segunda repetición. Vale, bien a las rodillas. Arriba el pecho. Bien, venga. Dos. Bloquea, bloquea. Bloquea, bien. Recordad que lleva 200 kilos encima, ¿eh? 200 kilos encima, ¿eh? Y trata a Lallas. Otro especialista en este movimiento. 200 kilos. Y trata a Lallas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=753" target="_blank" class="timestamp">[12:33]</a> Muy bien. Muy bien. No, no. 200 kilos por encima de la cabeza es una locura. A ver. ¡Dos! Joder, qué barbaridad este tío. Este tío era buenísimo. Y chiquitito, ¿eh? Qué barbaridad. Hay que ir a Brian Shaw. Claro que puede hacer mucho daño. Brian Shaw nunca fue un tío... Digamos... No fue su mejor movimiento este. Pero bueno, 200 kilos, ¿sabes? Encima. Vamos a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=784" target="_blank" class="timestamp">[13:04]</a> Esta prueba nunca se le dio bien a Braia Sao Tiene dientes, lo que pasa es que tiene un vocal A ver Mike Burke Braia Sao no ha hecho ninguna Mike Burke ¡Dios, Dios, Dios! ¡Bloquea, bloquea, bloquea! ¡Dios, Dios! ¡Oh, luchadísima! Aquí va Thor Sigamos con el... Sí, el carry 400 kilos de carry Vamos a ver cómo hacen El primero es salir Dimitar Sabatinov Vamos a ver Ahí va</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=817" target="_blank" class="timestamp">[13:37]</a> Y a pelo, ¿eh? 400 kilos a pelo. Sin agarraderas ni nada. Me parece una barbaridad que lo levanten del suelo, tío. Es una locura. Yo tengo una anécdota con este hombre. A este hombre yo le vi llegar con una bombola de oxígeno al Arnold Classic de Barcelona, tío. Lo de este hombre me parecía lo más insano que he visto en mi vida. En cuanto a un competidor. ¡Ahí va Thor!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=847" target="_blank" class="timestamp">[14:07]</a> Bastante bueno en esta prueba, ¿eh? Se le ha caído. Antes lo gafó. Antes lo digo, antes lo gafó. Un Thor muy joven, ¿eh? Vamos, vamos. Venga, venga, venga. Joder. No. No tiene pinta de hacerlo bien. Aquí va el lesionado. El supuesto lesionado. Menos mal que estaba lesionado el tío, ¿sabes? Si os fijáis, tiene el bíceps derecho roto. Mirad cómo lo tiene más cortito. Tiene roto el chaval.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=877" target="_blank" class="timestamp">[14:37]</a> Vaya mano tiene, tío. Se le cae y se le levanta. Se cae. El ruso este era muy bueno. Mike Burke. Este tiene también muy buen agarre. Muy, pero que muy buen agarre. Venga, venga, venga, venga. Venga, final. Sí. Primero en acabar la prueba. Sí, señor. Sí, señor. Brian Shaw. Especialista en este tipo de pruebas. Tiene una mano muy grande. Por lo tanto, tiene muy buen agarre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=903" target="_blank" class="timestamp">[15:03]</a> Bien, compacto. Venga, venga, venga, venga, venga, venga, venga, venga. Sigue, sigue, sigue, sigue. Sigue, sigue, sigue, sigue. Está a punto de llegar, está a punto de llegar. Uy, se le ha caído. Joder, qué putada. Uy, hostias. Esto es peligrosísimo. Uf. Dios, Dios, Dios. Uf. Sabicas, esta prueba no se le da muy bien. Históricamente no se le da muy bien. Nunca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=935" target="_blank" class="timestamp">[15:35]</a> Nunca se le dio bien esta prueba. ¿Esto te puede hacer mucho daño en la espalda? Bueno, en la espalda y en las manos. Tiene que finalizar. Te queda muy poquito. Ahí se quedó. Jerry Pritchett es el siguiente. ¡400 kilos! ¡Venga, venga, venga! ¡Ojo, ojo, ojo! ¡Hostia, como un rayo, tú!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=962" target="_blank" class="timestamp">[16:02]</a> ¡Coño! ¡Dios! Muy buena prueba de Jerry Pritchett. Bueno, se habrá puesto a la cabeza. Último evento que da al campeón. Hemos visto el peso muerto, el cilindro, Australian OAC, el carry, ¡ay, el yugo! Y ahora el final, la Circus Dumbbell, mancuerna de circo. Estamos hablando de una mancuerna que pesa 200...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=983" target="_blank" class="timestamp">[16:23]</a> 74 libras que tienen que levantar a una mano. 125 kilos. Limitar Sabatinov. Este hombre, aquí donde lo veis, ha tenido el récord a una mano más el récord del mundo. ¿Vale? De máximo peso levantado a una sola mano. Tienen que hacerlo a repeticiones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=999" target="_blank" class="timestamp">[16:39]</a> Encima, esa mancuerna es una mancuerna estrechita, porque toda la vida en el Storman han sido mancuernas que medían casi un metro de largas. El peso, al estar más reducido, es más difícil de levantar. Peso que sea más voluminoso es más fácil de levantar. Ahí va. Muy bien. En esta prueba era un especialista este hombre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1020" target="_blank" class="timestamp">[17:00]</a> Muy buena prueba, bien. Es una locura el peso, ¿eh? Una locura, tío. 125 kilos. Yo lo máximo que levanté en esta prueba fueron 110 en la época. Me gustaría volver a hacerlo. Bueno, volveré, volveré. Mira, mira lo que tiene que hacer, ¿eh? Mira lo que tiene que hacer para poder levantar, llevarse al hombro, ¿eh? Fijaros. Y la técnica que tiene, que se tiene que meter, mira, se mete debajo, ¿ves? ¡Pam! ¡Dos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1042" target="_blank" class="timestamp">[17:22]</a> Dos. Este va a ser el referente, que lo sepáis. De él va a depender un poco cómo va a ir el primero, el segundo, el tercero en esta prueba. Porque él va a quedar muy arriba, este muchacho. Porque es muy bueno. Era muy bueno en esta prueba. También no es solo empuje de hombro. Si os fijáis cómo levanta. Es un... Tú te pones, empujas con las piernas y conforme sube la cuerda te metes debajo. ¿Vale? Te tienes que meter debajo. Fíjate cómo la tiene que cargar. ¡Qué barbaridad!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1068" target="_blank" class="timestamp">[17:48]</a> Mirad. Aquí se va a ver claramente lo que hace la técnica. Mirad cómo empuja... Se agacha, empuja con las piernas para arriba y él se mete debajo. ¿Veis? ¡Ping, bang! Y se mete debajo. ¿Veis? Tres. Muy bien. Muy, pero que muy bien. Ahí va Thor. Zurdo. También muy bueno en esta prueba. Se le daba muy bien antes. Quítate de medio, coño. ¿Vale? Una. Bien. Bien. Aquí se va a definir el ganador, ¿eh? Que creo que va... Brian Shaw y Savickas van muy cerca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1098" target="_blank" class="timestamp">[18:18]</a> Dos. Muy bien. Cuatro. Se está luciendo. Se está luciendo. Para eso tienes que tener un brazo más fuerte que el otro. No, sueles entrenar los brazos por igual. Lo que pasa es que hay un brazo más predominante. Bueno, predominante. Tres. Hostias. Tres repeticiones. Cuidado. Va por una cuarta. Vamos a ver el bicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1124" target="_blank" class="timestamp">[18:44]</a> Quítate de medio, coño. No. Una más. Lo voy a intentar otra vez. Se la lleva al hombro. Vamos a ver. Y bloquea. Toma. Que ha hecho cuatro. Ahora el que pueda, que me iguale. Ahí va. Lalas. Muy bueno en esta prueba también. Una. Venga. Este es muy bueno. Ahí va. Dos. Joder.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1154" target="_blank" class="timestamp">[19:14]</a> Uy, este tiene pinta de que va a hacer más... Que va por Thor, ¿eh? Va por Thor. Una técnica diferente, si os fijáis. Tres... No, no, no vale. Lleva dos válidas, ¿eh? Vamos a ver. Tres. ¡Sí, señor! ¿Va por una cuarta? Tío, muy explosivo. Muy potente. Vamos por una cuarta. No. Duele el hombro. Que se te caiga la mancuera en el hombro te duele. Vamos a ver. Tío, muy completo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1182" target="_blank" class="timestamp">[19:42]</a> no a verlo es bien sí señor una ave dos joder con burk la carga de la tercera por la tercera no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1210" target="_blank" class="timestamp">[20:10]</a> Tres. Muy bien. Sí, es muy fuerte este hombre. Era muy fuerte y muy completo, ¿eh? Va por una cuarta. Si levanta ahora empata a Tor, ¿eh? ¡Cuatro! ¡Hostias! ¡Qué locura! Aquí lo habrá yasado. Uh, sólido, ¿eh? Una. ¡Dos! ¡Hostia! ¿Veis lo que os he dicho? A cambio de mano, amigos. Este cambio de mano. Primero con la derecha y luego con la izquierda, ¿eh? Fíjate. Ahora con la derecha de nuevo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1240" target="_blank" class="timestamp">[20:40]</a> Tres. Esto no es tan común esto, ¿eh? No es tan común. Usar los dos brazos. Pero claro, es inteligente. Te fatigas menos. Va por la cuarta. Va por la cuarta. Por la derecha. Su mano dominante, digamos. ¡Cuatro! ¡Hostias! ¿Ha quedado por una quinta para ganar? No. No ha bloqueado. ¡Uf!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1268" target="_blank" class="timestamp">[21:08]</a> Si hace la quinta, se pone primero. Si hace la quinta, se pone primero. Vamos a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1279" target="_blank" class="timestamp">[21:19]</a> No. No ha valido esa. Esa no vale. Cuatro. No vale. No. Ha hecho cuatro. ¿Le han contado cinco repeticiones? ¿Pero cuándo ha hecho cinco? O sea, sí se la han contado. La última se la han contado. Aquí va Sabicas. No sé la ventaja de puntos que tendrá, pero bueno, si gana el campeonato, veremos. Aquí lo va a... Lo va a... Si... Lo veremos ahora mismo. Si gana o no. Vamos a ver. Aquí lo veremos. Uf, le ha costado mucho levantarla. Quita usted de medio, coño. Vale, bloquea. Una.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1302" target="_blank" class="timestamp">[21:42]</a> Recordad que esto es el que máximos puntos ha hecho entre todas las pruebas. Isavikas ha ganado el cilindro, ha ganado el peso muerto y ha ganado el yugo. Así que yo creo que aquí ni siquiera tiene que hacer. Yo creo que haciendo tres o cuatro, gana. Dos. Me parece a mí que si hace una más, gana el campeonato. Si hace una más, me parece que gana el campeonato. Sí, recordad que es el que mejor media tiene. Si hace tres, me parece que gana el campeonato. Pero usar las dos manos en el justo no, porque es llevártela al hombro cuando... A ver... ¡Tres! ¡Tres!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1332" target="_blank" class="timestamp">[22:12]</a> No, no ha ganado Capela todavía. Vale. Yo creo que se hace 4 porque empataría con Thor. Con Thor se hace 4. Vamos a ver. Empataría con Thor. Quítate de en medio, tío, que lo vemos. Uf, se le está moviendo. Creo que se hace esta gana, ¿eh? Se hace esta gana. Uy, Dios. Lo ha hecho ahí. Uf, aquí es que te la está jugando. A la última repetición tiene que ser una movida que flipas, ¿eh? Le cuesta mucho cargarla. Vamos a ver. ¡Ojo! ¡Ojo! ¡Ojo! Ganó. Míralo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J8gVkhBvohk&t=1363" target="_blank" class="timestamp">[22:43]</a> Sí, señor. Ahí está. Acaba de ganar el campeonato. ¡Qué barbaridad! Eso sí que es chungo, ¿eh? Una vez que fallas, lo normal es que no lo levantes. Está haciendo así porque es su campeonato número 7 que gana. Ha ganado ese campeonato 7 veces. Bueno, lo ha ganado alguna más, pero hasta esa fecha 7 veces. Sí, sí, campeón. Lo de Sabicas es otro rollo, tío.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-CxK7Q9kWkt4">
+            <h2>¡KRIZO ANUNCIA A FARAH Y ESTARÁ EN EL NY PRO! El eslovaco BUSCA REVANCHA tras un 2024 ACIAGO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 25/04/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4" target="_blank">
+                    <img src="https://i.ytimg.com/vi/CxK7Q9kWkt4/hqdefault.jpg" alt="¡KRIZO ANUNCIA A FARAH Y ESTARÁ EN EL NY PRO! El eslovaco BUSCA REVANCHA tras un 2024 ACIAGO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <p>RESUMEN GENERAL:</p>
+
+<p>El video trata sobre el retorno competitivo del fisicoculturista Michael Crizo, tras una compleja cirugía de hombro y una inesperada presentación en el Mister Olimpia. Crizo, quien anteriormente se había posicionado dentro del top 10, llegó al EMPRO 2024 en condiciones físicas muy inferiores a las habituales, generando interrogantes sobre su rendimiento.</p>
+
+<p>La narrativa central se enfoca en el arduo proceso de recuperación de Crizo, mostrando su dedicación y esfuerzo para superar los desafíos post-operatorios y volver a la competición a un alto nivel. El video destaca la transformación física lograda tras la cirugía, evidenciando el compromiso del atleta con su disciplina.</p>
+
+<p>La confirmación de su participación en el New York Pro, anunciada por un juez central del Mister Olimpia, representa un momento crucial en su carrera.  Este evento se presenta como una oportunidad para demostrar su recuperación y retomar el camino hacia el éxito, tras una séptima posición en la última competición del Mister Olimpia que sorprendió a muchos.</p>
+
+<p>Finalmente, el video concluye generando expectación con un anuncio prometedor para el futuro, anticipando una noticia que "va a dar bastante que hablar" y manteniendo a la audiencia en vilo sobre el futuro de Michael Crizo y su carrera.</p>
+
+<p>MOMENTOS CLAVE:</p>
+
+<p><strong>"[La caída de un campeón]"</strong> <a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&amp;t=209" target="_blank">[03:29]</a>
+Después de dominar la escena y colarse en el top 10 del Olympia, Michael Crizo llegó al EMPRO 2024 “muy desmejorado”, con problemas para alcanzar la condición óptima, más aguado y tapado. Este giro inesperado tras su éxito inicial plantea la pregunta de qué sucedió con el atleta, creando un fuerte contraste entre su pasado glorioso y su presente incierto.</p>
+
+<p><strong>"[El viacrucis de un campeón]"</strong> <a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&amp;t=357" target="_blank">[05:57]</a> 
+Se revela la dura recuperación de Michael Crizo tras una compleja cirugía de hombro, mostrando su evolución desde el punto más bajo tras la operación hasta su actual estado. Se enfatiza el sufrimiento y esfuerzo para volver a la competición, y la transformación física que ha logrado.</p>
+
+<p><strong>"[Crizo compite en el New York Pro: Confirmación Oficial]"</strong> <a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&amp;t=565" target="_blank">[09:25]</a>
+La confirmación de que Michael Crizo competirá en el New York Pro por Steve Weiberger, juez central del Mister Olimpia, marca un momento clave. Esto implica su regreso a la competición de alto nivel y genera gran expectación, especialmente tras su sorprendente séptima posición en el Mister Olimpia anterior.</p>
+
+<p><strong>"[Bomba en el canal: Anuncio que sacudirá las redes]"</strong> <a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&amp;t=16" target="_blank">[00:16]</a>
+El creador promete una noticia "que va a dar bastante que hablar" el domingo, generando intriga y expectativa sobre un posible anuncio impactante. Deja a la audiencia en vilo, creando un fuerte gancho para el próximo video.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal. Feliz jornada de viernes, estamos ya a las puertas del fin de semana y tenemos que hablar de algunas noticias que se han producido en el mundo del culturismo, sobre todo en concreto relacionadas con Michael Crizo. Michael Crizo que desveló, al menos yo creo que lo confirmaron de manera oficial porque lo pusieron en el tablón de Instagram, tanto de Crizo como de, en este caso, George Farah.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=27" target="_blank" class="timestamp">[00:27]</a> El hecho de que los dos estaban colaborando juntos, algo que desde luego no se sabía, quizás antes de la operación de Crizo se desconocía que esta unión era real, pero ahora se ha ido filtrando en las últimas semanas y ya parece que de esta manera...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=43" target="_blank" class="timestamp">[00:43]</a> se haría oficial. Pero no solamente eso, sino que Michael Crizo, como todos sabéis, va a hacer el Peace World Pro y ya se está empezando a mover en Estados Unidos. Ha estado con Steve Weiberger en Nueva York y el propio Steve ha confirmado que Michael Crizo va a estar haciendo el New York Pro justo dos semanas después del Peace World Pro para el que ya está anunciado. Así que vamos a ver a Michael Crizo con un periplo en Estados Unidos. Generalmente también es verdad que los atletas que suelen hacer</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=69" target="_blank" class="timestamp">[01:09]</a> el Pittsburgh, muchos de ellos también repiten en Nueva York, y parece que va a ser ese el estreno en esta temporada 2025 de un Michael Crizo, que también lo vamos a analizar, porque ha habido luces y sombras con él en todos estos últimos tiempos, no solamente en la tarima, que lo analizaremos, sino también fuera de ella, con declaraciones, con salidas de un poquito de tono, etc., etc.,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=88" target="_blank" class="timestamp">[01:28]</a> que sin duda merece e invita a hablar de él, así que como digo vamos a pasar a analizar toda la actualidad de Michael Crizo, por supuesto no sin olvidarme antes de los códigos, ya lo sabéis, código Iron Road en toda la web de Big, estar muy atentos a Big, estar muy atentos a la web y a las promociones, en mi portal de Instagram vais a tener muchas novedades sobre productos que está haciendo Big nuevos,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=109" target="_blank" class="timestamp">[01:49]</a> nuevos sabores y como digo, sobre todo pensados en el cliente, así que como digo, aprovechad ese 10% de descuento y por supuesto 10% de descuento en toda la web de Agonjin con el mismo código, código Iron Road. Y como digo, vamos a pasar a la actualidad de Michael Crizo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=125" target="_blank" class="timestamp">[02:05]</a> porque yo creo que invitan a hablar un poquito y a coger un poquito de trasfondo de Michael Crizo, porque hace tan solo dos años, que se dice pronto, nos encontramos esto en la tarima de New Space, que era un Michael Crizo imponente, un Michael Crizo dominador de la escena, y tenéis a Josema, que se metió top 4, nada más y nada menos, en su debut profesional en la categoría Open,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=150" target="_blank" class="timestamp">[02:30]</a> Pero era evidente que Michael Crisó había venido a arrasar y eso fue lo que hizo. Un empro dominado de principio a fin por Michael. Y en este caso, sí que es verdad que cuando se produjo su cambio de la IFBB,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=167" target="_blank" class="timestamp">[02:47]</a> de donde él obviamente había sido gran dominador en los últimos años, a NPC, todo el mundo esperaba que fuera uno de esos nombres importantes en la categoría Open. Y no solamente fue así. Es que Michael Crizo consiguió barrer en el EMPRO, pero es que poco después en el Olimpia, porque recordemos que el EMPRO es en verano, el Olimpia es en octubre más o menos,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=191" target="_blank" class="timestamp">[03:11]</a> Se coló nada más y nada menos que en el top 10 de la Olimpia quedando séptimo. Es decir, todo el mundo pensaba, y de hecho así fue, porque lo ratificó él con su nivel, que Michael Crici iba a ser uno de los nombres propios importantes en la categoría Open para varios años. ¿Qué fue lo que pasó?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=209" target="_blank" class="timestamp">[03:29]</a> Con Michael Crizo, pues que nos encontramos al año siguiente con una versión de Crizo muy desmejorada en el empro del 2024. Con Michael Crizo que llegó con bastantes problemas a la hora de apretar en ese punto de condición, más aguado, más tapado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=225" target="_blank" class="timestamp">[03:45]</a> Creo que con varios problemas en la puesta a punto, de hecho pudimos estar en el backstage, pudimos entrevistarlo incluso, y creo que él mismo ni se encontraba cómodo, todo le molestaba en el sentido del calor, de lo tarde que se hizo el salir, etc.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=241" target="_blank" class="timestamp">[04:01]</a> Y yo creo que fue un campeonato para olvidar, para un Michael Crizo que ya venía lesionado, todo hay que decirlo, ¿vale? Ya venía con problemas en el hombro bastante recurrentes. A partir de aquí, como todos sabéis, Michael Crizo tuvo un proceso, tuvo una situación en la cual tuvo que pasar por el quirófano y se tuvo que operar...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=263" target="_blank" class="timestamp">[04:23]</a> del hombro o de problemas en el hombro, que todos sabemos que en el mundo del culturismo lesiones de este tipo no son nada fáciles de gestionar, quiero decir, es una lesión importante, una lesión que tiene su posoperatorio y que obviamente pues dificulta y resta cualquier tipo de, ya no de progresión, sino simplemente de cumplir con una serie de plazos y de ver cómo va a salir al año siguiente en Tarímate, de hecho aquí lo tenéis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=290" target="_blank" class="timestamp">[04:50]</a> Después de esta cirugía, la evolución que ha tenido. Michael Criso competía en torno a verano del año pasado en el EMPRO.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=299" target="_blank" class="timestamp">[04:59]</a> Y como podéis ver, pues obviamente voy a rescataros el momento de la cirugía. Creo que está más o menos por aquí, aunque bueno, yo creo que esto a lo mejor ya puede ser más tema de recuperación y demás. Pero como digo, una situación complicada para Michael Crizo, una operación difícil y más para un atleta de sus dimensiones y de su...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=321" target="_blank" class="timestamp">[05:21]</a> de su nivel y que obviamente requería de un tiempo de inhabilitación vamos a decir así o de recuperación</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=330" target="_blank" class="timestamp">[05:30]</a> que como podemos ver se ha llevado a cabo y de qué manera, porque ahora vamos a ver al Michael Criso ya totalmente recuperado, fijaros aquí sesiones como digo ya de recuperación y un Michael Criso que evidentemente ha tenido un auténtico viacruz y fijaros el punto con el que estaba justo después de esa operación, en fin, trabajos y más trabajos,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=357" target="_blank" class="timestamp">[05:57]</a> y una situación en un 2024 que estoy completamente seguro que Michael Crizo va a querer olvidar porque obviamente ha tenido que pasar por un auténtico viacrucis pero la realidad como digo fijaros aquí justo después de ser operado el físico que tenía obvio y normal después de una situación tan dificultosa la realidad es que Michael Crizo ha pasado de ahí a esto que tenemos aquí que es un Michael Crizo ya más acorde con lo que normalmente tengo con la imagen que tenemos todos de Michael Crizo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=387" target="_blank" class="timestamp">[06:27]</a> Y que sin ninguna duda, y lo vamos a hablar, tiene sus puntos a favor más que evidentes, como son por ejemplo todo el tema hombro, brazo, pectoral, dimensiones de clavículas, etc. Y sus puntos débiles que él también se ha querido salir muy rápido a la palestra cuando le han preguntado por ellos. Estamos hablando sobre todo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=411" target="_blank" class="timestamp">[06:51]</a> del tema de la espalda, principalmente encuadrado en femorales y glúteos. Y eso es ahí donde él, como digo, ha sido y ha ejercido una crítica foribunda. De hecho, tenéis un vídeo en el canal que lo hizo donde, en fin, se pasó cuatro pueblos. Fijaros la evolución de un punto a otro, de un mes entrenando después de la operación de hombro, que son estas imágenes, a más o menos el Michael Criso de hace dos semanas, que es este que tenemos aquí. Como digo, un atleta de primerísimo nivel.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=438" target="_blank" class="timestamp">[07:18]</a> un atleta que todos tenemos muchas ganas de ver porque obviamente tiene mucho para poder demostrar y tiene mucho también hay que decirlo así</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=449" target="_blank" class="timestamp">[07:29]</a> Tiene mucho para poder decir en una Olimpia. Yo insisto, creo que es uno de esos atletas que queremos ver cuál es su punto de evolución porque sí que es verdad que a nivel de simetrías y demás hay mucha diferencia entre lo que puede ofrecer en ese conjunto brazos-hombros que probablemente sea de lo mejorcito de la categoría sino lo mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=471" target="_blank" class="timestamp">[07:51]</a> con el back pose que ya sabemos todos que se le queda un poquito atrás, fijaros en estos ejercicios donde se ve esto que estoy diciendo, todo lo que es las extremidades y el pectoral, que probablemente sea lo mejor de Michael Crizo, aparte él es muy amplio de clavículas, con lo cual impresiona mucho, llama mucha atención, aparte es un atleta muy alto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=489" target="_blank" class="timestamp">[08:09]</a> Pero claro, como digo, luego esos bad posts, esos elementos que se van quedando rezagados son un poquito los que más pueden llegar en un momento dado a preocupar. ¿Dónde vamos a la noticia en este caso de Michael Crizo, que es un poco la que quería traeros? Pues tenemos dos. La primera...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=506" target="_blank" class="timestamp">[08:26]</a> fue la confirmación oficial, porque digo oficial porque lo etiquetaron y él lo resumió, con lo cual le da carácter oficial, también hemos visto algunas publicaciones donde ha comentado George Farah, de que George Farah es el preparador de Michael Cripton. George Farah que, como todos sabéis...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=522" target="_blank" class="timestamp">[08:42]</a> parecía que estaba alejado de cualquier tipo de preparación. De hecho, él llevaba a Andrew Jackett en el pasado y a Blessing Abodibu y a los dos les invitó a buscarse preparador porque él se iba a retirar. De hecho, creo recordar además que George Farah atravesó por un problema de salud bastante delicado y que también eso invitaba a su retiro. Y en este caso, George Farah parece que ha retomado cuentas con el mundo del culturismo y parece que Michael Crizo va a ser su elegido. Así que, como digo, noticia en ese sentido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=551" target="_blank" class="timestamp">[09:11]</a> que va a llevar George Farah a Michael Crizo, uno de los gurús del mundo del culturismo. Y la siguiente, como digo, es esta de aquí, la confirmación oficial, ahora aprovechando evidentemente que Michael Crizo ya está por Estados Unidos dándose alguna contravuelta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=565" target="_blank" class="timestamp">[09:25]</a> de Steve Weiberger nada más y nada menos que el juez central del Mister Olimpia y a su vez promotor del New York Pro de que Michael Crizo estará compitiendo en el New York Pro y que va a ser un gran show después de... en una semana tendremos ese, un par de semanas tendremos ese Pittsburgh Pro con un impresionante line-up y que el 17 de mayo pues estará como digo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=585" target="_blank" class="timestamp">[09:45]</a> o mejor dicho más adelante, creo que no es el 17 de mayo, creo que el 17 de mayo precisamente es el Pittsburgh Pro, pues será a finales de mayo ese New York Pro para el que en este caso Steve Weiberger ha confirmado de manera oficial y lo resube Michael Crizo con lo cual le damos carácter de oficialidad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=601" target="_blank" class="timestamp">[10:01]</a> que en este caso el atleta oriental va a estar en esa tarima del New York Pro. Así que como digo, grandes noticias, un Michael Crizo que se está moviendo, un Michael Crizo que como digo invita a verlo, a ver si se acerca más a la versión de 2023 que nos dejó a todos bastante sorprendidos y que sin duda no solamente que no lo dejara a nosotros sino que a los propios jueces que lo colocaron séptimo del Mister Olimpia, nada menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=625" target="_blank" class="timestamp">[10:25]</a> O si por otro lado seguimos con los problemas habituales que tuvo en el 24, que yo creo que se refieren más o que están más focalizados en problemas de puesta a punto y problemas físicos que él ya arrastraba con el tema del hombro, etc., etc., que también pusieron un poquito más de impedimento en esa preparación y en ese año.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=643" target="_blank" class="timestamp">[10:43]</a> veremos a ver por dónde va a salir Michael Crizo como digo vamos a estar muy atentos a él porque sin duda que va a ser uno de los nombres propios de este mes de este mes que va a arrancar dentro de poquito de mayo en Estados Unidos así que como digo chicos y chicas un Michael Crizo que se prepara un Michael Crizo que como digo llega espectacular ojalá que haya un poquito equilibrado sus partes más débiles</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=666" target="_blank" class="timestamp">[11:06]</a> Y poquito más en referente a este gran atleta. Así que como digo chicos y chicas, dejadme en la caja de comentarios y opinar de toda esta actualidad de Michael Crizo. Dadle un fuerte like al vídeo, suscribíos al canal. Ojito porque el domingo, lo dije el domingo pasado, bueno lo dije la semana pasada, que el domingo iba a haber noticias importantes. Os la di, la exclusiva de Raúl Carrasco en la que afirma que este va a ser su último año preparando a gran escala. Vamos a decirlo así, que poco a poco va a ir tendiendo hacia una retirada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CxK7Q9kWkt4&t=695" target="_blank" class="timestamp">[11:35]</a> Os lo digo ya, el domingo vamos a tener noticia, en este caso no puedo decir de quién, pero vamos a tener una muy buena noticia en el canal y vamos a tener, va a ser una noticia que estoy seguro que va a dar bastante que hablar. Así que estén muy atentos al canal, sobre todo el domingo, ¿vale? Por supuesto, como digo, dadle un fuerte like al vídeo, suscribiros al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 25/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
