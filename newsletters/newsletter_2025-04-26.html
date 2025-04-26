@@ -1,0 +1,438 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 26/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">26/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Jorge Tabet</strong>: <a href='#video-aIaIxlAi9Gg'>ENTRENAMIENTO PESADO de PIERNA EXPLICADO *UNA LUCHA INTERNA*</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-aIaIxlAi9Gg">
+            <h2>ENTRENAMIENTO PESADO de PIERNA EXPLICADO *UNA LUCHA INTERNA*</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Jorge Tabet</span>
+                <span class="date">Publicado: 26/04/2025 09:24</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg" target="_blank">
+                    <img src="https://i.ytimg.com/vi/aIaIxlAi9Gg/hqdefault.jpg" alt="ENTRENAMIENTO PESADO de PIERNA EXPLICADO *UNA LUCHA INTERNA*" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video documenta una intensa sesión de entrenamiento de pierna en el gimnasio, centrada en ejercicios como aductores y la máquina hack squat.
+Se muestra la ejecución de las series, incluyendo variaciones técnicas como pausas y eliminación del rebote para maximizar la tensión.
+Hay una interacción constante entre el atleta y su entrenador, quien lo motiva y da indicaciones sobre la técnica y el esfuerzo.
+El enfoque principal es la búsqueda de fuerza y crecimiento muscular a través de una metodología de entrenamiento exigente.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Variante de Adductor sin Máquina Específica <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=75" target="_blank">[01:15]</a></h3>
+
+<p>Se explica y muestra una alternativa al ejercicio de adductor con máquina, utilizando una polea. La variante busca trabajar la zona de manera efectiva a pesar de la falta de equipamiento ideal, aunque reconocen limitaciones en la rodilla.</p>
+
+<h3>Inicio del Trabajo Intenso de Pierna y Estrategia <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=314" target="_blank">[05:14]</a></h3>
+
+<p>Se introduce el objetivo principal del día: enfocado en femoral y cuádriceps, comenzando con series pesadas en la máquina hack squat. Detallan la aproximación al peso efectivo y el número de series y repeticiones planeadas.</p>
+
+<h3>La Calidad de la Máquina Hack Squat <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=645" target="_blank">[10:45]</a></h3>
+
+<p>Después de varias series pesadas, comentan la excelente sensación y efectividad de la máquina hack squat específica que están utilizando. La consideran una herramienta "locura" para el entrenamiento intenso de pierna.</p>
+
+<h3>Sabiduría en la Técnica de la Jaca <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=854" target="_blank">[14:14]</a></h3>
+
+<p>Se menciona de forma humorística un consejo recibido de un "sabio" sobre cómo realizar específicamente el ejercicio en la máquina jaca (hack squat). Se bromea sobre seguir solo esa parte del consejo.</p>
+
+<h3>Planificando las Últimas Series Agonizantes <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=1026" target="_blank">[17:06]</a></h3>
+
+<p>Discuten la estrategia para las series finales de la hack squat, planteando añadir pausas y posiblemente un dropset. Se preparan mentalmente para el esfuerzo máximo que requerirán estas series.</p>
+
+<h3>Explicación de la Nueva Metodología en Hack Squat <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=1570" target="_blank">[26:10]</a></h3>
+
+<p>El atleta reflexiona sobre la técnica que están aplicando en la hack squat, explicando el cambio de metodología. Detallan cómo eliminar el efecto "muelle" y mantener la tensión constante para un trabajo más demandante, a pesar de la dificultad inicial.</p>
+
+<h3>Final del Intenso Entrenamiento de Pierna <a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&amp;t=2275" target="_blank">[37:55]</a></h3>
+
+<p>Concluyen la extenuante sesión de entrenamiento, marcando el final del trabajo pesado en la máquina hack squat y otras series. Se reconocen mutuamente el esfuerzo realizado durante el entreno.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=14" target="_blank" class="timestamp">[00:14]</a> ¡Ay! ¡Ay!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=75" target="_blank" class="timestamp">[01:15]</a> ¿Por qué hacemos este ejercicio? Simple y llanamente porque no tenemos máquina de aductor, la típica de gimnasio. Es una especie de variante de Copenhague aductor, se podría llamar. Kevin está haciendo un poquito de glúteo, pero porque tiene debilidad en lo que es el glúteo medio y demás, le está dando caña.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=91" target="_blank" class="timestamp">[01:31]</a> Yo lo tengo bastante bien, así que le doy más caña al tema del adductor al principio del entrenamiento. Prefiero la máquina, todo se ha dicho, pero si no tenéis la máquina, esta variante es muy buena y prácticamente en todos los gimnasios hay poleas. Ya os digo, es una especie de copiar adductor, estás tumbado y demás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=108" target="_blank" class="timestamp">[01:48]</a> bastante bien. Repito, hay un limitante muy grande que es el tema de la rodilla, porque al final lo tienes agarrado en el pie, pero no ha salvado todo lo que es el volumen. Ya te digo, de tema adductor me noto buen trabajo en la zona, así que mejor que nada es. No es lo ideal, al menos en mi opinión, pero como variante sirve bastante y al menos todo este año lo hemos notado mucho. En lo que es la zona del adductor una buena mejoría, así que quieras que no, sirve.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=146" target="_blank" class="timestamp">[02:26]</a> Papá. Papá. Papá. Papá.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=179" target="_blank" class="timestamp">[02:59]</a> ¿Metemos cuatro? Sí. Es tu tercera. Tercera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=210" target="_blank" class="timestamp">[03:30]</a> Es que me he notado de autorea un jodido el día efemoral. Hicimos seis series el día efemoral. Mira que este ejercicio de primeras lo ves y piensas que es una mierda. A ver, yo prefiero la máquina, pero la realidad del trabajo se lo lleva. Sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=236" target="_blank" class="timestamp">[03:56]</a> Pero más que nada, prefiero la máquina por comodidad de la rodilla, pero no por otra cosa. Sí. O sea, la activación es muy buena. Lo que pasa es que la palanca en la rodilla… Sí. Hasta la papa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=268" target="_blank" class="timestamp">[04:28]</a> Tío, ya hace calor, ¿eh, loco? Hombre, ya hace un día de locos, ¿eh? Está súper bien. Sí, increíble. 9 grados y hace calor, ¿eh? Es que el sol pega mucho aquí, tío. Sí, sí. Contrae un poco más. Vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=299" target="_blank" class="timestamp">[04:59]</a> Cómo me lo toqué bien, tío. Qué pasada. Qué pasada. Es que esta máquina de zoomerar es muy buena. Es muy buena, tío. Muy buena. Así que me la ha sentado no tanto. Esta. Está muy buena. Vale, Javaris. Segundo ejercicio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=314" target="_blank" class="timestamp">[05:14]</a> Tenemos un día enfocado al femoral, literalmente todo de femoral, pero antes de empezar con el trabajo, digamos, duro de quadriceps, metemos aductor, fatigamos un poquito el femoral y ya nos metemos al trabajo real de quad. En este caso, el día de quadriceps, metemos tres lineales, ¿vale? El día de femoral sí hacemos algunas drops, algunas descendentes, pausadas, negativas, en este caso el día de lo que es quadriceps, como solo buscamos activarlo un poquito, fatigarlo un poquito para luego el trabajo de quad,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=342" target="_blank" class="timestamp">[05:42]</a> Real y efectivo. Tres series lineales muy pesadas. Vamos a ir aproximando poquito a poco. Y luego iremos con todo entre 10 y 12 repeticiones T series. ¿Qué tal el peso? Bien. Y la siguiente ya… ¿Mi siguiente efectivo? Sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=376" target="_blank" class="timestamp">[06:16]</a> Bien. Fácil. Vamos. Fácil. Todas tuyas. No más. Hostia puta. Es que esta máquina es muy buena. No sé ni cuántas he hecho. Doce.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=408" target="_blank" class="timestamp">[06:48]</a> Esta máquina es muy buena, tío. Me la voy a poner entera yo, creo. Sí, sí, sí. Te voy a tener la suadera porque tengo un calor ya. ¡Eh! ¡Eh! ¡Ah! ¡Ah!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=442" target="_blank" class="timestamp">[07:22]</a> Va. Va. Va. Tira, tira, tira, tira. Estoy. Va. Vámonos. Va. Arriba. Aguántala.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=476" target="_blank" class="timestamp">[07:56]</a> Me ha pesado, ¿eh? Joder, que se ha pesado. Me ha pesado, me ha pesado. Me he cansado yo y lo has hecho tú. He subido, ¿eh? Sí, sí. Y tú dale caña. No, no, pero para que te bajes, cabrón. Buah, descansa, ¿eh? Si no van a hacer mis shows, ¿eh? Buah.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=504" target="_blank" class="timestamp">[08:24]</a> 10 buenos, eh Apretale a esto aunque sea cabrón Más fácil Más fácil</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=534" target="_blank" class="timestamp">[08:54]</a> Eso, te cierro, te cierro arriba. Vamos. Una más. Hijo de puta. Tienes una más. Tengo un tío. ¡Tierra! Eso es. Cierra tú, cabrón. Me cago en mi puta vida, tío. Haces esto y terminas, cabrón. Chavales, me queda una serie.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=565" target="_blank" class="timestamp">[09:25]</a> No, pero esa hija que voy a hacer, eh. Fuerte no. Pero voy a hacerla, tío. Eh, aquí el que va a competir eres tú, eh. Además, yo he venido aquí entrenarte. Ay, Dios. Vamos, va. Va, dale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=589" target="_blank" class="timestamp">[09:49]</a> Va. Contrae bien, aguanta las contracciones. Márcalas. No, yo era el último día de chismil, pero me lo han quitado. ¡Hostias, que lo hiciste hace tres! ¡Ha tomado polvo de la dieta! ¡Ay, puta mierda! A ver, porque me estás comiendo bastante. ¡Hostias! ¡Va! Aguanta la contracción. Eso es. Márcala un poco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=613" target="_blank" class="timestamp">[10:13]</a> Va. Va. Va. Va. Eso es. Va. Eso es. Arriba.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=645" target="_blank" class="timestamp">[10:45]</a> ¡Joder! ¡Si me está pesando! Es que yo me noto un cansadete del otro día. ¿Cuándo hicimos? ¿Sábado? No, viernes. Hace cuatro días. ¡Qué pasada! Esta máquina es una locura, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=672" target="_blank" class="timestamp">[11:12]</a> ¿12 weeks y media? No, en realidad más, creo. ¿Más? Abril... Abril tres meses y medio. ¿14? No, 14 son 4. No, son 16, 4. Ah, sí, ¿verdad? 14 semanas. Bueno, es un buen número. 13, en realidad 13. Entre 12 y 16, podemos decir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=702" target="_blank" class="timestamp">[11:42]</a> Wix out. Ya. Dependiendo del campeonato. Tres o cuatro meses. Hostia, me lo estoy notando, eh. Mucho esta, eh. Sí. Uf. Muy bien. Va. Pam, pam, pam. Es algo que se quiere.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=736" target="_blank" class="timestamp">[12:16]</a> Vamos. Vale. Dame dos más. Una más. Hostia puta, eh, tío. Va. Esto es muy YouTube Fitness 2018. 2018.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=765" target="_blank" class="timestamp">[12:45]</a> Aguántalas arriba. Aguanta un poco. Márcala. Eso es. Va. Va. Eso es. Va. Otra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=794" target="_blank" class="timestamp">[13:14]</a> ¡Aguántala! ¡Aguanta, aguanta! ¡Aguanta, aguanta, aguanta, aguanta! ¡Eso es! ¡Dale vida! ¡Extensiones! ¡Vale! ¿Seguro ya? Sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=825" target="_blank" class="timestamp">[13:45]</a> Un sabio me dijo, cuanto antes empiezas, me sacabas. Era sabio. Era muy sabio. Sabio era seguro. Fuerte no sé si estaba, pero sabio era. Así que vamos con el sufrimiento, tío. Cuanto antes le demos, tío. Antes acabamos con esto. La última serie hacemos… Sí, sí. La última… La última serie… Sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=854" target="_blank" class="timestamp">[14:14]</a> A mí me dijo que hiciéramos solo la jaca así. El resto no me dijo nada, ¿sabes? Dufort, sigue adelante el vídeo. Ve solo la parte de la jaca. Va ya. Va. Va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=884" target="_blank" class="timestamp">[14:44]</a> Dos, tres, cuatro y cinco. Ahí. Dos, tres, cuatro, cinco, seis, siete, ocho, nueve y diez. Vale. Una, dos, tres, cuatro y cinco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=909" target="_blank" class="timestamp">[15:09]</a> 2, 3, 4, 5, 6, 7, 8, 9, 10. Va. 2, 3, 4 y 5. Va. 1, 2, 3, 4, 5, 6, 7, 8, 9 y 10.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=938" target="_blank" class="timestamp">[15:38]</a> Por cierto, ¿tengo unas sujetas en el brazo de ayer? Yo el tríceps lo tengo KO. ¿Le dimos, eh? El bíceps no tanto, pero los tríceps siempre, tío. Hostia. Yo me fui a dormir incluso. Dije, hostia. Yo el bíceps no tanto, pero los tríceps… Yo sí, yo sí. Va. Un, dos, tres, cuatro, cinco. Aguanta, va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=967" target="_blank" class="timestamp">[16:07]</a> 5, 6, 7, 8, 9 y 10. 1, 2, 3, 4 y 5. Aguanta. 5, 6, 7, 8, 9 y 10. Va. Marca bien. 1, 2, 3, 4 y 5. Va. 1, 2,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=995" target="_blank" class="timestamp">[16:35]</a> Dos, tres, cuatro, cinco, seis, siete, ocho, nueve y diez. Hostias. No tengas prisa en hacer las cinco. ¿Sabes? O sea, baja hasta abajo y haces una, una, una, una. En unos diez segundos te puedo ayudar, en lo otro no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1026" target="_blank" class="timestamp">[17:06]</a> ¿Vamos a por la última? Sí. ¿Qué hacemos? ¿Dropset o qué hacemos? Vamos a intentar hacer cuatro pausas. En vez de tres, cuatro. Y luego dropset. Y en la dropset hacemos lo mismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1060" target="_blank" class="timestamp">[17:40]</a> Tienes una sema, chaval. Va. Yes, sir. No, en la drop set haremos 10. Y según veamos… Bueno, yo tiro, tío. Haz lo que quieras. Sí, vamos improvisando sobre la marcha. ¿Cuatro pausas, pues, con todo el peso? Sí. Sí. Sí llego. La semana pasada llegaste. Ya, ya, pero…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1095" target="_blank" class="timestamp">[18:15]</a> Va. Céntrate, eh. Va fuerte, que ahora has descansado más. Va. Una. Dos. No tengas prisa en hacerlas. Tres. Eso es. Cuatro. Cinco. Eso es. Va. Aguanta. Dos. Tres. Cuatro. Cinco. Seis. Aguanta. Seis. Ocho. Nueve. Y diez. Vale, va. Una. Dos. Tres. Cuatro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1122" target="_blank" class="timestamp">[18:42]</a> Y cinco. Eso es. Va. Contrae. Una. Dos. Tres. Cuatro. Cinco. Seis. Siete. Ocho. Nueve. Y diez. Una. Dos. Tres. Cuatro. Y cinco. Va. Una. Dos. Tres. Cuatro. Cinco. Seis. Siete. Ocho. Nueve. Y diez. Va. Sigue, sigue, sigue, cabrón. Va. Una. Dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1153" target="_blank" class="timestamp">[19:13]</a> Tres. Va. Cuatro. Cinco. Aguanta arriba. Va. Va. Aguántala. Dos. Tres. Cuatro. Cinco. Seis. Siete. Ocho. Nueve. Y diez. Va. Vale. Aguántalas. Aguanta tres segundos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1180" target="_blank" class="timestamp">[19:40]</a> Una, dos, tres. Va. Una, dos, tres. Va. Una, dos, tres. Va. Dos más. Va. Una, dos, tres. Una más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1199" target="_blank" class="timestamp">[19:59]</a> Dos. Tres. Va. Sácala, sácala. Sácala. Sácala. Una. Dos. Tres. Cuatro. Cinco. Seis. Va. Siete. Ocho. Nueve. Vale. Aguanta. Ay, cabrón. Vale. Aguanta arriba. Aguanta arriba. Aguanta arriba. Va. Va. Aguanta arriba. Bloquea bien, eh. Bloquea bien. Va. Eso es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1228" target="_blank" class="timestamp">[20:28]</a> Vale, 5 cortas. 1, 2, 3, 4, 5. ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Arriba! ¡Va! ¡Aguante ahí! ¡Aguante ahí! ¡Bloquea la rodilla! ¡Eso es! ¡Aguántala! ¡Mete sangre! ¡Eso es! ¡Va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1269" target="_blank" class="timestamp">[21:09]</a> ¡Gracias!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1299" target="_blank" class="timestamp">[21:39]</a> ¡Ay! ¡Ay! ¡Ay!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1335" target="_blank" class="timestamp">[22:15]</a> ¡Va! ¡Va! ¡Va! ¡Va! ¡Va, Juli!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1363" target="_blank" class="timestamp">[22:43]</a> No. No te canses, ¿eh? Tres, cuatro y listo. Tres, cuatro y fuera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1387" target="_blank" class="timestamp">[23:07]</a> más fuerte que el puto vinagre, chaval. Vámonos. Pues cinco rojos. Hostias, cinco rojos. Vamos a ver. Primera de tres. ¿Te doy la rodilla? No. Pues de locos. A pegar el castañazo. ¡Come on, boy!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1417" target="_blank" class="timestamp">[23:37]</a> Va. Dale, niño. Mentalízate. Vamos arriba. Va. Fuerte, ¿eh? Acuérdate, no tengas prisa en bajar. Si salen menos, salen menos. Pero controla la carga. Haz la tuya. ¿Vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1446" target="_blank" class="timestamp">[24:06]</a> Fuerte. Desde la primera. Fuerte. Va. Eso es. Arriba. Bien. Fácil. Eso es. Vamos. Bien. Va. Fácil. Fácil. Fácil. Eso es. Sigue. Sigue. Vamos con rabia. Eso es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1475" target="_blank" class="timestamp">[24:35]</a> ¡Arriba! ¡Bien! ¡Up! ¡Bien! ¡Sigue, sigue! ¡Sácalas todas! ¡Va! ¡No lo pienses! ¡No lo pienses! ¡Arriba! ¡Bien! ¡Solo! ¡Vas solo! ¡Vamos! ¡Otra, otra! ¡Otra! ¡Va! ¡Va! ¡Sácala! ¡Fácil, eh! ¡Arriba! ¡Vamos! ¡Bien! ¡Hostia, qué bueno! ¡Qué bueno, tío!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1505" target="_blank" class="timestamp">[25:05]</a> Muy buena serie, ¿eh? Muy bien, han sido todas tuyas, ¿eh? ¡Fua! Muchísimo peso, ¿eh? Sí. ¡Buah! Te las ha sacado bastantes, ¿eh? ¿Las has contado o no? ¿Qué te has contado, brother? Creo que 10 o 11 han caído, ¿eh? Creo. ¡Buah! ¡Buah! ¡Buah! ¡Buah!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1536" target="_blank" class="timestamp">[25:36]</a> Muy buena serie, ¿eh? Muy buena serie. Muy buena serie. Muy, muy buena. O sea, a mí me ha sorprendido, tío. Porque la semana pasada, la primera no tenías todavía pillado el patrón. Sacaste siete u ocho y la segunda ya fueron diez. Pero en esta te has pescado diez o once seguro. Estoy viendo cómo pone más peso. Vale, javale. Hostia puta. Lo que os comentaba al principio, ¿vale? Nos han cambiado un poquito...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1570" target="_blank" class="timestamp">[26:10]</a> Nos ha cambiado un poquito de metodología de trabajo, Sergio. Estamos intentando de normal. Si me habéis visto hacer jaca, es como una jaca normal, ¿no? Llegas hasta abajo del todo y subes, ¿vale? Aprovechas un poquito el efecto muelle al final del recorrido y lanzas para arriba. En este caso lo eliminamos completamente haciendo una pequeña pausa o intentándolo, ya que con este peso es complicado, en lo que es la zona de la paralela, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1596" target="_blank" class="timestamp">[26:36]</a> Al final eliminamos el efecto muelle y lo que hacemos es mantener tensión constante en las piernas. Muy pesado. Literalmente no caben más discos. Entre 6, 8, 10, 12. Las que se puedan. Pero sobre todo controlando el movimiento. Y tirando kilos como unos cabrones. Problemas. Que te cambian el patrón. Te cambian. Te quitan el efecto muelle.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1625" target="_blank" class="timestamp">[27:05]</a> Que al final es como tú tiras, como tú te sientes cómodo. Ventajas. Pues que espero que te ponga más fuerte. Porque si no, vaya putada. Así que nada, primera de tres. Voy a descansar un poco y le damos. ¿Listo? Sí. Va, siéntate. Igual o mejor que la anterior. Va. Va, que no queda nada, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1662" target="_blank" class="timestamp">[27:42]</a> Va fuerte. Eso es. Va. Un bloque. Va. Vamos. Eso es. Repe a repe. Va. Eso es. Vamos. Eso es. Baja un pelín más. Ahí. Eso es. Va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1686" target="_blank" class="timestamp">[28:06]</a> ¿Sigue? Eso es, muy bien. Fácil, fácil, fácil. ¡Va! Coge aire. ¡Va! ¡Abajo! ¡Vale! ¡Fuerte! ¡Va! ¡Arriba! ¡Va! ¡Con rabia! ¡Fuerte! ¡Arriba! ¡Vamos! ¡Eso es!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1725" target="_blank" class="timestamp">[28:45]</a> Buena serie. Metemos la tercera igual. Voy a poner toda la tarde de hielo en las rodillas, ¿eh? ¿Te duelen? ¡Come on, boy! Va. El Jorge 2018 entrenaba con esta canción y quería estar así. Así que dale caña.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1753" target="_blank" class="timestamp">[29:13]</a> ¡Va! ¡Me cago en la puta! ¡Vamos allá! ¡Hostias! ¡Vamos! ¡Va! ¡Va! ¡Hostia! ¡Va! ¡Fácil! ¡Eso es! ¡Va! ¡Fuerte desde la primera! ¡Va! ¡Con todo! ¡Vamos! ¡Eso es! ¡Va! ¡Fácil!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1782" target="_blank" class="timestamp">[29:42]</a> ¡Vamos! ¡Dos! ¡Hop! ¡Bien! ¡Va! ¡Fácil! ¡Eso es! ¡Coge aire! ¡Va! ¡Vamos! ¡Abajo! ¡Va! ¡Fuerte! ¡Eso es! ¡Hop! ¡Bien! ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Dos más! ¡Dos más mínimo! ¡Va! ¡Abajo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1811" target="_blank" class="timestamp">[30:11]</a> ¡Fuerte! ¡Otra! ¡Va! ¡Otra! ¡Sigue! ¡Sigue! ¡Sigue! ¡Sigue! ¡Dos más! ¡Dos más! ¡Hay dos más! ¡Vamos! ¡Va! ¡Arriba! ¡Eso es! Muy bien. Esa última, ¿eh? Esa última ha pesado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1840" target="_blank" class="timestamp">[30:40]</a> ¡Baba!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1877" target="_blank" class="timestamp">[31:17]</a> ¡Hepa! ¡Va, mañana! Última, ¿eh? ¡Va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1903" target="_blank" class="timestamp">[31:43]</a> Vale. Eso es. Contrólate esto. No tengas prisa. Eso es. Va. Vamos, George. Va. Vale. Fácil. Bajo un pelín. Estoy yo. Eso es. Va. Vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1932" target="_blank" class="timestamp">[32:12]</a> ¡Va! ¡Va! ¡Dale! Controla bien la bajada. Eso es. ¡Eso! ¡Va! ¡Vamos! ¡Va! ¡Sigue!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1964" target="_blank" class="timestamp">[32:44]</a> Sigue, sigue, sigue, sigue. Va. Va. Va. Vale, coge aire. Coge aire. Va. Vamos. Sigue. Va, que va. Va. Madre mía. Vale, va. Va. Va. Va, es la última.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=1996" target="_blank" class="timestamp">[33:16]</a> Eso es. ¡Vamos, George! ¡Va! ¡Vamos! ¡Va! ¡Coge aire! ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Ya! ¡Va! ¡Vamos! ¡Sigue! ¡Va! ¡Fuerte!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2029" target="_blank" class="timestamp">[33:49]</a> Vale, va. Vamos, niño. Va, que ya queda menos. Eso es. Eso es. No tengas prisa. Eso es. Va. Vamos. Va, abajo. Coge aire. Va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2059" target="_blank" class="timestamp">[34:19]</a> ¡Vamos! ¡Va! Coge aire, coge aire. Vale, va. Va, va, va, va. Fuerte abajo. ¡Va! Vale, va. Vamos, niño. Va, que ya queda nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2091" target="_blank" class="timestamp">[34:51]</a> Vale. Eso es. Baja más. Baja más. Baja hasta abajo. Ahí. Eso es. Va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2101" target="_blank" class="timestamp">[35:01]</a> ¡Vamos! ¡Va! ¡Fuerte! ¡Eso es! ¡Va, va, va, va! ¡No te relajes! ¡Vamos! ¡Va! ¡Va, niño! ¡Abajo! ¡Abajo! ¡Va! ¡Dale, dale, dale! ¡Va! ¡Eso es! ¡Vamos! ¡Coge aire! ¡Coge aire! ¡Va! ¡Abajo! ¡Igual! ¡Va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2131" target="_blank" class="timestamp">[35:31]</a> ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Va! ¡Que ya queda nada! ¡Vamos! ¡Abajo, arriba! ¡Va! ¡Eso es! ¡Qué buena!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2156" target="_blank" class="timestamp">[35:56]</a> ¡Vamos! ¡Sigue! ¡Va! ¡Ahora va lo bueno! ¡Come on, boy! ¡Va! ¡Va! ¡Va! ¡Coge aire! ¡Vale, va! ¡Va! ¡Hop! ¡Fácil! ¡Va! ¡Vamos! ¡Vamos, niño! ¡Va! ¡Queda última!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2186" target="_blank" class="timestamp">[36:26]</a> ¡Dale! ¡Va! ¡Vale, va! ¡Vamos! ¡Va! Última. ¡Vamos! ¡Va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2210" target="_blank" class="timestamp">[36:50]</a> Eso es. Ahí estamos. Bien. Una detrás de otra. No pares arriba. No pares arriba. Va. Vamos. Abajo ya. Va. Va. Con rabia, hostia. Vamos. Va. Eso es. Otra. Abajo, abajo ya. Abajo ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2240" target="_blank" class="timestamp">[37:20]</a> ¡Vale! ¡Coge aire! ¡Va! ¡Coge aire! ¡Vamos! ¡Va! ¡Que sufra! ¡Eso es! ¡Vamos! ¡Va! ¡Coge aire! ¡Vale! ¡Coge aire! ¡Va! Es la última. ¡Sácalo todo! ¡Vamos! ¡Va! ¡Vamos! ¡Dale!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=aIaIxlAi9Gg&t=2275" target="_blank" class="timestamp">[37:55]</a> Ya está. Ya está. Buen entreno, brother. Uno menos.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 26/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
