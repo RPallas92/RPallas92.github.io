@@ -1,0 +1,541 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 27/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">27/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>John opina </strong>: <a href='#video-0PkeAHWbDWI'>FRANK: "SÍ, HE MENTIDO" (OTRA VEZ) - LORO LEAK</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-0PkeAHWbDWI">
+            <h2>FRANK: "SÍ, HE MENTIDO" (OTRA VEZ) - LORO LEAK</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John opina </span>
+                <span class="date">Publicado: 27/04/2025 11:40</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI" target="_blank">
+                    <img src="https://i.ytimg.com/vi/0PkeAHWbDWI/hqdefault.jpg" alt="FRANK: "SÍ, HE MENTIDO" (OTRA VEZ) - LORO LEAK" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video es una reacción a una explicación pública de Frank Cuesta sobre polémicas con un excolaborador (Luciano/Chi).
+Se analizan las acusaciones de mentiras recurrentes de Frank, sus afirmaciones sobre enfermedades y situaciones dramáticas.
+El comentarista critica el "teatro" y la manipulación emocional, mientras aborda temas delicados como ataques personales y filtraciones de información privada.
+La discusión principal gira en torno a la credibilidad de Frank y el conflicto con Luciano, incluyendo la extraña historia de un loro supuestamente cambiado.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>La Mentira Recurrente y la Duda Legítima <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=95" target="_blank">[01:35]</a></h3>
+
+<p>El comentarista reacciona a la admisión de Frank Cuesta de haber mentido, señalando que tras engaños repetidos, no se está obligado a creerle. Se debate sobre la moralidad de dudar de alguien que ha demostrado ser mitómano y manipulador emocionalmente.</p>
+
+<h3>El Cáncer Oculto: Una Afirmación Dramática <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=151" target="_blank">[02:31]</a></h3>
+
+<p>Frank Cuesta, a través de la transcripción, menciona tener mielodisplasia, un tipo de leucemia que ha tenido por 20 años. Afirma que si no es tratada, te mata, añadiendo dramatismo a su situación de salud.</p>
+
+<h3>La Compasión vs. el Mitómano <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=224" target="_blank">[03:44]</a></h3>
+
+<p>Se discute si creer o no la afirmación del cáncer, dada la reputación de mentiroso de Frank. El comentarista expresa su aversión a mostrar compasión a un mentiroso sistemático, contrastando con mentiras piadosas.</p>
+
+<h3>¿Teatro o Realidad? Sufriendo el "Pufo" <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=360" target="_blank">[06:00]</a></h3>
+
+<p>El comentarista sugiere que el sufrimiento actual de Frank no es por su enfermedad, sino por el escándalo y las consecuencias de sus acciones y mentiras públicas. Cuestiona la autenticidad de su sufrimiento en ese momento.</p>
+
+<h3>Acusación de Perfil en App de Citas Pidiendo Tríos <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=483" target="_blank">[08:03]</a></h3>
+
+<p>Se menciona que el perfil de Frank de la jungla apareció en una aplicación de citas pidiendo tríos. Aunque Frank lo niega, el comentarista no juzga la acción privada, pero sí a quien lo publica para desprestigiar.</p>
+
+<h3>Chantaje Emocional y la Exigencia de Pruebas <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=560" target="_blank">[09:20]</a></h3>
+
+<p>El comentarista critica la tendencia de Frank a usar la emotividad y el chantaje emocional en lugar de mostrar pruebas (como papeles médicos) para respaldar sus afirmaciones. Insta a ser pragmático y no dejarse arrastrar por la exageración.</p>
+
+<h3>Ataques que Sobrepasan la Indecencia: Familia Involucrada <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=666" target="_blank">[11:06]</a></h3>
+
+<p>Frank afirma que los ataques han superado la indecencia, dirigidos no solo a él sino a terceros, incluyendo ataques personales a sus hijos. Esto genera indignación en el comentarista por involucrar a la familia en el conflicto.</p>
+
+<h3>Grave Acusación Sexual y Shock del Comentarista <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=1084" target="_blank">[18:04]</a></h3>
+
+<p>Se revela que Luciano/Chi acusó a Frank de tener "fiestas sexuales con menores". Esta es una acusación muy seria que impacta al comentarista, quien la considera una estrategia "rastrera" y "asquerosa", defendiendo a Frank de esta imputación sin pruebas.</p>
+
+<h3>El Pasado de Luciano: Amigo, Colaborador y la Ruptura <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=2222" target="_blank">[37:02]</a></h3>
+
+<p>Frank relata cómo conoció a Luciano en la cárcel, su amistad posterior y la colaboración profesional. Describe cómo le dio coche, teléfono y otros recursos, además de acuerdos económicos justos, contrastando con la traición actual de Luciano.</p>
+
+<h3>La Extraña Historia del Loro "La Roja" <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=2407" target="_blank">[40:07]</a></h3>
+
+<p>Se introduce la polémica sobre un loro llamado "La Roja", supuestamente de Luciano. Frank afirma que el loro no era realmente de Luciano, que solo lo visitaba, y comienza a relatar su propia y dramática versión de la muerte y sustitución del ave.</p>
+
+<h3>La Sorprendente Revelación: Frank Confiesa Haber Cambiado el Loro <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=2966" target="_blank">[49:26]</a></h3>
+
+<p>En un giro inesperado, Frank Cuesta admite directamente que cambiaron al loro "La Roja". La revelación de haber sustituido el pájaro para que Luciano no se diera cuenta deja al comentarista asombrado por la magnitud y el absurdo de la mentira.</p>
+
+<h3>El Miedo, la Seguridad y las Acusaciones Cruzadas <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=3147" target="_blank">[52:27]</a></h3>
+
+<p>Frank afirma sentir miedo y haber aumentado la seguridad en su santuario debido a las amenazas de Luciano. Contrasta esto con la supuesta falta de cuidado de Luciano hacia los animales y reaparece la controversia sobre las nutrias.</p>
+
+<h3>El Teatro del Sufrimiento y la Amenaza Final <a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&amp;t=3355" target="_blank">[55:55]</a></h3>
+
+<p>Frank retoma el tema de su enfermedad con gran dramatismo, acusando a Luciano de forzarlo a revelar detalles personales. El comentarista critica el "puro teatro" y la manipulación, mientras Frank lanza una última amenaza legal y de exponer más trapos sucios.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=0" target="_blank" class="timestamp">[00:00]</a> El churrero ha sido un vio respondiendo a chi. Anda que va a decir la verdad, churrero. Frankuesta. Sí, mentí. Bueno, otra vez ha mentido. Otra vez que ha reconocido que ha mentido. Pero bueno, que no se acaba aquí esto. Dejo las redes. Has vuelto. Has vuelto. Eso sea cualquiera, tío. Comentarios. Vamos a hacer comentarios. Tú y mujeres. Frank, me da igual. Yo te sigo fiel porque salvas animales. Los animales te quieren.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=25" target="_blank" class="timestamp">[00:25]</a> Que no, además tienen hambre. Por eso se hace un visa corriendo y le siguen. A ver, comentarios. Ay, yo no entiendo cómo le puede hacer caso a un hombre que esconde el rostro para hablar, que es un cobarde. Claro, ya está. Sabemos que eres una gran persona, Fran. Eres el faro de luz en la oscuridad humana. La Noran. La Patri. La Kitsugi suena a tía también, supongo. Bueno, que a con el comentario de que suena a tía por cojones. La Nora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=47" target="_blank" class="timestamp">[00:47]</a> Haces una enseñanza en el universo. La Yavana. Una hora y media. Frank, tío, un resumen. Maldito. Pero eso es otra historia. Pero mis hijos se han comido. Durante el tiempo de tratamiento se han comido al cuidarme. Y tú y tus amigos salís públicamente a decir que yo no tengo una enfermedad. Yo tengo varias enfermedades, Luciano, que tú no sabes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=73" target="_blank" class="timestamp">[01:13]</a> Que el otro día a Javi se le escapó. Se le escapó porque yo pensé que cuando le daba el parte médico, pues que no iba a ser capaz de traducir todo. Porque estaba escrito ahí que tal. Lo tradujeron todo. Y salió que tenía una diabetes. ¿Tú nunca has sabido eso, a que no, Luciano?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=95" target="_blank" class="timestamp">[01:35]</a> Lo siento, tío, es que me escapa la risa, lo siento. A lo mejor es verdad, pero es que, ¿sabes qué pasa? Cuando un tío te miente... Mira, cuando un tío te miente, no una, dos, sino como tres veces, tú no estás obligado a creer lo que te diga. O sea, y cuando te hace chantaje emocional, es que si le sigues creyendo es que eres imbécil. Tú estás legitimado para decir, mira, no me lo creo. Se ha muerto mi madre, pues no me lo creo. Estoy llorando, no me lo creo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=120" target="_blank" class="timestamp">[02:00]</a> Me has engañado varias veces, ¿verdad? Pues no te has creado en algo que digas. Y estoy legitimado no creerte. Hombre, es muy inmoral no creer algo. O sea, te viene un tío y se ha muerto mi madre. Hostia, vale, vale, lo siento. No voy a dudar, no voy a dudar, vale, claro. Estoy obligado a darle, pues, creerle. Estoy obligado a creerle. Pero si me has engañado... ¡Ah, no, hombre! ¡Que ten por culo! No sé qué es La Roja, no sé qué es. ¿Qué es La Roja? No sé de qué va. Porque yo hay cosas que guardo más personales. Que lo guardo para hacer gente muy cercana a mí. No lo sabía ni Paloma.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=151" target="_blank" class="timestamp">[02:31]</a> No lo sabían ni mis hijos. Tengo una mielodisplasia, o mielodisplasia, no sé cómo se dice en español, mielodisplasia. A ver, ahí van realmente, deja las redes, pero hombre, si realmente sé alguien que habla de él y tiene relevancia, pues sí, tendrá que explicarse, eso es normal. Desde hace 20 años. Es un cáncer escondido. Es un tipo de leucemia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=179" target="_blank" class="timestamp">[02:59]</a> Que si no es tratado, te mata. Hace años, cuando a mí me tocó la primera vez que tuvo un proceso... No sé, hay que comparar todo lo que dice, con que tiene un satélite de Lomus que le puso para él, ¿sabes? Y ha entrenado a Mónica Seles, ¿cómo se llama? Que si no es tratado, es un cáncer escondido. Es un tipo de leucemia. Síndrome mielodisplásico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=206" target="_blank" class="timestamp">[03:26]</a> O anemia refractaria. Es un grupo de neoplasias hematológicas. Flor, mentir con esto me parece absurdo, ¿verdad? Es un cáncer. Bueno, no sé. No sé, bueno. Es un cáncer escondido. Es un tipo de leucemia. Que si no es tratado, te mata.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=224" target="_blank" class="timestamp">[03:44]</a> Ruz resoyó lo de cáncer, pues me lo puedo creer. Yo también sí. Pero este tío miente tanto que ya no sabes qué creer. Es que no me gusta la compasión a un mentiroso. A ver, no hay que ser simple. Mentir, se puede mentir porque a veces te pregunta alguien algo y a ti te importa. ¿Cuándo te ha costado el coche? Mira, 15 mil euros. Me he tratado por culo. No sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=243" target="_blank" class="timestamp">[04:03]</a> Hay mentiras que, bueno, que esto es una mentira piadosa, hay que jugar con pinzas, ¿eh? Porque esto es una mentira piadosa muchas veces lo que es una mentira interesada, pero hay mentiras piadosas, ¿no? Es como el pobre Jordi Wall con el padre, tío. ¿Cómo estoy? Bien, bien, bien. Y le dicen los médicos, no, a usted le quedan, no sé, como 12 horas de vida. Y con que el padre de Jordi Wall era un hombre que siempre aborreció los médicos y los tratamientos y todo el rollo, pues pactó con la madre y el médico, pues no decía nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=272" target="_blank" class="timestamp">[04:32]</a> Porque al final es para interés de su padre, ¿no? Por el hombre, ¿no? Y ya está. Fijaos. Anda, que por eso es igual. Menudo trago más duro, ¿no? Pero otra cosa es... Pero otra cosa es, tío, la mentira sistemática. Es que es el auténtico inventman. Lo de una chanante. Le dice... ¿Sabes qué le dije a Almodóvar? ¡Pasa a decir Almodóvar!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=293" target="_blank" class="timestamp">[04:53]</a> ¡Solviven al holocausto, soy judío! Deja de mentir ya, hombre. Trom of Steel. Yo he conocido a mitómanos en la vida real. No te puedes creer nada de lo que te digan. Al final te los tomas a cachondeo. Es como el cuento del lobo. Sí, sí, hostia, sí. Es brutal, ¿eh? El que es mitómano... Es que dice... ¿Puedes parar de mentir? O sea, te mueres, dices la verdad. Y además te lo dicen con una confianza y una chulería que te lo crees al principio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=322" target="_blank" class="timestamp">[05:22]</a> Hace años, cuando a mí me tocó la primera vez que tuvo un proceso de un mes y pico, dos meses, muy jodido, probabilidades de supervivencia eran 40%, 45%, estamos en el 65-70% ahora mismo. Llevo muchos años haciendo un tratamiento. A ver, ¿qué he hecho? Depende de qué tratamiento esté siguiendo ese año, depende de qué fuerte es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=360" target="_blank" class="timestamp">[06:00]</a> Joder, teatro, ¿no? Y yo he tenido... No está sufriendo por la enfermedad. Bueno, que yo no digo que no sufra. Digo que ahora mismo, ahora mismo no sufre por lo que está diciendo. Está sufriendo por el pastel, por el pufo que se está comiendo y la que le viene, ¿eh? Por tu culpa, Luciano, y por tus amigos. No me lo creo, decía la Serleta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=389" target="_blank" class="timestamp">[06:29]</a> Te digo una cosa, ¿sabes por qué desbloqueó? ¿Sabes por qué desbloqueó Paloma Carismán? Samutemil. En un vídeo, Chi ese dice que eso es un burdel. Drogas y más cosas turbias. Está interesante. Vamos al principio, es una hora y media. Buenas noches a todos. Sabéis que durante semanas he estado apartado, vamos a decir, de la vida pública. No he querido hablar, no he querido...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=415" target="_blank" class="timestamp">[06:55]</a> Mostrarme en la cámara. Había decidido después de un año larguísimo de problemas, de estrés muy grande, tanto en la vida personal como profesional. Burr, en vez de llorar y hacer el paripé, ¿por qué no enseñan papeles y listo? Bueno, sí, también es verdad. Sí, sí. O sea, yo con el cáncer de mi mujer solo tenía que hacer esto así. Mira. Ya está, un fajo de papeles ahí. Sí, bueno, no sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=444" target="_blank" class="timestamp">[07:24]</a> No sé, si a mí me acusaran de que mi mujer no tiene cáncer, cuando tú, cuando estás viva, claro. No me pongo a hacer show este. No sé, es que tampoco tengo ganas de hacer show. Diría, hombre, a ver, mira, no sé. Pero te pongo... Entro la mega salud, la gestión, el perfil médico, entro aquí, te lo pongo, vea, aquí está, a ver, aquí está... No sé, papeles, y aquí está la química, sé, tío. Me aclaro ahí todo. He decidido coger un tiempo para estar de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=473" target="_blank" class="timestamp">[07:53]</a> Daniela. A ver, que eso es personal. No me mola que lo publiquen, pero bueno, que tampoco... Me hace rir, pero bueno, que no hay que juzgar a alguien por eso. Aparecer ha aparecido en una cita... Joder, macho. Que el perfil de Frank de la jungla ha aparecido en una explicación de citas pidiendo tríos. Frank dice que es falso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=494" target="_blank" class="timestamp">[08:14]</a> A ver, que haga lo que quiera. Si quiere hacer tríos y cuatrigas humanas o un cien pies, que la aproveche. No juzgo eso. Y si busca un hombre para hacer gomo, pues muy bien. Que disfrute. A ver, que no... Me hace gracia, no es divertido, pero que no tiene... Un cuarteto, sí. Un cuarteto de instrumentos de tronco cónicos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=520" target="_blank" class="timestamp">[08:40]</a> Que no juzgo a alguien por eso, ¿eh? Si eso es privado. Juzgo más a quien lo publica que a otra cosa, ¿eh? Pero bueno, que me hace gracia esta. Fuera completamente de las cámaras, de los medios, de ningún tipo de declaración. Esto es como los chuzados, ¿no? Menos de un gramo, Nati. Menos de cinco nos orgía, ¿no? Está bien. Y como habéis visto, pues ha tornado en algo totalmente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=544" target="_blank" class="timestamp">[09:04]</a> Sí, anuncio en Tinder. Busco hace un cuarteto, están bombas. Voluntarios. ...diferente que ha hecho que hoy tenga que salir aquí a explicar varias cosas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=560" target="_blank" class="timestamp">[09:20]</a> No porque me sienta obligado. Yus, porque es mentira, probablemente. Prefiere ponerse a llorar y jugar con la emotividad de la gente para que la apoyen. Sí, es que la gente tiene que ser pragmática. La emotividad, que es una cosa muy femenina, está muy bien. Para ver Faconcrest o un culebrón. Ahora son turcos los culebrones. Mi madre los ve.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=582" target="_blank" class="timestamp">[09:42]</a> Pero es que hay que ser Tío, hay que tener valores Que no lo digo que yo tenga muchos Pero es igual, hay que tener valores, principios Rectitud Y ser pragmático, tío, y ser frío Y una persona que te ha mentido decirle Mira, me pareces muy majo Pero bueno, no te ofendas, ¿eh? Eres un trollero rematado Si tienes cáncer, me sacas el papel Es muy fácil, sácamelo ¿Cómo que? No, no, sácame el papel Sácame algo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=608" target="_blank" class="timestamp">[10:08]</a> Es... Sufro. Sufro mucho. No, sí. Muy bonito. No me da chantaje emocional, ¿vale? Me bajo. Sácame un papel. Mira, todos nosotros, cualquiera de nosotros nos pasa, ¿verdad? Es decir... Hostia, no, que mañana no puedo. Mira, te lo paso. ¿Ves que tengo la cita? Y lo pasas. Pero cuando tú dices a alguien... Oye, mañana nos vemos. No, no, que no puedo porque tengo visita al médico. Ah, sí, pásame la... Pásame el compromete, o sea, una prueba. Ya sabéis. La persona reacciona...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=637" target="_blank" class="timestamp">[10:37]</a> Reaccionas siempre emotivamente. Te doy cuenta que estás dudando de mí, de verdad. Cálmate, cálmate. Cuanto más exageres la reacción, más me estás trolleando, más me estás engañando. ¿Sí o no? ¿Verdad? No os dejéis arrastrar a la gente así, ¿eh? ...a hacerlo. Pero porque ha llegado un momento en el cual... ...en el cual hay que hacerlo. ¿De acuerdo? Yo he dejado varios días, varias semanas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=666" target="_blank" class="timestamp">[11:06]</a> Ha habido ataques que ya han sobrepasado la indecencia de una manera brutal. Ataques personales y sobre todo ataques a terceros, a gente relacionada conmigo. Y entiendo que para mucha gente que está en esa guerra, que dicen la guerra, el jungle war, sea divertido ver como una persona la puedes machacar, la puedes...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=695" target="_blank" class="timestamp">[11:35]</a> Mira, este tío... Habría que hacer una biografía a Frank Cuesta cómica. Hostia, molaría. El canal ese, el Láser ese, que mucha gente lo odia, no sé por qué. Claro, porque son fanboys de Frank Cuesta. Tendría que hacer una biografía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=711" target="_blank" class="timestamp">[11:51]</a> no oficial Frank Cuesta. Poco esquemática y además en plan con cachondeo, ¿no? Y que en el libro especifique. Todo esto es... No hemos inventado. Es verídico. Según Frank Cuesta, son capítulos explicados por él o que han salido en sus vídeos y tal. Y si te hacen la biografía con todas las trolas, con trapo Frank Cuesta, es que te partes la caja.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=737" target="_blank" class="timestamp">[12:17]</a> era tenista a un nivel ahí top mundial no sé qué enseñó a Mónica Ser pero bueno la realidad luego miras y no encaja nada ¿no? porque no sé qué no sé cuál y encima saca las incoherencias luego la ha intentado matar pues no sé cuántas veces los traficantes animales sí está a borda de muerte cada semana sí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=755" target="_blank" class="timestamp">[12:35]</a> Luego ha contado historias truculentas y fantasiosas que cuando haces así con él... Pasas un trapo a la historia y dices... ¡Buah! ¡Vaya trola, tío! ¡Se no se aguanta por ningún lado! ¡Esquivo una bala! O sea, el vídeo ese con el tío ahí que... ¡Ya! ¡Le saca mi historia del tío! ¡Huye! ¡Buah! ¡Le pega algo del tío! ¡Oh! ¡Y papá, papá! Y hoy hay un tío ahí... ¡Ah! ¡Estoy herido! ¡Hostia, tío! Eso es brutal. Es que es cómico, ¿eh? Luego cuando va a rescatar animales a la...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=783" target="_blank" class="timestamp">[13:03]</a> mercadillo clandestino. ¿Os acordáis el vídeo ese? Que ahí va el tío, sí, sí, vamos a rescatar unas nutrias. Y va y coge una caja y se lo lleva, ¿no? Y el tío que analiza lo ve, no sé si es el láser, y dice ¿y cómo sabe que estaba ahí? O sea, no me acuerdo, ¿no? Pero el tío analizaba y eso es que dice, hostia, como mola, pero porque te dejas llevar por la motividad al momento, pero si tú analizas críticamente, dice, pues no te he sentido ninguno, pues estoy viendo, ¿no? Sí, ofrenda la trola. Sí, me iba a fichar en Madrid, pues me jodió la rodilla también, es muy típico, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=815" target="_blank" class="timestamp">[13:35]</a> Intentar humillar. Y ya os digo, durante todo este tiempo ha habido humillaciones, aterraciones. Han intentado aterrar. No solo a mí, sino a mi hija. Ha habido aterraciones. Familia y a la gente que está dentro del entorno. Han usurpado. Han difamado. Han mentido. Han manipulado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=845" target="_blank" class="timestamp">[14:05]</a> Se han aprovechado y han utilizado las armas más sucias que se pueden utilizar para sacar un rédito mediático, para sacar un rédito económico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=860" target="_blank" class="timestamp">[14:20]</a> Este tipo de personajes suelen tener más esto que con las mujeres. Los tíos los clavos más rápido. Sí, sí. A las mujeres les encanta esto. Les encanta. Es que es el Invent Man de la bachamante clavado. Con la tía esa. ¿De verdad? Sí, yo soy tal. ¿De verdad? Y tengo un chavete en la playa. ¿De verdad? Y la tía. ¡Joder, me enamoro de ti! Igual que este. Llevan las tías ahí. La Yuso. La Cristian Segui. Un montón de famosas ahí al santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=885" target="_blank" class="timestamp">[14:45]</a> ¿De verdad? Sí, es que me imagino el tío ahí en el santuario. Sí, yo una vez salvé a unos sopandas, ¿sabes? Había unos cazadores chinos ahí con la escopeta y tal. Y yo salté y salté. ¡No! Y una golpe ahí la escopeta se volando. Luché con ellos. Me atacó cinco chinos a la vez. Y un monje shaolin y el oso salvé. Y las tías ahí. ¡Oh! No lo puedo creer. Me estoy poniendo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=910" target="_blank" class="timestamp">[15:10]</a> ¿Qué ha hecho onda? No sé qué. Y zafas ahí le metía. La yus también, ¿eh? Y luego a Cristina Segui... Claro, que no es tonta. Cristina Segui es tonta, ¿no? Es una señora que está... Pues bueno, se pasa el arroz por mujer y quiso aprovechar con el tío. Tuvo su romance, ¿no? Como tantas tías. Pero claro, me parece que ahí mismo, después del casquete, el tío siguió... Sí, no. Yo era amigo Ronald Reagan, ¿sabes? Y me regaló... No sé, un estadio de fútbol, pero lo vendí y no sé qué, ¿no? Y la tía creo que se dio cuenta y dijo... Joder, madre mía. Y cuando volvió...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=938" target="_blank" class="timestamp">[15:38]</a> Y cuando volvió de Santuario... Bueno, Santuario. Santuario, que es su casa, ¿sabes? Santuario, que hostias, tío. Yo ya tengo Santuario aquí en mi casa, ¿sabes? Cuando volvió, puso en Twitter. Este tío es el Paco Sanz. ¿Os acordáis del tuit ese? Y sobre todo para sacar un rédito de satisfacción personal. De ver cómo puedes machacar a una persona y a sus personas más cercanas. Como te dé las ganas con total impunidad. Y sin importarte absolutamente nada de lo que le pase a estas personas. Yo me llamo Frank Cuesta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=969" target="_blank" class="timestamp">[16:09]</a> Me conocéis por Frank de la jungla. Wild Frank. Es un personaje público al cual se puede criticar. Al cual se le pueden pedir explicaciones de ciertas cosas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=981" target="_blank" class="timestamp">[16:21]</a> Sí, sí. Psicopatón. Dice que Elon Musk estuvo en el santuario y le puso un salateite encima solo para él. Y no es coña. Lo dijo en directo. Sí, sí. Dijo. Oye, Frank. How are you, motherfucker? Ey, Elon. Pues aquí estoy. Me voy a chino bañar y me ocupo una gorra blanca. Lo dejaré aquí guardar para contar directos con el tío. Va a haber tela. Me la pondré para atrás. Que sí, que sí. Al expuerto. Que sí, que no. Que parece bien. Parece.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1011" target="_blank" class="timestamp">[16:51]</a> cuesta, sí. Y el tío en un directo decía, no, yo llamo a la secretaria de los musk y me paga el santuario, pero bueno, no quiero hacerlo con así que no sé cuál. Lo hago por animales y por animales y tal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1022" target="_blank" class="timestamp">[17:02]</a> Y le va para allá, ahí lo busca, ahí aterrizó el avión ahí en su santuario y tal, y le puso su satélite ahí arriba. Es que es brutal el pavo este, ¿eh? Entrenador de Mónica Sales, acordaos, ¿eh? Gente, si no habéis visto el vídeo Inventman de la chanante, buscadlo en Google. Inventman. Lo ponéis y veis el vídeo. Es buenísimo. Pero de repente a mí se me están pidiendo explicaciones de mi vida personal. De mi vida más personal, de mi vida más íntima.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1047" target="_blank" class="timestamp">[17:27]</a> Se han destapado. Sí, porque eres un mentiroso y con que nadie te cree tienes que demostrar lo que dices, lo que hay, tío. Si no hubiese sido mentiroso. Y digo destapado. Lo más íntimo de personas relacionadas conmigo. Se ha utilizado una foto de una persona que está embarazada con mellizos. Que está tranquila en su casa. Para hacer una especie de complot. Se han hecho cosas brutales. Se han creado cuentas de Tinder.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1075" target="_blank" class="timestamp">[17:55]</a> para decir que nosotros teníamos una cuenta aquí para hacer fiestas sexuales se me ha acusado y aquí voy a ti</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1084" target="_blank" class="timestamp">[18:04]</a> eso si fue verdad es asqueroso el alinear temas sexuales es primero de todo que que no debería denigrar a nadie porque eso es privado haga lo que haga eso es su vida sexual y eso es sagrado la vida sexual es privada eso es sagrado y quien se dedica a sacar trapos de esos intentando desprestigiar a alguien en verdad debería condenarse a la persona que lo destapa Luciano detener fiestas sexuales con menores</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1114" target="_blank" class="timestamp">[18:34]</a> ¡Ah! ¡Hostia! ¡Qué mal rollo, tío! ¡Hostia! ¡Qué mal rollo, tío! ¡Uf! ¡Uf! No mola eso. No lo sabía, ¿eh? Que le han acusado eso. Mal rollo, ¿eh? Eso no me lo creo, ¿eh? ¡Hostia! ¡Qué mal rollo, tío! Eso sí que no... ¡Uf! Eso ya no me hace gracia ninguna, ¿eh? No me mola, tío. Eso sí que ya... ¡Uf! Mal. Mierda, tío. Eso no... Me ha cortado el rollo completamente, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1137" target="_blank" class="timestamp">[18:57]</a> Viacu, pero si le denuncias, ¿le estás dando crédito a eso? Yo no, yo no, yo no doy crédito a eso. Este es un mentiroso, se ha demostrado que ha mentido, lo ha reconocido varias veces, porque al final, cada que la mentira sale, para que no se te monte el tinglao que ha tenido que hacer siempre, guiar de victimismo su situación, lo hacía por mis hijos, lo hacía por los vecinos, lo hacía por...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1159" target="_blank" class="timestamp">[19:19]</a> ...por un papagayo que pasaba por ahí... ...que lo vi un día... ...lo hice también por él... ...y lo hice por... ...los Anunnakis... ...y todo eso... ...y todo eso... ...se justifica... ...y es mentiroso... ...pero... ...que acusarle de pedo... ...eso ya es... ...ay, cállate... ...te parece... ...este tío es un jeta y un fantasma... ...pero no creo que sea pedo exactamente... ...a mí eso sí que es aso asqueroso... ...y el que lo ha publicado... ...si no tienes pruebas... ...y sacas eso... ...eres un hijo de peda... ...para especie...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1186" target="_blank" class="timestamp">[19:46]</a> El que ha publicado... El Juanito, ¿cómo se llama? No sé. El Joaquín, ¿qué ha hecho? Sí, sí. Puede ser mucha cosa, pero no. Sí, sí. El que ha publicado eso me parece una estrategia muy, muy, muy rastrera. Mal rollo, tío. Mal rollo. Ahí sí que lo de Franco esta no se lo merece. No, me dijiste que no lo habías dicho. Tú dijiste cuando te preguntaron. No me extrañaría.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1214" target="_blank" class="timestamp">[20:14]</a> Ahí, coño, ¿en qué quedamos, tío? En nuestra nariz. Perdón, ¿eh? A ver. O sea, que no lo han dicho. Que lo sea. Y aquí voy a ti, Chi. Luciano. Detener fiestas sexuales con menores. No, me dijiste que no lo habías dicho. Tú dijiste cuando te preguntaron. No me extrañaría. Joder, perdónate. Tanto dramático para luego. No lo ha dicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1238" target="_blank" class="timestamp">[20:38]</a> Que no me extrañaría si lo hiciera. A ver, que él sí, que el Chi este... Joder, me he perdido el nombre. El tío este tiene pinta de ser un perra y un asqueroso, sí. Pero también tiene pinta de que tiene información real. Bueno, claro, si ha trabajado ahí, claro que la tiene, ¿no? Daniel, durante una charla le preguntaron a Chi...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1255" target="_blank" class="timestamp">[20:55]</a> De si había llevado menores a su santuario. Y Chi dijo, no me sorprendería. O sea, mentira. Mentira, no. No llevaba menores. Porque si no, lo diría. Porque el chiste le tiene ganas a la Frank. Hombre, también, tío. Joder, macho. Qué gentuza, ¿eh? Y a sus personas más cercanas. Y no voy a ir contra ti, Luciano. Se va a traer el Luciano este el chiste. También es un perle. Cuidado, ¿eh? No voy a ir en este vídeo contra ti. Porque tú has sido mi amigo. Tú has sido una persona que yo he querido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1284" target="_blank" class="timestamp">[21:24]</a> El Luciano este no es consciente cuando dice, no me estrenaría. No es consciente. Pero bueno, también yo entiendo que nadie puede entender que se la acuse de pedo si dice, hombre, no me estrenaría porque no ha firmado nada el Luciano. ¿Vale? Bueno, bueno. O sea, es que tampoco se lo puede condenar, no se lo puede condenar completamente al Luciano porque no ha hecho que lo sea. ¿No? O sea, vale. Seguimos, ¿vale? Tú has sido una persona que yo he cuidado. Tú has sido una persona...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1313" target="_blank" class="timestamp">[21:53]</a> que ha estado dentro de mi circo. 611, es un resentido el chi, Luciano, porque le despidió para contratar a su hijo. Sí, bueno, seguro que el tío este es un asqueroso del libro, el Luciano este, sí, sí. Esto siempre es muy feo, ¿no? Porque hay una persona que tú le confías y esa persona aprovecha confianza para luego echar todo lo privado a hacer lo público. Eso es muy feo, muy feo, muy feo. Que es un chi, no, es un trabajador que tuvo Frank. Tu dector 97, insinuar eso es manipular, sí. Estoy de acuerdo, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1342" target="_blank" class="timestamp">[22:22]</a> Círculo más cercano. Dices que yo tengo que destapar todo. Hay cosas sagradas, tío. No puedes ni siquiera dudar si es pedo. Tienes pruebas, pues cállate, tío. Y si no, que te ataca la tierra, ¿eh? Voy a hablar de todo hoy. De absolutamente todo. De todo. Y vas a ver que cuando el otro día decías y me amenazabas de muerte, eso es otro de los delitos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1365" target="_blank" class="timestamp">[22:45]</a> ¿Vale? Cuando dices que si le pasa algo a tu madre es por mi culpa. No es por mi culpa. Las últimas palabras que me escucharon a mí decir sobre ti fue que eras como un hermano, que eras un cabrón, hijoputa, que te hayas comportado como un cabrón, pero que eras como un hermano y que ya lo hablaríamos. Y que no tenías nada que ver con la detención. Esas fueron mis últimas palabras para ti. Con lo cual te lo digo públicamente. No me amenaces de muerte nunca más por si tu madre se lleva un disgusto o no. Si tu madre se está llevando un disgusto... Va, no, estas son peleas vacías.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1392" target="_blank" class="timestamp">[23:12]</a> No, si mi madre pasa algo te arrepentirás. ¿Me amenazas de muerte? Deja de tonterías. Va, grano, tío. Es porque estás haciendo el ridículo en las redes sociales. Porque estás amenazando. Porque estás... Gutiérrez. Lo está haciendo como venganza porque Frank le mató a su loro. ¿Qué dices? ¿En serio? Nada. Es que es una maruja, ¿eh? Dejando. Porque estás intentando humillar. Porque estás rompiendo todos los límites de la confianza de una amistad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1422" target="_blank" class="timestamp">[23:42]</a> porque te estás regocijando en el dolor de otras personas. Así que no vuelvas a decir eso, porque no es verdad y lo sabes. Y lo sabes. Y voy a contar todo hoy. Pero no lo voy a contar para echarte mierda, Luciano, o para decir que el chico que está en Miami es esto o que el otro es lo otro. Hombre, se murió un loro, no quiere decir que lo ha matado. Si se le ha muerto el loro, yo qué sé, tío. Joder. Desde luego, Luciano, a este tío, que es un perla de cuidado, eh. Pero bueno, a ver. También es verdad que cuando dos personas acaban mal, bueno, en fin.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1452" target="_blank" class="timestamp">[24:12]</a> Cuando dos personas acaban mal, tienes que tener bastantes principios morales para no convertirte en un hater, como el típico divorcio, que acaba y luego uno de los dos va a muerte contra el otro. O has divorciado, pues ya está. Es que me dice eso, pues ya está. Pues le anuncio la mente. Pues no vayas por ese camino, no hay que ser. A ver, dice Aureus. John, que no acuela, que el loro es viviendo 200 años. Bueno, pues a lo mejor ha pillado una gripe el loro, se ha muerto, tío. O estornudó, se le salió el corazón del sitio, no hay que ser. Otro, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1483" target="_blank" class="timestamp">[24:43]</a> No. Porque creo que le debo esto a la gente que está pensando, hostia, ¿esto qué pasa? Y es muy sucio que hayáis hecho esto. Porque hoy voy a tener que abrir cosas de lo más personal que he tenido en mi vida. Y esto lo habéis hecho vosotros. Raed Token. Lo que tú has hecho, diciendo que yo metía eso en grupos y tal, tú sabes que no es verdad. Y tú sabes de dónde has conseguido esa foto para hacer ese vídeo que dices. ¿Qué foto? No me he enterado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1512" target="_blank" class="timestamp">[25:12]</a> Sabes, Red Token. Y tendrás que demostrarlo. Lo tendrás que demostrar. Porque esa foto que... Estoy flipando. Es que no sé si estáis hablando en serio o son bromas. Liliacra. Es que le hizo un cambiazo al loro. Y cuando Chi le preguntó, Frank le mintió, como siempre, vamos a decir la verdad. Si dice la verdad, se muere Frank este. Frank le mintió y le dijo que la arreglaron el pico. No, esto es una broma, ¿no? No sé, tío. Lo que tú tenías, no la tenía yo. Nunca he tenido esa foto, ni ese vídeo. Nunca jamás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1543" target="_blank" class="timestamp">[25:43]</a> Esas fotos que tú deliberaste, que te dieron, esas son de antes de yo conocer a esa persona. ¡No puede ser! ¿Qué me estás contando? ¿Qué me estás contando? ¿Qué me estás contando? ¿Qué historia es esa? ¿Qué me estás contando, tío?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1561" target="_blank" class="timestamp">[26:01]</a> ¿Esto es real? ¿Me estáis vacilando? Gutiérrez. Bueno, el que me vacile lo baneo, porque me jodéis el vídeo. Frank. Frank le mató el loro. La roja se llamaba el loro. Le mató el loro a Chi y Frank le pegó un cambiazo por otro loro y se dio cuenta. No. Hostia, ojalá no haya un bot para añadir aquí en el chat de Twitch para poder verificar lo que me decís. Un poco que se llame Pepito y decir Pepito, ¿me puedes verificar lo que dice el capullo este?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1589" target="_blank" class="timestamp">[26:29]</a> No, en serio. Me estás vaciando con el loro. Tú, en serio. Es que es muy... Es muy perpéntico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1596" target="_blank" class="timestamp">[26:36]</a> Que no, coño, que lo dice en el canal de Láser X. Es que es muy surrealista. Es que es... Pregunta a Grock. No tengo Grock aquí, qué pena. Hostia, tío, es que me mola porque me recuerda a los jaleos que tienen los yonkis. Ah, y aquí lo voy a admitir. Este pavo no tiene vergüenza, Frank Cuesta, y te sale aquí con una dignidad, con las pausas dramáticas. Me habéis obligado a salir a mi retiro espiritual. Habéis hecho daño a gente. Sí, maté al loro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1627" target="_blank" class="timestamp">[27:07]</a> Alguien se la sacó de su teléfono.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1657" target="_blank" class="timestamp">[27:37]</a> ¿No? Venga, va, tío, pruébalo. Venga, va, va. ¿De qué vas? ¿Y tripis? No, no, tripis no. ¿Ácido? ¿Basuco? Tampoco, tío. ¿Y un supositorio de no sé qué? Por el culo también, de droga. Sí, claro, por el culo. ¿No? ¿Y una cachimba de LSD? Claro, o sea, por patas huyes de esa mujer. Normal, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1679" target="_blank" class="timestamp">[27:59]</a> ¿Quién se casa con una yonki? Pues el que también le mete. Vosotros lo tomen la broma, pero la droga une mucho, ¿eh? Suena fatal, pero la verdad. O sea, si tú estás con una mujer y a ti te gusta el fom-fom-fom y a la mujer le gusta el fom-fom-fom, hace mucha gracia cuando te estás liando y la que te pegó, venga, venga, aquí abajo, no sé qué, bueno, quiero tantos detalles. Sí, sí, Simón y a Silvia son inseparadas también por eso. Teóricamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1708" target="_blank" class="timestamp">[28:28]</a> Teóricamente. Yo no había visto eso nunca. Eh... Hostia, tío, esto es buenísimo, ¿eh? Esto es el salseo, pero... La champions del salseo, ¿eh? O sea, Frank, tío, gracias, porque estás salseando. Estás alargando el chicle, tío. Es un desastre, pavo. Es muy duro. Es muy duro de estar aquí, de ver a personas que quieres jodidas. Os habéis estado mofando de mis hijos, de mi hijo mayor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1738" target="_blank" class="timestamp">[28:58]</a> Chi ha intentado dejar caer algo que ni mis hijos saben, que le conté en confianza, Chi te lo conté en confianza, sobre mi hija. Ni mis hijos lo saben y lo dejaste caer en un directo. Ni mis hijos lo saben y lo dejaste caer en un directo. Había roto todo lo que es la decencia dentro de Internet.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1764" target="_blank" class="timestamp">[29:24]</a> Mucha gente os considerará héroes. Habéis desenmascarado a Frank. No, Frank se va a desenmascarar hoy. Se va a desenmascarar completamente hoy. Ay, qué pena que metan en los hijos, eh. Me sabe mal, tío. No sé de qué vale la información. Tampoco me interesa. Bueno, si lo quieres comentar, pues bueno. No sé, no sé, no sé. Pero me da pena, tío. Esto sí que es feo, ¿sabes? Porque qué pintan los niños, ¿no? Bueno, niños. Son adultos, pero es igual, tío. Esto sí que es feo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1786" target="_blank" class="timestamp">[29:46]</a> Al fin y al cabo, por mucho que el tío sea un embustero, que demostra que es un embustero y un tipejo y que se ha aprovechado las mentiras, se ha aprovechado de las mujeres, todas estas que lo veían como un hombre bueno, pues bueno, eso es eso y lo otro es otro, ¿no? O sea, por mucho que un tío te caiga mal, porque puedes ser bastante indecente, no le puedes acusar cosas que son mentiras ni tocar a los hijos, tío, en fin...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1812" target="_blank" class="timestamp">[30:12]</a> Es decir, si él denunciara judicialmente cosas que son mentiras o cosas que han hecho a sus hijos, bueno, yo apoyo, yo que no soy nadie, pero normalmente lo apoyaría, ¿sabes? Pero habéis roto toda la decencia de Internet. Sois terroristas de Internet porque habéis creado terror.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1833" target="_blank" class="timestamp">[30:33]</a> Red Token y Mexiberga, no sé qué son. Son los que pusieron fotos donde Frank hace no sé qué y su novia está haciendo no sé qué. No quiero leerlo, lo siento. Y el perfil es donde piden tríos. Pues hay que ser muy hijo de P para sacar todo lo sexual de una persona y publicarla. Es muy asqueroso, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1854" target="_blank" class="timestamp">[30:54]</a> ¿Sabes lo más asqueroso de cuando una persona roba contenido sexual privado de alguien como Frank y lo publica? Esa intención moralista de decir, mira, mira, ¿sabes? O sea, como que no tienen las relaciones heteros habituales, o sea, pero tú no sé, es que ni un cura te va a comprar ese discurso, ¿no? Es asqueroso, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1878" target="_blank" class="timestamp">[31:18]</a> Porque habéis intentado humillar, destrozar, vandalizar la vida de personas que no están dentro de vuestra vida. Personas que no os han hecho absolutamente nada. Y si os han hecho, os han hecho un 0,5% de lo que vosotros habéis hecho. Y Luciano. El Vergas ese y el otro son del mismo perfil que el Dallas. Viven de difamar a la gente, porque es mala gente, tío. Yo ayer intenté hablar contigo. Has filtrado una...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1906" target="_blank" class="timestamp">[31:46]</a> Veo que nunca has visto una foto del Mexivergas. Lo ibas a entender ahora mismo. Promocionado ni fans de una niña de 14 años que me estás contando, tío. ¡Qué basura, tío! ¡Qué basura!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1920" target="_blank" class="timestamp">[32:00]</a> Red Token es un estafador que hizo una estafa con Dalas. ¡Qué basura, tío! ¡Qué basura, tío! Bueno, me sabe mal que el Frank Cuesta tenga que sufrir por gentuza esta, tío. Porque hay que ser basura, ¿eh? ¡Qué inmundicio, tío! Una cosa es que seas un trolero y un listo que te hace minore base de trolas y otra cosa es lo que hace esta gentuza. La parte del chat. Tú no has filtrado la parte donde dices que vas a ayudar en las causas que están en contra mía. Tú ayer en el chat dijiste eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1948" target="_blank" class="timestamp">[32:28]</a> que ayudarías a las causas que están en contra mía. Que le pidiera perdón a Yuyi. Que te pidiera perdón a ti. Y vamos a ir con todo eso. Bueno, entonces, resumiendo, el chi este, el... ¿Cómo se llama Julián? ¿Cómo se llama? El chi este, el extrajador, es un chantajista y un mal bicho, ¿no? Se comparece...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1972" target="_blank" class="timestamp">[32:52]</a> Pero que tiene el arma de la verdad parcial. Y está sacando verdades, ¿verdad? Tú no puedes vivir escondiendo cosas. Tú puedes esconder el sexual porque estás en tu derecho y nadie le importa. Y el que expone el sexual de otro es que diría que está en la cárcel. Pero fuera de lo íntimo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=1990" target="_blank" class="timestamp">[33:10]</a> Tener que esconder cosas porque eres un mentiroso y vives en una mentira, luego pasa esto, ¿sabes? Que te viene una mala persona, un ex trabajador, con ganas de venganza porque es un rencoroso, pues te pasa esto, ¿sabes? Pero ya te digo, todo esto lo has provocado tú, Luciano. Tienes una oportunidad de dejarlo ahí. Tú lo dejas ahí de lado y yo lo dejo de lado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2019" target="_blank" class="timestamp">[33:39]</a> Pero tú ya has empezado con amenazas personales. A mis hijos, a mí, a Paloma y a todo el mundo que está alrededor nuestro. Hoy ha habido una reunión aquí. Aquí, porque tú has estado por toda esta zona. Ha habido una reunión. Toda la gente estaba preguntando por el verde. ¿Por qué ha desaparecido el verde hace tres días? ¿Quién estaba por aquí hace cuatro y tres días? ¿Quién? Ha habido una reunión aquí. Solo te digo eso. Aquí. Enfrente de mi casa. Enfrente de nuestro santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2050" target="_blank" class="timestamp">[34:10]</a> Enfrente del sitio que tú viste en hacer. Tú has sido mi amigo, has sido como un hermano pequeño para mí. Cuando no tenías coche, te di un coche. Un pica. Teléfonos de última gama. Cuando tu computadora se rompió, te compré una computadora nueva. Creamos los viajes para que tú ganases dinero extra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2078" target="_blank" class="timestamp">[34:38]</a> Jamás te pedí cuentas. Tú me dabas lo que sobraba, lo que... Ah, el verde es otro loro que desapareció. Vale, vale. Me tocaba. Jamás te pedí cuentas. Jamás te pedí cuentas. Jamás. Tú has tenido todas las claves de mi computadora, de mi WhatsApp, de mis teléfonos, todo. Has tenido acceso. Te he dejado en mi casa solo, en el santuario solo, con acceso a todas las computadoras, a WhatsApp, a teléfonos, a lo que fue.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2100" target="_blank" class="timestamp">[35:00]</a> Tú te dedicas a esto. Tú te dedicas a las computadoras. Jamás te he pedido cuentas. Jamás te he pedido cuentas. Jamás, Luciano. Tú te enfadaste hace tiempo. Yo lo sé. Yo te mandé un mensaje desde el hormiguero diciendo que las personas más cercanas son las que te traicionarán porque estabas haciendo cosas que no me gustaban. Y te mandé el mensaje porque yo creía que Luciano, el Luciano que yo he querido mucho como amigo, como un hermano...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2129" target="_blank" class="timestamp">[35:29]</a> A ver, es que se ha registrado un tío que se llama El Verde Lorico. Dice, soy yo el loro. Qué capullo, tío. A ver, espérate. Dice Daniel Jomi, no es solo rencor, es que amigos de Frank acusan a Chi como el traidor que había acusado a Frank con... Que había acusado a Frank... Joder, Paco es un normal, tío. Con las autoridades para las nutres legales. A ver, pero escribir bien, Daniel Jomi, que tengo que leerte y Paco yo es un normal. ¿Y esto qué quieres escribir mal?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2156" target="_blank" class="timestamp">[35:56]</a> Chi recibió el acoso porque se la acusó de ser el que se chivó a las autoridades, el que puso la denuncia. ¿Chi fue el que denunció a Frank Cuesta? ¿Confirmado o no? Hermano, yo creí que ibas a volver a ser el mismo. Tú dices que yo he cambiado. Seguramente, todos cambiamos. Pero hay algo que está claro, yo jamás te haré daño a propósito. Jamás. También te digo, hoy es el último día que voy a permitir esto. Mañana la cosa cambia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2184" target="_blank" class="timestamp">[36:24]</a> Y todo depende de ti. Todo depende ahora de ti, Luciano. Que vas a sacar lo más grande, sácalo más grande. Vale, no fue chi. Incluso Frank no niega. Vale, gracias. Perdón. Lo más grande. Yo no he cometido ningún delito. Contra ti. Contra ti. Pero nosotros ya hemos traducido absolutamente todo lo que has dicho. Todo lo que has escrito. En estas semanas. Y créeme, hay 19 delitos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2213" target="_blank" class="timestamp">[36:53]</a> Eran 17. Ayer fueron otros dos. Tío, que está interesante el olito. Mira la cara de dramatismo que pone Frank. Te mira con cara de pena. Como un perro que... A un cío ese que había en los 80, no mandó a los perros. El perro sería ahí con esa cara, mirando con pena. Yo conocí a Luciano en la cárcel. Nos conocimos en la cárcel. Yo iba a ver a la madre de mis hijos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2241" target="_blank" class="timestamp">[37:21]</a> Estaba Luciano haciendo así con el jabón en la ducha a ver si alguien... Y se agachaba a cogerlo. Y Frank... No sé. Entonces lo conocí ahí, ¿sabes? Y se me acercó una persona, un chico argentino, a saludar. Era un fan. Se le acercó. ¿Me coja pastilla de jabón? ¿Güey? Se llamaba Luciano. Se llamaba Luciano. Él estaba allí por sus razones. Tenía a su mujer en la cárcel. No sé exactamente cuál era el delito. Era algo de dinero, de estafa, de no sé lo que era.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2270" target="_blank" class="timestamp">[37:50]</a> Yo le conocí en la cárcel. El roce, hacer cariño. Nos hicimos amigos. Capastilla de jabón, os lo he dicho, ¿eh? Empezamos a hacer cositas juntos. Me acompañaba a hacer esto. Me grababa aquí. Un amigo. Un amigo. Poco a poco te vas haciendo más amigo. Pasó navidades en casa porque no tenía ningún sitio donde pasar las navidades. Se divorció después de que salió su mujer de la cárcel. Hubo un sitio de hacer amigos en la cárcel, ¿eh? Hay gente de fiar, ¿eh? Otra relación. Luego...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2301" target="_blank" class="timestamp">[38:21]</a> Seguimos la relación normal, amigos, amistad, cuando había algo, oye, ¿quién es tal? Venía, hacía algo, él lo ha dicho, yo le daba dinero, pues por esto, por esto, por esto, él no pedía, pero si venía a trabajar yo le daba dinero. Hasta que llegamos a un acuerdo cuando hicimos el santuario, cuando hice el santuario, cuando creé el santuario, cuando construí el santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2323" target="_blank" class="timestamp">[38:43]</a> Llegamos al acuerdo después de un tiempo de... Se pueden hacer viajes, tal, lo lleva él. Se pueden hacer camisetas. Las camisetas eran 100% tuyas, Luciano. El negocio de las camisetas era 100% tuyo. Jamás he recibido un euro de las camisetas. Era todo tuyo. El 30% de todo lo que se ingresaba con los viajes era tuyo. Y lo que quedaba después de los gastos era mío. Desde el principio, Luciano, te dije que era una tontería teniendo el santuario y que esto iba a quedar para vosotros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2353" target="_blank" class="timestamp">[39:13]</a> Pero ¿a cuánta gente quería regalar santuario? ¿Que me he perdido ya? ¿A tenso que ir a la chi también? ...a quedar para vosotros. Que esto iba a quedar para vosotros. Esa era la idea. Te lo dije muchas veces. Muchas veces me repetiste yo quiero algo para mí, algo para mí y te dije, hazte un café, hazte una cosita así que tal. No, voy a hacer un santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2381" target="_blank" class="timestamp">[39:41]</a> Me pareció mal. No, me pareció estúpido. Porque teniendo este santuario que era para ti, era para ti, tú ibas a llevar este santuario. Tú ibas a llevarlo. Y lo sabías. Pero querías algo tuyo. Tú no has comprado tierras, Luciano. Tú no has comprado tierras. Tú a mí me dijiste que alquilaste unas tierras. Ibas allí, hacías una grabación, un paseo, una cosa, llevaste a dos chavales a ir a hacer no sé qué, un paseo. Tú no has comprado tierras, Luciano. No has comprado tierras. Estás diciendo que llevas con las tierras dos años.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2407" target="_blank" class="timestamp">[40:07]</a> si hubieras tenido las tierras dos años hubieras puesto por lo menos no sé una tienda de campaña un palo una bandera una medio valla una cuerda que lo sabes ahí donde el cabrero vale ha sido tu roja y tu pájaro donde yo les estoy dando de comer la papilla desde pequeñitos se criaron aquí se criaron conmigo no contigo no era tu roja era un pájaro que a ti te encantaba que a ti te quería mucho te quería mucho ese pájaro a ti</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2437" target="_blank" class="timestamp">[40:37]</a> Pero tú no vivías aquí. Y de hecho, el accidente pudo ser el 6, el 7 o el 8 de diciembre. La siguiente vez que tú viniste aquí fue a mediados de enero. A mediados de enero. Tú has ido contando una historia romántica que era tu roja, que era tu loro. ¡Cállate! ¡Cállate, hombre! ¡Qué momento dramático! ¡Estaba poniendo en serio! ¡Joder, Nacho! ¡Tora! Frank incubó los huevos él mismo. Es que, tío, es verdad...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2463" target="_blank" class="timestamp">[41:03]</a> Se ponía el huevo de la roja, se ponía ahí en la huevera suya. Hasta que nació el pollito del loro, ¿no? Joder, macho, tío. Es que le hace unos comentarios. No era tu loro. Tú no le dabas de comer. Tú no la cuidabas. Tú no te preocupabas cuando se perdían. No, no era tu roja. Era un pájaro. Que tú venías aquí, te hacías fotos videocitos y te chuleabas de que la roja a ti te quería mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2493" target="_blank" class="timestamp">[41:33]</a> Pero no era tu roja, no era tu pájaro. No. Si hubiera sido tu roja y tu pájaro... Porque no se le ha ocurrido la trola, si no la suelta. Dijo, yo incubí el huevo. Antes que naciera estaba ahí. Lo tenía en el cazoncillo puesto, calentito. Para asegurarme que naciera el pollito. Entre que tuvo el accidente y mitad de enero cuando viniste para... Porque había gente que venía. Hubieras venido aquí a ver cómo estaba. No viniste ni un día.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2524" target="_blank" class="timestamp">[42:04]</a> Y es más, tanto que entiendes de pájaros y tanto que les has dicho a todo el mundo que tú, tu pájaro, tu pájaro, tu roja. Yo te di un loro verde, igual que el verde que ha desaparecido hace tres días, cuatro ya. Yo te di un loro verde joven para que lo cuidases. Aquí hemos tenido muchos pájaros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2548" target="_blank" class="timestamp">[42:28]</a> Aquí ha habido mucha gente que cuando los pájaros empiezan a volar, vamos detrás de ellos y si nos tenemos que pasar la noche, como nos la hemos pasado y está en vídeos, nos pasamos la noche debajo de un árbol para saber dónde va por la mañana porque cuando empiezan a volar se pierden y hasta que empiezan a saber cómo volver y cómo pararse y cómo agarrarse hay que estar ahí. Yo te di un loro verde, Luciano, joven, y te dije, cuando empieza a volar tienes que ir detrás de él y tienes que joderte y estar detrás de él hasta que aprenda. Ese loro se fue una vez, lo pudiste coger porque se quedó cerca de tu casa,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2576" target="_blank" class="timestamp">[42:56]</a> Casa que yo nunca he conocido. Porque nunca me has invitado a tu casa. Eso... Eso es feo, ¿eh, chi, tío? Pues he invitado a su casa y un par de filetones, ¿no? Y la segunda vez que se fue, volando, me dijiste que se había perdido ya. El gran salvador de los pájaros, el que sabe tanto de animales ahora de repente. Un pájaro que te di, un loro verde. Lo dejaste ir. Por vago.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2604" target="_blank" class="timestamp">[43:24]</a> A ver, por el oro, tío. Pero, joder, macho, es que es un poco cómico todo esto, ¿eh? ¿Sabéis? Yo voy a contar un loro que tuve yo. Me acuerdo cuando... Pues antes tenía coches en casa, ¿no? Tienes uno, compraba uno. Cuando antes los coches eran baratos, ¿no? Y por si se me los te pillas un pepino. Segunda mano, así, un M... No lo tuve, ¿no? Pero iba a ser un M5 de 34, no es igual.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2625" target="_blank" class="timestamp">[43:45]</a> Pues había un... Cuando anunciaba los coches en Autoscout, ¿no? Antes anunciaba cosas en Autoscout, los coches, no en Wallapop. Había un tío que era un pesado que siempre te ofrecía un loro, tío. O vendía cosas, no sé, vendía cosas... Hola, yo tengo un loro, ¿te interesa? A cambio, te pago y el loro, ¿no? Y pensaba, ¿qué cojones quiero el loro, tío?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2644" target="_blank" class="timestamp">[44:04]</a> Yo vi un tío que tenía un loro que siempre te lo ofrecía, ¿no? Y vendía, yo qué sé, una moto. Hola, ¿te interesa 3.000 y un loro? Es un loro muy bueno. Y yo, que no quiero el loro, hombre. Que tú eres el pesado que también ofreciste para el coche. Qué cosa, ¿no? Más curiosas, ¿verdad? Ofrece un loro. Por vago. Así que no me vendas. Y no le vendas a la gente que yo no quiero a los animales. Que yo abuso de los animales. Que yo mato animales. Yo puedo hacer muchas cosas mal en la vida. Puedo ser la Antoñita la Fantástica. Pueden ser tres y yo decir siete.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2677" target="_blank" class="timestamp">[44:37]</a> Pero lo que no voy a hacer es dejar un animal así. La Roja... Todas las mujeres llorando. ¡Ay, Frank, qué bueno eres con los loros! El mismo día que yo hice el vídeo donde le curé el ala, ese mismo día, puedes llamar a Animal Space, que es el hospital veterinario más grande e importante de Bangkok. Vas allí, como has ido preguntando muchas cosas sobre mí, te vas allí y preguntas. Ese mismo día que yo hice el vídeo, llevamos a La Roja a ese hospital.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2704" target="_blank" class="timestamp">[45:04]</a> Doctor, tengo un loro, está muy grave. En ese hospital, donde se la trató, porque las heridas que tenía por dentro, yo no sabía qué tipo de heridas interiores tenía. Le curé el al... Le pusieron un vial ahí al loro, ¿sabes? El loro ahí. Por favor. El loro habla, ¿sabes? Doctor, estoy mal. Estoy mal. Y me la llevé para allá. Y estuvo varios días. Y la roja murió allí. Me costó 47.000 watts. 47.000 watts, más de 1.500 dólares.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2734" target="_blank" class="timestamp">[45:34]</a> El tratamiento. ¡Jo! Esto me está sonando una trola, tío. Nivel franco esta. O sea, le llevó el loro al hospital. ¡Doctor! ¡El loro! ¡Está grave! ¡Está gravísimo! ¡Señor! ¡Este loro va a subir! ¡No!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2750" target="_blank" class="timestamp">[45:50]</a> Lo encueco mis cojones. Lo tenía metido entre el perineo, el ano y mi huevera. El huevo ahí durante tiempo. Y el doctor, Dios mío, es usted un hombre humanístico. Humanamente hablando. Sí, doctor. Y luego noté como me hipocoteaba ahí en el ano. Oh, ha nacido yo. Sí, está aquí el loro. La roja lo voy a llamar porque es rojo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2770" target="_blank" class="timestamp">[46:10]</a> Me dijeron el primer día que iba a morir. Que lo mejor era ponerla a dormir. Dije que lo intentasen. Me hubiera costado 6.000 watts.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2804" target="_blank" class="timestamp">[46:44]</a> Lo siento, tío. Es que le está dando un dramatismo a esto que lo siento, eh. Y sí, la roja murió. ¿Y sabes lo que hicimos? Lo requieren de Mozart. Un funeral ahí. Hizo un agujero ahí en el santuario. Me volví loco hasta que pude conseguir otra roja. Y durante un mes, todos los días, Paloma, esa mujer que tú odias...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2826" target="_blank" class="timestamp">[47:06]</a> esa mujer que tú odias, Paloma, y yo, con una capucha como la tuya, la que usas siempre, con una capucha como la tuya que compramos en la China. Estuvimos dentro del voladero, horas y horas, para que la lora se acostumbrase a venir a nosotros y reconociese la capucha. ¿Qué me estás contando, tío? Se muere el loro, se lo dice, tío, que se ha muerto el loro. Lo iba a hospital, me ha costado pasta, pero se ha muerto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2851" target="_blank" class="timestamp">[47:31]</a> O sea, ¿pero qué movida me estás contando, tío? ¿Sí, para qué? Esto es muy raro, ¿eh? Esto que estás contando ahora es porque el loro no murió porque tú has dicho, ¿eh? Para que cuando tú vinieras te reconociese fuera hacia ti. ¿Pero qué dices, tío? Eso es que no puede ser, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2876" target="_blank" class="timestamp">[47:56]</a> Eso que el loro del tío un día... Yo qué sé, ¿sabes? Conducido con el coche y lo pasó por encima al loro. Y yo, coño, me he cargado al loro. ¿Ahora qué hago? Se va a enfadar el chi este. Espérate. ¿Paloma o Pepita? No sé quién era. Vamos con un loro. Se parece. Es violeta, Frank. Es igual. Pinto de rojo. Mira, ponte una capucha. ¿Te hace caso? Así cuela. Tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2903" target="_blank" class="timestamp">[48:23]</a> Es que es muy fuerte lo que está contando. Esto lo hizo una mujer de limpieza en casa que se cargó el marco de la ventana y cogió con tipos y lo pintó. O sea, ¿cuándo ocultas algo? Porque no sé qué, esa es la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2916" target="_blank" class="timestamp">[48:36]</a> O sea, ¿por qué hace esto? ¿Para ocultar la verdad? Si no, va y se lo dice, tío. Que al loro le va a dar una diplomia. Le iba al veterinario y le va a dar un derrame cerebral y ya está. Y le dice, mira, aquí está el pajo en la caja, muerto. ¿Pero qué me estás contando, tío? O sea, es que... Joder, pero te estoy flipando, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2936" target="_blank" class="timestamp">[48:56]</a> Claro, claro. Luego el chiseo cuenta que no era el loro. Cuando el loro empezó a hablar... Y dijo... Algo que no... ¿Sabes? Que no cuadraba. Oye, mi loro siempre decía... ¡A la Madrid! ¡A la Madrid! Y este no lo dice. Este no es mi loro, Frank. Y de hecho sabes... Y lo sabes en tu corazón... Que tú tuviste a la roja en la mano. ¡Lo sabes en tu corazón!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2966" target="_blank" class="timestamp">[49:26]</a> Que te cambiamos a la roja. Sí. ¡Qué trolero es el pavo este, tío! ¡Hostia! Pero este tío es espectacular, macho. ¿De qué planeta viene este tío? Total. Que te cambia el loro por otro. Es que es brutal. Esto es injustificable, tío. Sí. La roja había muerto. Sabíamos lo que significaba para ti. Y estábamos contentos cuando viniste ese día con el grupo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=2992" target="_blank" class="timestamp">[49:52]</a> Eres un farsante de la peor especie, tío. Eres un farsante y un manipulador de la peor especie. Si tú hiciste eso, es porque mataste el loro de otra manera. Es porque hiciste algo malo. Y no te atrevías a decir que el loro estaba muerto. Porque el tío te se ha preguntado por qué se ha muerto. ¿Qué ha pasado? Hostia, qué elemento, tío. Estoy flipando, ¿eh? Esto es perpéntico, ¿eh? ¿Que te darías cuenta o no te darías cuenta? Bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3023" target="_blank" class="timestamp">[50:23]</a> Ahora veis lindo, ¿sabes? Estaba con la mujer. Tío, así cuela porque como no cuele. Ahora, si te das cuenta, bueno. Sí. Hostia, qué elemento, tío. Ese pájaro iba a ir hacia ti también. Esa es la historia de la roja. Qué bueno, ¿es verdad? Lo hizo para cuidar los sentimientos del chi. Y tú sabes que el día que llegaste, la roja fue solo hacia ti. No fue hacia nosotros. Tú pudiste cogerla. Tú la tuviste en la mano. Nadie era capaz de coger ese pájaro en la mano. Nadie es capaz. Nadie.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3053" target="_blank" class="timestamp">[50:53]</a> Está por ahí nadie. Nadie. Pero fue hacia ti. Tú la pudiste coger. No te mordió. Eso fue un mes todos los putos días haciéndolo. Esa es la historia de la roja. ¿La querías en abierto o la tienes en abierto? Tío, deja el dramatismo, venga. Que es muy gratuito, ¿eh? Cuéntalo y ya está. No lo hagas como si fuera aquí. Una historia increíble. Voy a seguir. Ya he hablado del santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3084" target="_blank" class="timestamp">[51:24]</a> Dices que yo metí mierda sobre ti. No. Yo no metí mierda sobre ti. Pero a mí me dijeron que eras un pesado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3091" target="_blank" class="timestamp">[51:31]</a> Cuando Grefg estuvo aquí al final, cuando grabamos el vídeo de la cobra gay, te querías meter a toda costa y me tuve que cabrear delante de todo el mundo y decirte no vas a estar en el vídeo porque no, porque lo digo yo. La única vez que te he dicho en toda mi vida porque lo digo yo. Jamás te había hablado así, pero eras un pesado. Durante ese tiempo te gustó el hacerte famoso, te gustó el que la gente te diga que bueno eres y te podías haber hecho un nombre. Todavía estás a tiempo de hacerte un nombre, chi.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3119" target="_blank" class="timestamp">[51:59]</a> Todavía estás a tiempo. Pero ahora mismo la sensación de la mayoría de la gente es que no los trigo limpio. Y no por mi culpa. Tus males no vienen por mi culpa. Los míos ahora mismo vienen muchísimos por tu culpa. Pero tus males no vienen por mi culpa. Yo desde tres días después de que salí del calabozo no he vuelto a pronunciar tu nombre públicamente. Piensa eso. Eso se presenta, eso está escrito ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3147" target="_blank" class="timestamp">[52:27]</a> Tienes tiempo de parar esto o tienes tiempo de ir a peor. Y no me vengas con más amenazas de yo voy a terminar al final, aunque no sea en internet, no me vengas con más amenazas. Yo jamás, y tú lo sabes, Luciano, tú sabes, Luciano, que jamás he cerrado una puerta del coche, una puerta de casa, jamás. Y ahora duermo con miedo. Paloma no duerme allá, duerme aquí, porque tiene miedo. Hemos tenido que traer gente para que se quede aquí, porque tenemos miedo. Cierro el santuario con una cadena todas las noches, el campamento con una cadena todas las noches, la de esa zona.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3179" target="_blank" class="timestamp">[52:59]</a> porque has creado terror y miedo y hoy lo hablábamos aquí fuera por eso estuvimos hablando los vecinos ¿para qué dices eso? él nunca ha dormido ahí él ha dormido en el hotel en Utón que siempre iban allí a comerse pescaos y siempre que aparecían chispas se lo decía Paloma cuando yo me iba más de un día ella desaparecía solo puede corroborar a Paloma en el próximo directo y la última vez que me fui 10 días a España desapareció</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3209" target="_blank" class="timestamp">[53:29]</a> Cuando yo vine la busqué. La busqué por todos los lados. Estaba el perrito por aquí y todo. El perro, perro. Tu teoría es que la mató un perro, que se salió y que la mató algo fuera. Podía ser. Podía ser, sí. Podía ser. Lo malo es que la señora estaba viendo esa nutria. Allá donde el río. Y lo puede corroborar. Lo puede corroborar. Que la mató un perro, no lo sé. Que fue fuera, no lo sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3235" target="_blank" class="timestamp">[53:55]</a> ¿Que está en el río para arriba? No lo sé. Pero desde luego que las últimas noticias que tuvimos de chispas fue que se había ido al río donde tiene en la casa esta señora. Eso lo puede corroborar Paloma y esta señora. ¿Luego desapareció? Sí. Pero intentar hacer daño con eso, cuando tú no has vivido con ella todos los días, cuando tú no has dormido con ella, cuando tú no has estado con ella cuando has estado enferma,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3261" target="_blank" class="timestamp">[54:21]</a> Y cuando tú has metido mierda de que yo no amo a los animales, no amo a los animales. Yo los cuido. Yo estoy aquí con ellos. Todos los días yo sacrifico tiempo por ellos. Estar aquí no es tirar dos cazos de comida, no. El tema es que, según parece, estas nutrias que tiene él son de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3284" target="_blank" class="timestamp">[54:44]</a> De una especie protegida. No todas las nutrias son protegidas, las que tienen el se. Y claro, se les mueren los animales, que es lo que la gente está denunciando hace tiempo. Se te mueren los animales porque no están en condiciones que no pueden vivir ahí. No es eso. Hay que estar aquí para saberlo. Tú no vives aquí, Chi. Tú no vivías aquí. ¿Has pasado mucho tiempo? Sí, pero a ratos. Y sobre todo cuando venía gente que es donde ganabas dinero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3311" target="_blank" class="timestamp">[55:11]</a> Repito, yo no sé dónde vives. Nunca fui a tu casa, nunca me invitaste. Nunca lo pedí. Ah, ya lo sé, tío. No necesito más, venga. Porque es mi dinero, el dinero que yo he ganado. El frutero se gana el dinero vendiendo peras y manzanas. Yo me gano el dinero haciendo vídeos que entretienen y haciendo directos que entretienen. No me lo están donando. Están pagando por un servicio. Y el que ve el vídeo no tiene ni qué pagar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3335" target="_blank" class="timestamp">[55:35]</a> Entonces, la manipulación está muy bien, pero es que parece que el único dinero que yo he recibido en mi vida ha sido el de las donaciones que se hicieron para poner el santuario a nombre de mi hijo. Yo gano dinero todos los meses, yo he ganado mucho dinero en el pasado también. Yo tengo un sitio que ahora vale un millón de dólares. Me hace mucha gracia, Luciano, que digas que si aquí hay, vamos a hacer la cuenta, 100, no son 100, son 119.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3363" target="_blank" class="timestamp">[56:03]</a> El calabozo, dije lo que dije y te excluí de cualquier responsabilidad. Y dije, pues es un pesado, pues es esto, pues es lo otro. Mira lo que habéis hecho vosotros. Voy a parar un momento a beber algo. Vale. Terreno personal. Terreno personal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3384" target="_blank" class="timestamp">[56:24]</a> de FSP, como te llames, se publicó un chat con el Frank Cuesta y él hablando, se supone, en el que le dice, tío, reconoce el chi, le dice, Frank, esto es mentira. Reconoce que esto es mentira. Dilo, que no tienes cáncer, que no sé qué, que no sé cuál. Pero mis hijos se han comido. Durante el tiempo de tratamiento se han comido al cuidarme. Y tú y tus amigos salís públicamente a decir que yo no tengo una enfermedad. Yo tengo varias enfermedades, Luciano, que tú no sabes. Que el otro día a Javi se le escapó. Se le escapó porque yo pensé que cuando le daba el parte...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3414" target="_blank" class="timestamp">[56:54]</a> médico pero el año pasado yo no perdí pelo y este año para mí fue muy doloroso levantarme una mañana del cual yo cuento esto cuento bueno tal lo único que digo es cuando toca el tratamiento siempre digo lo mismo pongo una canción de bruce spielstein no surrender y digo que voy a perder peso y digo que seguramente pierda pelo el año pasado yo no perdí pelo y este año para mí fue muy doloroso levantarme una mañana</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3445" target="_blank" class="timestamp">[57:25]</a> Y yo pensaba que no lo iba a perder. Levantarme una pañada. Y ahí lo podéis preguntar a Paloma. Y tener la almohada llena de pelo. Que no me acordaba porque hacía cuatro años que no me pasaba. Este año ha sido más jodido. Y hacer así y que se te vaya el pelo. Y luego tú escuchas mofas de la gente que te está diciendo. Te está diciendo que te rapas las cejas y que te rapas la cabeza.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3467" target="_blank" class="timestamp">[57:47]</a> Llevo 20 años con esto Va tío Deja Deja hacer teatro Porque te encanta Te encanta el teatro Que te dice a la gente esto Pues no llores tanto Hácelo así Y dice Mira Gente Dejad de mentir por favor ¿Vale? Esto Aquí está ¿Vale? O el correo electrónico Que lo tienes ¿Vale? Y toda la gente va a decir Ah perdón Ya está Ya está Anda hombre</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3496" target="_blank" class="timestamp">[58:16]</a> Esto es puro teatro, tío. Esto es manipulación emocional. Pero total, es exagerado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3507" target="_blank" class="timestamp">[58:27]</a> luchando con esta mierda. ¿Tú te crees? Va, va, va, tío. Si tú mismo reconoces que has mentido un montón de veces. Has, tío, no sé, casi la tercera vez ya que hace un vídeo para decir ¡Es verdad! ¡Lo reconozco! ¡No dije la verdad! Pero él fue por alguna causa, porque el animal ese y porque no sé qué. Sí, pero has mentido, ¿verdad? Sí, sí, mentí, mentí con lo del santuario, ¿no? Pero fue porque no sé qué. Anda, hombre. Si me estás mintiendo, tío. ¿Crees que es fácil?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3539" target="_blank" class="timestamp">[58:59]</a> Y tengo que decir hoy lo que tengo. ¿Y cómo lo tengo? Bueno, él sabe que tiene audiencia femenina y todo esto es maravilloso. Está llorando. Frank, no llores. Aguanta, Frank. Los animales te necesitan, Frank. Y llevo 20 años con esto. Y llevo muchos años en un tratamiento alternativo. ¿Y tú te crees que es fácil? Que yo me esconda. Que yo esconda cosas. ¿Qué os digo yo siempre cuando pasa algo? Está todo bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3569" target="_blank" class="timestamp">[59:29]</a> Está todo bien. Está todo bien. Es muy sagradable, tío. Me incomoda, ¿verdad? Yo tengo que salir aquí a decir cosas que no me gusta hablar. Sí, tengo un cáncer. Lo digo. Digo, hay que luchar las cosas. Cuando llega el momento en el que tengo que hacer el tratamiento, que es anual, anual, siempre pongo la misma canción. Podéis ir a mis redes sociales. Son años haciendo esto. Años. Y solo pongo la canción. Bruce Springsteen.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3597" target="_blank" class="timestamp">[59:57]</a> No surrender. A veces se cae el pelo, a veces no. Depende de qué tratamiento esté siguiendo ese año, depende de qué fuerte es. Va, tío, venga, por favor, déjalo. Y yo he tenido que salir a decir esto hoy. Por tu culpa, Luciano, y por tus amigos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3622" target="_blank" class="timestamp">[60:22]</a> No te lo perderé nunca, Luciano. ¿Sabes por qué desbloqueó? Mira, yo siempre, en mi vida siempre que la gente se tiene que poner a llorar o tiene que hacer ese teatro o acusarte, ¿no? De cuando tú no te crees algo que te dice, pues no me lo creo. ¿Cómo? ¿Cómo no te lo puedes creer?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3642" target="_blank" class="timestamp">[60:42]</a> ¡Me duele! ¡Que no te me creas! Y yo, pues... Joder, pues me estás haciendo desconfiar que te cagas. Por mí que es fácil demostrarlo, ¿eh? O sea, si me metes todo el teatro este es que... Típico, tío, típico, típico. Típico. Como en el restaurante, me acuerdo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3655" target="_blank" class="timestamp">[60:55]</a> Mira que mañana no puedo venir porque es el cupo de mi madre, que sabes que tiene cáncer. Vale, pues me traes el comprobante de... Vamos a un restaurante a acelerar el cupo de mi madre. Pues me traes el comprobante en la factura del restaurante. ¿Vale? Si es familiar, saldrá la factura buena. ¿Cómo? Me siento insultado. Sí, sí, pero me traes la factura... Perdón, la cuenta del restaurante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3679" target="_blank" class="timestamp">[61:19]</a> ¡Ah! Es una vergüenza. Tú te coges fiesta. Bueno, ya tiene unas fiestas semanales, pero quiero otra fiesta, ¿no? ¿Quieres un día más de fiesta? Sí. Bueno, pues me traes la A, tal. ¡Buah! El tío echa una moto. ¿Sabéis cómo acabó la historia? Vino el tío a cabo de, no sé, dos, tres días, ¿no? Es decir, porque se pilló varios días, no sé cómo fue. Y lo dijo que pasó mal, que pasó mal, que tiene cáncer, ¿eh? Uno de lloré, ¿eh? Vino con una resaca que no puede ni moverse, de todo que se metió esos días.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3708" target="_blank" class="timestamp">[61:48]</a> Y trajo, pero trajo un papel, tío, de un bar ahí con un café y un bocato o algo. No sé, algo así. Puede ser ridículo el tío. Toma. Ahí con todo el morro, ¿eh? ¿Sabes por qué desbloqueó Paloma Carismán? Porque dije, por favor, desbloqueale. Porque su madre murió de cáncer. Y me jode mucho que se estén diciendo estas cosas. Porque solamente el que tiene que pasar tratamientos, ya sean de quimioterapia, de radioterapia... Me da mucho asco este espectáculo, ¿eh? Grotesco, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3734" target="_blank" class="timestamp">[62:14]</a> Vivimos con miedo dentro del puto cuerpo. Vivimos con puto miedo dentro del puto cuerpo. Luciano, tú me conoces hace muchos años. Qué teatro, tío. Qué teatro es. Se nota un montón el sobresentimentalismo que me mete, ¿sabes? ¿Cuánto tiempo llevo yo diciendo esto queda para vosotros porque cualquier día la cosa se pone peor? ¿Cuántos años te he dicho eso, Luciano? Cualquier día la cosa se pone peor. Tú sabes que el estrés no es bueno para mí. Lleváis semanas dando por el culo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3765" target="_blank" class="timestamp">[62:45]</a> Y yo te he tratado como un amigo y como un hermano. Va, tío, que son las 12 y tengo que irme a dormir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3775" target="_blank" class="timestamp">[62:55]</a> Lo más curioso de todo esto es que luego vendrá cuando coge el vídeo las mujeres, todas estas mujeres que le siguen, no tienes sentimientos, eres un asqueroso. No, señorita, o vieja, o charo de mierda. No se trata de sentimientos, se trata de tener la decencia, la honestidad, de anteponer la razón y la crítica a la comodidad de tus sentimientos, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3800" target="_blank" class="timestamp">[63:20]</a> Porque para ti esto es un melodrama, pero para mí no, para mí no. Esto no es un melodrama turco o venezolano, ¿sabes? Esto es la realidad. Esto es un tico que es mentiroso y un manipulador. Va, esto lo hace porque saques un negocio. Esto lo hace porque... ...diciendo estas cosas. Que no os pase a vosotros ni a vuestra familia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3828" target="_blank" class="timestamp">[63:48]</a> Y esa es la razón por la que Paloma ha desbloqueado a Carismán. Paloma se peleó con Frank y fue a contarle cosas a la Yuge. Entonces le dije, entiendo que esté cabreado y tal, por lo que se está diciendo. Porque su madre murió de cáncer. Ella era un tío que adoraba a su madre. Y repito, vivir con el miedo durante tantos años y decir siempre estás bien, está todo bien, está todo bien, no es fácil, Luciano. Y estar ahí por todos vosotros que he estado no es fácil, Luciano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3857" target="_blank" class="timestamp">[64:17]</a> Si me caía, yo se caía el chiringuito. Y tú lo sabes. Amenazas constantes. Lleváis semanas de amenazas. A mis hijos y a mí. Amenazas. Voy a sacar esto. Voy a contar esto. Ha sido a sitios. La Serlen decía, no, no, este no se hacía ciento y pico kilómetros. Luciano, tú sabes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3879" target="_blank" class="timestamp">[64:39]</a> tú lo sabes luciano tú lo puedes haber dicho desde el refugio hasta la cárcel se tardan dos horas y pico por las mañanas lo sabes y dos horas y pico de vueltas son cinco horas en el coche y lo sabes y lo sabes y lo sabes pero era mejor dejar que se burlen de eso que teatro de obra crear un perfil de tinder yo soy una cosa soy una persona que conoce mucha gente mucha gente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3908" target="_blank" class="timestamp">[65:08]</a> Y aquí yo podría hablar también. Pero no voy a hablar. Yo no me meto en aplicaciones para quedar con chavalas jóvenes. Tenéis hijos. Te lo ofrecí de nuevo en un delito. Porque yo mañana voy a España y presento esos papeles. Te podría poner una querella que no hago esas cosas. No. La venganza es muy fea. La traición es muy fea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0PkeAHWbDWI&t=3932" target="_blank" class="timestamp">[65:32]</a> ¿Has visto el vídeo por completo? ¿Te dice algo al final? ¿Interesante o qué? Bueno, gente, me voy a dormir, ¿vale? Mañana recién vamos a Simón, perdónate. Me veo mañana, ¿vale? Buenas noches. Hasta mañana. Adiós.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 27/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
