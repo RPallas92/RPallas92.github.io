@@ -1,0 +1,607 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 28/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">28/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Joan Pradells</strong>: <a href='#video-J_arOXLVsXA'>Fran Espín, ¿Vale La Pena Todo Esto? | 90 Días Para Mi Competición Profesional</a></li>
+<li><strong>Alex Sroka - Fitness & Culturismo</strong>: <a href='#video-URjdUZQLJy8'>ESTA ES MI FUERZA DESUPUES DE DEJAR LA QUÍMICA</a></li>
+<li><strong>alvarobernalalejandre</strong>: <a href='#video-u4vww9T3oeQ'>El fin del mundo.</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-J_arOXLVsXA">
+            <h2>Fran Espín, ¿Vale La Pena Todo Esto? | 90 Días Para Mi Competición Profesional</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 28/04/2025 18:30</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=J_arOXLVsXA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/J_arOXLVsXA/hqdefault.jpg" alt="Fran Espín, ¿Vale La Pena Todo Esto? | 90 Días Para Mi Competición Profesional" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video es una conversación entre un culturista y su entrenador, Fran, sobre su preparación actual y su trayectoria en el deporte.
+Discuten el progreso físico, los desafíos metabólicos del atleta y la importancia de la constancia y la meticulosidad en la preparación Open.
+Abordan el culturismo como una carrera a largo plazo, las ambiciones (llegar al Olympia) y la inversión necesaria en la categoría Open.
+Subrayan la relación entrenador-atleta, la adaptación de las estrategias de preparación y el aprendizaje continuo en el deporte.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Análisis en persona y el valor del culturismo <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=120" target="_blank">[02:00]</a></h3>
+
+<p>Fran llega para revisar en persona el físico del atleta, apreciando los cambios. Discuten si el culturismo "merece la pena" como carrera, destacando cómo ha creado una plataforma de trabajo y la importancia de la iniciativa tras la retirada.</p>
+
+<h3>El punto débil: metabolismo que pierde peso rápido <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=381" target="_blank">[06:21]</a></h3>
+
+<p>Fran explica el desafío genético del atleta: al apretar demasiado, pierde peso muy rápido sin mejorar la condición. Esto frustra al atleta, quien desearía ser más agresivo en la preparación, pero requiere un enfoque muy medido y progresivo.</p>
+
+<h3>La ciencia detrás de la preparación Open <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=664" target="_blank">[11:04]</a></h3>
+
+<p>Se detalla la meticulosidad de Fran como preparador, midiendo gramos y variables para tener control total. Hablan de la suplementación, su importancia, la calidad del producto y cómo, aunque no marque la diferencia principal, sí ayuda en la recuperación y el rendimiento.</p>
+
+<h3>El regreso a la tarima y la mentalidad del competidor <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=816" target="_blank">[13:36]</a></h3>
+
+<p>Tras dos años sin competir, el atleta expresa sus ganas de volver. Reflexiona sobre si clasificarse para el Olympia le cambiaría la vida, concluyendo que no cree que afecte drásticamente su mentalidad o tranquilidad actual, solo aportaría motivación y quizás beneficios económicos.</p>
+
+<h3>Open Bodybuilding: Una carrera de fondo y sacrificio <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=1000" target="_blank">[16:40]</a></h3>
+
+<p>Comparan la categoría Open con Classic, destacando que Open requiere mucho más tiempo de trabajo y grandes mejoras para destacar. Señalan la escasez de competidores jóvenes en la élite Open, lo que subraya que es un trabajo a largo plazo, de años de construcción muscular.</p>
+
+<h3>Construyendo una base profesional para competir <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=1542" target="_blank">[25:42]</a></h3>
+
+<p>Fran explica que el objetivo principal de los últimos años ha sido crear una base muscular sólida y profesional. Ahora que la tiene, el plan es competir año a año para seguir mejorando sobre esa base ya establecida, sin dar pasos atrás.</p>
+
+<h3>Preparación a medida: La clave del progreso <a href="https://www.youtube.com/watch?v=J_arOXLVsXA&amp;t=1969" target="_blank">[32:49]</a></h3>
+
+<p>Subrayan que cada persona es diferente y la preparación debe adaptarse individualmente. Fran enfatiza la importancia de no cerrarse a una única forma de trabajar, escuchar al competidor, probar nuevas estrategias (con lógica) y aprender constantemente para mejorar.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=0" target="_blank" class="timestamp">[00:00]</a> Tú sabes que a mí me gusta que flipas con turismo. ¿Tú crees que merece la pena? Ahora mismo voy por detrás del plan de lo establecido. Si te saltas de la dieta y haces lo que quieres, no se puede. Tu cuerpo, realmente, si te aprieta demasiado, pierdas peso rápido y no me acuerdo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=15" target="_blank" class="timestamp">[00:15]</a> ¿Cómo estás? ¿Qué tal el viaje hasta aquí? Bien, bien. El viaje, la verdad que se me ha hecho costito, tío. ¿Sabes lo que me estaba pasando? Estoy grabando todos los días, pero formato vlog y tal porque me entretengo, estoy aquí solo, estoy tranquilo y tal. Y los domingos, tío, es cierto que decía ¿Qué cojones subo los domingos? Pues los domingos no entreno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=32" target="_blank" class="timestamp">[00:32]</a> Y se me hacía como que mi base del día realmente es un poco el entrenamiento. Subo un poquito el entrenamiento y subo más cosas que hago y demás y tal. Pero los domingos me gusta intentar estar tranquilo con Marta, viendo algo o lo que sea, ¿sabes? Y digo, ¿los mismos qué hago? Y el otro día quedé con Willyrex y me dijo, pero voy con ropa de entrenamiento, con ropa normal, tal, no sé qué.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=52" target="_blank" class="timestamp">[00:52]</a> Le dije, no, vente con ropa normal. Y hacemos una charla en plan de... Porque yo le sigo un montón. Le seguía de los billetes de Call of Duty. Y ahora le sigo porque me encanta él. Él a nivel vital, a nivel... Tiene sus hijas, sus consejos de empresa, de no sé qué. Me encanta. Y dije, mira, tengo un guión. Preparé un guión. Y luego dije...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=71" target="_blank" class="timestamp">[01:11]</a> No le voy a hacer ni caso. Voy a disfrutar un rato, ¿sabes? Porque ya habíamos estado con él ahí hablando y tal. Y me ha pasado un poco contigo. Te digo, ¿viene Fran? Me apetecía hacer el formato de este coche que te he dicho en plan hablando, que espero que salga bien, porque esto es complicado que salga bien. No hay nadie detrás de cámaras ni nada. A ver qué tal. Bueno, y digo, pues voy a hacer el formato con Fran y así el domingo. No tengo que grabar como tal. Ese vídeo no está grabado el domingo. Me libero ese día que, aparte, no me gusta como tal grabar porque no me parece interesante. Y es raro que estés aquí, ¿sabes? Ha venido a verme. Hombre, a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=98" target="_blank" class="timestamp">[01:38]</a> Aprovechamos un poquito el festivo y aquí estábamos y digo, hostia, pues mira, pegamos un fin de semana de relax entre comillas, porque sigo trabajando, pero ya estábamos aquí y me di de venir a otro sitio, vengo aquí y te reviso, te echo un vistazo, vemos cómo está todo. Sí, pero que me hace gracia porque cuando te lo dijimos al principio, ya pues iremos tal, y le dije, ni coña, me ha dicho esto, pero no van a venir ni coña.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=120" target="_blank" class="timestamp">[02:00]</a> Aparte que viene bien, coño. Me viene bien en persona y poder apreciar los cambios en persona porque se puede ver el físico diferente, la piel, el tono muscular e incluso el tamaño. Ayer te noté porque hemos hablado por teléfono, hemos hablado por videollamada, revisiones, tal, no sé qué. Pero es cierto que ayer me tocaste la piel y todo. Te quiero tocar la piel, a ver cómo estás, tal de verdad, tal. Sí, para ver lo grueso que estaba, para ver si es una piel de esta que cuesta quitar o una piel que realmente está afinándose y se nota que está afinándose.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=148" target="_blank" class="timestamp">[02:28]</a> Sí, ¿eh? Lo que pasa es que la zona lumbar, también suele ser muy normal en los glúteos, suelen ser las últimas en llegar a apretarse y verse realmente en condición. Entonces, en tu caso, como siempre es tu punto débil, sí que es verdad que lo vas a ver sobre todo cuando hagamos la primera puesta a punto como mejora súper rápido. Hasta ahora va mejorando poquito a poco, pero bueno, digamos que al final será un poquito cuando hagamos la puesta a punto de prueba o tal, es cuando vas a dar una mejora más notoriosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=177" target="_blank" class="timestamp">[02:57]</a> Tú sabes que a mí me gusta que flipas el culturismo. Me lo disfruto, generalmente creo. ¿Tú crees que merece la pena? Ya has retirado y todo, ¿sabes? Mira, a mí me ha merecido la pena porque todo el esfuerzo que hice, todo el sacrificio, dinero invertido, a día de hoy ha hecho que sé quién soy. Entonces, tú nunca sabés lo que vas a hacer el día de mañana. Yo lo he dicho que me lo planteo. Y tú has empezado en este deporte, trabajo como tal, por tu deporte. Igual hubiese hecho otra cosa, hubiese sido empresario de cualquier otra cosa, pero te echas de grabarte tus entrenamientos, combatirlo con la gente de YouTube y todo eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=206" target="_blank" class="timestamp">[03:26]</a> Has creado una plataforma de trabajo que el día, pues mira, dónde estás, ¿no? Pero que nunca se sabe que tú el día de mañana, cuando te retires. El importante de ello es tener iniciativa y no decir, bueno, termino de competir y se acabó el culturismo y ahora, pues, me meto un genazo y para casa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=219" target="_blank" class="timestamp">[03:39]</a> A ver, puede ser, si tú ya vienes con una base empresarial ya, eres un tío que te dedicas a redes sociales, eres un tío que tiene empresas, ¿qué te va a pasar? Pues que puedes seguir invirtiendo y seguir, un poquito como Jack Adler, ¿no? Jack Adler, me acuerdo que era reconocido porque tenía su empresa de construcción o tal, o trabajaba tal, a día de hoy,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=239" target="_blank" class="timestamp">[03:59]</a> ¿Cómo está? Él hizo mucha inversión en Vegas. Sí. En su momento. Y míralo. ¿Cómo está? Míralo. Lo para, ¿eh? El tío lo para. Es inteligente también, ¿eh? Hay que saber hacerlo. Es bastante inteligente. Yo creo que no sabría estar tantos años a tope como él, por ejemplo. Ya. De tener 50 años así en feria en feria, no sé qué. Eso es otra cosa. Y tal. Tú quieres seguir vinculando a este deporte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=257" target="_blank" class="timestamp">[04:17]</a> Como lo han hecho gente como él, eso ya depende de ti, ¿no? Porque tú también es lo que estoy diciendo. Tú tocas con muchas ramas, no solo el culturismo. Es decir, te mueves con gente que tiene ambiciones que no solo competir, sino igual, pues yo qué sé, por ejemplo, Willyrex, ¿cómo has dicho? Es un chico que quería contenido de videojuegos para niños. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=275" target="_blank" class="timestamp">[04:35]</a> Sí, pero eso es como... Yo soy culturista, tal, no sé qué, y luego tienes otras cosas. Y él también tiene otras cosas, ¿sabes? Es un poco... Eso es. La gente no conoce su parte empresarial. Claro. Que el tío lo ven... Nada, juega videojuegos, tal y claro. No, no, pero es que el tío es un empresario puro duro. Sí. Porque aparte de ahí, se ha hecho dinero, pero ha hecho dinero gracias a su base, que ha sido...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=292" target="_blank" class="timestamp">[04:52]</a> pues eso el contenido ¿no? crear contenido sí sí 100% contenido para el público que hace él que son niños o así empezaría pues tú creando o sea has comenzado en esto creando contenido para el mundo del culturismo bueno no del culturismo sino de la musculación del gimnasio vamos por decirlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=308" target="_blank" class="timestamp">[05:08]</a> Yo tengo que decir una cosa que la gente yo creo que se piensa que este fitness es un poco también como el punto clave o punto de inflexión de saber dónde competimos y todo y yo te aprieto que flipas y todo y eres duro de roer. A ver, yo tengo unas ideas muy claras, Iván. Yo tengo muy claras las ideas. Estoy muy contento con el trabajo que se ha logrado estos últimos dos años. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=329" target="_blank" class="timestamp">[05:29]</a> Pero me gustaría que acabase como debe, y no me refiero que sí. Por supuesto, me gustaría que acabase de ser un Mr. Olimpia y subiéndolo al escenario, pero me refiero que acabar con el físico encima del escenario, que a nosotros nos gusta. Porque todavía eres muy joven, tienes mucho trabajo por delante, mucha progresión por delante, pero para mí lo más importante ahora es presentar una evolución donde realmente se te vea como un entrenador profesional. El físico de ayer se veía bonito. Lo acabamos de revisar en el vídeo y se veía bonito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=356" target="_blank" class="timestamp">[05:56]</a> Sí, me gusta. Te vas apretando y vas cogiendo mejores líneas, los detalles musculares. Este año ha sido un cambio bastante bueno. Del año pasado a este, que hicimos una recomposición. Y también cada año aprendes un poco, ¿no? Sabes que si apretas mucho no escurros. Es un aspecto que es lo que te digo yo, ¿no? Yo y mucha gente, ya sabemos que tienes una gran genética, pero como que tiene una gran genética, siempre tiene un punto,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=381" target="_blank" class="timestamp">[06:21]</a> Tiene algo que va en contra de él y en tu contra va la falta de madurez en ese sentido y en el que en tu cuerpo, realmente, si te aprieta demasiado, pierdas peso rápido y no mejoras. Me da rabia, eh. Sí, pero bueno, es algo con lo que también es tiempo. Porque me gustaría ser agresivo y pasarlo mal. Que no es fácil, ¿sabes? En plan, ser agresivo y pasarlo mal y fuera. Vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=399" target="_blank" class="timestamp">[06:39]</a> Lo vas a pasar, lo vas a trazar más tiempo. ¿Por qué? Porque a nada que hacemos cambios muy bruscos, tu cuerpo pierde peso más rápido de lo normal, que mucha gente diría que es estupendo. Sí, estupendo, si pierdes peso rápidamente y ves que el físico mejora. Ahora, cuando ves que empeora, dices, coño, ahí no va muy bien. Ya, me da mucha rabia, me da mucha rabia eso. Cada persona es diferente. Hay gente que, ya te he dicho yo, dos horas de cardio, 200 g de arroz al día y llenos, redondos y sin ningún problema. Y luego está quien le bajas 50 g de arroz, le echas un poquito más de cardio y, uff, dos kilos para abajo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=427" target="_blank" class="timestamp">[07:07]</a> Y bueno, a ver. Eso soy yo. Claro, ese es el problema. Es como que hay que medir todo el rato todo. Sí, y es que con mucho cuidado porque si te pasas un poco, pues te fundes rápido. Sí, la verdad que es. Te fundes rápido y al final también eso es parte del tiempo de la madurez muscular, de estar el músculo bien asentado. Pero bueno, eso es lo que tenemos que tratar ahora de trabajar. Pues eso, tratar de evitar que esto pase y vamos poco a poco y midiendo mucho los cambios.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=450" target="_blank" class="timestamp">[07:30]</a> Digo una cosa, ¿eh? Más allá de todo y de los momentos, de lo que sea preparación, cerrada, tal, que al final va a hacer dos años que no compito, es una puta locura y todo. Pero he aprendido un montón, ¿sabes? En plan, todo, por ejemplo, ahora yo soy un puto rayado de la salud digestiva, tipo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=466" target="_blank" class="timestamp">[07:46]</a> Y es por ti. Porque me has metido en la cabeza unas cosas que digo, tío, yo antes hacía unos destrozos que flipas en el estómago y ahora me da reparo cualquier cosa. Ahora el arroz, narco, no le pongas nada, los suplementos sin sabor, el no sé qué. Y es por ti.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=481" target="_blank" class="timestamp">[08:01]</a> Pero porque al final yo me baso mucho en mi experiencia propia y en la que he adquirido algo con muchos de mis competidores. Y siempre acabas llegando a una conclusión y a tener una cierta cantidad de conocimientos, ¿no? Eso es lo que trato de evitar qué te pasa a ti. Ahora mismo voy por detrás del plan de lo establecido. Si te salta de la dieta y haces lo que quieres, no se puede.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=503" target="_blank" class="timestamp">[08:23]</a> Ya, pero ¿tú crees que todo el mundo cumple con lo que le mandas? A ver, creo que no, tío. Ojalá. Muchas veces me ha pasado que... Pero ya no te hablo de la dieta, ¿sabes? De todo, de todo. Sí, sí, claro, por supuesto. Pero aquí hay de todo. Hay gente que estoy seguro que lo hace al milímetro y quien lo hará al 70% o al 50%. Joder, muchas veces yo veo gente que le cuesta mucho progresar y digo, hostia, igual...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=525" target="_blank" class="timestamp">[08:45]</a> Pues sí que me cuesta, tío. Estoy haciendo una estrategia, luego otra. Digo, hostia, que es un metabolismo muy complicado. No confía en ninguna, ¿eh? Y luego igual se está escapando de la cosa por ahí, ¿sabes? Igual el tío no hace la dieta de 100% o la chica o el cardio o algo que está haciendo fuera de la normal. Pero bueno, me gusta confiar, vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=543" target="_blank" class="timestamp">[09:03]</a> No sé, yo a veces me rayo que flipas, ¿sabes? En plan, digo, estoy aquí como un gilipollas, haciendo todo perfecto, en plan, es lo que te decía, te decía la L-carnitina, tío. Una vez que te hablé y te dije, ¿te has visto lo que va a la L-carnitina? En plan, no tiene sentido esto. Fran, tío, me acuerdo, yo que sé, que no es por cuestionarte tampoco, pero es por decir, ¿de verdad? O sea, ¿esto es necesario? Sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=564" target="_blank" class="timestamp">[09:24]</a> Y no sé, me llama la atención y a la vez te quedas como en tu cabeza pensando diciendo, ¿soy yo el único retrasado que está haciendo esto? O sea, en plan, él lo pone, pero ¿soy yo el único retrasado que lo está haciendo? Y eso me pasa con un montón de cosas. Sí, no, la gran mayoría lo hace. La gran mayoría, estoy seguro porque se nota, ¿no? Y luego habrá otra minoría que no hace, ¿no? Pero yo también soy competidor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=584" target="_blank" class="timestamp">[09:44]</a> Estaba en tu lado y yo sí he sido de los que he hecho todo lo que me han mandado porque he dicho, bueno, al final nos guiamos sobre un trabajo, sobre un plan y si hago cosas aparte que no salen en el plan, ¿cómo realmente vas a ver el preparador qué es lo que estamos haciendo real? Si yo digo que estoy haciendo 30 minutos y en realidad estoy haciendo 45 y luego me subo a 45, ¿qué quieres hacer? Y digo, subir a 60.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=604" target="_blank" class="timestamp">[10:04]</a> Y al final el físico tiene un desgaste y se va a notar. No sé, amigo. Al final siempre confías y confías. Y sigues hasta el final. Y luego ya tendrás tiempo, cuando acabe la temporada, y decir, oye, ¿ha funcionado o no ha funcionado? ¿Me da pena? ¿Me da pena? Si todo va bien, pues adelante. Si no, pues mira, me busco otra forma de trabajar. Y al final es un poquito eso también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=621" target="_blank" class="timestamp">[10:21]</a> No sé, me llama mucho la atención ese tipo de cosas. Sí, sí. Pero vamos, que al final un atleta profesional es eso. Un atleta profesional y tiene que estar al cien por cien con todo, tío. Ya, pero por ejemplo, que no es por juzgarte. O sea, yo aquí estamos hablando y nos llevamos de puta madre y tal. Tú ves una preparación tuya y ella asusta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=639" target="_blank" class="timestamp">[10:39]</a> En plan, no hablo de química ni hablo de nada. Asusta en el hecho de decir, hermano. Yo me acuerdo al principio que digo, esto para seguirlo es imposible. Digo, llevo un lío que flipas. En plan, tal día tal, luego te acostumbras a todo, está claro. Pero por ejemplo, la suplementación. Si yo no me hiciera pastilleros para todos los días, abrir cada bote de suplementación, estar mirando por detrás cuánto lleva, es una locura. Claro, si te has acostumbrado, es normal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=664" target="_blank" class="timestamp">[11:04]</a> Pero al final, claro, es que es eso. A ver, no es que yo lo haga complicado, pero al final... A ver, me gusta ser meticuloso con las cosas que hacemos. Me gusta medir los gramos, me gusta medir todo, el agua, me gusta medir todo, porque al final creo que todo tiene, digamos, todo tiene su función. Y gracias a ello, yo puedo tener también control de todo lo que estamos haciendo y poder decir, pues, comer más o comer menos, pasaramos menos gramos de grasa, de proteína, de menos cantidad de agua, o vamos a ajustar la suplementación, esto y lo otro. Creo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=692" target="_blank" class="timestamp">[11:32]</a> A mí lo que me interesa es que no quede nada, digamos, fuera de control. Sí. Que pueda tener todas las variables para poder controlarlo. Y al final, la suplementación es parte también de nuestro deporte, ¿no? Y sí que es verdad que no es lo que va a marcar la diferencia, pero, o sea, no... Se nota un montón, tío. Yo te lo he dicho antes, por un caso determinado y tal. Y se nota un montón. De hecho, claro, la gente yo creo que a veces se puede pensar en plan... Omega 3. Ah, pues nosotros vamos Omega 3. No, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=717" target="_blank" class="timestamp">[11:57]</a> En plan, vete detrás del botecito de Omega 3, mira qué cantidad me has mandado, en qué comidas tengo Omega 3, quizás te estás tomando 6 partidas de Omega 3 al día, ¿sabes? A ver, tienes un control, y lo que te digo, es importante tener el control de lo que estás tomando, ¿vale? Porque hay que ajustar el programa, hay que ajustar, tener control de todo, y luego, comprar calidad del producto también, que bueno, es la de la carnitina, pues es un producto caro porque estás comprando una calidad, pues tal, ¿no? De eso, de una proteína, lo que sea. Y luego, claro, una inversión.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=745" target="_blank" class="timestamp">[12:25]</a> Esto no quiere decir que un campeón se acabase de tomar 50 suplementos. No, pero si te puedes permitir. En hecho, tienes un sponsor, tienes tal, tienes cual. Te lo puedes permitir al final. Que no lo tengas, te lo puedes permitir. Sí, por eso, te lo puedes permitir. Que el camino sea mucho más fácil. Sí, no sé, sí. Yo, cuando llegué a competidor, me he preparado desde dos puntos. Desde el punto de vista de, lógicamente, no puedo permitirme más que un multivitalínico ni una proteína.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=770" target="_blank" class="timestamp">[12:50]</a> Sí. Hasta el punto de tener sponsor y permitirme todo lo que yo quería. Claro. ¿Diferencia? Bueno, sí, al final, tiempo. Tiempo, más desarrollo muscular, pero diferencia, al final, cuando lo he notado realmente, ha sido a la hora de recuperarme, a la hora del rendimiento durante el entrenamiento, a la hora, por ejemplo, de encuentro analítico, que es el colesterol que se teca. Si puedes permitírtelo, mucho mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=792" target="_blank" class="timestamp">[13:12]</a> Controles médicos. Claro. Bueno, eso es otra parte, ¿no? Y yo creo que hoy en día ya la gente está muy concienciada de que es fundamental trabajar con los médicos, tío. Por lo menos si no ha trabajado con los médicos, tener un cierto conocimiento y hacer tus chequeos médicos para poder hacer desde tu deporte algo más longevo, ¿no? Sí. Por cierto, ya la gente me pone por comentarios que no compito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=816" target="_blank" class="timestamp">[13:36]</a> Que no compites, ¿por qué? Yo qué sé, porque llevo mucho tiempo sin competir. Bueno, pues, de este año no pasa. De este año no pasa, eh. Es que ya hemos hecho lo que queríamos. A ver, yo creo que este proceso lo he hecho desde un principio. Sí. Pero bueno, a ver, no pasa nada. Fue culpa mía, te lo he dicho antes justamente. Me has puesto un caso y... Estaba desmotivado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=836" target="_blank" class="timestamp">[13:56]</a> En verdad yo hice lo mismo, ¿sabes? Si es que la cagué porque en ese momento... También, ¿sabes? El otro día me pusieron un comentario que me parecía curioso. Me dijeron, ¿estás preparado? En plan, si me clasifico o cualquier cosa, ¿sabes? En plan, ¿estás preparado para que te cambie la vida? Y le dije, creo que no me va a cambiar la vida. Ni de coña. Y más que nada, por mi cabeza ya, de cómo estoy yo ahora mismo. Digo, si es que yo puedo clasificarme a la Olimpia o puedo lo que sea y creo que no me va a cambiar en nada. O sea, me va a ir muy bien, pero la cabeza fría de un momento pico y tal ya lo he tenido, ya he pasado por ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=864" target="_blank" class="timestamp">[14:24]</a> Ya sé lo que quiero y lo que no quiero. Estoy aquí tranquilo. No quiero cambiar mi vida tampoco. Lo único que puedes ser más motivado. Sí. Motivado porque es un objetivo nuevo y es algo que, joder, al final... Más motivado y quizá ganas más dinero, pero... Sí, bueno, eso ya es por tu parte empresarial. Sí, pero sin más. Sí, exacto, exacto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=882" target="_blank" class="timestamp">[14:42]</a> No sé, me llama la atención. He competido muy poco. Tengo muchas ganas de competir, Frank. Tengo muchas ganas. Pero es lo que te he dicho yo. Vienes en un momento de tu vida que ganas de ser apropiar con un poquito de tiempo, dentro de lo que es el culturismo real. O sea, dieta para apretar, para...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=900" target="_blank" class="timestamp">[15:00]</a> entrenar como un culturista, en ganar una propuesta tan rápido, pues al final ha hecho que, pues eso, tienes todavía que necesitar más tiempo para tener el físico de un profesional realmente, ¿vale? Para poder subirte a un escenario y decir, hostia, pues tengo un físico profesional para poder luchar, ¿me entiendes? Y ese, que puede ser dos años, tres años o cuatro, pero en tu caso, bueno, has sido lo que teníamos previsto más o menos dos añitos. Sí, ha habido trabajo, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=922" target="_blank" class="timestamp">[15:22]</a> Sí, caro. Es que creo que no he fallado en estos dos años. No, no, no. Así constante. Pero es que es la única manera de mejorar. A ver, si puedo mejorar más rápido, menos rápido. Pero yo creo que si quieres ser constante y seguir mejorando, tío, no puedes dar pie a estar... O sea, creo que en estos dos últimos años me he ido de vacaciones a Roma cuatro días y a París cuatro días. Muy bien. Está bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=940" target="_blank" class="timestamp">[15:40]</a> Hay que saber gestionarlo de una manera u otra. En parte me arrepiento, ¿sabes? Sí, puedes haberte tomado más tiempo de decirte, me voy una semana entera. Y no me voy ocho días, o sea, una semana entera en dos años. Me voy dos semanas o tres o cuatro, no pasa nada. Con lo que siempre te he dicho, todo tiene su momento y hay fases en la preparación donde hay que tener cierto relax. Lo que sí está claro es que si quieres mejorar, hay que ser constante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=964" target="_blank" class="timestamp">[16:04]</a> Hay que ser constante con el trabajo, hay que estar siempre ahí, pues eso. Dale y dale. Hay gente con genética que se puede permitir más, con menos. Tú tienes buena genética, pero tienes que seguir constante igualmente. Porque si encima tienes buena genética y lo haces, pues imagínate la progresión. Cuesta un montón, ¿eh? Sí, es un... Cuesta un montón. Te digo una cosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=980" target="_blank" class="timestamp">[16:20]</a> La única mala gestión que veo de los dos años sin competir es que se ha aguantado porque ahora ya voy a decir que está ahí para competir y tal. En la recta final. En la recta final y tal. Pero a nivel de motivación y objetivos es mucho tiempo. Mucho tiempo para ver. Sí, cuesta mucho porque al final es eso. El que es competidor lo que quiere es competir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1000" target="_blank" class="timestamp">[16:40]</a> Sí, te dedicas a eso y también tu vida depende un poco de eso. Es un poquito de lo que yo te digo, hay que ser consciente también de que se necesita tiempo para poder mejorar. Y si fuese todo tan fácil y tan rápido estaría lleno de que utilicen las Opens por todos lados. Y por desgracia cada vez hay menos. Opens hay menos. Eso, por desgracia cada vez hay menos. Entonces el trabajo de un Open es un trabajo de largo plazo. Ya. Si me decías que se competiera en Classic, pues sería más fácil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1025" target="_blank" class="timestamp">[17:05]</a> Más fácilmente te comillas porque no tienes que crecer. Ya puedes bajar de peso, puedes perder el músculo. ¿Tú verías posible que yo compitiera en clase? Yo creo que no, tío. ¿O sí? No sé, tío. ¿Comer aire? Es que no sé, tío. Yo no sé, no te veo. O sea, estructuralmente tienes una buena estructura. ¿Cuánto tendría que pesar? Yo sé, tío. No sé. Había que ver en las tablas de estatura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1047" target="_blank" class="timestamp">[17:27]</a> Pero… Unos 100 kilos, yo creo. No sé, tío. Hostia puta, ¿eh? Estaría duro, ¿eh? Bajar ese peso. Sí, sí, sí. Bajaría mal, mal, mal. Al final, es lo que digo, que al ser categoría de culturismo, Open, pues tienes un proceso de más tiempo. O sea, necesitas tiempo para poder preparar y obtener unas grandes mejoras. ¿Me entiendes? Sí. Que no es tan fácil como decir, bueno, va, va, voy a preparar Open y se me hace algo en Open con 4 kilos más. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1070" target="_blank" class="timestamp">[17:50]</a> Es que Open, a mí, y no me gusta decirlo públicamente ni demás, en serio, ¿eh? O sea, no me gusta decirlo. Yo creo que va a llegar a Olimpia, lo tengo clarísimo. Eso es lo primero. Tienes potencial para ello. Pero, ¿cuántos Olimpia jóvenes hay en Open Open? Hostia, no sé, tío. A ver qué vale ese Open. ¿Martin? Ahora mismo. Están todos por encima de los 30, tío. Sí. A ver, es lo que estamos hablando, porque es un trabajo a largo plazo, tío. Incluso es que un igual que era joven, un igual que era joven ya no es tan joven.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1099" target="_blank" class="timestamp">[18:19]</a> Ya. Ya tendrás 31 años, ¿sabes? Sí, es verdad. Es que al final, ya te digo, construir un físico de Open no es cuestión de dos días, ¿sabes? Es cuestión de mucho tiempo de trabajo y seguir ahí año tras año dándole caña. Por eso muchas veces mucha gente se queda en categorías más bajas porque dicen, hostias, que es mucho sacrificio. A ver, es que yo de hecho la progresión la haría por categorías más bajas hasta que llegues a Open, ¿no? Sí, claro. No sé tú, de tu opinión, pero si quieres empezar joven, ¿para qué vas a empezar por Open? No, claro, normalmente la gente empieza poco a poco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1129" target="_blank" class="timestamp">[18:49]</a> Pues si empiezas muy pronto, empiezas en Mail, si empiezas luego... No, eso sí, porque ahora, antiguamente competías en categorías hasta 80, hasta 90, hasta 100 y luego vas subiendo hasta, bueno, ya te pites en Open, ¿no? Pero antiguamente, hoy en día sí, hoy en día, de hecho hay muchos casos, ¿no? Por ejemplo, me acuerdo de este animal, creo que es este animal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1147" target="_blank" class="timestamp">[19:07]</a> Stand Animal. Sí, ese chico empezó en Men's. Luego se siguió en Classic. Sí, fue en Classic, además. Lo hizo bien. Y acabó en Open, ¿vale? Un pique en Open, de hecho. Sí, sí, sí. Lo que pasa es que lleva un año o dos retirado. Pero bueno, pero puso transición. Bueno, hace dos años, dos veranos. Sí, sí. Hizo un Canadá, un Vancouver. Muy bueno. Un tercero o así. Un segundo o un tercero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1167" target="_blank" class="timestamp">[19:27]</a> Pues este chico tuvo su momento, tuvo su momento también de transición de categoría, donde estuvo un tiempo, digamos, trabajando para meter más masa muscular, la estructura, porque al final, aunque vienes de Classic, aunque fuese igual el chico es alto, igual pesaría 100 kilos, pero es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1183" target="_blank" class="timestamp">[19:43]</a> Con la altura que tenía igual que estaba a 110-112 kilos. Y tuvo su periodo de transformación, por así decirlo. Es jodido, ¿eh? Es muy jodido. Es una categoría complicada, pero también es bonita, tío. Es bonita... ¿Classic? No, no me refiero a Classic. Me refiero a Open. Open es bonito, por supuesto que es bonito. Pero Open también, tío. Tiene su parte dura y tiene su parte marita, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1203" target="_blank" class="timestamp">[20:03]</a> Para mí Open, siendo honesto, hay mucha peña muy quemada. Por supuesto. Físicos muy quemados y luego hay gente muy bonita. La categoría Open ya no es como hace años. O sea, que no vemos más Open. Ahora últimamente sí que lo estoy viendo que hay más Open. Pero hubo una transición en el... Creo que fue en el... Como que ahí sí que es verdad que bajó mucho el nivel de las competiciones. Y no solo el nivel, sino la cantidad de competidores. Yo me acuerdo de ir a una Olympia en Las Vegas. ¿Cuál? De ver, no me acuerdo, creo que fue... ¿2019?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1231" target="_blank" class="timestamp">[20:31]</a> No me acuerdo qué fue, tío. Pero me acuerdo haber ido y decir, menuda chapuza campeonato de Opel. Sí, pero no a los primeros puestos, dices como luego el resto. No, a ver, realmente es que no me gustaron y me... O sea, está bien porque están fuertes, pero por ejemplo, ahí creo que ganó este chico que estuvo viendo en Dubái. Brandon Curry. Brandon Curry, que a mí me encanta, Brandon Curry. Pero aquel año creo que fue el nivel más bajo que he visto en Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1251" target="_blank" class="timestamp">[20:51]</a> Ese año quedó Brandon Curry primero, tercero Chopin, segundo quedó el de las rastas, el que le lleva ahora al que ganoce. Sí, ya sé quién es, este chico, sí, William Buenath. Sí, exacto. Y luego Big Ramy por ahí estaba cuarto o quinto, no me acuerdo exactamente cómo fue. Sí, sí, pero se echó falta, no había muchos competidores, se echó falta mucho el trabajo, la condición, los físicos, no sé, yo me quedé un poquito... Ese año no fue Phil Heath. Efectivamente, no fue.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1277" target="_blank" class="timestamp">[21:17]</a> Y le prohibieron la competición a Show Roden que venía de haber ganado. El año anterior, que era el que tiene que ganar, ¿sabes? Sí, es un poco el que iba a ganar. Realmente no iba a field. Yo creo que ahí también Brandon Curry supo estar, ¿sabes? Sí, a ver, salió muy bien él, para lo que es él. Para lo que suele salir. Salió bien. De los que había realmente... A ver, mi chupada me gustaba mucho, pero realmente... Su primer año, ¿eh? Tampoco iba...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1304" target="_blank" class="timestamp">[21:44]</a> De los que había, creo que fue el justo ganador. Pero me refiero que el nivel en realidad no fue… El nivel ni la cantidad de competidores fue estratosférico. Y luego sí que es verdad que año tras año ha ido mejorando la categoría Open. Estamos en un punto ahora que estaba bien. ¿Te parece? Sí, yo creo que está bien. A ver… ¿Te gusta? A ver, me gusta más la otra época. Yo vengo también de… Yo he mamado la época de Kevin Lebron, Dorian, Nasser… Había… Claro, el que vive esa época diría que es la mejor, ¿no? Es la que viví yo. Y el que vivió la época de Lejane dirán que esa era aún mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1333" target="_blank" class="timestamp">[22:13]</a> O sea, normal, ¿no? Pero a mí, si esos niveles que tuvieras un Olimpio y veías ahí, a los 10 primeros eran terribles, tío. Ahora vas, te encuentras igual posiblemente a los 5 primeros. Al resto dices tú, coño. Es verdad que a partir del quinto o sexto empieza a bajar el nivel de forma clara. Pero bueno. No, bueno, es como todo. Ahora hay nuevas caras también. Y digo yo que hay nuevas caras. Eso está bien porque eso también al final le da vida a nuestro deporte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1360" target="_blank" class="timestamp">[22:40]</a> Ah, sí, meterse en un top 10 de los limpias es increíble. Sí, hombre, claro. Eso sí. O sea, entras en la historia. Sí. No sé si entras en la historia, pero por lo menos... De tu país, seguro. Eso que te lleva, ¿sabes? Eso que te lleva porque podrás decir que lo has conseguido y has estado ahí, independientemente del puesto que tengas. O sea, que quedes, ¿no? Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1378" target="_blank" class="timestamp">[22:58]</a> No sé, tío. La verdad que... Como con todo, cualquier competidor, al final, ¿su objetivo cuál es? El competidor profesional. El que no es profesional es ser profesional. Y el que lo es es tratar de llegar a pisar, se lo limpia y vivir ese momento, ese ambiente y tal. Así que, bueno, he cometido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1395" target="_blank" class="timestamp">[23:15]</a> Tengo un post-in, me acuerdo más que llevaste sabatillas, en tu despacho. ¿Sí? De cuando me empezaste a llevar. Sí. Hostia, ¿eh? De ese físico al que hemos visto ahora comiendo. Que justamente es que me han pasado el vídeo. Ah, sí, ¿eh? Me han pasado el vídeo para chequearlo, para subir el vídeo del sábado. Hostia, de ese vídeo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1412" target="_blank" class="timestamp">[23:32]</a> ¿A ese? Sí, tío. Han pasado muchas cosas. Sí, sí, de verdad. Han pasado dos años. No ha llegado a dos años. Pero me ha cambiado mucho el físico. Sí, sí, es una pasada, tío. Es una pasada. Sí, al final el tiempo y hacer bien el trabajo, tío. Al final eso. Es como todo. Es tiempo y trabajo. Nadie te va a regalar nada si no haces las cosas bien. Y por mucha genética que tengas, por mucho dinero que puedas tener, si no te aplicas, si no te aplicas, o sea, es imposible llegar ahí. Por lo menos no llegar de esta forma, ¿no? Puedes llegar más lento o más rápido, depende.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1441" target="_blank" class="timestamp">[24:01]</a> Pero al final es un camino que es complicado y tienes que ser constante. Yo creo, sinceramente, que podemos hacer cosas chulas. Ojalá. Ese es el objetivo por lo que uno trabaja, ¿no? Siempre tratando de cumplir objetivos. Ya te digo, tú como atleta profesional, tus objetivos son ganar campeonatos profesionales y subirte al escenario de los menstruales. Y cada año que subas, poder mejorar posiciones. Al final es un poquito lo que busca cualquier competidor. Sí. Mejorar, mejorar. Pero no solo físicamente, sino también a nivel competitivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1467" target="_blank" class="timestamp">[24:27]</a> Tengo muchas ganas, la verdad. Ya queda menos. Tengo muchas ganas. Queda lo más duro. Yo entiendo que la gente a veces se pone nerviosa conmigo. Incluso la gente en plan... No, pero nerviosa en plan porque te meto presión. Y es en plan también entenderme, ¿sabes? O sea... Tienes ganas, tío. Yo tengo ganas de competir. Además tengo ganas de competir contigo también. En plan... Pues hostia, me está llevando, veo la experiencia que me lleves compitiendo, tal. Sí, ven lo mal, ven lo mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1491" target="_blank" class="timestamp">[24:51]</a> Bueno, eso es algo que te pasa a ti y le pasa a mucha gente. Por eso eres competidor, ¿no? Y más tú eres joven y has competido pocas veces. Flipas, ¿eh? En plan, mi decisión también es no competir. O sea, me refiero, te he hecho caso a muerte. Es un sacrificio, pero bueno, que al final ahora puedes ver por qué ha sido, ¿no? Porque has conseguido un físico totalmente diferente, mucho más evolucionado y mucho más profesional. Ese es el sacrificio. Si hubiese sido tan fácil el modelo, dices, va, ya salimos a competir. Ojalá fuese tan fácil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1516" target="_blank" class="timestamp">[25:16]</a> Ojalá. Sí, ahí dentro de cuatro será mejor, pero tengo que competir ya. Sí, pero ya una vez que arrancas, ya no puedes pedir el T20. Una vez que arrancas, la primera es crear la base. Una vez que tienes la base, ahora ya tienes que seguir competiendo. Yo pienso así, ¿eh? Pienso que competir año a año si te lo permite, pues la salud en términos de lesiones, todo. Me permite poder competir todos los años, hazlo. Hazlo, ¿vale? No te digo que le fundes a competir 10 o 12 competiciones, pero hacer competir una temporada por año sería lo suyo. Tengo muchas ganas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1542" target="_blank" class="timestamp">[25:42]</a> Lo primero era crear una buena base, una base muscular donde ya pudiese tener un físico más profesional. Sí. ¿Vale? Más adaptado a la categoría. Mira, ahora tengo un físico muy profesional. Claro, ahora sí. Y entonces ahora solo se trata de poder enfocar cada año, el seguir mejorando, pero ya compitiendo. Compitiendo. Ahí tenemos el caso. El más palpable es el de Ángel. Ángel, primer año creo que fue el año que estuvo un poquito más de tiempo sin competir y ya debutó en profesional. No ha parado. Con un físico con más densidad, más muscular. Ya no ha parado, tío. Ahí sigue, ahí sigue el tío luchando. ¿Qué?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1571" target="_blank" class="timestamp">[26:11]</a> Y por eso te digo, y como hay muchos, una vez que han creado esa base, tiene esa base muscular, pues venga adelante. Pero también hay que tener en cuenta que él ya venía de ser un gran competidor. Él ya venía de competir 10 o 12 años. O sea, ya tenía alguna base. Lo que pasa es que cuando se ganó la Procar, ya de lo que es la NPC, por así decirlo. La Ronix, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1590" target="_blank" class="timestamp">[26:30]</a> Ahí al final lo que dijimos, ok, va a quedar un pequeño saltito ahora en cuanto al tema de masa muscular porque solo creo que estás con 212 libras. Y no sé si se salía competiendo con 80 y algo kilos. Entonces hice todo ese proceso de coger algo más de masa muscular durante un año para luego competir con 90 y tantos kilos. Sí, competir con más y que no se te note que los has cogido. No sé cómo decírtelo. En plan, me refiero a que eran tuyos, ¿sabes? Que estás sentado. Sí, que estás sentado el músculo, sí, sí, eso también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1612" target="_blank" class="timestamp">[26:52]</a> Eso me parece súper importante. Lo que pasa es que hoy en día también lo que te digo es que hay chavales como tú con genéticas muy buenas, cogen mucho musco muy rápido. También porque hoy en día los colectivos que tenemos, los competidores, los culturistas, los preparadores, pues son un poco diferentes a los que sabía un poquito anteriormente. No es que diga que son mejores, pero sí que es verdad que hay un...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1630" target="_blank" class="timestamp">[27:10]</a> otro tipo de convencimientos y hacemos que un culturista pueda ser más grande con menos tiempo, entre comillas, por así decirlo. Y ya te digo que en tu caso, gente como tú, chavales jóvenes que llevan poco de tiempo metidos en el mundo de la competición y ya estamos hablando de tíos que han pesado 130 kilos. Hay genéticas, luego hay gente que se ha hecho ese trabajo, pero tú eres un tío que haces power y ha pesado 100 kilos, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1653" target="_blank" class="timestamp">[27:33]</a> 110, 115, sí. Y eso, quieras que no, hostia, es un buen peso, tío, para ser un power. ¿Cuántos años tenías ahí? Sí, el otro es otro físico. Claro, porque es un power. Pero me refiero a que… Es físico blando. Yo lo veo así ahora y lo veo ahora. Claro. Y qué diferencia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1670" target="_blank" class="timestamp">[27:50]</a> La cara, todo. Pero tampoco había tu metabolismo, tu genética. Vienes a ser un tío súper delgado y súper fibroso, ¿entiendes? Tiene que ver mucho con la composición corporal de cada persona. No, chau, esto es muy fuerte ese día. Pero es cierto que lo que hemos hablado también. Luego, open es open, ¿eh? Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1689" target="_blank" class="timestamp">[28:09]</a> Luego hay que aguantarlo, hay que seguirlo, hay que todo... Open es una categoría donde tienes que invertir mucho tiempo. Tiempo de trabajo a largo plazo. Tiempo, dinero, todo. Dinero tienes que invertir en todas las categorías. Pero en Open más hay que volver más. Hay que tomar más suplementación. Pero al final es como todo. ¿Tú dirías que la terapia de Open es mucho más diferente a Open?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1714" target="_blank" class="timestamp">[28:34]</a> Pues he visto de todo. He visto que hay Opens que toman más que los 12. Es que al final los 12 también, si tú midas peso y satura, es como un Open.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1723" target="_blank" class="timestamp">[28:43]</a> Un 212, un metro 64, 105 kilos, estás hablando de un tío, de un Open. Estás hablando de un Open, pero en... Claro, adaptado. Claro, en baja estatura. Sí, sí. Entonces, pues te puedes encontrar de todo. Hay gente que sí, que toma más, hay gente que toma menos, que al final es muy individual, ¿vale? Genética de cada persona, tío. Pero es como que necesitan 3.500 calorías para competir y que necesitan 5.500. Para llegar a empezar lo mismo, al fin y al cabo. A veces me pregunta la gente que no se adapta. ¿Cuántas calorías comes? Y digo, no tengo ni puta idea, la verdad. A ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1753" target="_blank" class="timestamp">[29:13]</a> Ahora no nos lo he contado, pero es un tío que consume bastante calorías, la verdad que... ¿Sí? Sí, sí. O sea, tú fuera de temporada puedes llegar tranquilamente a 7000 calorías. Recuerdo que estaba hablando con Nudo y tal, y decía, guau, yo creo que de 100 gramos de arroz no lo voy a bajar nunca. En plan ahora, en la preparación, ¿sabes? Sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1768" target="_blank" class="timestamp">[29:28]</a> Yo todavía me puse 90 gramos. Ya hemos empezado a bajar, ¿no? Sí, hay algunos, hay competidores que no les bajo prácticamente en ese sentido en que bajan muy poquito. Yo creo que yo te voy a bajar. No, pero que me da igual, que bájame lo que quieras. Sí, incluso Opens, ¿eh? Opens que dices tú, hostia, este con lo grande que es. No, no, hay Opens. Bueno, ya me acuerdo, es que el mayor Opens que podemos ver es el Ruricore, cuando vivas en la edita de Coriemann, que tomaba 200 gramos de patata.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1793" target="_blank" class="timestamp">[29:53]</a> En algunas comidas. Y hacía dos horas de cardio. Y entrenaba como el tío. Porque era un tío que hacía una doble frecuencia, entrenamiento con dos pesos brutales. Y veías que su dieta igual tenía netos 180 gramos, 200 gramos de netos de carbohidratos, aunque luego tendría días altos. Pero, coño, su dieta normal y corriente es muy baja en carbohidratos, alta en proteína, ¿vale? Pero es que no tiene ni grasas. Y luego se metía dos horas de cardio, trabajaba de policía y hacía unos entrenamientos que eran una puta locura de entrenamiento, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1820" target="_blank" class="timestamp">[30:20]</a> O sea, ¿cómo puede ser? Pero mira cómo salía. Genéticas. Genéticas. Al final son genéticas y ya está. A veces también pasa que el metabolismo… Yo te aprieto, te aprieto, te aprieto… Y en un momento se empieza a activar de la forma que necesitas comer, porque si no el peso cae. Y tienes que saber cuándo decir, ok, el peso está cayendo, a comer. A comer. A comer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1836" target="_blank" class="timestamp">[30:36]</a> y no bajas. Yo tengo chavales que no bajan de 100 metros de arroz por comida. De hecho, tú eres bastante más agresivo antes de la competición que luego en la competición. Sí, exacto. ¿Eso conmigo también crees que será así? Bueno, puede ser. Esa es la cosa, según lo que vaya pasando. Sí, porque en tu cuerpo tenemos que ir manejándolo de forma muy progresiva. No puedes hacer cambios muy bruscos porque se va rápido y luego no ves la mejora que esperas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1861" target="_blank" class="timestamp">[31:01]</a> progresivo, con tiempo y bueno, darle el tiempo para que todo ese masa muscular que tienes esté bien fijada, tenga su madurez, que puedas presentar ese bombeo, ¿vale? Sobre todo eso, ¿eh? Si me quedo en plan es una mierda. Hoy en el vídeo se me veía en el que hemos visto, ¿eh? Me había bombeado en plan todo. Todo, todo, todo. Eso me ha encantado. Eso es lo bonito. Tendría que llegar con un look más lleno, más redondo, más bombeado. Que no todo el mundo pruebe porque también...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1885" target="_blank" class="timestamp">[31:25]</a> Es muy genético, pero a ti te conozco un poquito más, te he visto cómo funciona el cuerpo y cómo se te ve. Sabes que te puedes permitir ir más lleno. Sí, lo dicho. Tengo muchas ganas de desahir. Ya estamos en la reta final. Está ahí. De hecho, lo que más me apetece ahora es el tupper de merluza que tengo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1907" target="_blank" class="timestamp">[31:47]</a> Es que me apetece. O sea, es que es eso que me apetece. Estoy súper cansado, además. Yo creo que voy a dormir. Pues sí, sí. Ahora échate una buena siesta, que es parte del protocolo del culturista. Estoy súper cansado, tío. Estoy súper cansado. Y estoy consiguiendo dormir, estoy tranquilo aquí. Bien, eso es lo importante. A ver, lo bueno que estás aquí es que te puedes dedicar plenamente a lo que haces. Sin distracciones. Bueno, en todos lados, pero... Sí, pero bueno, aquí un poquito más, ¿no? Yo pienso que sí. Yo creo que también. Y además, incluso yo cuando me digo, ah, quiero un fin de semana un poquito de relax. ¿Dónde lo vamos? Pues tipo, mira.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1935" target="_blank" class="timestamp">[32:15]</a> Vamos a aprovechar. Vamos a Andorra, que yo vine muchas veces por aquí. Y así aprovechamos y visitamos a Yoan, le echamos un vistazo en persona y tal. Porque a mí me provoca paz, tranquilidad. O sea, aunque hay mucha gente, cada vez más, pero no sé, la montaña o el ambiente o no sé, es diferente, tío. Yo estoy en casa ahí en Cerraete, súper a gusto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1958" target="_blank" class="timestamp">[32:38]</a> Tu entrenamiento, tu comida, tú hacer tu trabajo, que es lo que te gusta y a funcionar, tío. Sí, tío, a currar, a currar. Y el año que viene me vas a permitir probar unas cosas, que habrá que adaptarlas, pero me hace ilusión, de verdad. También mi época de probar cosas y probarlas en forma conjunta e inteligente. Sí, exacto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=1978" target="_blank" class="timestamp">[32:58]</a> Yo al final, es lo que siempre te digo, no solo persona cerrada, creo que es un error, cerrarte solo a una forma de trabajar, creo que hay que entender que cada persona es totalmente diferente. Y también lo que te he dicho, y si probamos esto y es un éxito, para ti es un éxito también brutal. Bueno, claro, sí, porque de ahí aprendemos, ¿no? Pero al final es esto de hacer un trabajo en equipo y donde podamos ver si realmente merece la pena hacerlo de esta forma o de otra forma, ver un poquito todo, ver un poquito todo. Al final es un poquito eso, tampoco hay que cerrarse, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=2004" target="_blank" class="timestamp">[33:24]</a> El culturismo es muy individual y cada persona reacciona de forma diferente. Si yo te hubiese preparado como yo me preparaba para competir yo mismo, me volvía a lo loco. No porque me hubiera funcionado, hay que funcionar igual de bien a los demás. Sí, porque hay muchos años de distancia como para no haber aprendido nada durante todos esos años. Efectivamente. Digo, ¿de verdad la gente que prepara igual que hace 10 años no ha aprendido nada estos 10 años? Venga, va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=2025" target="_blank" class="timestamp">[33:45]</a> Deben de aprender. Y es bueno reciclarse, aprender. Y no solo aprender por ti mismo, sino también aprender con el competidor. Sí. ¿Sabes? Escuchar, tener un feedback de él. Probar, no tener miedo a probar. Que sea probar con una lógica. Tiene que abrachar con... Sí, sabiendo lo que estás haciendo, que tenga toda una lógica. Y adelante, tío. Y adaptarte, adaptar toda la preparación en función a los objetivos que tengas. 100%. Muchas gracias, Fran. La verdad. Por la visita, por la charla y por todo. Un placer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=J_arOXLVsXA&t=2049" target="_blank" class="timestamp">[34:09]</a> Espero que se haya visto bien y que se haya escuchado bien. No prometo nada, porque esta ha sido la primera vez que lo probábamos. Teníamos micros de solapa, hemos probado el micro de pistola. Da igual, espero que haya salido bien. Yo creo que sí, ¿no? Por lo menos hemos tenido una buena charla. Lo que le he dicho es que hasta que compita le voy a llamar todas las semanas, porque me ha venido muy bien. Bien. Si viene bien atípicamente, pues ahí estamos, tío. Sí. No hay problema. Así que gracias, chicos. Suscríbanse y nos vemos. Chao. Chao.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-URjdUZQLJy8">
+            <h2>ESTA ES MI FUERZA DESUPUES DE DEJAR LA QUÍMICA</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Alex Sroka - Fitness & Culturismo</span>
+                <span class="date">Publicado: 28/04/2025 16:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=URjdUZQLJy8" target="_blank">
+                    <img src="https://i.ytimg.com/vi/URjdUZQLJy8/hqdefault.jpg" alt="ESTA ES MI FUERZA DESUPUES DE DEJAR LA QUÍMICA" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El creador del video regresa a entrenar tras dos meses de parón total y un periodo previo de baja actividad.
+También ha dejado de usar química y se propone evaluar cuánta fuerza ha perdido.
+Tras una sesión, se muestra sorprendido positivamente por haber mantenido más fuerza de la esperada.
+Comenta específicamente el rendimiento en varios ejercicios y la diferencia entre pérdida de fuerza y apariencia física al dejar los PEDs.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Retorno y el Gran Parón <a href="https://www.youtube.com/watch?v=URjdUZQLJy8&amp;t=23" target="_blank">[00:23]</a></h3>
+
+<p>El creador explica que lleva dos meses sin ir al gimnasio y varios meses previos entrenando muy poco. Menciona que ha dejado la "química" y se pregunta cuánta fuerza habrá perdido después de tanto tiempo inactivo y sin PEDs.</p>
+
+<h3>Sorpresa ante el Rendimiento Conservado <a href="https://www.youtube.com/watch?v=URjdUZQLJy8&amp;t=233" target="_blank">[03:53]</a></h3>
+
+<p>Después de su primera sesión de entrenamiento tras el parón, el creador expresa su contento y sorpresa. Había anticipado una pérdida de rendimiento mucho mayor, considerando tanto la inactividad como el haber dejado la química.</p>
+
+<h3>Dominadas: La Mayor Sorpresa <a href="https://www.youtube.com/watch?v=URjdUZQLJy8&amp;t=289" target="_blank">[04:49]</a></h3>
+
+<p>Destaca su rendimiento en dominadas (11 repeticiones con 118 kg) como lo más sorprendente. Explica que este ejercicio requiere mucha adaptación y aun así logró un número de repeticiones muy superior al que esperaba en su estado desadaptado.</p>
+
+<h3>Fuerza vs. Apariencia sin Química <a href="https://www.youtube.com/watch?v=URjdUZQLJy8&amp;t=483" target="_blank">[08:03]</a></h3>
+
+<p>Aclara que está en fase de PCT, con testosterona nula, y explica el impacto de dejar los PEDs. Señala que la fuerza se mantiene bastante bien, pero lo que sí cambia significativamente es la apariencia muscular (bombeo, plenitud) debido a la reducción del glucógeno.</p>
+
+<h3>Próximos Pasos y el PCT Detallado <a href="https://www.youtube.com/watch?v=URjdUZQLJy8&amp;t=551" target="_blank">[09:11]</a></h3>
+
+<p>Anuncia que su próximo video profundizará en cómo está llevando a cabo el PCT y la etapa previa. Invita a los espectadores a suscribirse para obtener todos los detalles de este proceso.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=0" target="_blank" class="timestamp">[00:00]</a> ¡Hey! ¿Qué pasa culturistas? ¿Cómo estáis? Bueno, yo estoy muy bien. Y bueno gente, en el vídeo de hoy se vienen cositas porque, como bien sabréis, la mayoría de vosotros pues llevo bastante tiempo sin entrenar. Actualmente llevaré como dos meses sin tocar ni una sola pesa, más o menos, y pues los meses anteriores igualmente no hacía prácticamente nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=23" target="_blank" class="timestamp">[00:23]</a> Nada de nada. Estamos hablando de que iba una o dos veces por semana y encima de todas las veces que iba, pues la mayor parte de las veces hacía empujes, algún astirón y pierna, pues a lo mejor una vez al mes o cosas así. Entonces el resumen es ese, que este último medio año no he estado entrenando prácticamente nada y estos últimos dos meses, pues literalmente ni siquiera he pisado el gym. Y pues me ha venido a preguntar a la mente y es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=47" target="_blank" class="timestamp">[00:47]</a> ¿Cuánta fuerza he perdido después de haber dejado la química y encima estando tan inactivo? Porque claro, si lo pensáis, si yo hubiese seguido entrenando bastante como hacía antes, pues seguramente hubiese mantenido muchísimo mejor el físico y la fuerza. Pero como he estado bastante quieto, pues evidentemente esto seguramente no se ha mantenido demasiado bien. Así que vamos a ver cuánta fuerza tengo actualmente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=71" target="_blank" class="timestamp">[01:11]</a> Eso sí, antes de irme a entrenar voy a tomarme mi suplementación que la tengo por aquí, esta maravillosa creatina del Procise que es la microfiltrada que se disuelve sola y pues de paso os recuerdo que si es buscando pillar precisamente suplementación lo podéis hacer en Procise y con mi código GYMROCA o ROCA PRO obtenéis un 10% de descuento y los regalos de mis promos. Ah sí, y también en deuspower.to tenéis un 10% de descuento con el código DUGE. Y bueno, una vez dicho todo esto, ahora sí que sí, vamos al gym.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=113" target="_blank" class="timestamp">[01:53]</a> ¡Suscríbete al canal!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=179" target="_blank" class="timestamp">[02:59]</a> ¡Suscríbete al canal!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=209" target="_blank" class="timestamp">[03:29]</a> Bueno gente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=233" target="_blank" class="timestamp">[03:53]</a> Vamos a comentar sensaciones y la verdad es que estoy bastante contento con el resultado. Yo me esperaba una pérdida de rendimiento bastante mayor a la que estoy experimentando, ya que al fin y al cabo el tiempo que llevo parado es bastante notable. Tampoco es una barbaridad, pero sí que es verdad que ya es un tiempecillo. Y teniendo en cuenta que esto se ha sumado al tema de dejar la química, ciertamente pensaba que estaría peor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=260" target="_blank" class="timestamp">[04:20]</a> pero no ha sido así el press de banca bastante bien aunque bueno esto es un poco normal porque lo cierto es que lo que es el tema de los empujes es lo que más he entrenado dentro de lo poco que he entrenado así que evidentemente la banca se ha mantenido bien he tirado 4 reps con 140 kilos aunque yo creo que podría haber salido una quinta pero bueno como estaba solo y tampoco es que esté adaptado al 100% a lo que sería ese patrón de movimiento o bueno incluso al entrenar mismamente pues tampoco quería arriesgarme pero sí yo creo que una quinta podría salir pero bueno igualmente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=289" target="_blank" class="timestamp">[04:49]</a> pues eso 4 con 140 creo que está bastante bien después con las dominadas que es un ejercicio que me ha sorprendido bastante de hecho diría que es el que más me ha sorprendido porque al fin y al cabo pensar que yo actualmente peso 118 kilos y hacerse 11 repeticiones con ese peso corporal y encima teniendo en cuenta que estoy tan tremendamente desadaptado es bastante increíble y más teniendo en cuenta que las dominadas son un ejercicio el cual requiere de muchísima adaptación es decir que tú</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=316" target="_blank" class="timestamp">[05:16]</a> Puedes ser una persona que, por ejemplo, entrena habitualmente y hace espalda y todo lo que tú quieras, pero si no haces dominadas y no te has adaptado a hacer ese ejercicio en concreto, pues lo que es tu rendimiento en este ejercicio cae muchísimo. Entonces, por eso mismo os digo que me sorprende y para bien, porque lo que yo me esperaba es que me hiciese, no sé, tres o cuatro ejercicios.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=336" target="_blank" class="timestamp">[05:36]</a> o algo así, teniendo en cuenta mi peso corporal y lo tremendamente desartado que estoy y cómo es la adaptación para este ejercicio. Pero no ha sido así. He sacado 11 repesí. Yo considero que si le doy cañita a las dominadas, no creo que me costase mucho llegar a las 20 repeticiones. Y lo digo con toda la humildad del mundo, os lo aseguro. Porque es que al fin y al cabo, claro, cuando te adaptas a este ejercicio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=358" target="_blank" class="timestamp">[05:58]</a> progresas tan rápido hasta cierto punto, evidentemente, pero al principio mejoras a un ritmo brutal. Entonces, lo dicho, yo creo que para la sesión siguiente puede estar haciéndome en vez de 11, 13, 14 y para dentro de dos o tres semanas hacerme unas 20 o así, pero bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=373" target="_blank" class="timestamp">[06:13]</a> sea como sea, pues bueno, este es así el resultado actual. En cuanto luego a las laterales, también ha ido bastante bien, 20 kilitos por mano, con una técnica exquisita y pues bueno, normal, como siempre. Lo cierto es que en las laterales no perdió absolutamente nada de fuerza, lo cual es bastante curioso, ¿no? Pero pues eso, técnica bien, tempo bien, sin balanceos, sin inercias, extendiendo los brazos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=398" target="_blank" class="timestamp">[06:38]</a> adecuadamente todo correcto así que aquí pues bueno no hay mucho que comentar después en la extensión de tríceps tampoco hay gran cosa que comentar simplemente puse pues todo el peso de la polea y ya está es cierto que cuando usaba química metía una mancuerna o a veces incluso dos encima de lo que es el peso de la polea no obstante como es doble normalmente este incremento tampoco es tanto porque claro como se divide entre dos pues al final esos 10 kilos de mancuerna que tú colocas ahí por ejemplo sólo son cinco más entonces</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=425" target="_blank" class="timestamp">[07:05]</a> Pues sí, tengo un poco menos de fuerza, pero vamos, que en lo que es el tren superior, pues tampoco tengo tanta menos. Y ya por último, con el tema del curl de bíceps, sí que me he enfrentado a un problema, y es el tema de la fatiga. Y es que al estar tan desadaptado de entrenar, me fatigo con muchísima facilidad. Y cuando he llegado al curl de bíceps, pues estaba bastante cansado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=443" target="_blank" class="timestamp">[07:23]</a> y encima lo que es el bíceps y el antebrazo, los tenía petaos de las dominadas, que sí, solo hice dos series de dominadas. Bueno, hice dos series de cada cosa, pero el tema está en que esas dos series de dominadas me reventaron por completo. Entonces, claro, cuando ya estaba en el curl de bíceps decía, me cago en Dios, cómo me pesa esto, y lo notaba, como que el bíceps y el antebrazo por aquí, en lo que sería el flexor,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=464" target="_blank" class="timestamp">[07:44]</a> Ya estaba muy fatigado y como que no podía sacarle el máximo rendimiento que podría. Y yo creo que tranquilamente, a la que haga un entreno más o dos, vuelva a tirar con las de 30 kilos por mano sin problema alguno. Que eso igualmente ya lo tiré cuando era natural, como bien sabéis. Pero aún así, bastante contento con la fuerza que preservo en el tren superior.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=483" target="_blank" class="timestamp">[08:03]</a> Recordad que mi contexto no es solo que he dejado la química, que de hecho actualmente ya estoy haciendo el PCT y no estoy consumiendo nada de química. O sea, estoy consumiendo las cosas del PCT, ¿vale? El clomifeno y el HCG y esas mierdas, pero lo que es la testo, pues ahora mismo la tengo a cero por completo. Porque no estoy usando nada de texto inyectable ni estoy seguramente produciendo la mía propia, ya que estoy en ese proceso de recuperación. Pero aún así, pues bueno, la fuerza está ahí. No obstante, lo que sí que cambia al dejar la química es especialmente el aspecto y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=511" target="_blank" class="timestamp">[08:31]</a> No lo digo por el tema del porcentaje de grasa, porque al fin y al cabo eso lo determina sobre todo la dieta, pero sí que cambia el aspecto muscular en el sentido de ese bombeo muscular y esa plenitud muscular. Porque como aumenta tanto el glucógeno muscular, pues todo esto de aquí se te pone así como súper petado y es como que estás...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=527" target="_blank" class="timestamp">[08:47]</a> Como así, ¿no? Los hombros como bolas de cañón, esto como súper lleno, el pectoral superior aquí, el trapecio que, bueno, así todo petado y es como mega increíble, ¿no? Esto es como así, ¿sabes? Va por la vida así, macho, con la química, ¿no? Bueno, si tienes un nivel alto usando química o si ya, pues digamos que se empieza a notar, si pasas 60 kilos y te ciclas, no vas a estar así, pero me entendéis, ¿no? Que si se te nota ya la química, pues vas como así, ¿no? Con todo ahí mega petado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=551" target="_blank" class="timestamp">[09:11]</a> Entonces eso, si tú dejas la química, lo vas a perder, porque ese aumento del glucógeno muscular, pues tu cuerpo no lo sostiene de forma natural, por mucho que sigas entrenando después de haber dejado la química. No obstante, la fuerza, curiosamente, se mantiene bastante, bastante bien. Y bueno, culturistas, hasta aquí sería el vídeo de hoy. Espero que os haya gustado mucho este vídeo. Dejadme vuestra opinión en los comentarios. Y por cierto, tenéis que saber que en mi siguiente vídeo os explicaré todo el detalle sobre cómo estoy haciendo el PCT y también cómo fue la etapa de pre-PCT, porque esto...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=URjdUZQLJy8&t=580" target="_blank" class="timestamp">[09:40]</a> También es importante, así que suscribiros al canal, darle like, no os lo perdáis y nos vemos en los siguientes vídeos. Chao.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-u4vww9T3oeQ">
+            <h2>El fin del mundo.</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: alvarobernalalejandre</span>
+                <span class="date">Publicado: 28/04/2025 17:19</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ" target="_blank">
+                    <img src="https://i.ytimg.com/vi/u4vww9T3oeQ/hqdefault.jpg" alt="El fin del mundo." loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video es una sátira sobre la preparación para un hipotético fin del mundo, mezclada con música.
+El narrador cuenta con humor sus desventuras comprando provisiones y la falta de "superalimentos".
+Critica la sobrecarga de información de las noticias y sugiere enfocarse en estudios más útiles.
+Finaliza con una anécdota humorística sobre problemas triviales en tiempos de crisis.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Inicio Musical del Apocalipsis <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&amp;t=0" target="_blank">[00:00]</a></h3>
+
+<p>El video comienza con el narrador tocando música, que se ve interrumpida por la idea de un inminente fin del mundo. Recibe una llamada para comprar provisiones urgentemente.</p>
+
+<h3>El Cálculo Errado de las Raciones <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&amp;t=41" target="_blank">[00:41]</a></h3>
+
+<p>El narrador relata su caótica compra de grandes cantidades de agua y arroz. Descubre que calculó mal la proporción y debe volver a la tienda a comprar más agua.</p>
+
+<h3>La Tragedia de los Superalimentos Ausentes <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&amp;t=90" target="_blank">[01:30]</a></h3>
+
+<p>Expresa su indignación por la falta de semillas de chía, aguacates y otros "superalimentos". Bromea sobre cómo los influencers crearán contenido sin estos productos.</p>
+
+<h3>La Estrategia Contra la Sobrecarga de Noticias <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&amp;t=113" target="_blank">[01:53]</a></h3>
+
+<p>El narrador reflexiona sobre su decisión de dejar de ver noticias para evitar el estrés y la confusión. Explica que prefiere estudiar temas prácticos como salud y entrenamiento.</p>
+
+<h3>El Gran Problema de las Croquetas <a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&amp;t=141" target="_blank">[02:21]</a></h3>
+
+<p>Cierra el video con una pregunta humorística sobre qué hacer con las croquetas congeladas en medio del caos. Identifica esto como un "problema del primer mundo" y aconseja no dejarse abrumar por la información.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=0" target="_blank" class="timestamp">[00:00]</a> Estaba yo estudiando insensatez en la guitarra eléctrica, pero claro, ha llegado el fin del mundo y se ha cortado el sonido. Digo, bueno, pues sigue por lo menos en la española, ¿no? Pero en eso me llama una amiga y me dice, vete ahora mismo a Mercadona, tienes que comprar provisiones. Digo, pero, ¿a qué? Si el fin del mundo cuanto antes llegue, mejor, ¿no? Oye, lo que me gusta de la bolsa nova es las disonancias. Mira, menor, nueve.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=23" target="_blank" class="timestamp">[00:23]</a> ¿Ves la disonancia? Realmente estamos haciendo dominante secundaria. Estamos aquí. Dominante secundaria de la nota tónica, de la tonalidad en la que estamos. Bueno, pues estamos aquí. Total, que me voy allí y compro 100 litros de agua.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=41" target="_blank" class="timestamp">[00:41]</a> Y 200 kilos de arroz. Total, llego a mi casa y digo, anda, joder, si la proporción son tres partes de agua por una de arroz. Total, que he comprado 100 litros de agua, me faltan dos por tres, me faltan 500 litros de agua. Total, que bajo Mercadona a comprar los otros 500 litros de agua, la segunda parte que bonita, ¿verdad?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=63" target="_blank" class="timestamp">[01:03]</a> Y claro, cuando llego a mi casa, ya, llego a mi casa con los 500 litros de agua más los 100 que tenía y digo, ¿y ahora cómo lo vas a cocer? ¡Gilipollas! Digo, si es que no estamos preparados para el fin del mundo. Además que en esto de comprar tanta agua y tanto arroz, he tenido que pelearme con un pensionista que sabía karate. Yo, claro, como he estudiado pilates, pues me ha dado hostias por todos los lados. Al final me lo he llevado porque, bueno, hemos, te lo voy a decir entre nosotros, hemos arramplado el camión que estaba reponiendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=90" target="_blank" class="timestamp">[01:30]</a> De lo que me siento verdaderamente indignado es que no había semillas de chía, no había aguacate, no había algas, no había arándanos. Y digo, yo ahora como creo los vídeos de influencers hablando de superalimentos, pues así no hay manera. Total, que no vamos a morir. No vamos a morir, pero hoy no, mañana. Mira, los que llevamos ya mucho tiempo sin ver noticias, básicamente porque no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=113" target="_blank" class="timestamp">[01:53]</a> nos molesta mucho que nos mareen para nada y nos dedicamos a estudiar de otras cosas. Yo estudio mucho, por ejemplo, entrenamiento de cáncer, de entrenamiento de obesidad, entrenamiento autoinmunes, entreno mucho de adultos mayores, porque bueno, yo ya soy un adulto mayor. Cuantas menos noticias veamos, menos nos explota la cabeza. Y si efectivamente algún día pasa algo, pues no va a coger a todos. Así que la última parte de insensatez es preciosa, cuando hace mirar qué disonancia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=u4vww9T3oeQ&t=141" target="_blank" class="timestamp">[02:21]</a> Oye, una cosita. ¿Y ahora qué hago yo con las croquetas que tenía en el congelador? Los problemas del primer mundo. No permitas que te vuelvan loco con la información. Un abrazo para todos.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 28/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
