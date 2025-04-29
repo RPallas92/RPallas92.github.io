@@ -1,0 +1,407 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 29/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">29/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>John_MH</strong>: <a href='#video-CznBhIapCKc'>ANÁLISIS PSICOLÓGICO DEL MÉDICO INVESTIGADO POR EL COLEGIO DE MÉDICOS - DR MARIO GONZÁLEZ</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-CznBhIapCKc">
+            <h2>ANÁLISIS PSICOLÓGICO DEL MÉDICO INVESTIGADO POR EL COLEGIO DE MÉDICOS - DR MARIO GONZÁLEZ</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John_MH</span>
+                <span class="date">Publicado: 29/04/2025 05:59</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=CznBhIapCKc" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=CznBhIapCKc" target="_blank">
+                    <img src="https://i.ytimg.com/vi/CznBhIapCKc/hqdefault.jpg" alt="ANÁLISIS PSICOLÓGICO DEL MÉDICO INVESTIGADO POR EL COLEGIO DE MÉDICOS - DR MARIO GONZÁLEZ" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video es una conversación que analiza el perturbador comportamiento de un médico, Mario González, apodado Cucumber.
+Se exploran sus posibles perfiles psicológicos, destacando rasgos de sadismo, psicopatía y narcisismo por sus acciones agresivas.
+Se narran incidentes concretos de su conducta humillante, amenazante e incluso delictiva contra pacientes y colegas.
+Los ponentes discuten la aparente impunidad que tuvo inicialmente y la necesidad de justicia ante sus actos.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Insultos, Amenazas y Deseos de Muerte <a href="https://www.youtube.com/watch?v=CznBhIapCKc&amp;t=26" target="_blank">[00:26]</a></h3>
+
+<p>Se presentan ejemplos directos del comportamiento agresivo y cruel de Mario González. Incluye insultos, deseos de muerte a la madre de una persona y la atribución de culpa por el fallecimiento de su esposa. Establece el tono extremo de la conducta analizada.</p>
+
+<h3>El Perfil Psicológico: Sadismo y Antisocialidad <a href="https://www.youtube.com/watch?v=CznBhIapCKc&amp;t=328" target="_blank">[05:28]</a></h3>
+
+<p>La discusión se centra en intentar clasificar el perfil psicológico de Cucumber. Se debate si encaja más como sádico, antisocial o narcisista, señalando rasgos como la falta de autocontrol, la agresividad y el disfrute con el sufrimiento ajeno.</p>
+
+<h3>La Impunidad y el Colegio de Médicos <a href="https://www.youtube.com/watch?v=CznBhIapCKc&amp;t=610" target="_blank">[10:10]</a></h3>
+
+<p>Se critica la aparente falta de consecuencias legales y profesionales que Mario González enfrentó inicialmente. A pesar de numerosas denuncias y su comportamiento público, se señala que el Colegio de Médicos no actuó durante mucho tiempo.</p>
+
+<h3>Crueldad en el Contexto Médico <a href="https://www.youtube.com/watch?v=CznBhIapCKc&amp;t=875" target="_blank">[14:35]</a></h3>
+
+<p>Se describen acciones particularmente inquietantes dentro de su rol médico. Se menciona su supuesta actitud en el IFEMA, tomando decisiones de vida o muerte y mostrando un disfrute con el sufrimiento de los pacientes.</p>
+
+<h3>Justicia frente a Venganza <a href="https://www.youtube.com/watch?v=CznBhIapCKc&amp;t=1206" target="_blank">[20:06]</a></h3>
+
+<p>Hacia el final, los ponentes reflexionan sobre cómo abordar a una persona con un perfil tan dañino. Se subraya la importancia de buscar justicia y rendición de cuentas, diferenciándolo de una simple venganza personal.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=0" target="_blank" class="timestamp">[00:00]</a> Muy buenas. Mi nombre es Mario, Mario González. Puto retrasado de mierda. Doctor Cumber. Soy médico en un hospital de Madrid. Médico adjunto. Era médico residente. Alfabeto de mierda. Que no hay un paciente. Eh, John, que lo estarás viendo. El culpable de la muerte de tu esposa eres tú. Tú eres quien ha matado a tu esposa. Así que soca. Como sé que esto te llegará, disfrútalo. Ves a tu madre. Eres tú si no te suicidas. Cállate porque te voy a destruir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=26" target="_blank" class="timestamp">[00:26]</a> Y voy a disfrutarlo, eh. Dado que es roca, yo opino que de aquí a dos años se ha suicidado. No, puto analfabeto de mierda. Mira. ¡Ay, que me coge sin comer! ¡Que mi madre se muere cáncer! ¡Que me vean sus huevos! ¡Hala! Este, el de la madre... ¡Ay, que se me muere la madre! ¿Está muerta la madre?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=43" target="_blank" class="timestamp">[00:43]</a> No, ¿verdad? Puta escoria. A ti te encanta decir que no, con el pan no se juega. Te voy a quitar el pan de la boca a ti y a tu puta madre. ¿Cómo Alfredo que está muerto? Pregunto, ¿eh? O la puta de su exmujer que... Yo puse Instagram hablando del doctor psicópata este, el sádico este. Entonces yo puse que lo... Yo lo analizaba como la triangulación del mal que en psicología es la combinación especialmente nefasta entre características de la personalidad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=73" target="_blank" class="timestamp">[01:13]</a> malas, pero combinadas a hacer unas personalidades muy malignas, que es la psicopatía, el maquiavelismo y el narcisismo. Es decir, que el Jibisabil, bueno, es un caso muy extremo, se le considera un caso muy potente de esta triada del mal, que es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=93" target="_blank" class="timestamp">[01:33]</a> Un tío muy maquiavélico, muy narcisista y muy psicópata. En el caso de Jimmy Savile. Y el Cucumber yo lo he identificado así, como un tío maquiavélico, psicópata y narcisista. Pero tú no estás de acuerdo, ¿no? Es que hay un montón de trastornos que comparten rasgos. No sé, el psicópata, el narcisista, el antisocial, el sádico... Comparten un montón de rasgos. Lo que pasa es que apuntan más a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=120" target="_blank" class="timestamp">[02:00]</a> Yo creo que este tío tiene más rasgos de otros trastornos. Por ejemplo, ser maquiavélico se asocia con una planificación, con una actuación insidiosa, progresiva, planeada, metódica. Todo encaminado a un fin, todo planeado, todo estructurado. Y este tío es que carece de autocontrol. Es impulsivo e irritable. Y eso a mí me encaja más, bueno, lo has dicho tú, con un... Bueno, antes...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=149" target="_blank" class="timestamp">[02:29]</a> Hasta el DSM-III el sadismo estaba considerado como un trastorno de la personalidad. Y a partir del 4, estamos en el 5, se eliminó. ¿Es un sádico o no es un trastorno? No, se engloba en otro trastorno. Pero como trastorno propio ya no se contempla. Ya no se puede diagnosticar. Pero bueno, este diagnosticado para mí tiene como una serie de rasgos propios identitarios que encajan mucho con este tío. No tienen autocontrol.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=177" target="_blank" class="timestamp">[02:57]</a> Son agresivos, les gusta coaccionar, intimidar, amenazar y buscan siempre profesiones o posiciones que les permitan ejercer ese control para tener la oportunidad de castigar. La esencia, al igual que la de un narcisista, es mantener su ego, esa retroalimentación. En un sádico, la esencia es que disfrutan y sienten satisfacción con el sufrimiento y la humillación ajena.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=207" target="_blank" class="timestamp">[03:27]</a> Eso es la gene. Que es el caso del Mare González, del Cucumber. Sí, para mí sí. Son ríquidos, son dogmáticos, son inflexibles, no tienen remordimientos, ni vergüenza, ni culpa. Eso que cuando tú me explicaste que en una conferencia el tío se levantó delante de todo el mundo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=226" target="_blank" class="timestamp">[03:46]</a> agresivo, intimidando al que estaba dando la charla. Me encajó mucho. O ese punto de histrionismo, que ellos nunca tienen vergüenza a un histriónico. Al contrario, necesitan esa atención. Es placentera. Es que la gente no lo sabe. El Cucumbo, el Mario, es un tío muy echado para adelante. Se creen que en persona... No, no. En persona es igual. Es un tío que en persona es igual de agresivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=254" target="_blank" class="timestamp">[04:14]</a> O sea, no se echa para atrás. Ese sentido no es cobarde, ¿sabes? Es sádico en persona y en internet. No es ese perfil de fracasado de la vida que es un tío gris y cuando se mete a webcam se transforma y hace una interpretación de sí mismo y vive una fantasía. No, no, que está en persona es igual. Es igual de flipado. Otra cosa que se rota en mente es un megalomanía por webcam, ¿no? Es que él solo se habla y se ve y crezca. A ver, lo de que comentas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=282" target="_blank" class="timestamp">[04:42]</a> Según me digo, ¿sabes qué pasa? Yo no soy mucho de preguntar, ¿sabes? Los cotilleos, aunque me ría Frank Cuesta, pero según parece, me parece, porque tampoco lo pregunto, que Roberto Castellano hizo una conferencia, ¿no? Algo serio. Habíamos los culturistas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=298" target="_blank" class="timestamp">[04:58]</a> Y en el público que había, que no debía ser poco, estaba el Cucumber, el Mario González, este que lo han echado ya del hospital de la Quirón, se puso en medio y se ve que empezó a soldar un discurso revelando secretos médicos de culturistas que eso es un delito que es ilegal como médico, ¿sabes? Que es una cosa flipante. Y montó un pollo que flipas. Pero sin vergüenza ninguna y despreciando las consecuencias violentas hacia él, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=328" target="_blank" class="timestamp">[05:28]</a> es un tío que sorprende pero luego te sorprende más si estas conductas están disfuncionales como que no atienden a las normas sociales si chocan fíjate yo le veo más para mí encaja si tuviera de meterlo en un perfil psicológico sería de sádico que no tiene por qué pero en su caso con connotaciones sexuales evidentes porque siempre lo remarca el tema de la sodomía</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=355" target="_blank" class="timestamp">[05:55]</a> Que no tiene por qué. Un sádico siente placer al humillar a otra persona y al hacerlo sufrir. No tiene por qué estar ligado en un contexto sexual. Pero este sí que hace referencia siempre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=368" target="_blank" class="timestamp">[06:08]</a> Yo lo veo más como un perfil sádico y antisocial. Con mucho ego también, que también tiene ese rasgo del narcisismo. El antisocial, el sociópata, es la persona que no distingue el bien del mal, que es impulsiva y que actúa con crueldad e indiferencia y que no tiene empatía tampoco. Son rasgos que te encaminan inevitablemente a cometer delitos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=390" target="_blank" class="timestamp">[06:30]</a> Es como que las normas, las leyes es algo externo para ellos, que no entienden, no encajan y les cuesta muchísimo acatarlas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=400" target="_blank" class="timestamp">[06:40]</a> Entonces, esa actitud impulsivamente temeraria de desprecio sentido común que bordea... Es como un lemming, bordea la actitud suicida. Es decir, esa manera que tiene, como dices tú, de que por su perfil psicológico le lleva siempre a cometer delitos. Eso es ser un sociópata. Y encima... Eso es la esencia del sociópata.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=427" target="_blank" class="timestamp">[07:07]</a> El no distinguir, no tienen clara la diferencia entre lo bueno y lo malo. Y tienen una tendencia muy marcada a increpar, molestar y manipular a los demás. Llegando a la crueldad. Con indiferencia, con falta de empatía. En todos estos tres trastornos siempre comparten la falta de empatía. Son personas muy egoístas y muy ególatras. El antisocial no tanto. Pero a mí ese punto de agresividad y que este tío con ese nivel cultural tan alto no sea consciente de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=458" target="_blank" class="timestamp">[07:38]</a> Lo peligroso a nivel legal de las consecuencias que puede tener. Yo le veo ese punto de sociopatía. Era evidente que lo que estaba diciendo... Eso se podía meter en problemas. Un punto de sociopatía. Un punto gordo, ¿no? Sí, sí. Sí, sí, pero... El sociópata le gusta tocarle las narizas a la persona. Siempre está ahí bordeando la línea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=484" target="_blank" class="timestamp">[08:04]</a> Pero no es un sádico. El sádico siente placer al ocasionar sufrimiento y al humillar a los demás. Eso es lo que le mueve. Y ese punto es lo que decías tú. El Jimmy Savile, cuando ves vídeos, notas esa agresividad controlada. Controlada. Daba miedo. O sea, cuando ves un tío que está intentando ser agresivos para defenderse, es una cosa. Pero cuando ves otro que se están conteniendo, da miedo. Me impactaba mucho. Da miedo porque inconscientemente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=514" target="_blank" class="timestamp">[08:34]</a> Aunque no te lo estés plateando en el momento de forma consciente. Tú entiendes que si ese tío tuviera la oportunidad, realmente se cebaba contigo y te hacía mucho daño y disfrutaba. Y esta gente es muy perturbadora. Pero mira, otro punto que coincide, salvando las diferencias de nivel, porque este tío era algo exageradísimo. A nivel de perversión, de agresividad y de protección a nivel social y gubernamental.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=540" target="_blank" class="timestamp">[09:00]</a> Pero yo creo que él se iba retroalimentando con la impunidad que iba percibiendo. Y este pájaro le pasaba lo mismo. Él empezaba a alargar ahí, en YouTube, público o en redes. No le pasaba nada. Empezaba a amenazar a todo el mundo. ¿Y qué pasaba? La gente le venía a hablar, que es lo que hacía siempre. Su modo superandi era, yo te ataco agresivamente con todo. Ahora hablas de Cucumber, que la gente no se pierda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=566" target="_blank" class="timestamp">[09:26]</a> Sí, exacto. El doctor Mario González. Tienen en común esta percepción de impunidad. Lo has clavado. Porque yo lo he visto, el recorrido que ha hecho, era, como bien dices, el hecho de que hacía algo y no pasaba nada. Pues que no pasaba nada, nada. Es decir, salía, hacía un vídeo. El Cucumber, el doctor Mario González, el psicópata este, hablando del doctor Enrique Garbe, el jefe de medicina deportiva de Quirón, España. O sea, una autoridad médica. Además que es un tío súper majo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=596" target="_blank" class="timestamp">[09:56]</a> ¿No?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=598" target="_blank" class="timestamp">[09:58]</a> y diciendo que su mujer embarazada, que su hijo va a morir, que no sé qué, riéndose, ¿no? Tú, tu hijo no estará muerto, no sé qué. Que luego le cayó la denuncia, ¿eh? Bueno, perdón, una querella que tiene pendiente. Pero como bien dices, él no veía consecuencias. Ahora sí que las ha visto, ¿eh? Pero la clave es lo que tú dices. Este tío se cree impune porque el colegio de médicos, porque le caerían denuncias, un montón de médicos contra él al colegio de médicos y al colegio de odontología médica, como se llame,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=628" target="_blank" class="timestamp">[10:28]</a> Que no pasaba nada. Que el Colegio de Médicos pasaba olímpicamente el tema. Que les daba igual. Lo que bien dices tú es situación de impunidad. Y Jimmy Sabil pasó lo mismo. Era impune, impune, impune. Y al final pues le hizo lo que le daba la gana. Sí, se metió en los directos. Sí, es verdad. Siempre tiene una necesidad patológica de llamar atención y ser el centro. Es decir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=648" target="_blank" class="timestamp">[10:48]</a> cualquier circunstancia él te viene a chotearse en tu cara sabes que cuando te peleas y tal en un momento de tensión siempre tienes con un instinto de cordura si no me voy a meter ahí el tío coge y se te mete ahí en medio va a buscar tal cuelgo el la intro que hice esta cortita donde recopió todo cuando lo he puesto en instagram el chat de cuando lo puse en instagram ya vino a reírse</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=675" target="_blank" class="timestamp">[11:15]</a> ¡Ja! ¡Qué bueno, tío! Me he partido la caja. Me ha encantado. Está currado la edición, ¿eh? Te recomiendo que hables conmigo. Ya con ese tono siempre violento y sádico, ¿sabes? Como amenazándome. Yo sí, sí. La que te va a caer va a ser buena.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=690" target="_blank" class="timestamp">[11:30]</a> Es bestial. Y aún así, otra persona, si se arriesga un enfermo, sí. Otra persona le cae a Tunda, que le ha caído a nivel nacional y mediático, de todas las teles llamándole. Al día siguiente, el tuit, le llamaba Canal 4, La Sexta, Antena 3, el ABC, que yo sepa. Y lo que no sé, pues igual ha llamado a la Confidencial y Telemadrid le habrá llamado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=714" target="_blank" class="timestamp">[11:54]</a> O sea, le ha llamado todo Dios. ¿Sabes qué hacía el tío? Bueno, luego ya se cansó y empezó... ¿A ti quién tal el teléfono? No me llamen más, ¿sabes? Mi abogado, no sé qué. Pero al principio, el tío... No, no. Empezaba a soltar trolls porque el tío es mentiroso defendiéndose, ¿no? No, no, este es tal, tal. Difagándome a mí encima, ¿sabes? Y claro, la periodista una me contactó a mí... Oye, que me dice que eres tal y has hecho tal. Y yo, ¿qué dices? No, mentira. No te lo creas. O sea, el tío es... Es que es el demonio, este pavo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=742" target="_blank" class="timestamp">[12:22]</a> Sea lo que sea, los raros de la personalidad, este tío es demoníaco. Es tonto. Porque como médico, cargarte la carrera de esta manera, hay que asundar mal. Pero unas ansias de hacer daño, y es el sadismo, pero bestia, ¿eh? ¿Pero por qué te piensas que es médico? Porque busca dominar a paciente, ¿no? A gente desamparada. Pero, ostras... No, no. Tu parte oscura determina tu destino, ¿eh? Este tío...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=769" target="_blank" class="timestamp">[12:49]</a> Estos trastornos que tiene, estos han encaminado su vida. No tengas ninguna duda. Si a ti te gusta el sadismo, el control, pues que has de ser médico. Fíjate, el nivel de poder y el de daño que puedes infligir. Este con la enfermedad de Asia... Los pedos, ¿a dónde van? Profesor de básquet, profesor de fútbol... O antes sean curas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=797" target="_blank" class="timestamp">[13:17]</a> No, no, todo va encaminado solo con esa pulsión. Pero fíjate, es el peor conjunto de rasgos que puede tener un médico. Porque si tú eres narcisista, al final tú tienes delirios de grandeza, tú tienes tu ego, pero tu objetivo no es dañar a nadie. Es un efecto secundario para reafirmarte. Si tú eres un psicópata...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=822" target="_blank" class="timestamp">[13:42]</a> Tú no buscas el mal ajeno porque sí. Tú buscas dominar pero no hacer sufrir sin motivo. Pero el sádico lo que le gusta es el sufrimiento. Es lo que le estimula. Es lo que le provoca satisfacción. La humillación y el sufrimiento. Estos son los perfiles que matan a alguien y sienten placer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=845" target="_blank" class="timestamp">[14:05]</a> Pero es que lo flipante que el colegio de médicos no busca estos perfiles sádicos y los quita de la carrera. Les da igual. Se están panteando echarlo porque grabó un paciente. Esto en España es un delito que se paga con la cárcel. Grabar pacientes sin su consentimiento, siendo médico. Pero ya está. Si no es por el vídeo del paciente intubado, el colegio de médicos no hace nada. Es un perfil, como bien dices tú, que claramente tiene tendencia al delito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=875" target="_blank" class="timestamp">[14:35]</a> Y, sobre todo, a torturar personas. Y este tío, fíjate que... Este estuvo en el IFEMA ese, en el sitio ese que montaron improvisado para el tema de la enfermedad de Asia. Y el tío era el que hacía el triaje y decidía quién vivía y quién moría. Lo dice siempre, le encanta. Y entonces, él, en la entrevista... No, el IFEMA, que era como un polio deportivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=900" target="_blank" class="timestamp">[15:00]</a> El cenar fue después. Yo te digo antes, me parece bien, me parece bien. Yo no soy de Madrid. Pues el tío le decía que le decía, quítale el respirador ese y pónselo ese y dejarlo morir, ¿no? Un psicópata sádico en esta situación. ¡Madre mía! El tío se caga con ganas. Y la gente dice, es que ver tanto la muerte le va a traumar. Y así, le va a traumar. Ver tanto la muerte le da un gustazo que el tío dice que venga otra enfermedad así a que no voy a dejar ninguno vivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=927" target="_blank" class="timestamp">[15:27]</a> Tienen mérito las argumentaciones que se inventan algunas personas para justificar que los manipulen. No, no, que mucha gente defiende a Cucumber. Sí, sí, pero que somos capaces de distorsionar la realidad de tal forma para que encaje con nuestras argumentaciones, que es sorprendente. Sí, sí. Mira, tenemos la capacidad de que si haga un tío, te diga a la cámara, sí, te he mentido aquí y aquí y aquí, y tú creértelo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=955" target="_blank" class="timestamp">[15:55]</a> A ver, el 99% de la gente se ha horrorizado con el tío este y siente sobre todo un gran desamparo. El vídeo este que hice en Twitter causa un gran impacto porque estás viendo que es un médico y todo el mundo somos pacientes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=969" target="_blank" class="timestamp">[16:09]</a> Y un paciente está totalmente desamparado, está en la camilla con el vial a la espera que te supere y que te venga el tío este, que es un psico psicópata, diciendo que si nos mata, le da igual porque no tiene ni un cargo de conciencia y le va a falta que lo jures. Y todo lo que hace, pues la gente se siente desamparada y aterrorizada y dice, tío, que no me ingrese en el hospital donde esté el tío este, que no sé si me va a matar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=990" target="_blank" class="timestamp">[16:30]</a> No, pero es que el tema no es que le dé igual, no le provoca indiferencia, al contrario, lo está deseando. Si hacía porras, pero cuando haces una porra es que estás esperando a ver quién es el primero. Induciendo al autólisis. Convenciendo a un chaval que estaba con una depresión, bueno, por circunstancia, por la madre. Mátate, mátate, mátate, mátate. Un médico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1012" target="_blank" class="timestamp">[16:52]</a> Roca, ¿ves tu madre? ¡Ja, ja! ¡Si no te matas! ¡Acabas como ella! ¡Ja, ja, ja! Así, ojo. Se iba riéndose. ¡Ustos, cómo le gusta! No tiene más más. Que si te mueve tu madre, tu madre empieza a insultarla. Dios, qué... Y la gente, qué tarao. No, no, qué sádico, es sádico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1030" target="_blank" class="timestamp">[17:10]</a> me gustaría saber es Carlos que yo recuerde los sádicos y los psicópatas sádicos creo que se distinguen cuando son pequeños hacen torturas sádicas animales ya niños que dices que no lo que un niño quiere abrazar un cachorrito de manera natural un niño estos les gusta coger el animal y torturarlo y cargárselo y despellejarlo y eso a ver no en todos los casos el psicópata es como una entidad aparte realmente es una condición</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1060" target="_blank" class="timestamp">[17:40]</a> Es que se nace así. La esencia de un psicópata es que no tiene una conexión emocional. No empatiza. No es capaz de resonar emocionalmente con el sufrimiento ni la alegría ajena. Tiene como esa propiedad que tenemos de ser sociales, de serie, es que no les viene. Y al final adquieren conductas sociales por imitación.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1089" target="_blank" class="timestamp">[18:09]</a> porque ven cómo se comportan los demás y lo imitan como si fuera un robot, pero es que no sienten esas interacciones. Dice Yagami, además se droga muchísimo, si es muy, muy toxicómono. Es que el antisocial va muy, muy relacionado, es el perfil del delincuente, siempre está asociado al consumo de drogas. Y este tiene pinta, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1114" target="_blank" class="timestamp">[18:34]</a> Es que es flipante, tío. A mi mujer le detectan un globo bastante multiforme que su diagnóstico es terminal. El tratamiento es paliativo. No tiene ni tratamiento de ese cáncer. Y yo la tortuga y la he matado. Es que es flipante, tío. Sale un tío que insulta, se ríe y desea muerto a la madre mamás. Que el doctor Kike Barber sabe que tiene un hijo y dice que nacerá muerto y lo celebra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1141" target="_blank" class="timestamp">[19:01]</a> Que Roca está deprimido por la madre. Él dice, ¿ves tu madre? Que tiene el deterioro cognitivo. Eso es demencia genética. Tú la tendrás. Y cuando te chuzas, la tendrás mucho antes. Así que mi consejo es que te mates. Que te cuelgues. Y va insistiendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1156" target="_blank" class="timestamp">[19:16]</a> Luego, no sé, más cosas no de acuerdo, ¿sabes? Pero con todo el mundo. Al de Diego intentó incitar una campaña contra él para que lo echan al hospital. ¿Qué sucede en los hospitales? Cuando recién esto, no fue el caso de Diego, pero ha pasado en otros casos, preventivamente te quieren echar. Y luego ya veremos qué hacemos. Pero primero todo te quieren echar. Porque hay un tío que diga eso. Y de Cucumber, pues hay más, pero no de acuerdo. A más gente. Ah, sí, eso. Que me guíe en Navarro. Acabaría en la cárcel porque está asociado a una red de narcotráfico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1186" target="_blank" class="timestamp">[19:46]</a> Y que estuvo a cárcel en Ceuta. Muy pobre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1191" target="_blank" class="timestamp">[19:51]</a> Pero una cosa, tío, de verdad. ¿John, qué opinas de la venganza? ¿Nos beneficia en algo? No, al final es tu dignidad. Es decir, hay la justicia. Y a Cucumber, al doctor Mario González. Pero bueno, yo que he hecho así, a esperarme. Sabía que este tipo vendría a España. Sabía que iba a estar expuesto. Y le lanzaría el dardo. Le daría todo el ruido que pudiera y caería. Pero no es una venganza. Es justicia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1221" target="_blank" class="timestamp">[20:21]</a> ¿Me entiendes? La venganza de sí mismo no es... Un tío así no puede quedar impune. A este tío hay que eliminarlo como se pueda, a nivel profesional y social, a nivel de prestigio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1235" target="_blank" class="timestamp">[20:35]</a> No puede ser que esta persona se dedique a insultar, a reírse de enfermos oncológicos, a desearles la muerte, a desear que una mujer embarazada se le muera al niño, a que se le muera a acusar a la persona que se le ha muerto la mujer que la mató él con un tumor cebral, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CznBhIapCKc&t=1254" target="_blank" class="timestamp">[20:54]</a> Alguien tiene que hacer algo. No es venganza. Yo no creo en la venganza. Creo en la justicia. Punto. Y uno tiene que moverse por un sentido de justicia. Es un sentido de honor, de valores.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 29/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
