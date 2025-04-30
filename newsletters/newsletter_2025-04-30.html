@@ -1,0 +1,445 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 30/04/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">30/04/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>John opina </strong>: <a href='#video-8Se387aiyX0'>EL MÉDICO INVESTIGADO QUE TODOS TEMEN. DR MARIO GONZÁLEZ. DR CUCUMBER. PRIMERA PARTE</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-8Se387aiyX0">
+            <h2>EL MÉDICO INVESTIGADO QUE TODOS TEMEN. DR MARIO GONZÁLEZ. DR CUCUMBER. PRIMERA PARTE</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John opina </span>
+                <span class="date">Publicado: 30/04/2025 07:21</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=8Se387aiyX0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=8Se387aiyX0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/8Se387aiyX0/hqdefault.jpg" alt="EL MÉDICO INVESTIGADO QUE TODOS TEMEN. DR MARIO GONZÁLEZ. DR CUCUMBER. PRIMERA PARTE" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video es una fuerte denuncia contra el Dr. Mario González Fernández, conocido como "Dr. Cucumber".
+El orador lo acusa de ser un "psicópata" sádico, tóxico y mentalmente perturbado, inapto para ejercer la medicina.
+Se detallan ejemplos de su supuesta conducta maligna: burlarse de pacientes y muertos, difamar colegas y fomentar el suicidio.
+El orador insta a las autoridades médicas y al público a exponer y detener a este médico por el peligro que representa.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>La Peligrosidad del Doctor Cucumber <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=120" target="_blank">[02:00]</a></h3>
+
+<p>El orador introduce al Dr. Cucumber, Mario González Fernández, acusándolo de ser un psicópata con un claro perfil sádico. Cuestiona cómo puede ejercer la medicina dada su supuesta malignidad y el peligro que representa para los pacientes y la comunidad médica.</p>
+
+<h3>La Necroporra y el Placer Sádico <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=177" target="_blank">[02:57]</a></h3>
+
+<p>Se muestra un tuit del Dr. Cucumber donde supuestamente realiza una "necroporra", apostando sobre la muerte de personas por enfermedad o suicidio. El orador usa esto como ejemplo de su perfil sádico y su aparente disfrute con el sufrimiento ajeno.</p>
+
+<h3>Análisis Psicológico y Comportamiento Errático <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=606" target="_blank">[10:06]</a></h3>
+
+<p>El orador analiza el comportamiento histriónico y las expresiones del Dr. Cucumber en sus vídeos, sugiriendo que podría estar bajo la influencia de sustancias estimulantes o sufrir una perturbación mental. Lo describe como narcisista e inseguro, desinhibido en su malignidad.</p>
+
+<h3>Denuncias, Falsas Recetas y Persecución Legal <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=1102" target="_blank">[18:22]</a></h3>
+
+<p>Se menciona que el Dr. Cucumber ha sido denunciado por una empresa (Big Supplement) y se le acusa de recetarse falsamente y de ser objeto de una investigación por el colegio de médicos. El orador expresa su intención de perseguirlo legalmente y exponer sus supuestas ilegalidades.</p>
+
+<h3>Proyección de Miedos y Fases Maníacas/Depresivas <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=1257" target="_blank">[20:57]</a></h3>
+
+<p>El orador argumenta que el Dr. Cucumber proyecta sus propios temores de ir a la cárcel o suicidarse sobre otros. Describe sus acciones destructivas como producto de fases maníacas extremas, alternando con periodos depresivos, posiblemente influenciados por alcohol y medicación.</p>
+
+<h3>Llamada a la Acción: Exponer al "Cáncer" Médico <a href="https://www.youtube.com/watch?v=8Se387aiyX0&amp;t=1596" target="_blank">[26:36]</a></h3>
+
+<p>El orador concluye instando a la audiencia a enviar quejas y material al hospital donde trabaja el Dr. Cucumber, a los colegios de médicos y sociedades científicas. Reitera que es un ser "vomitivo", "malo en esencia", al que hay que anular porque es como un "cáncer" para la comunidad.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=0" target="_blank" class="timestamp">[00:00]</a> Muy buenas. Mi nombre es Mario, Mario González. Puto retrasado de mierda. Doctor Cumber. Soy médico en un hospital de Madrid. ¿Qué coño sabéis? Médico adjunto. Era médico residente. Alfabeto de mierda. Te di mi palabra de honor. Tú no sabes lo que significa eso, pero te di mi palabra de honor de que no voy a descansar hasta que estés muerto o en la cárcel. ¿Tú qué coño vas a saber? Miguel, que tú, si sigues, te ibas a acabar con tus huesos en la cárcel, ¿eh? ¿No hay un paciente?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=31" target="_blank" class="timestamp">[00:31]</a> Cuanto más te escondas, más palo estoy a dar. Y ya he hablado con muchos de los médicos que trataron con tu mujer y eres un puto impresentable. Delita lo que has llegado a hacer tu impresión. Todas las desgracias que le pasaron a tu mujer en su fase final son culpa de tus negligencias y tus faltas de atención. Todas las desgracias que le pasaron a tu mujer en su fase final son culpa de tus negligencias y tus faltas de atención. John, que lo estarás viendo, el culpable de la muerte de tu esposa eres tú. No es ningún médico, eres tú. Tú eres quien ha matado a tu esposa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=59" target="_blank" class="timestamp">[00:59]</a> El cual yo voy a destruir. Don Enrique Garde, ten cuidado cuando te llamen, no mientas. Puede caerte más, puede caerte menos, pero si mientes... Así que soca, como sé que esto te llegará, disfrútalo. Ves a tu madre, eres tú, si no te suicidas. Un impresentable y un peligro. Y hasta ahora, por ternura, por sencillamente porque me dabas pena, te follo el culo como a todos. ¡Subnormal! Y ahora, empezamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=85" target="_blank" class="timestamp">[01:25]</a> Cállate porque te voy a destruir. Y voy a disfrutarlo, eh. Dado que es roca, yo opino que de aquí a dos años se ha suicidado. No, puto analfabeto de mierda. Mira. Que me cojan sin comer. Que mi madre se muere cáncer. Que me verán sus huevos. ¡Ana! ¡Vosotros qué coño sabéis! Este, el de la madre. ¡Ay, que se me muere la madre! Está muerta la madre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=107" target="_blank" class="timestamp">[01:47]</a> No, ¿verdad? Puta escoria. A ti te encanta decir que no, con el pan no se juega. A ti te voy a quitar el pan. De la boca a ti y a tu puta madre. ¿Como Alfredo que está muerto? Pregunto, ¿eh? O la puta de su exmujer que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=120" target="_blank" class="timestamp">[02:00]</a> ¿Qué tal, gente? Este es un vídeo especial. Os pido máxima difusión, sobre todo los de Madrid. Y los que pudierais compartir este vídeo con médicos que trabajan en Quirón Salud o de la Comunidad de Madrid, es importante que la Comunidad Médica conozca a este sujeto, las maldades que hace y el peligro que supone para cualquier paciente que esté en manos de este psicópata con un claro perfil sádico a un punto que es... no entiendo cómo este hombre puede ejercer la medicina.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=148" target="_blank" class="timestamp">[02:28]</a> Veréis que es un vídeo que es muy desagradable, pero es necesario verlo. Es el doctor Cucumber Mario González Fernández, creo que se llamaba. Bueno, aquí lo tenéis, le hacía un artículo a este sujeto, poniéndolo como un héroe. Un tío que se va a dar gloria después en Instagram de decidir quién vivía y quién moría con evidente placer sádico. Aquí tiene su perfil Mario González Fernández, su currículum personal y bueno, está ahora mismo en la Quirón Salud de Madrid. Vais a ver qué clase de sujeto es este personaje.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=177" target="_blank" class="timestamp">[02:57]</a> y que está totalmente alejado de lo que es la ética médica más elemental. Mira, necroporra de Dr. Cucumber. Pedro RS, de infarto a los 47 años, fallecido, según él, es roca por autólisis a los 28 años y paradis por fracaso renal a los 27. Y encima del tío tiene las narices de citar a la gente para que vea el tuit, ¿no? O sea, busca relevancia a cualquier costa, ¿no? Se cree impune este tío, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=203" target="_blank" class="timestamp">[03:23]</a> Se cree que como médico puede hacer apología del autólisis, traírse de los enfermos oncológicos o de los muertos, mostrar su perfil sádico y se siente impune. Probablemente, a lo mejor tiene razón, puede hacer lo que quiera y tiene total impunidad. Puede ser incluso una sesión en serie y no pasará nada. Y ya se acabó. Es que le está todo podrido y no hay otra solución. Hay gente que tiene... Está anunciando un apocalipsis del fitness. Lo va a destruir todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=228" target="_blank" class="timestamp">[03:48]</a> que ayudar a que esto siga adelante de forma adecuada y esa gente es gente tipo pues Fran ahora que habla con él ya es buena persona</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=237" target="_blank" class="timestamp">[03:57]</a> Fran, ahora que ha hablado con él, eres buena persona. El Fran José es el pobre chaval ese, que es un trozo de pan, que es anticonflictos, es de ayudar a todo el mundo, como el autor te digo. Es un tío que si puede, te ayuda. Evita conflicto y punto. Es un tío sencillo. No tiene ego en ese sentido. Pues el tío le hizo bien imposible. El cucú lo estuvo persiguiendo igual, acosándolo, difamándolo, con promesas de la cárcel, no sé qué. Habló con él y le dijo, tío, déjame en paz. Estoy hablando de como colegas. Le entró, pues no sé, supongo que estaría...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=266" target="_blank" class="timestamp">[04:26]</a> meneándose el Cucumber, el doctor, mientras hablaban, sin que Fran se dé cuenta, imaginándose que lo estaba ahí dominando al Fran, porque este tío tiene auténticas parafilias dominantes, Sado y todo el rollo. Porque lo que más quiere... Mira a Laura Exe. Este es un ejemplo. Laura Exe, un saludo, que eras amigo del Cucumber también y luego vienes a mi canal ahí como si fueras amiga mía. Ya te bloquearé porque gentuza que seguía y tragaba todo el contenido del Cucumber. Primero, que para creerse que sea imbécil. Para no ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=296" target="_blank" class="timestamp">[04:56]</a> todo el perfil psiquiátrico y sádico de individuo este no sé qué problema tenéis porque mira que decía tonterías este hombre pero claro a la gente le cegaba el morbo este de hacer daño hostia este tío va a hacer daño dice que va a meter en la cárcel de diego que va a provocar que haga autólisis roca que va a destruir a este o que tiene cosas que contar de john que nadie sabe que que contará a contar pues nada sea un vago y cosas así no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=322" target="_blank" class="timestamp">[05:22]</a> Bueno, estoy juntándose con el castellano, va de dos, ¿no? Entonces a uno se alimenta con el otro, ¿no? Castellano que lo tengo que denunciar porque me difamó con injurias inventadas así, igual que este. Que esta gente le tendría que denunciar porque, claro, me dice que tortó a mi mujer, que se está muriendo de cáncer, que bonito, ¿no? Pues aquí está Laura Exes, mira, aquí está. Pero luego esta gente viene a mi canal, ¿no? Que dices, vamos a ver, y pone comentarios, yo no sé qué, y piensas, pero vamos a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=344" target="_blank" class="timestamp">[05:44]</a> ¿Tú? ¿Tú? ¿Consumir el contenido de este tío? Diciendo que tortó a mi mujer cuando estaba en el terminal de cáncer, que yo lo coloco de cáncer y soy responsable de su desgracia, bla, bla, bla. Y viene a mi canal, ¿no? ¡Qué basura! Pero fíjate, con Francis ha hablado y es buen tío. ¿Qué es lo que quiere? Sentirse poderoso. Que la gente venga llorando y luego tal. Francis es bueno, este le salva, dice. Robert, esta gente que sabe hacer las cosas bien. Y Robert Castellano, que es su amigo, vale. Dado que es roca, yo opino que de aquí a dos años se ha suicidado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=374" target="_blank" class="timestamp">[06:14]</a> Un suicidio, obviamente, está empujadito por la clínica. Uy, la clínica, por la química. Pero bueno, vamos a ello. Y la roca, erre que erre que erre que se ha cao todo. Si se ha dejado en paz al chaval, hombre. Y el tío más sano y más feliz, ¿sabes? Que no, Robert. Y en este caso ya he hablado bastante con Fran. Y Fran es, me parece, buen tipo. Lo que pasó ya se explicó que era un malentendido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=398" target="_blank" class="timestamp">[06:38]</a> Ciénico, tío. Qué ciénico. Después de todas las difamaciones del daño que le hizo al Fran... No, ya me ha entendido. Vino a hablar con él y ya está. No, espera, Darbull. Y no al revés, que tiene que quedar alguien. Tú no puedes, o sea, eso es irresponsable. Tú no puedes cargarte todo y no dejar nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=416" target="_blank" class="timestamp">[06:56]</a> Vaya fantasía se monta el chaval. Y lo necesito, no puedo mentir, lo necesito. ¿Vale? Le llegué a Robert, lo digo abiertamente, yo a Robert le llegué a pedir dinero. Le dije a Robert, necesito pasta. Y Robert me dijo, tío, líquido, estoy pelado, pero te puedo ayudar. Y le vi que no estaba muy... Y me dijo que no tenía líquido y tal, pero que si lo tuviera yo le creo y... No, que le pidió dinero a Roberto Castellano y dijo que no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=445" target="_blank" class="timestamp">[07:25]</a> y creo que es que Robert es el tío más sincero y más campechano que he conocido. O sea, yo llegué a pedir dinero y imagínate la vergüenza que me supone a mí. Pero, ojo, más vergüenza me debería ser esto del foro. Esto sí que me daría vergüenza. En el culturismo, repito, hay que quitar a Robert de en medio. Robert es una constelación, un cerebro galaxia al lado de esta gentuza.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=469" target="_blank" class="timestamp">[07:49]</a> Castellano es una constelación. Oye, es que es para flipar que este tío... Lo venenoso que es con todo el mundo, menos con el Castellano, que es... Vamos, se muere por él. Bueno, Castellano ha sido el que le dio... Lo metió en el mundo de Fini. Lo subía a los directos con él, con Tufor y todo esto. Tufor no te ocupa ninguna. No sé, más de 100. Me confundo con el programa. Vale, vamos con el Yorelius.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=495" target="_blank" class="timestamp">[08:15]</a> Ah, que también le hizo un traje al Joelus y luego era su amigo. Impresionante, ¿no? Una característica de este tarao, fíjate lo surrealista que es, que su canal de YouTube pone 10% de descuento en productos Big Supplement si usa la palabra Cucumber.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=512" target="_blank" class="timestamp">[08:32]</a> El referido. Este tío acaba denunciado por la propia empresa que le patrocinaba. Es el típico loco, bueno, perturbado mental, malnacido, que acaba mal con todas las personas que se le acercan. Es un individuo que si no te acercas a él no pasa nada. Pero si eres amigo suyo, tranquilo que te desgraciará la vida, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=532" target="_blank" class="timestamp">[08:52]</a> Doctor de Diego, game over. Doctor de Diego irá a la cárcel, ¿no? Lo sorprendente que después de este vídeo de hace dos años que ya indicaba que este personaje, además de que no estaba en la cabeza, tenía la malignidad de un tumor metastásico, o sea, lo peor de lo peor...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=549" target="_blank" class="timestamp">[09:09]</a> seguía haciendo contenido con miembros de la comunidad de fitness. Lo que os falta para entender es que este tío es un cáncer. El doctor de Diego es una persona respetada en la comunidad de fitness. Todo el mundo habla bien de él. Nunca nadie me ha hablado mal del doctor de Diego. Solo hay este vídeo de este personaje que tiene 4.000 visitas difamando. Claramente, el doctor de Diego es jefe del servicio hospitalario, cardiólogo, especialista en arritmias, médico deportivo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=578" target="_blank" class="timestamp">[09:38]</a> Y estético, bueno, poco de todo. Pero bueno, su especialidad es la cardiología y es jefe de servicio. O sea, es un hombre respetable, respetado. Y este personaje maligno se dedica a intentar destruir por el placer de hacer daño. Mira lo que dice. Hola, ¿qué tal? ¿Qué pasa? Bueno. Sospechas siempre de una persona que se expresa de esta manera. No puede tocarse, no puede moverse, se está moviendo constantemente. Mira al cielo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=606" target="_blank" class="timestamp">[10:06]</a> Es muy histriónico en la expresión, como puedes ver. No está quieto. Es uno de dos. O ha tomado sustancias estimulantes. No sé, polvo colombiano. O este histriónismo indica alguna perturbación mental. Que está loco, evidentemente. Que esté loco no quiere decir que le exima de ser mala persona.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=626" target="_blank" class="timestamp">[10:26]</a> le desinhibe en su comportamiento y da rienda suelta a su malignidad, pero no le exime de los delitos que comete. El perfil de persona de Instagram...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=638" target="_blank" class="timestamp">[10:38]</a> Un montón de autólogas, ni las medidas de higiene necesarias. Entonces, bueno, un montón de cosas que al final me dio tanta lástima. Cuando empecé a ver el perfil de persona de Instagram, típica persona narcisista desde la inseguridad, que claramente tiene un gran complejo de inferioridad, polioperado... No voy a entrar en descalificaciones porque me dio pena. Me dio pena como persona, es decir, aparentando, ya con un problema en el habla...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=665" target="_blank" class="timestamp">[11:05]</a> Mal. El problema es el habla, el autor te digo, ¿qué dices, tío? Una persona contrahecha, mal. Una persona contrahecha. Que me parecía que estaba haciendo... Ya sé que eres homo, pero, hombre, tampoco juzgues a las personas, a los hombres por su padecia física. Que será buen médico, aunque te parezca contrahecho, ¿no? O estás pensando en meterle el potro y atarlo ahí, someterlo a tus torturas BDSM. Suficiente el ridículo como para, encima, hacer sangre. Y dije, bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=693" target="_blank" class="timestamp">[11:33]</a> Y a nada que le hice una historia me bloqueó. Yo soy médico especialista en la parte digestivo. Uy, le dedicaste a insultarte, bloqueo al doctor Diego. Uy, le juraste es odio eterno, ¿no? Ser rencoroso y maligno. Uy, y así viene vídeo. No tengo nada que esconder. Yo lo hago todo correcto y además, pues, bueno, es lo mío. No tengo que andar con gilipolleces. Entonces me permito el lujo de hablar de otras cosas. Este perfil de Instagram, de este tal, no sé qué has liado, dame tu versión.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=722" target="_blank" class="timestamp">[12:02]</a> Yo hablo contigo y no hago este vídeo. Su respuesta ha sido bloquear mi ignorar. Como le digo a los pacientes que no quieren hacer cribado de cáncer colorectal porque les da miedo. Como miedo que tú y yo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=738" target="_blank" class="timestamp">[12:18]</a> Qué pesado. Está bloqueado porque él tiene su vida, su trabajo y tiene cosas que hacer. Eres tú que se dedica todo el día a obsesivamente hacer daño. Si haces la de la astruz y metes la cabeza debajo de la tierra, te dejas el culo afuera. Y te lo van a dejar fino fino. Y te lo hacen despertar en culos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=757" target="_blank" class="timestamp">[12:37]</a> Entonces, al parecer, bueno... Experto en culos, tío, madre mía. Fijáis, todo va relacionado con el culo siempre. Siempre da besitos anales, es el doctor Cucumber, un pepino... Detrás de todo esto está ese inconsciente que siempre va por el culo, ¿no? Es un personaje muy homo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=776" target="_blank" class="timestamp">[12:56]</a> En el sentido muy oscuro De esa sexualidad Y tiene Siempre se le trasluzan Las parafilias de dominación Siempre está dando por culo Te daré, te daré, te daré Está como una chota Es un personaje realmente desagradable Es lo peor de fitness Lo más oscuro, lo más retorcido Lo más maligno Lo más...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=798" target="_blank" class="timestamp">[13:18]</a> dañino y este tío es médico. Debe tener los pacientes como rehenes. Debe disfrutar con los procesos oncológicos de sus pacientes, amigo. Y no sé. Y si tienes que pedir disculpas, alguien pídelas. Si tienes que pedir explicaciones, alguien pídelas. Pídelas, no darlas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=818" target="_blank" class="timestamp">[13:38]</a> Y si tienes que mantener un perfil bajo en adelante, hazlo. Porque leyendo entre líneas no sé qué coño has hecho, pero hay gente... Bueno, está un poco borracho. No está ralentizado el vídeo. Aquí tiene un pedorro el tío bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=835" target="_blank" class="timestamp">[13:55]</a> Es alcohólico, lo reconoció por él mismo. Hay todas las benzodiazepinas. Toma un medicamento para proteger el hígado, porque es la cantidad que bebe. No está ralentizado el vídeo, está hacia normal, pero aquí está intentando pensar, pero desvaria mucho el pobre. Seguimos. Vale, vale de reírte de mi profesión, porque tú ya no eres médico. Tú eres un payaso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=853" target="_blank" class="timestamp">[14:13]</a> Basta de rirte de profesión. Es su profesión. Y él ha determinado que el doctor Diego no es un médico. Es que en base de nada. O sea, gratuitamente. El prestigio que tiene un cardiólogo jefe de servicio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=867" target="_blank" class="timestamp">[14:27]</a> Tirado por la borda por este sujeto tóxico que le protege la ley, que es inmune y que trabaja como médico. Es que no sé cómo los demás médicos no cojan el tío este y lo denuncian entre todos y lo echan del oficio al tarao este sádico. Deja de hacer el ridículo. El vídeo que subió borracho, borracho, en un coche... Tío, si esto lo ven tus pacientes, ¿qué puedes aconsejarles? ¿Cómo cuando te vean...? Qué tío más cínico, de verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=895" target="_blank" class="timestamp">[14:55]</a> Bien, su Instagram privado, era Stories, subió, que está en el coche. Pues está alegre el hombre, está contento, decía bromas con uno. ¿Qué habrá bebido? Pues yo qué sé, habrá bebido. Pues habrá bebido una copa de vino o dos copas. Es como si el médico no tuviese vida privada y su Instagram no pusiera cosas de su vida privada, que no era nada de su intimidad sexual, que era un tío, después de cenar, haciendo bromas con un compañero. Diciendo, ¿tú qué te has tomado? Yo, testosterona. Ya está, o sea, no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=921" target="_blank" class="timestamp">[15:21]</a> Y este ser malvado siempre busca el punto débil que le cree que es débil para atacar con una desproporcionalidad solo para el beneficio propio de sentirse poderoso y dominante. Y lo que más le gusta es que la gente le vaya al mensaje privado. Por favor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=937" target="_blank" class="timestamp">[15:37]</a> y lo que más le revienta que el bloque, porque la mayoría de la gente que ha hecho con él, bloquear, ¿qué es el friki este? Uy, qué tal ahora está. Bloquean y siguen su vida. Y este se queda impotente, ¿no? Entonces, rabia. No quiero imaginar a alguna persona débil de su entorno cómo debe reaccionar por frustración, ¿no? Debe derivar la frustración hacia alguien que pueda maltratar. Pero bueno, te persigue, te intenta perseguir, te machaca, te hace vídeos, vídeos, vídeos, vídeos, vídeos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=965" target="_blank" class="timestamp">[16:05]</a> Un tío que luego, después de hacer este vídeo, se pasó meses yendo a hacer vídeos en la comunidad de fines con otros culturistas, ¿eh? Eso dice mucho de los demás, también hay que decir, ¿eh? La sensibilidad de los demás, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=982" target="_blank" class="timestamp">[16:22]</a> Además que siempre pone en duda los demás que sean médicos. Él es estudiante, no es ni médico. Está ejerciendo como no está en prácticas. No es ni médico y aquí lo era menos. Y encima el tío pone en duda que los demás sean médicos. Jefe de servicio, el doctor Cerezo pone en duda que sea endocrino. Nadie es médico, solo él es médico. ¿Cómo se quedará tranquilo alguien si eres tú quien va a coger el catéter? Si eres tú quien va a hacer la radioscopia, la fluoroscopia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1011" target="_blank" class="timestamp">[16:51]</a> No sé, tío, pero cualquier paciente que te vea a ti con ese histrionismo, ese manerismo que tienes de hablar, no para de tocarte la cara, hacer movimientos, moverte así todo el rato, eso si no te pillan paposo. Porque la mitad de los virus que a su interés sales paposo, sales espeso, derretido. Otros con un síndrome de abstinencia, un resacón, sudando, que parece que te han puesto una esponja moja en la cabeza, que parece que te han puesto un boxeador después de un combate, chorreando...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1037" target="_blank" class="timestamp">[17:17]</a> ¿Qué van a pensar de ti los pacientes? Se van a horrorizar. Bueno, me consta que ya te han echado algún sitio del trabajo. Trabajas en una privada, en un grupo hospitalario como Quirón muy importante. Diría que el primero de España sigue haciendo un poco de... Sí, como tú ahora. Ahora trabajas ahí tú también. Números. Con un prestigio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1056" target="_blank" class="timestamp">[17:36]</a> Hasta ahora está dándose placer pensando que va a destruir al doctor de Diego. El flipado este. ¿Y si estos vídeos llegan a la dirección de tu hospital de Quiro? Se cree que está en una película, que es el Joker. Yo he puesto el vídeo. Si no, pues lo pongo ahora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1071" target="_blank" class="timestamp">[17:51]</a> Vamos. Muy buenas. Un poquito de insulina, nada. 20 unidades al día, 20 unidades. Las que me puedo. ¿Cuántas unidades del GH? Seguro unas 10 o 30. ¿Y luego qué ha pasado? Cuéntanos. Nada, o sea, yo no siento nada. ¿Pero qué ha pasado con la tele de mi sartal? Bueno, está bromeando, una bromita. Una bromita que a todo el mundo le hace más o menos gracia hasta que llega el cenizo este a hacer daño. Hacer daño. Es el que hace daño. Que hace daño que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1102" target="_blank" class="timestamp">[18:22]</a> Que le dejan. Este tío es maligno y hace años en mi idea que se le deja. ¿Vale? Porque cuando llegue las consecuencias de lo que hace, dejará de hacer daño. Hasta entonces, de momento, Big Supplement, hay que honrar a esta empresa porque su dueño es de las pocas personas que le han tomado la medida a Cucumber y han reaccionado con la dignidad de denunciarlo con todo el presupuesto necesario y llevarlo todo el tema hasta las últimas consecuencias. ¿Qué animo a hacer a la gente? ¿Qué animo a hacer a la gente? ¿Qué quieres hacer a la gente contra la doctora Diego? Bueno, primero, a mí me das igual.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1132" target="_blank" class="timestamp">[18:52]</a> Me da igual, pues literalmente me da igual, me da igual si entras a la cárcel mañana, me da igual... Le da igual, le dedicas un vídeo 20 minutos y está obsesionado con él, no para hacer historias de Instagram, pero te da igual, ¿no? Si te echan paso mañana, me da igual si todo sigue igual, me jode por los pacientes que no se enteren y caigan en tus zarpas, ¿vale? Haces muchas cosas... Fíjate, por un vídeo de broma, ¿eh? ...abiertamente ilegales...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1157" target="_blank" class="timestamp">[19:17]</a> Solo hace falta que alguien... Solo hace falta... Lo dice el tío que tiene puesto en fuero músculo los post donde reconoce que él mismo se receta a Primo Bolán y que la farmacia llamó a la escuela de médicos denunciando recetas falsas que eran las del tío este. Bueno, es que si este tío no hay que poder cogerlo. Si hubiese una investigación serie del colegio de médicos, este tío, evidentemente, no ejerció nunca más. Aparte que te pierdes en la cárcel, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1184" target="_blank" class="timestamp">[19:44]</a> Lo que ya has hecho. Cabrear a alguien. Te doy un consejo para lo que te quede de vida. Siempre está igual. Te doy un consejo para lo que te quede de vida. Me has hecho enfadar. Lo vas a pagar caro. Y especialmente útil en la cárcel.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1196" target="_blank" class="timestamp">[19:56]</a> No hay nada peor que crearte enemigos que estén todo el día ojo a visor a lo que haces. Más si eres un patán como tú. Que haces muchas cagadas. Déjate de fantasmadas. Tú te vas a hacer famoso el vídeo este que estoy haciendo y todo lo que me llegue a raíz de este vídeo porque te va a dar...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1216" target="_blank" class="timestamp">[20:16]</a> mucha visibilidad y mucha gente me va a hablar de ti y me van a enviar más documentos, todo esto lo vas a arrastrar toda tu vida. Porque yo y mucha gente nos vamos a dedicar a perseguirte donde trabajas, a aportar todos estos documentos gráficos donde tú te ríes de los muertos, te ríes de los pacientes intubados...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1231" target="_blank" class="timestamp">[20:31]</a> Pides a famosos que se hagan autólisis. Que demuestres tu perfil sádico, dominante, bipolar, esquizoide. Y esto te va a perseguir. Queremos, yo y mucha gente, que seas famoso. Para mal. Y que todo esto que estás haciendo te vuelva en contra. Donde vaya a trabajar, que te conozcan. Tus compañeros y tus jefes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1257" target="_blank" class="timestamp">[20:57]</a> Y siempre has estado hablando de que éste se suicide y que éste haga autólisis y tú te harás autólisis. Posiblemente por proyección, por reflejo. Porque posiblemente es una idea que tú has tenido muchas veces en tu cabeza. Pasas del agujero de la depresión inducida por alcoholismo y el abuso de medicamentos que tú no te recetas para volver a la superficie convertido en un maníaco con unas ansias destructivas dominantes para validarte por encima de los demás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1287" target="_blank" class="timestamp">[21:27]</a> Para que la realidad otra vez te vuelva al agujero y siempre estás pensando en acabar con ti, con tu vida. Y cuando vuelve otra vez, con esa fase maníaca, típico de bipolar pero extremo, pides a los demás que se hagan autólisis. Que se te dé. Siempre utilizas un patrón definido para juzgar y machacar a todo el mundo. Siempre haces lo mismo. Usa siempre las mismas frases. Escucha esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1311" target="_blank" class="timestamp">[21:51]</a> Lo que te queda de vida o lo que te queda de vida a ti, te va a pasar esto. Te perseguiré, te destruiré, irás a la cárcel. Eso es tus propios temores. Esto es como tú acabarás y lo sabes. Y cuando estás de bajona, medicado con antipsicóticos, ansiolíticos y todo lo que te meten, cuando te has soltado el psiquiátrico como ahora, por eso tu Instagram cuando aparece estás así...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1332" target="_blank" class="timestamp">[22:12]</a> si estoy muy zen y tan zen con lo antipsicótico que te han metido es cuando pasas a la fase contraria a la maniaca y estás de bajona y tienes todos los pensamientos intrusivos que tienes ahora y lo que tú proyectas de los demás en tu fase maniaca es lo que tienes ahora es lo que estás sufriendo por eso te hago el vídeo porque estás de bajona y sí que te va a doler y te quiero machacar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1355" target="_blank" class="timestamp">[22:35]</a> y cuando tengas otra vez la fase maníaca no te pasa nada porque estaremos todos armados te conoceremos hay este vídeo como referencia y nosotros contactaremos siempre con tus compañeros para que se den vergüenza de que haya un elemento tan malvado como tú que es totalmente lo opuesto a la ética médica más elemental y si tienes cien ojos sobre ti las anagogías del culo siempre está con el culo y el pepino y el cúcumbre se te van a follar vale además he oído por ahí en realidad sé muchas cosas pero he oído</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1385" target="_blank" class="timestamp">[23:05]</a> que tienes por ir de sociedad un policía. Siempre sabe, nunca sabe nada. A la que sabe algo, tiene que hacerte cuenta de vida con esa información. De mí sabía de todo. No ha sacado nada. Decía que entre historias médicos que le iban a contar lo que yo le hacía a mi mujer en la fase terminal, cuando en la última fase del cáncer yo le hacía cosas, dice él. Y encima yo le provoqué todo lo que le pasó al final del cáncer. Le provoqué el cáncer, bueno, se contradicen en los vídeos. Dice que le provoqué el cáncer, que todas las gracias que tuvo mi mujer</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1413" target="_blank" class="timestamp">[23:33]</a> las provoqué yo y que los médicos se orrizan conmigo bueno la clásica difamación de deshumanizar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1422" target="_blank" class="timestamp">[23:42]</a> bueno ya veré cuando lo denuncio también yo a este ya voy por estoy con Castellano luego tendré que denunciar a este tío que es amiguito de Castellano pero claro hombre que un médico diga esas cosas así que cosas te lo tengo fácil ya le presenté la denuncia en su momento y pero siempre sigue este patrón porque me han dicho a otros policías ahora dice que tiene un policía de compra que tonterías dice verdad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1449" target="_blank" class="timestamp">[24:09]</a> Esos policías ya estáis tardando en notificar a asuntos internos. ¿Sabéis? Los policías... Bueno, este es una manera que no para de hacer expresiones. Hace dos años el doctor de Diego tiene más prestigio que nunca y está mejor valorado que nunca en su hospital. Así que, flipadito... ...policías. ¿Sí?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1468" target="_blank" class="timestamp">[24:28]</a> Entonces, por una parte al policía... Es cuño y pequeño jugando al espejo con la cámara, poniendo caritas de matón. ... y notificando con nombre y apellidos a los asuntos internos los que tengáis interés en que no dañe la imagen de la policía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1482" target="_blank" class="timestamp">[24:42]</a> Mira, ¿os acordáis de Taxi Driver cuando el Travis habla al espejo y sale a sí mismo y se amenaza a sí mismo? ¿Me estás mirando? Mira, el Travis está sanísimo de la cabeza a comprar con el tío este. Aunque el Travis, el Taxi Driver, lo que intenta es hacer dentro de su mente enferma una misión benigna que es salvar a una menor de edad</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1500" target="_blank" class="timestamp">[25:00]</a> Que está prostituida. Este no. Este es un taxi driver. Versión LGTB. Pero malo. Que intenta hacer daño a gente buena. Por envidia. Por celos. Tiene proyecciones. Me ve a mí que hago un vídeo que lo peta. Me dedica a vídeos. Que ve que el doctor Diego tiene prestigio. Tiene que destruir su prestigio. Y así con todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1522" target="_blank" class="timestamp">[25:22]</a> La gente que tengáis algún problema con ese señor, os invito, recomiendo que mandéis al departamento de comunicación y prensa del hospital de Torrevieja, el público en el que trabajaba. Qué malo es. Qué impotentemente malo es. Creo, lo pongo, que le mandéis todo el material que tengáis, vuestras quejas y vuestro malestar. Y sobre todo al grupo Quirón, al hospital de Quirón o de Torrevieja. Ahora los pongo cuando los busque.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1547" target="_blank" class="timestamp">[25:47]</a> mandadle al departamento también de comunicación y prensa y atención al paciente vuestro malestar percibido por esto, porque esa sea la imagen del servicio y luego extensible al resto de servicios, al colegio de médicos de Alicante y luego extensible a las sociedades científicas a las que pertenezca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1569" target="_blank" class="timestamp">[26:09]</a> Bueno, el dolor de Diego le caracteriza el trato humano a todo el mundo y muy empático, aunque eche 12 horas. ¿Por qué? Porque todo el mundo lo hizo. Hay médicos que tienen más incapacidad en aspecto social y emocional, les cuesta, pero el dolor de Diego le caracteriza ser muy cercano y muy cálido. ¿Vale? Para él demasiado, porque luego es muy gracioso, hace bromas, es un cachondo y él le pone enfermo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1596" target="_blank" class="timestamp">[26:36]</a> ¿Qué pasa? Has mandado basura, escora inmunda, has mandado a que alguien, intentas condicionar para que le envíen correos de denuncia al doctor de Diego. Sabes que quieres que tus propios seguidores, que no conocen de nada al doctor de Diego, pero te siguen a ti y se van a creer lo que le digas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1616" target="_blank" class="timestamp">[26:56]</a> para que le envíen cartas de queja. Gente que no sabe quién y qué es todo de Diego. Intentaste con todas tus armas hacer daño. Como siempre has fracasado, porque es un fracaso. Fracasaste conmigo, fracasaste con tu mamás, con Erroca, con los montón de médicos que no me acuerdo los nombres, porque son bastantes médicos que has intentado hacerles daño. Difamarlos, acusando de crímenes que no han hecho, delitos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1640" target="_blank" class="timestamp">[27:20]</a> Intentando movilizar tu audiencia para presentar quejas. Tú te has dedicado a enviar cartas a los colegios de médicos denunciando a todos estos médicos como todos de Diego y otros más. No has conseguido nada. Eres un desgraciado. Nadie se ha muerto. Nadie está en la cárcel. Nadie ha recibido una misera multa. Ni siquiera procesos administrativos o judiciales. No pasa nada. No se ha movido nada. Eres un auténtico desgraciado. Eres una negación completa de la realidad que tú te has montado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1668" target="_blank" class="timestamp">[27:48]</a> Eres un ser humano absolutamente vomitivo. Eres malo en esencia, tío. Eres tan tóxico que hay que anularte de cualquier manera porque eres como un cáncer. Eres un tío que de alguna manera hay que reducir tu capacidad maligna.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1681" target="_blank" class="timestamp">[28:01]</a> lo mejor es cuando estás en psiquiátrico lo mejor es cuando estás medicado pero cuando te entra la fase maníaca como cuando estás a Japón y tu familia no te puede controlar ahí estás suelto estás desatado todo el día bebiendo alcohol y loco perdido ahí en Japón madre mía todo el contenido que tengo en gran parte es de Japón tú eres malo siempre pero en Japón te sueltas ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1699" target="_blank" class="timestamp">[28:19]</a> Entonces, bueno, Big Supplement te va a meter una buenísima. Te va a caer una porque encima está tirando de un buffet de abogados de prestigio internacional. Te va a caer una que te va a caer sí o sí. Si por las buenas o por las malas, en la vida judicial me refiero, te va a caer. Porque es que no te van a soltar. Pero hay más gente que te va a denunciar. Yo también. Pero poco a poco. Todos esperamos tu caída.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1723" target="_blank" class="timestamp">[28:43]</a> pero acaba por ti mismo para cuando hayas caído todos nosotros haremos justicia en tu peor momento tu fase maníaca no porque no ni atiendas razones no ves la realidad te vuelves loco eres megalomaníaco pero cuando estás de bajona y ves las cosas con más claridad porque estás medicado se te anula el exceso de trinción en el cerebro sigue siendo igual de mala persona quiere hacer daño igual pero ves las cosas con realidad pues ahí te va a caer el pulpo poco a poco poco a poco</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1753" target="_blank" class="timestamp">[29:13]</a> Además, en el momento en el que cometa algún tipo de delito, probablemente eso acabe llevando a que también le hagan una investigación fiscal. Parece que le gusta la pasta. Habrá que ver cómo declara y cómo tal. Yo solo digo que no es el camino, pero creo que ya es tarde para ti. Lo que deberías hacer es tener perfil bajo hasta que se... Fíjate que es esa persona que se dedica a denunciar también a Hacienda a los médicos. Impresionante, ¿eh? Hacienda, sabéis que es como una mafia en que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1782" target="_blank" class="timestamp">[29:42]</a> funciona mediante la presunción de culpabilidad. Entonces es un recurso extremadamente miserable rastrero que un tío tiene un C de Hacienda porque Hacienda, pues bueno, son como psicópatas que van a destruir personas como él. Solo que Hacienda lo hace por dinero. Él lo hace por pura maldad. Así que lo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1799" target="_blank" class="timestamp">[29:59]</a> increíble las pocas herramientas que tiene este tío para hacer daño, el daño que hace este tiene el perfil típico de psicópata que si le das la vida a los pacientes como médico, este no tiene no dudaría ninguno en darse el placer sádico de hacer sufrir matar gente, no tengo ninguna duda ¿vale? porque creo por lo que he oído que lo tuyo ya es inevitable como médico</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1829" target="_blank" class="timestamp">[30:29]</a> Yo todavía estoy en la fase de que pienso que eres víctima de tu propia estupidez. Encima de corrupto, tonto. Y contrahecho encima. Está contrahecho. Encima, como evaluación de homo, que es evaluación física, que es muy importante para él. Encima que es tonto. O sea, el jefe de servicio, el cardiólogo. Aunque he demostrado ayer mucha magnanimidad, también tengo mi mechita col. Y dice que es magnánimo. Fíjate, perfil típico del maltratador sádico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1858" target="_blank" class="timestamp">[30:58]</a> pero sádico, de ficción de sadismo. Es un tío que hace lo que nadie tiene en estómago para hacer, porque todos tenemos sensibilidad humana, ni siquiera nuestros propios enemigos, él lo hace a cualquier persona que se acerque por el placer propio de torturar. Y encima se considera magnánimo. Es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1876" target="_blank" class="timestamp">[31:16]</a> Está claro que este tío nunca subirá en la escala médica y siempre se ha considerado una basura. Pero cualquier médico lo vea y va a decir, madre mía, menú elemento. Menú asesino potencia. Y estará vigilado. Pero oye, que este tío ejerza sigue siendo preocupante. Como médico, esto es una orden. Para. Una orden. Fíjate el tío, lo talado que está, cómo se mueve. Las cosas que hace de loco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1899" target="_blank" class="timestamp">[31:39]</a> ¿Cómo se recrea en sí mismo? Hace un papel de sí mismo. O sea, cuando se pone a webcam, vive una vida alternativa, de la que es adicto parece, porque el tío no para de hacer vida siempre. Te estás metiendo en unos fregados que yo pararía. No solo pararía, desaparecería, me iría de los hospitales y a lo mejor me iría hasta del país, al nivel que estás, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1921" target="_blank" class="timestamp">[32:01]</a> Porque ya tienes mucho... Este es perfil como el malo, el silencio de los corderos. No el Arthur Hopkins, el otro. El que era un travesaño... ¿Os acordáis? Psicópata. Mismo perfil. Mismo perfil. Miren cómo se mueve, ¿eh? Los perros de presa de los que no te han ladrado detrás tuya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1939" target="_blank" class="timestamp">[32:19]</a> de las instituciones le está diciendo que se vaya del país es que es flipante tío porque eres un caramelito eres un caramelito hasta para qué sé yo equipo de investigación alguna televisión tienes todo el cóctel para ser ese programa de prime time es decir para hacerte famoso pero mal</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1960" target="_blank" class="timestamp">[32:40]</a> Madre mía, qué manera de expresarse tan amanerada, ¿eh? En fin, me cansa bastante. Aún sigue cinco minutos más de sadismo contra el autor de Diego. Fijaos lo que tengo que aguantar es la comunidad de Finder. La mayoría de gente lo conoce a este tío, ¿eh? Pero fíjate... Mira, este hombre, este doctor... No recuerdo cómo se llamaba, que está aquí abajo. El doctor Andreu. Este es otra víctima colateral del Cucumber. O sea, el doctor Andreu... A ver si esa imagen es de él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=8Se387aiyX0&t=1985" target="_blank" class="timestamp">[33:05]</a> Otro que le pilló por bando a Cucumber en su Instagram empezó a difundir las peores difamaciones posibles contra él, que caerás, la policía lo sabe, huye el país... Bueno, no recomiendo hacer autopsis como a La Roca, pero lo mismo, ¿no? El pobre hombre diciendo, bueno, ¿a este tío qué le pasa?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 30/04/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
