@@ -1,0 +1,639 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 02/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">02/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Joan Pradells</strong>: <a href='#video-wXbbQbSJGh0'>Cuidado Con La Creatina | 90 Días Para Mi Competición Profesional</a></li>
+<li><strong>Antonio Masmas</strong>: <a href='#video-RfR1N3-5_Ao'>Tarrako Explota contra los PELO BRÓCOLI</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-xvNjXvFMesM'>"NO SE GANA SOLO CON UNA POSE" ¡CAIKE RETA A JOSEMA a UNA SEMANA del PITTSBURGH PRO!</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-wXbbQbSJGh0">
+            <h2>Cuidado Con La Creatina | 90 Días Para Mi Competición Profesional</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 02/05/2025 13:56</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/wXbbQbSJGh0/hqdefault.jpg" alt="Cuidado Con La Creatina | 90 Días Para Mi Competición Profesional" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video documenta un día en la preparación de un culturista, centrado en su rutina matutina de hipopresivos y posado, y un entrenamiento de pierna.
+El día coincide con un festivo, lo que afecta la agenda y genera incertidumbre sobre próximos eventos importantes.
+El creador comparte momentos personales, desde la interacción con sus gallinas hasta la emoción por posibles futuras colaboraciones.
+Finalmente, reflexiona sobre la intensidad del proceso de competición y la anticipación de cambios en su entrenamiento.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Creatina Caducada para las Gallinas <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&amp;t=33" target="_blank">[00:33]</a></h3>
+
+<p>El video comienza con una escena inusual donde el creador le da creatina caducada a sus gallinas, mostrando una reacción sorprendente de una de ellas. Este momento marca el tono personal y a veces excéntrico del vlog.</p>
+
+<h3>La Dura Rutina del Posado de Competición <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&amp;t=179" target="_blank">[02:59]</a></h3>
+
+<p>El creador detalla su intensa sesión de posado matutino, explicando el uso de hipopresivos y la crema hidratante para mejorar el vacío abdominal. Destaca el agotamiento de las 27 minutos de poses.</p>
+
+<h3>Un Salto de Nivel Inesperado <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&amp;t=253" target="_blank">[04:13]</a></h3>
+
+<p>Exprésale emoción y sorpresa ante la posibilidad de colaborar con figuras mediáticas como Jake Paul y Logan Paul. Lo describe como "subir el nivel al máximo" y algo que no tiene sentido.</p>
+
+<h3>Entrenamiento Intenso a Pesar de Limitaciones <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&amp;t=401" target="_blank">[06:41]</a></h3>
+
+<p>Se muestra una parte del entrenamiento de pierna, específicamente extensiones, evidenciando el esfuerzo físico. El creador comenta sobre la necesidad de adaptarse debido a la falta de ciertas máquinas.</p>
+
+<h3>Gallinas a la Moda: Leashes Experimentales <a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&amp;t=780" target="_blank">[13:00]</a></h3>
+
+<p>Un momento cómico y tierno ocurre al intentar ponerles leashes a las gallinas del gallinero. Muestra la personalidad única de las aves y la interacción lúdica con ellas.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=0" target="_blank" class="timestamp">[00:00]</a> Y aquí tengo crema hidratante. Lo que voy a hacer ahora es son hipopresivos. Es para precalentar bien la zona y luego poder hacer el vacío de autochnear más profundo. ¡Ahí! ¡Vamos! ¡Cinco! ¡Vamos! ¡Cuatro! ¡Sigue! ¡Tres! ¡Fuerte! ¡Vale! ¡Va a flipar, tío! ¡Tira! ¡Sigue! ¡Sigue! ¡Sigue! ¡Va! ¡Va! Acabo de bajar al gallinero y le he dado esta creatina de MyProtein a las gallinas porque estaba caducada y mirad lo que me ha pasado. Miedo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=36" target="_blank" class="timestamp">[00:36]</a> Muy buenas a todos, chicos. Estamos en un nuevo vídeo. Día 39, si no me equivoco. Día 39. Es muy posible. Aquí está el felfudo. No sé qué cojones hace aquí. Acabado aquí. Y aquí tengo crema hidratante. ¿Vale? Porque tengo crema hidratante y porque un jueves, el día de pierna, me estoy bajando a hacer cardio. No voy a hacer cardio, ¿vale? Porque no tengo cardio, básicamente. Los días de cuarentena, nunca he tenido cardio y nunca me he bajado directamente. Me he despertado y me he puesto a desayunar. Salinas. Entonces he visto una afuera, pero ahora voy a hacer fresquito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=63" target="_blank" class="timestamp">[01:03]</a> Hoy es festivo y es uno de mayo, chavales. Hoy no hay ni Dios por las calles. Pero básicamente, la crema hidratante, lo que voy a hacer ahora son hipopresivos. Además me he tocado cuadrices. No quiero posar después de hacer cuadrices porque no tiene sentido. Voy a hacer el doble de posi y lo que haría después de entrenar. Lo voy a hacer ahora, lo prefiero, ya que hoy no tengo cardio. Y además estoy muy contento porque, no sé, como que hay noticias buenas, tío. Y que hay noticias buenas no siempre es lo normal, ¿sabéis? Y hay noticias bastante, bastante buenas. Estos días pueden</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=87" target="_blank" class="timestamp">[01:27]</a> Pueden pasar cosas churas, la semana que viene apunta muy bien, también por los cambios de Fran, porque ya sé que se acerca la parte más enfocada de la competición. Estoy posando, llevo toda la semana posando mucho. Creo que me eficia. Básicamente la crema hidratante es para recalentar bien la zona y luego poder hacer el vacío de abdominal más profundo. Por ejemplo, ayer me noté mucho de la sesión 1 a la sesión 2 de Posi, el vacío de abdominal. Me noté un montón, un montón, un montón. Estoy descansando mejor, estoy estando más tranquilo. Joder, son cosas, chicos, que se valoran, tío. Que se valoran un montón. Así que estamos en eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=117" target="_blank" class="timestamp">[01:57]</a> Me voy a poner ahí con un espermito y voy a estar un buen rato. Pero bueno, hoy no tengo cardio, así que lo que sea un buen rato va a ser menos porque no tengo ni cardio ni abdominales. O sea que chilling la vida, pero vamos, total, total, total. O sea, me parece hoy súper tranquilo en ese sentido. Así que vamos con ello. Día 39, si no me equivoco. Uff, día de pierna. Pero los días de pierna probablemente vayan a cambiar. Sí, sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=140" target="_blank" class="timestamp">[02:20]</a> Hoy durante el día os voy contando cosas, porque es festivo y tampoco voy a tener muchas noticias externas, pero si puedo tener algo os voy contando y si no, lo iréis viendo directamente. Bueno, por fin del día finalizado. Aquí lo tenéis, en verdad son 27 minutos. Hoy lo quería hacer sin la voz de Olimpia, ir bailándolo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=158" target="_blank" class="timestamp">[02:38]</a> Y ahora me voy a tomar los greens. Normalmente este día yo ni he bajado aquí. Me he bajado, me he bajado crema de hidratante, me he estado dando para hacer bien los hipopresivos, he hecho los hipopresivos. Me he puesto el timer, me he puesto seis rondas para no tener que pasar después de hacer cuáles. Es que pienso que no tiene sentido. Ahora me tomo los greens. Creo que es mejor ritmo ya en una competición tan profunda, por así decirlo, y en el que tengo tanto que trabajar las poses.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=179" target="_blank" class="timestamp">[02:59]</a> Así que nada, lo del timer, lo del audio limpia... Está muy muy guay. Estoy muerto, eh. O sea, me sale como que he estado 27 minutos posando. Y la verdad que cansa bastante porque son... Tengo dos minutos de descanso en tres rondas. Llevo así en la primera semana. O sea, va a haber un momento que... No sé si pose más tiempo. Más sesiones seguramente sí. Pero dentro del mismo tiempo acorte los descansos. Las transiciones son muy cortas, eso tengo que verlo. Pero acorte el descanso total y aumente las poses. Algunas poses sobre todo. Me gustaría aumentar las actividades vacío para trabajar más ese vacío y estar más seguro de mí mismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=209" target="_blank" class="timestamp">[03:29]</a> Así que... Momento del día. Me poste ahí un vídeo de Kaviv para motivarme. Momento del día greens. No puedo dar. No fuera bravas el saborcito al limón. Está rico, ¿eh? Y ahora sí, chavales. Día 1 de mayo. Día del trabajador. Se acaba aquí el vídeo. Disfrutando mucho. Es broma. Voy para arriba y empezamos a trabajar. Que es lo que toca y en el momento en el que estamos. Y luego encima toca pierna.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=238" target="_blank" class="timestamp">[03:58]</a> Hoy como es día de pierna, ufff.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=241" target="_blank" class="timestamp">[04:01]</a> Por aquí, y por aquí estoy todo feliz. Estoy todo feliz, todo feliz. Estamos aquí currando. Por cierto, tíos, parece increíble. O sea, en qué momento la vuelta al mundo, en qué momento hay que grabar con Jake Paul, yo y con Logan Paul. Es subir el nivel al máximo. O sea, no tiene sentido. No tiene sentido. Me ha conversado, o sea, tú estabas viendo esto y diciendo no puede ser. O sea, no puede ser. Esto es lo máximo. Lo digo en serio. Me tengo que afeitar, por cierto. Y hoy es festivo, pero mañana va a pasar algo top. Pero me da miedo porque es festivo hoy, entonces como que no puedo tenerlo tan, tan, tan atado. Así que bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=271" target="_blank" class="timestamp">[04:31]</a> Toca pierna. Toca pierna. Y ya está. Es lo importante. Joderme la pierna. Voy a comerme esto y esto disfruto. Para que me veáis. Para que me veáis. Así. Disfrutad. Esto me lo bajo en... One second, vamos. One second.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=290" target="_blank" class="timestamp">[04:50]</a> Bueno, por fin voy a bajar a entrenar, pero... Me he afeitado, por cierto, y me he cortado, pero es que no hay que quitar la sangre seca. Mirad a Marta. No os voy a explicar lo que está haciendo, pero está muy gracioso. No le voy a explicar lo que está haciendo, pero está muy gracioso. No lo enseñes, no lo enseñes. Luego, luego, luego lo enseñamos. Me voy a entrenar, es que está muy gracioso. Y además me he tocado la pierna, estoy cuarentado así. Toca el Shaker de Batman, es que toca la pierna. Lo he bautizado así. El Shaker de Batman es para la pierna. ¿Qué pasa, señor? Estamos ready. Hoy no te he ganado. Uy, la puta. Vamos a tomarnos esto y a entrenar. Tengo ganas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=320" target="_blank" class="timestamp">[05:20]</a> No te lo debo pasar luego, por cierto. Pero estás esta mañana un buen rato pasando. Y aparte que si llegas de las lampas hoy. No, sí, cien por cien. Mucho mejor así. O sea, no todos los días, porque si yo me tiro aquí dos horas y media por las mañanas, si no hay nada, me muero. A las diez de las piernas, sí. Es el de femoral, me lo debo pensar. No es que no me gusta mucho bajarme aquí en frío. Si tuviera cardio y luego posara, sí que me gusta, ¿sabes? Pero como pitarme la ropa y ponerme a posar no me gusta. Me siento como muy frío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=344" target="_blank" class="timestamp">[05:44]</a> Yo, tío, me da bastante rabia porque hoy es festivo y tú ya sabes que mañana viene lo que viene. Pero claro, hoy es como que se ha quedado todo muy pendiente para hacer mañana a primera hora por la mañana, ¿sabes? Y eso me da rabia porque hoy se quedaría todo atado porque ha sido todo como muy rápido. Entonces hasta mañana por la mañana hay algún trámite que queda pendiente. Pero en principio mañana por la mañana... ¡Vaya a flipar! Para eso vamos a la zona de abajo. Y explicación del entrenamiento. Fácil, rapidito, adulto, cerebral, excepción, celular, celular...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=371" target="_blank" class="timestamp">[06:11]</a> extensión extensión y gemelo hoy dentro de acá es un día que nos estamos jugando pronto pero es cierto que cuando haya más cosas nuevas nos va a costar más hacerla y luego el invierno y todo pero bueno vamos a darle calla que tengo ganas de hecho esta la doctor va muy bien me raya mucho esa máquina la tenemos muy pillada la tenemos muy pillada tío es una movida Peña me pregunta muchas veces por qué la usamos como la usábamos tal oye por qué te pones el pincho y discos si no le puedes todos los pines y yo bro porque la utilizamos de un modo en concreto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=401" target="_blank" class="timestamp">[06:41]</a> Estoy todo el rato así. Uno, fuerte. Bien apretado. Uno, bien. Dos, sigues. ¡Ahí! ¡Vamos! ¡Cinco! ¡Vamos! ¡Cuatro! ¡Sigue! ¡Tres! ¡Puedes tú! ¡No me esperes! ¡Va! ¡Dos! ¡Una! ¡Aprieta! No dejes hacer fuerza. ¡Aprieta! Tres, tira. Dos. Uno. ¡Vamos! ¡Tres! Dos. Uno. ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=430" target="_blank" class="timestamp">[07:10]</a> ¡Arriba! Bien, una. Sigues. Arriba tú. Más. Vamos. ¡Fuerte! Va, le vas a flipar, tío. ¡Tira! ¡Sin parar! ¡Dos! ¡Eh! ¡Ya! Arriba una más. ¡Peleas otra! ¡Entra! ¡Fuerte! ¡Fuerte! ¡Fuera! ¡Sigue! ¡Sigue! ¡Va! ¡Va!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=459" target="_blank" class="timestamp">[07:39]</a> ¡Peleas otra! ¡Peleas otra! ¡Vamos! ¡Vamos! ¡Pelea la última! ¡Pelea la última! ¡Vamos! ¡Peleas! ¡Peleas tú! ¡Peleas tú! ¡Bien! Estoy bien, güero, loco. Estoy con esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=475" target="_blank" class="timestamp">[07:55]</a> Es... Esparta. No. Esto es el momento más light de la temporada. Y es la puta realidad. Pero tengo muchas ganas de que llegue la parte dura. La parte de trabajar. La parte fea. La parte que me gusta, tío. La puta. Pero esta prensa es la leche. Me encanta. Me encanta, me encanta. Para hacer drop sets. Por cómo no te hace daño. Por cómo pendula. Por cómo no depende de la gravedad. Y cago en la puta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=500" target="_blank" class="timestamp">[08:20]</a> También os digo, partida de la zona que viene, el entrenamiento que vais a ver creo que es muy, muy, muy diferente. Pero bueno, eso es positivo por algunas partes, negativo por otras. A ver qué me dice Fran el lunes también. Porque parece que ya el lunes hay muchos avances y muchas cosas que cambian. Han empezado las competis. Quiero acabar ya de competir que sea invierno y estar aquí con el gorro puesto, pantalones largos, ocho sudaderas y entrenando aquí como un gilipollas ganando a este. Así os lo digo. Es todo lo que quiero. Yo no voy a dejar que me gane. A ver ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=527" target="_blank" class="timestamp">[08:47]</a> A ver, estoy entrenando 5 putos rasos al día, tío. Es que tío, veo esto y me pesa, tío. Y no hay peso. Pero asura soy, ¿sabes? Es un asco, tío. Y entiendo que muchos ni me entendáis, ¿eh? Pero que lo peor de las competiciones son las competiciones. Sé que no grabo muchísimo los entrenamientos de pierna, pero es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=543" target="_blank" class="timestamp">[09:03]</a> Últimamente como que también son súper repetitivos, que siempre lo van a hacer, pero ahora todavía más porque nos faltan máquinas, cosa que no nos va a pasar. Que por cierto, en esta vamos a hacer una cosa muy guapa, por eso está aquí arriba. Esta ejemplos sentados es una pasada y lo único, vamos a hacerla un pelín más alta para poder básicamente que no haga tope.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=561" target="_blank" class="timestamp">[09:21]</a> Y idea de pierna, ¿eh? Me dicen uno que a ver el lunes que me dice Fran. El lunes Fran ya va a estar con el tema. Yo también estoy ahí. Entonces, ¿qué puede que sea el último fuerte? Que ni fuerte, porque yo tampoco lo siento fuerte. Pero sí que es cierto que, bueno. Esto tenemos como un juego para invierno que le dije que fue en plan, vale, el último ejercicio es aleatorio. Siempre. En plan, vamos a acabar el último aleatorio de elegir lo que sea. En plan, zancada, queda diez minutos, vale, zancada diez minutos. Vale, sentadilla diez minutos. Así que yo lo sé para elegir a él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=587" target="_blank" class="timestamp">[09:47]</a> Eso está bastante, bastante guapo. Tengo que abrir la puerta de abajo para poder vomitar bien. Para poder mear. Porque si no, voy a flipar. Pero flipar, flipar. Así que nada, chicos. He puesto esta mañana mucho. Una derede para notar que he puesto la hora. Y vamos para arriba. Flipase cuando he puesto las rondas. Me salía el tiempo total que iba a estar posando. Digo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=603" target="_blank" class="timestamp">[10:03]</a> ¡Hala! En plan, ya estás rato, ¿eh? Como 30 minutos o así. Estás haciendo hipopresivos. Me he bajado crema hidratante para meterme bien por el abdomen en las manos, para trabajarme, para calentarlo bien. Y luego, ¡pum! Posar, ¿sabéis? Y he flipado, ¿eh? O sea, he flipado, flipado bastante. Porque he dicho, ¡hala! Nos habéis vacío superpronunciado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=619" target="_blank" class="timestamp">[10:19]</a> Luego también, aquí decía, ¿cuántas rondas quedan? O sea, había un momento que digo, llevo muchísimo rato posando. Pero bueno, es lo que toca. Vamos para arriba, chicos. Bueno, el post, es que encima del post, hoy es un poco más de comida. Eso es bueno, en general en el día. Antes como que el post, o sea, los días de refín no me gustaban, en plan, pues era mucho arroz, pero sin salsa, sin aceite, sin nada, ¿sabes? Y ahora es como...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=639" target="_blank" class="timestamp">[10:39]</a> Buenísimo, muchísimo arroz, ¿sabes? En plan, me da absolutamente igual. Que no tenga nada. Está buenísimo. Y piña, chaval. Que es fruta. En plan, tiene un montón de sabor como azúcar, por así decirlo. Aunque sea piña en su salsa, ¿sabes? Ay, pero bueno. En los intras me los he sacado como si nada. Es que es fiesta esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=654" target="_blank" class="timestamp">[10:54]</a> Joder, sí que me he cortado fuerte, quitándome. Estoy entrenando a casa esta Marta con Carlota y le tengo que dejar la cámara, porque esta cámara es de Toni y su cámara, que es la que utilizo yo, va mal, no sé qué le pasa. Va a grabar ella con esta cámara y luego grabaré yo el resto del vlog. Como va a grabar una cosa en estático y yo me voy a morirme, pues eso. Mira quién está aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=678" target="_blank" class="timestamp">[11:18]</a> Desde luego, Carlota. Hola. Ya les he dicho que ibas a grabar y que ibas a quitar la cámara. Ah, vale. Y yo te quito la tuya siempre. Sí, no pasa nada. Una horita solo de chacha. Hemos hecho un podcast aquí las dos horas. Ahora en plan... Bueno, y Carlota, ¿cómo empezaste? Ya, ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=695" target="_blank" class="timestamp">[11:35]</a> Eso lo mejor es como la resistencia, ¿eh? No hablarte, poniendo un paraban y entras directo. Pero Cano no habla nunca con los invitados antes de entrar. Eso es lo mejor. Pero porque así queda súper tal. Ay, pero cuesta luego más arrancar a veces. Yo creo que es lo bonito de la entrevista. Quizá dices en mitad de la entrevista. Ah, eso ya habíamos hablado antes. No, ya, pero la gente no te ha escuchado hablarlo, ¿sabes? La gente quiere.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=724" target="_blank" class="timestamp">[12:04]</a> Es súper falso. Yo de hecho tengo unas cosas pensadas para grabar, que ya lo veréis, que quiero unificarlo todo para que eso no pase. ¿Sabes? Voy a ir a recoger a la persona con el coche, creo, grabando ya. Y cuando entre que esté grabando. Así entonces queda todo unido. Ya, bueno, no se puede recortar. No es directo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=750" target="_blank" class="timestamp">[12:30]</a> No, ya lo sé, ya lo sé. No, yo me estaba grabando a mí la cara, ¿eh? Es que no sabía dónde estáis. Habéis bajado al gimnasio antes, ¿no? Sí, hemos entrado y hemos salido. Ah, vale. Porque como estábamos recién saliendo gallinero y tal. Vale, bueno. Ahora os enseño el gallinero una cosa muy, muy guapa. Vamos. Vale, mirad. Estamos aquí bajando. Carlota no sé por qué lleva todas sus cosas por aquí por el gallinero. Van a entrenar ellas. Han grabado. Parece que les ha salido bien. O sea, ya vuelvo a tener mi cámara. Bueno, mi cámara. Esto es común. Con la cámara que suelo grabar. Y estamos el gallinero. Vale. Y mirad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=779" target="_blank" class="timestamp">[12:59]</a> Tenemos aquí las gallinas. Se han quedado dentro, es que son todos más. Pero es que vamos a grabar dos cosas. Mira Consuelo. Brutal. Mira Consuelo cómo está ahí sentada. Quizás está poniendo un huevo. No está poniendo un huevo, ya te lo digo yo. ¿No? Es que te hago... Ahí me flipa el jet, tío. Eso es una locura. Oye, os he dejado aquí dentro para que si llovía pudierais luego salir. Es que no saben ser gallinas. Vale, mirad lo que le hemos comprado. Mirad lo que le hemos comprado así para pasear un poquito. Para que no se metan con ella, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=810" target="_blank" class="timestamp">[13:30]</a> ¿Puedes enseñarla? Es brutal. Vale, a ver. Es brutal. ¿Pero le queda bien? ¿Seguro? Sí, le queda bien. Espera, que se lo voy a esconder como por debajo de las plumas. Un poco. Consuelo, ¿tienes? Se la pongo a esta. Es que está muy revoltosa. Esa se pongo un montón, tío. Esta es que le puedes hacer lo que quieras. Mira cómo se pica, no le gusta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=839" target="_blank" class="timestamp">[13:59]</a> Ahora le parece raro, pero tiene que tener algo dentro de los gallineros, ¿sabes? ¿Con suelo? No, o sea, si no es demasiado largo. Vamos para arriba, ¿no? Sí. O sea, antes se lo has puesto súper bien. También te digo, ha caído como ha caído, ¿eh? ¡Ay, pobrecita! Como se da la vuelta, no le gusta. ¡Camina, camina! ¡Ay, pobrecita! ¿Qué hacemos? ¡Cuííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííííí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=870" target="_blank" class="timestamp">[14:30]</a> A ver, llámala. ¿Tillotto? ¿Tú te creas que es un gato? ¿Tillotto? Es que hay que escondérselo por el rumaje, ¿sabes? Ay, ya sé. A ver, a ver esta. También te digo, Yeti se deja hacer de todo, eh. Quiero dos cosas súper simples, en verdad. A esta le quedan pequeños los brazos y todo. ¿Esa la he visto que grande es? Esa ni se le ven. A esa le puedes esconder dinero que no se le ve.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=899" target="_blank" class="timestamp">[14:59]</a> Se está volviendo una hija de puta esta que alucinas. Madre mía. Madre mía. Hay que adelgazar, ¿eh? Hay que adelgazar. Vale, ¿lo intentamos? A ver. Le pega, ¿no? ¿Qué es? El color y todo. Mira cómo come con los brazos así puestos. Eso sí que le queda mejor ese brazo. Solo lo tengo en el cartón. Ay, ay, ay. Mira cómo se le llega. Espera. Lo llevas. Lo llevas. Lo llevas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=930" target="_blank" class="timestamp">[15:30]</a> Acabo de bajar al gallinero y le he dado esta creatina de MyProtein a las gallinas porque estaba caducada y mirad lo que me ha pasado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=951" target="_blank" class="timestamp">[15:51]</a> Así que ya sabes, si te quieres poner como la gallina o como yo, tienes un 70% de descuento en toda la web de MyProtein y un 15% extra con mi código que te dejo ahí abajo. No sé si te pondrás como ella. Roma, ¿quieres saludar? Al vídeo. Ah, buenos días. No, buenas tardes. ¿Vas a hacer la mejor máquina de gemelo que existe? No, que va, que va. Una chapruza un poco, pero bueno. No, hacedme caso. Es una locura. Ya veréis cómo se queda. Va a ser una pasada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=976" target="_blank" class="timestamp">[16:16]</a> Y estamos pensando para tener otra. Pero bueno, me voy a subir. Hemos grabado una cosa. Me ha preguntado a Joel si en este vídeo había hablado mucho, así que no quiero pegarle la mega chapa y tengo 7 minutos de grabación. Y no he tenido cardio. Siento como que hoy estoy desconectado de vosotros y no he podido hablar en exceso. Me siento mal. O sea, me siento mal porque sé que todos esos que me veis a diario y me seguís de verdad fielmente, pues...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=997" target="_blank" class="timestamp">[16:37]</a> Os vais a quedar hoy con poca cosa, pero bueno. Ha venido Carlota, que la había visto hasta ahora entrenando con Marta. Ha venido a Roma, está haciendo una cosa en la máquina de gemelo que va a ser increíble. Me he reído muchísimo con las gallinas, la verdad. O sea, ha sido una puta locura. Bueno, básicamente es que aquí a veces tengo como guiones. Tampoco es que guionice los vídeos, pero sí que me apunto para pasárselo a yo en lo que hago para que lo sepa cada toma, ¿no? Y sí que es cierto que llevo siendo muy pesado en muchos vídeos. Muchos vídeos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=1022" target="_blank" class="timestamp">[17:02]</a> Es como metiendo hype con el gimnasio, pero no es hype. Es ilusión mía real realmente. O sea, no es hype. Os aseguro que no es hype. Entonces vas a salir bien, tío. Si lo de mañana se da mayo puede ser un mes espectacular en ese sentido. De ir acabando cosas, cerrando etapas, abriendo etapas nuevas de forma ya muy guapa. Tengo mucha ilusión por todo eso, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=1042" target="_blank" class="timestamp">[17:22]</a> Mucha, mucha ilusión. O sea, no sé cómo transmitiroslo muchas veces, la ilusión que me da. Que todo eso salga y todo eso salga bien. Así que espero que mañana se dé, porque encima es un poco incierto, porque es día 1 de mayo y no he podido hablar con quién tenía que hablar este tipo de cosas. Así que mañana a primera hora será como, pues sí, pues no, pues lo que sea. Pero, de hecho, para que os hagáis una idea, le dije, Tony, tío, no es nada de trabajo, pero te puedes venir a verla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=1066" target="_blank" class="timestamp">[17:46]</a> Me hace ilusión. Y ya está. Simplemente eso. Estoy todo el rato intentando cuadrar cómo se va a ser, cómo se va a poner. Así que me callo ya. Y espero que todo salga bien. Rezad conmigo, por favor. O sea, lo único que os pido es rezar conmigo para que mañana</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wXbbQbSJGh0&t=1083" target="_blank" class="timestamp">[18:03]</a> encima estoy en un proceso que estoy aprendiendo a ser más tranquilo con algunas cosas o pensarme más ciertas cosas y esto es parte del proceso y toda la parte de mayo que os digo es parte de ese proceso así que recemos, os quiero mucho suscríbanse y recordad que tenéis el link de mi protección en la descripción hay rebajas, tochas, tochas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-RfR1N3-5_Ao">
+            <h2>Tarrako Explota contra los PELO BRÓCOLI</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 02/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao" target="_blank">
+                    <img src="https://i.ytimg.com/vi/RfR1N3-5_Ao/hqdefault.jpg" alt="Tarrako Explota contra los PELO BRÓCOLI" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video es un desahogo del presentador ante la polarización y las críticas surgidas tras un fragmento de podcast de Carlos Tarraco sobre intensidad de entrenamiento.
+El speaker defiende a Tarraco, argumentando que muchos critican sus resultados o métodos atribuyéndolos al uso de química, sin reconocer el esfuerzo y la constancia.
+Se enfatiza que la falta de progreso en muchos individuos se debe a su propia falta de disciplina y capacidad para entrenar duro, no a ser "naturales".
+El video concluye haciendo un llamado a los críticos a centrarse en mejorar ellos mismos y dejar de proyectar sus frustraciones en otros.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Desahogo por la Polarización <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&amp;t=39" target="_blank">[00:39]</a></h3>
+
+<p>El presentador expresa su frustración por la creciente polarización en el sector fitness. Se desahoga sobre los ataques y la falta de comprensión objetiva ante opiniones y consejos de entrenadores como Carlos Tarraco.</p>
+
+<h3>La Dificultad de Entrenar Piernas al Límite <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&amp;t=311" target="_blank">[05:11]</a></h3>
+
+<p>Se aborda uno de los puntos polémicos: la falta de crecimiento en las piernas. El speaker y Tarraco coinciden en que la mayoría de la gente no aplica la intensidad necesaria, por miedo al sufrimiento y a las agujetas.</p>
+
+<h3>Defensa de la Trayectoria y Crítica a los Falsos Científicos <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&amp;t=371" target="_blank">[06:11]</a></h3>
+
+<p>El speaker defiende la carrera de Tarraco, destacando sus logros en powerlifting con controles antidoping como prueba de su fuerza natural. Critica a quienes "científicamente" justifican su falta de resultados, ignorando la necesidad de esfuerzo y sacrificio.</p>
+
+<h3>La Genética y la Constancia vs. la Frustración <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&amp;t=518" target="_blank">[08:38]</a></h3>
+
+<p>Se subraya que la fuerza de Tarraco viene de ser fuerte, tenaz y constante, con el mérito adicional de no tener una genética privilegiada para el strongman/powerlifting. Se confronta a los críticos frustrados que canalizan su debilidad atacando a quienes sí se esfuerzan.</p>
+
+<h3>La Actitud Débil, no la Química, es el Problema <a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&amp;t=1481" target="_blank">[24:41]</a></h3>
+
+<p>El speaker reitera firmemente que el principal impedimento para el progreso es una actitud floja y la falta de esfuerzo, no ser natural. Desafía a quienes usan la química como excusa para su fracaso, afirmando que ni dopados alcanzarían ciertos niveles de fuerza.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=0" target="_blank" class="timestamp">[00:00]</a> Ahora lo de Garraco. Desahogo total. Creo que se ha liado en un podcast de lo que ha dicho, ¿vale? Desahogo total. ¿Por qué desahogo total? Porque en los últimos días, semanas, pues bueno, hay ciertas circunstancias que creo que se están radicalizando demasiado y quisiera desahogarme sobre este tipo de acontecimientos francamente inesperados.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=22" target="_blank" class="timestamp">[00:22]</a> Lógicamente yo sabía que en el momento que fuera algún podcast o qué, diera mi opinión y saliera de mi buen mundo que tenía últimamente en mi comunidad tranquila, porque hace mucho tiempo que no salía, digamos, al exterior y las cosas han empeorado. Las cosas han empeorado, ¡joder!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=39" target="_blank" class="timestamp">[00:39]</a> Ya me lo temía. Es decir, era algo que se ve venir, que hay una polarización en todo el mundo y en el sector fitness no es una excepción. En el mundo de los hierros, como queráis llamarle. La gente tiene dificultades gravísimas. Voy a intentar hacer este vídeo sin insultar. Dificultades gravísimas de... Insulta, insulta, insulta, bravo, insulta. Prensión, hay gente que no entiende las cosas. De hecho...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=62" target="_blank" class="timestamp">[01:02]</a> Está guapísimo, ¿eh? El trono que tiene montado ahí, tío. El mundo va mal por eso, porque la gente tiene poca capacidad de ver las cosas de forma objetiva y aunque todos tenemos sesgos. Qué gana tengo de verle, tío, de verdad. Lo dicho, le hablaré a Carlos, a Tarraco. Le hablaré nada más que yo considere que me encuentre un poco fuerte porque yo no puedo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=83" target="_blank" class="timestamp">[01:23]</a> ir a la guarida de Tarraco, ¿vale? Siendo un Mindundi. O sea, creo que todos sabemos en el mundo… Yo tengo admiración por Carlos. Por Carlos, por Joan Ferrer, por Marc y por… Bueno, y muchos pupilos que han salido de ahí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=99" target="_blank" class="timestamp">[01:39]</a> que ya no están en la fuerza o que han hecho su vida y tal. Y tengo mucha admiración y yo si voy a ir allí no voy a tirar como un matado. Yo si voy a ir allí es para como las cabras, ¿no? Pegarnos cabezazos. Pegarnos cabezazos, que conste. Entrenando, quiero decir, dejándome los cojones yo allí. No que seguramente llegue allí y me den pal pelo. Es lo más normal porque no tengo el nivel. Pero por lo menos estar al nivel de personas fuertes como es Carlos, que es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=127" target="_blank" class="timestamp">[02:07]</a> que es un tío muy fuerte y su metodología me flipa, y iré. Más pronto que tarde iré. Os lo prometí e iré. No voy a pediros ningún tipo de me gustas ni hostias. Voy a ir, ¿vale? En muchos aspectos. Sí, pero yo quiero echarme un día de Strongman, ¿me entendéis? Un muerto, un yugo, unas piedras, unas maletas, o sea, un poquito, un poco urrí de todo, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=153" target="_blank" class="timestamp">[02:33]</a> Un popurrí de pruebas de Strockman. Y claro, tengo que tantear un poco las pruebas, que es que no las he tocado. Llevo años sin tocar las pruebas de Strockman. Y ya que voy allí, vamos a eso, ¿no? Vamos a hacer algo chulo, chulo. Que no voy a mover grandes cargas porque todavía me queda mucho proceso. Pero, hombre, algo bonito de ver. Algo bonito de ver. Ya os digo yo que Tarraco, el que le vi el otro día con 150, 140 en cada mano en maletines, los hace. O sea, ya eso es una barbaridad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=180" target="_blank" class="timestamp">[03:00]</a> Para un tío que hace ya años que no compite. En cilindro yo sé que con 140 hace repes en cilindro. Eso lo tengo clarísimo. Seguramente sea más. El yugo yo sé que alrededor de 350-400 lo tiene que estar moviendo. Seguro. En las piedras no voy a decir nada porque en las piedras el Tarragón se le dan siempre bien. Y muchas pruebas más. Entonces estaría guay tocarlo todo un poco y luego ir a comer un chuletón de esos gigantes allí en Tarragona.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=205" target="_blank" class="timestamp">[03:25]</a> ¿No? O unas bravas O que él quiera Pero sí, sí Y si él quiere Que yo estoy dando por hecho Que él quiere Que él me deja O sea Me acepta El ir Yo le pediré Por privado Por supuesto Oye, puedo ir allí Mira qué tal Y igual Ya lo que ¿Sabes? Claro, claro Estoy yo ahí autoinvitándome Hombre, no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=222" target="_blank" class="timestamp">[03:42]</a> No, hombre, no. No, no, no. Tentar ser lo más cerebral posible. El otro día simplemente hago un vídeo en el cual es un fragmento de un podcast que yo hago en Antifrágil y simplemente lo que hago es dar una explicación de por qué a la mayoría de gente no le crecen las piernas. ¡Ojo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=241" target="_blank" class="timestamp">[04:01]</a> que es que las personas ajustan mal el peso a trabajar. ¿Por qué? Porque el tren inferior es más difícil, es más costoso, se sufre mucho y duele mucho. Mucha gente no tiene esa capacidad de sufrimiento. Cierto, muy cierto. Y ponía el ejemplo extremo, radical, de una persona que ajusta mal y en vez de hacer 15 como le pido, porque él cree que el entreno es corto,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=268" target="_blank" class="timestamp">[04:28]</a> Y yo le quiero hacer ver que no es el entreno. Es como él afronta la sede. Y es algo que hemos dicho mucho. Y de 15 que tenía pautadas, va a 46. Pero eso no es un caso aislado. Aquí le... ¿Cómo que 46? Ha pasado a muchísima gente y la gran mayoría de personas que no les crecen las piernas es por falta de peso de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=292" target="_blank" class="timestamp">[04:52]</a> Sufrimiento de capacidad. No le pasa a nadie en el Cool Barra o en el Press de Bank. Por ego y por facilidad, todo el mundo va a tope.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=301" target="_blank" class="timestamp">[05:01]</a> No me digáis que no tiene razón. 100%. La gente no afronta un entrenamiento de pecho o un entrenamiento de brazo con la misma actitud que un entrenamiento de piernas. Esa es la realidad. Esa es la realidad, hermanos. Hombre, por favor. Eso no hay quien me lo discuta. Y ante esa explicación, que es verdad que está algo descontextualizada, la gente, en vez de ir al podcast completo y sacar conclusiones de lo que digo, que es que no es discutible,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=331" target="_blank" class="timestamp">[05:31]</a> No lo es. Es un ejemplo de ajustar mal el peso y por tanto de no tener las piernas el estímulo real necesario para luego crecer porque como son mucho más fuertes, son mucho más difíciles de trabajar que un bíceps o un tríceps o un pectoral.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=351" target="_blank" class="timestamp">[05:51]</a> Y le añado, y la gente no quiere quedarse tres días con dolores en las piernas, o cuatro días o cinco días con los dolores en las piernas. Que yo creo que eso es lo que le pasa a la mayoría. Que mientras están entrenando están pensando en qué agujetas voy a tener mañana y pasado y al otro. Que poco se dice eso, que entonces aflojan para evitar tener esas agujetas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=371" target="_blank" class="timestamp">[06:11]</a> Entonces no crecen. Es así. Es que es así. En vez de hacer eso, hay una caterva de perdedores frustrados que te atacan frontalmente acusándote de casi todo. Añado. Es que estoy tan de acuerdo con él. Le añado. Y muchos científicos, tío. Que no son científicos ni son nada. Agarran de la ciencia lo que les da la gana. Porque si tú llevas la ciencia a cabo, te dejan los cojones en cada entrenamiento. Lo que pasa es que estos que van de científicos cogen lo que les da la gana de la ciencia. Lo que les da la puta gana de la ciencia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=401" target="_blank" class="timestamp">[06:41]</a> Y luego dice, hostia, pero si es que no mejoro, si es que no consigo mejorar en fuerza, no consigo crecer. ¿Qué quiere, compadre? Si es que no estás haciendo las cosas bien y vas de listo. Muy sencillo. Para el que no lo tenga, porque hay gente que aparece de la nada y no conoce tu historia, un servidor...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=419" target="_blank" class="timestamp">[06:59]</a> Sí, yo. Gana dos Arnold Classic de powerlifting con controles antidoping y compite en AEP con controles. Incluso gano un campeonato de España donde doy negativo y el que había ganado por peso, levantado, pierde por dar positivo. En mi primer campeonato de España que gano, lo gano con un control antidoping. A partir de aquí, en los Arnold que gano o en Viso de Alcor, que hago una de las mejores marcas en la época de toda la AEP... Esto es verdad, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=445" target="_blank" class="timestamp">[07:25]</a> Esto es verdad porque yo en mi primera competición de powerlifting que hice en mi vida, que fue en el 2013, íbamos al campeonato de España y él quedó primero. Él quedó primero, ¿eh? O sea que lo ganó, así que es verdad. Bueno, uno de tantos, porque el power siempre se le ha dado bien a Carraco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=462" target="_blank" class="timestamp">[07:42]</a> Tengo más de 300 de sentadilla con rodilleras, más de 200 de banca y creo que cerca de 340 de peso muerto. ¿Todavía? A ver, ¿cuánto has dicho? Espérate. Tengo más de 300 de sentadilla con rodilleras, más de 300. Más de 300 los ha hecho delante mía, los dos compitiendo en AEP en un Arnold, los dos. Más de 300 se hizo de sentadilla, eso estoy seguro. Más de 200 de banca. Pero 200 no, bastante más de 200 de banca, porque también lo ha hecho delante mía. Y creo que cerca de 340 de peso muerto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=490" target="_blank" class="timestamp">[08:10]</a> No me acuerdo si eran 3.40, pero 3.30, 3.40 puede ser. Sí, sí, sí. Limpio. Él quiere decir limpio, eh, Nati. Y Rao. O sea, pelo. Con controles antidoping. Lo corroboro porque lo ha hecho delante mía. Lo ha hecho delante mía en Madrid. O sea, yo lo corroboro ahora mismo al 100%. Las extraías de 300, la banca de 200 y el peso muerto. Es que no sé si eran 3.30 o 3.25 los que tiró delante mía. Que luego tiró más en competiciones seguidas. O sea, eso lo ha hecho delante mía, eh. Y ahí había controles. Porque yo también tenía ahí controles.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=518" target="_blank" class="timestamp">[08:38]</a> Yo nunca había tomado nada. A partir de aquí, mi fuerza no viene por una supuesta locura de dopaje que llevo. Viene porque soy fuerte, tenaz y constante y nunca me he rendido. Añado algo y espero no ofenderte, Carlos. Es un tío fuerte, muy fuerte, al cual la genética no le acompaña, que tiene más mérito aún. Este tío es un tío muy fuerte porque es un tío muy, muy, muy...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=544" target="_blank" class="timestamp">[09:04]</a> Muy constante, muy pesado, muy de entrenar, muy duro, muy antiguo, ¿vale? Al que la genética no le acompaña. Es un tío que no es un tío enorme, no es un tío de articulaciones grandes. No, no lo es, no lo es, no lo es. No es un tío tampoco alto, o sea, es un tío de estatura media, no me acuerdo cuánto media está blanco, pero que mide unos 77, 78, por ahí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=572" target="_blank" class="timestamp">[09:32]</a> Es un tío que ha levantado lo que ha levantado a base de... Porque esa es la realidad. Por lo tanto, todas esas personas frustradas y débiles que lo canalizan de esa manera... Relajaos. Disfrutad. Intentad mejorar. Pero no os metáis ahí frontalmente en cosas que no tenéis razón. A partir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=596" target="_blank" class="timestamp">[09:56]</a> Ah, y otra cosa. Es un tío muy inteligente, ¿eh? No confundamos las pintas que tiene de vikingo, barba... No, no, no, no, no, no, no, no, ¿eh? No. Es un tío muy inteligente. Ya que hablas de piernas, he visto vídeos tuyos donde metes caña a la gente cuando estabas más enfadado de que las piernas... ¿Por qué no crecen las piernas, no? ¿Cuál sería el ejercicio así más...? ¿Qué hay que hacer para que crecen las piernas, Gerardo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=622" target="_blank" class="timestamp">[10:22]</a> ¿Sabes qué problema hay? Que las piernas tienen un potencial infinitamente superior al tren superior. Lo hablábamos de otro día. Tú hacer unos bíceps, tú en media hora… Unas pull-ups…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=633" target="_blank" class="timestamp">[10:33]</a> Tú puedes hacer bíceps, tríceps. Las piernas son muy grandes, muy potentes y te transforman, te transportan a todos sitios desde pequeño. No es comparable jamás. Entonces requieren un nivel de esfuerzo que el 99% no lo tiene. De hecho, pasa un montón. El otro día pasó con un chico que lo dejé en la prensa en un reel...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=653" target="_blank" class="timestamp">[10:53]</a> Que yo siempre digo, tú... Lo vi, lo vi. No, Antonio, el famoso Antonio. Que él le dije, oye, mira, no me crecen las piernas, que claro no. Y le dije, tal ejercicio. Y ya está. Como dándome a entender que el entreno había sido corto. Y que bueno, con solo tres series más, me parece que eran prensa con extensiones, como que se quedaba corto. Digo, no te preocupes, vamos a hacer una cosa. Ponte el peso para hacer 15 repeticiones. En la prensa. En la prensa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=678" target="_blank" class="timestamp">[11:18]</a> Se pone el peso, está ok todo, muy bien. El seguro, quita la manita. El seguro lo manejo yo. 46. ¿46 repes? A 46. ¿Qué dices? ¿46 repes? O sea, lo llevaste al fallo. Al fallo, de verdad. Claro, fue brutal porque luego hicimos un vídeo y el chico estaba rayado porque no podía levantarse de la prensa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=697" target="_blank" class="timestamp">[11:37]</a> Las piernas no eran suyas. Y luego tenía que hacer la extension. Ya se acabó. Con una serie. Sí, me parece que intenté hacer otra por allí. Es que es esto, tío. Y entonces dije, tú ibas a hacer 3 por 15, 45. Ibas a hacer 45 repeticiones en 3 series con ese peso. Y la primera has hecho 46. ¿Entiendes? Ahora crees que tienes poco entreno o necesitas que te mande más. Y yo tengo clientes online que les mandan 6 ejercicios de pierna y te dicen, oye...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=725" target="_blank" class="timestamp">[12:05]</a> Yo hago dos más, porque voy bien. Y yo siempre le digo, no saldrías de la prensa en mi club. Y ese es el punto que requiere. Estoy totalmente de acuerdo con él. Si te dejan los cojones, mejoras. Si no te lo dejan, no puedes mejorar. Tienes razón. Y lo he dicho, lo dije en el podcast de Antifrágil y lo he dicho en otras veces. Yo entro a competir ya en los Arnold's de Strongman</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=752" target="_blank" class="timestamp">[12:32]</a> Y decido competir en federaciones de powerlifting donde no hay controles. Y soy campeón de Europa y del mundo. Entonces yo digo y me reafirmo que compito con condiciones parecidas al resto de competidores. Punto. Acaba mi carrera deportiva y sigo aquí feliz como una perdiz entrenando duro e intentando ayudar a la gente a mejorar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=776" target="_blank" class="timestamp">[12:56]</a> ¿De acuerdo? Si alguien cree que a estas alturas del partido un servidor se está metiendo lo que no está escrito para intentar hacer repeticiones de militar con 100, es que no tiene ni idea de qué va esto. Yo era muy fuerte antes y soy muy fuerte después. Con el tema química, todo esto es un rumor que yo no puedo... Bueno, pero alguien cercano a él me dijo que aunque tocó la química, no era un tío que hacía especialmente locuras con la química.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=806" target="_blank" class="timestamp">[13:26]</a> ¿Vale? O sea, Tarraco, todo esto me lo comentaban a mí, no puedo tampoco decir quién, ¿vale? Que no era un tío de hacer locuras y tomar gramos de test, no. Entonces, ¿tomó química? Sí, bueno, pero ¿y qué? O sea, que al final, cuando tú te enfrentas a todos que están tomando química, ¿qué? ¿Qué más va? No sé, si eso es... ¿Eso es para tirarle todo lo que ha conseguido? Pues sois un normales, porque la mayoría de la carrera de Tarraco ha sido sin tomar química.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=833" target="_blank" class="timestamp">[13:53]</a> Los grandes logros de Tarraco y títulos han sido sin tomar química. Y ahí estaban los controles antidoping de la EPE. Es que han sido la mayoría. La mayoría. Me encuentro perfectamente y para mover los pesos que muevo diariamente no necesito ningún tipo de ayuda. Lo hago de serie.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=853" target="_blank" class="timestamp">[14:13]</a> Que haya gente que pueda decir, tú se lo debes, lo hacía antes y lo haré siempre. Siempre he sido fuerte en los preses y siempre he tenido más fuerza que la mayoría de la gente a mi alrededor. Desde pequeño. A partir de aquí, una cosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=867" target="_blank" class="timestamp">[14:27]</a> Es no hacer contenido de química de forma constante y la otra es esconderse o negar lo que sea. Nunca he dicho que fuera natural. Nunca he presumido de nada. Nunca me he metido con nadie ni que toma ni que no toma. ¿Dónde está el problema? Pero iré más lejos. Pues el problema está en que quieren medirse el pito contigo y como saben que no pueden medirse el pito contigo porque no llega nada a lo que tú levantas, lo quieren justificar con el tema de la química. Ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=894" target="_blank" class="timestamp">[14:54]</a> Nunca en miles de personas que he llevado online y que sigo llevando he pautado una sola línea de química. Nunca. No es mi especialidad y no lo he llevado nunca. Esto sí que es raro. Nunca. Es curioso, ¿eh? Jamás. En el club nunca he pautado nada. Y las últimas discusiones no hace mucho que he tenido referente a eso es para que no lo hiciera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=920" target="_blank" class="timestamp">[15:20]</a> Por tanto, no sé dónde está el problema. Yo no estoy obligado a hacer contenido de química. No me gusta, no lo veo provechoso, no sé suficiente. Hay gente que ya lo hace. ¿Cuál es el problema? Ahora bien, cuelgas una foto y tienes venas en las piernas. Esto, si no fuera por la química... A ver, que tú seas incapaz de trabajar sentadilla semanalmente bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=943" target="_blank" class="timestamp">[15:43]</a> que no te machaques como yo a zancadas, que no salgas a hacer cardio todos los días, que no lleves una alimentación correcta, que naciste débil y tu actitud te ha hecho más débil, no es mi culpa. Lleva tus frustraciones mejor, intenta mejorar como persona y poco a poco mejorarás físicamente también. Hay que ser muy infeliz, estar muy amargado, ser muy perdedor y ser muy desgraciado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=967" target="_blank" class="timestamp">[16:07]</a> para meterte constantemente en el Instagram de otra persona a cada vez hacer los mismos comentarios. Yo no me escondo de nada, pero este es el físico que he conseguido después de años de picar piedra. Y el que me conoce sabe que no me salto el cardio ni una mañana, que como lo que tengo que comer, que entreno como un animal y con la ilusión del primer día cada día. Pero eso no se ve.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=992" target="_blank" class="timestamp">[16:32]</a> Eso no se ve. A mí me molaría mucho que enseñasen más vídeos de entreno, tío. Largos. Como los que hacías antes, Carlos. Me molaría mucho, tío. Yo creo que la gente los va a ver. Pero bueno. Y no pauto absolutamente nada de química a nadie. Ni quiero saber nada. ¿Dónde estoy escondido? ¿Escondido dónde? Que a mí veis de Salón número 4. Estrón Mantarraco. Aquí. Porque algo que tienen las redes sociales es que todo el mundo difama con una solvencia y una libertad maravillosa de expresión. Aquí estoy.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1021" target="_blank" class="timestamp">[17:01]</a> Cada uno hable lo que quiera, si no tengo nada en contra, vengo de vuelta de todo. Pero por favor, se están polarizando las cosas de una manera que igual, que no se puede creer que puedes tener ciertos cuerpos sin química, hay una cantidad de frustrados que son flojos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1039" target="_blank" class="timestamp">[17:19]</a> Pero flojos de cojones que todo el mundo que destaca usa química. Es verdad que el nivel está bajo. O sea, la gente a la hora que un físico destaca un poquito, ese va con química. Hostias. Es por química. Si tú haces militar con 30 o 40 kilos y llevas así toda la vida, eres flojo. Entiendo que... Yo creo, yo, que yo nunca he fallado con los que he acusado. Que los he acusado porque decían que no, que ellos eran naturales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1069" target="_blank" class="timestamp">[17:49]</a> No he fallado con ninguno. Andoni, Amaza, Tomás Mazza, todos tuvieron que dejar de decir que eran naturales. Algunos lo confirmaron, otros... En vez de afrontarlo, o sea, en vez de decir tomo química, pues ya dejan de decir que son naturales y ya está. Que es lo que han hecho todos, los embusteros. Que te cueste que yo lo pueda hacer con 141 con el culo pegado al banco. Pero es que yo soy mejor que tú en eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1098" target="_blank" class="timestamp">[18:18]</a> Punto. Igual que hay gente que es mejor en otras cosas. No puedes canalizar tu frustración constantemente contra esas personas. Cuando esa persona no ha dicho nada al respecto. Y ya es algo que acaba molestando. Porque hay gente que no entiende las cosas. Y todo viene a raíz o ha explotado más. Desde el podcast con los de Antifrágil. Claro. Que es un bombardeo constante. Algunos pum, pum, pum, pum. Ey.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1126" target="_blank" class="timestamp">[18:46]</a> Haced vuestra vida, entrenad duro, intentad entender las cosas. Es que ese es el tema, tío. Al final, quien conozca a Tarraco, el que no lo conozca, que se vaya a su canal de Instagram y de YouTube, sabe que es un loco del entrenamiento. Que él es de esas personas, o por lo menos antes, no lo sé cómo estará ahora,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1147" target="_blank" class="timestamp">[19:07]</a> Que entrena de lunes a lunes. Que no toma descanso. O sea, que es un loco. ¿Por qué? Porque él disfruta entrenar. Luego vienen los resultados, sí. Pero él disfruta el entrenamiento. Y esos tíos ya no quedan. Ya no quedan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1164" target="_blank" class="timestamp">[19:24]</a> Claro, es su forma de vivir. Cuelgas un fragmento que solo estás explicando. Es importante ajustar bien los pesos para ganar pierna. Y hay una caterva de ignorantes. ¡Eso natural no sirve! A mí me revienta eso de eso natural no sirve, tío. Es que ahora parece que porque ser natural es como que tienes que ir al gimnasio a acariciar las pesas, tío. Y me hace gracia porque luego ves al fufi y miradlo. Natural. Chiquitín.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1192" target="_blank" class="timestamp">[19:52]</a> ...y se deja los cojones entrenando... ...que flipas... ...da igual el grupo muscular que cojas... ...ahí está... ...un tío natural que se deja los cojones entrenando... ...pero es que la verdad que me hace gracia... ...la mayoría es... ...no es que yo soy natural... ...ese sistema de entrenamiento a mí no me vale... ...eso no es... ...eso es solo para gente que toma química...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1209" target="_blank" class="timestamp">[20:09]</a> ¡Venga ya! Muta gente y he llevado... ¿Cuánto mide Fufi? Menos de unos 70, ya te lo digo, ya vamos. Miles de personas que han mutado con mis entrenamientos de forma natural. Que es que os habéis creído la leyenda que esto es como una especie de... de cueva, de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1225" target="_blank" class="timestamp">[20:25]</a> Aquí viene gente normal, lo que entrena duro, lo que vosotros no tenéis cojones y ovarios de hacer. ¿Esois auténtica? Uf, ¿cómo busco una palabra que no sea palabrota? Dilo. Igualmente os voy a decir una cosa, ¿eh? Yo creo que de la guarida de Tarraco hablo por experiencia porque he competido con todos. Con todos los pupiros de Tarraco he competido con todos. Christian Skrig, Joan Ferrer...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1249" target="_blank" class="timestamp">[20:49]</a> Campeón de España varias veces. Kasper Nitz, que yo creo que ya está retiradísimo. David Mesa no es de la escuela de Tarraco, pero sí que ha entrenado con Tarraco. He competido mil veces con él. O sea, bueno, los más top de la guarida de alumnos de Tarraco, he competido contra todos. Y os voy a decir una cosa, ¿eh? Yo me atrevo a decir que de la escuela de Tarraco, probablemente a porcentaje de atletas que ha sacado, que se sacan en el Strongman, sean...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1274" target="_blank" class="timestamp">[21:14]</a> los más naturales, el aguarida, o sea, el sitio donde más naturales, estos más naturales con nivel hayan sacado, que algunos sí que han tomado química, pero de verdad, o sea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1285" target="_blank" class="timestamp">[21:25]</a> De verdad lo digo, ¿eh? Es del sitio donde más strongman y powers naturales ha sacado con nivel, ¿eh? Sí, sois escoria. Vais buscando ahí, rascando, porque vuestras frustraciones, vuestro fracaso, no os deja dormir. Lo que tenéis que hacer es entrenar, comer y dejar de meteros. Si no te gusta a alguien, es algo que siempre me ha explotado la cabeza. Yo miro contenido cuando algo no me gusta. No lo miro. Tengo que estar allí… ¡Esto está bien! ¡Uy, esto si no fuera! ¡Uy!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1314" target="_blank" class="timestamp">[21:54]</a> Este militar es el mío, mi banca es la mía. Y te gano porque sí. Porque hay gente que genéticamente y naturalmente es más fuerte que otra. Y ya está. Pero es que encima nunca preguntáis o nunca os planteáis todo lo que hago yo diariamente para tener el físico que tengo actualmente. Y que lógicamente arrastro 25 años de no saltarme un entreno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1337" target="_blank" class="timestamp">[22:17]</a> Y de darlo todo tengo una libreta y cada martes por la mañana me pongo debajo de la barra de sentadilla, llueva, gafrío, haga calor, lo que sea, y hago una más siempre intento. Si no pongo un poco menos de peso, si no, siempre al límite. Porque si no me decepciona a mí mismo, cosa que vosotros vivís en una propia decepción. Y lo canalizáis la frustración contra otros. Punto. Yo hago mi vida, hago mi contenido, soy feliz y vivo perfectamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1366" target="_blank" class="timestamp">[22:46]</a> A partir de aquí es la última explicación que doy en estos sentidos. Solo pido que la gente piense un poco. Haz tu vida, coge información de quien te interese y sigue adelante. Y cuando un contenido no te guste, a otro sitio. Muy bien. Ya está. Ya está. Era necesario que... Me dice la gente unas cosas que digo, pero esta gente, ¿qué les pasa? Y fomentado por gente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1393" target="_blank" class="timestamp">[23:13]</a> Me voy a callar porque la diré gorda. En fin, lo bueno de las redes sociales es que la gente lo puede decir a distancia. Y ya está. ¿De acuerdo? Así que era un desahogo que tenía que hacer. ¡Me lo di nombres!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1405" target="_blank" class="timestamp">[23:25]</a> No me extiendo más. Creo que es importante especificar, hacer hincapié en que la nutrición, el entrenamiento, el cardio, el tesón, la constancia son básicas para progresar y a partir de allí hay gente con mayores y menores virtudes. Ahora bien, para ser un top competitivo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1428" target="_blank" class="timestamp">[23:48]</a> tienes que tener genética y el deporte profesional de élite tiene ciertos matices. Pero lo importante para que todo el mundo esté fuerte y saludable son los hábitos. Y lo único que intento en mi contenido es hacer hincapié en esos hábitos y explicar una historia vital.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1446" target="_blank" class="timestamp">[24:06]</a> Que creo que me ha ido bien. Tarraco es un tío que tiene ya 44 o 45 años. Es que no me acuerdo si era... Si 44 o 43, 44, tiene que tener seguro. Punto. No quiero entrar en más polémicas. No quiero entrar en esto. No estoy interesado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1464" target="_blank" class="timestamp">[24:24]</a> Necesitaba este desahogo porque desde que sale ese fragmento, ¿cuánta gente ha llegado a decir que la prensa al límite solo es para dopados? Si tú eres un fracasado que no tienes lo que hay que tener para llevar al límite un entreno de piernas, no digas que es porque no vas dopado, digas que no vales para eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1481" target="_blank" class="timestamp">[24:41]</a> Acepta tu frustración. No estás flojo porque eres natural, estás flojo porque lo eres, porque tu actitud es floja y porque no vales para esto. No canalices tu frustración contra los demás. Es muy diferente que una persona natural no tenga la capacidad de una persona que lleva química, claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1501" target="_blank" class="timestamp">[25:01]</a> O que toda justificación posible de una debilidad intrínseca espectacular sea porque no te dopas. No. Tú dopado serías el mismo parguela dopado. No levantarías nada nunca. Esa es la realidad, hermano. Con toda la química del mundo no me ganarías un pres de hombros. Nunca. Nunca. Si me dejan en una isla desierta un año comiendo medio cangrejo y medio coco al día te gano al volver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1530" target="_blank" class="timestamp">[25:30]</a> ¡Oh, vaya! Entonces, acéptalo. Aprende, disfruta y sobre todo disfruta tu vida y de tu camino. A mí déjame tranquilo, que yo simplemente intento convencer a la gente de que entrenar, comer bien y esforzarse al límite sin rendirse jamás es lo que tienen que hacer, sea cual sea sus circunstancias hormonales y sus objetivos de vida y competitivos. Ya. ¿De acuerdo? ¿Y sabéis qué voy a hacer ahora?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=RfR1N3-5_Ao&t=1558" target="_blank" class="timestamp">[25:58]</a> Sabadete, ponerme a entrenar como un animal. Y ya he hecho toda la semana, he entrenado más que vosotros en todo el año. Cuando hablo de vosotros, a toda esta panda de frustraos, quedáis todo el día por saco. ¿Sí? ¿Estáis ya? Venga, un abrazo. Chao. ¡Grande Tarraco! ¡Sí, señor! Sí, señor. Buen vídeo. Tiene que volver, tiene que volver Tarraco, ¿eh?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-xvNjXvFMesM">
+            <h2>"NO SE GANA SOLO CON UNA POSE" ¡CAIKE RETA A JOSEMA a UNA SEMANA del PITTSBURGH PRO!</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 02/05/2025 14:07</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=xvNjXvFMesM" target="_blank">
+                    <img src="https://i.ytimg.com/vi/xvNjXvFMesM/hqdefault.jpg" alt=""NO SE GANA SOLO CON UNA POSE" ¡CAIKE RETA A JOSEMA a UNA SEMANA del PITTSBURGH PRO!" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza una entrevista con el culturista Kaique a una semana del Pittsburgh Pro.
+Se detallan sus impresiones sobre el feedback de Tyler Mannion y Ruth Diesel respecto a su físico.
+Se discute su opinión sobre Josema, su rival, generando controversia con un comentario sobre las poses.
+Finalmente, se abordan los planes futuros de Kaique dependiendo del resultado en la competición.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Feedback Crucial para el Classic Kaique <a href="https://www.youtube.com/watch?v=xvNjXvFMesM&amp;t=144" target="_blank">[02:24]</a></h3>
+
+<p>Kaique comparte el positivo feedback recibido de Tyler Mannion, vicepresidente de la IFB Pro League. Destaca que está en el camino correcto para la categoría Classic Physique y se siente muy feliz y motivado por ello.</p>
+
+<h3>La Estrategia de Ocultar el Físico <a href="https://www.youtube.com/watch?v=xvNjXvFMesM&amp;t=420" target="_blank">[07:00]</a></h3>
+
+<p>Kaique responde a las críticas sobre su pose de espalda (back pose) afirmando que ha decidido mostrar su físico completo solo en el escenario. Menciona que el feedback de Tyler Mannion indica una gran mejora en su pose de espalda para Classic.</p>
+
+<h3>Kaique Opina Sobre Josema y Lanza un Dardo <a href="https://www.youtube.com/watch?v=xvNjXvFMesM&amp;t=607" target="_blank">[10:07]</a></h3>
+
+<p>Kaique elogia a Josema, reconociendo su nivel (Top 6 del Olympia) y su espectacular pose de espalda. Sin embargo, añade la frase "Campeonatos no se ganan solo con una pose", generando polémica.</p>
+
+<h3>Defensa Apasionada de la Competitividad de Josema <a href="https://www.youtube.com/watch?v=xvNjXvFMesM&amp;t=712" target="_blank">[11:52]</a></h3>
+
+<p>El comentarista refuta la idea de que Josema solo destaque en la pose de espalda. Argumenta que para quedar sexto en el Mr. Olympia, es necesario ser competitivo en todas las poses, no solo en una.</p>
+
+<h3>Los Planes Post-Pittsburgh Pro: Olympia o New York Pro <a href="https://www.youtube.com/watch?v=xvNjXvFMesM&amp;t=935" target="_blank">[15:35]</a></h3>
+
+<p>Kaique revela sus planes futuros: si gana el Pittsburgh Pro, se enfocaría directamente en el Mr. Olympia. Si queda segundo o tercero, consideraría competir en el New York Pro dependiendo del feedback recibido.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal y tenemos que hablar de la entrevista que se ha producido prácticamente de madrugada de los compañeros de la televisión de la Olimpia con Kaique. Declaraciones potentes de Kaique a tan solo una semana para el Pittsburgh Pro. Habla de Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=21" target="_blank" class="timestamp">[00:21]</a> Y creo que habla bien y lo vamos a poner, además voy a intentar dejar poca opinión en este vídeo, al menos la justita, para que vosotros sobre todo saquéis y extraigáis conclusiones porque desde luego yo creo que son halagos, prácticamente el 90% son halagos hasta que en el 10% final deja la frase.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=38" target="_blank" class="timestamp">[00:38]</a> Esa frase de, con tan solo una pose, la pose de espaldas, no se pueden ganar o no se ganan campeonatos. Ahora lo vais a escuchar, como digo, literal, para que saquéis vuestras propias conclusiones. Habla del check de Tyler Mannion, de la valoración de Ruth Diesel, de qué va a hacer después del Pittsburgh Pro, tanto si gana como si no lo hace. Ojito, porque vamos a tener declaraciones muy importantes de Kaike, que Kaike viene con mucha fuerza, viene, no voy a decir crecido porque no es la palabra, pero viene...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=65" target="_blank" class="timestamp">[01:05]</a> con mucha confianza en el físico que va a mostrar en su línea de competición, ojo, porque también es algo importante que se ve con ese refuerzo por parte de Tyler Mannion de que está en la categoría que tiene que estar, así que como digo chicos y chicas vamos a pasar a analizar todo lo que tiene por delante la entrevista de Kaike, que no poco, por supuesto recordaros el código de descuento en Big, código Iron Road en toda la web de Big, además muy prontito subiré</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=89" target="_blank" class="timestamp">[01:29]</a> el nuevo pedido que he hecho de este mes, que es espectacular, y insisto, hay un montón de promociones, aprovechadlas, porque en la página web están los precios súper competitivos, y además con ese 10% con el código Iron Road vais a tener toda la suplementación al mejor precio. Como digo, vamos a pasar a escuchar, bueno, por la entrevista del gran protagonista de la jornada, que nosotros, que caique. Y vamos a empezar, si os parece...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=113" target="_blank" class="timestamp">[01:53]</a> por el feedback que le dio Tyler Mannion y lo que supuso para él, ¿no? El hecho de verlo en Pittsburgh en esa quedada que ya vimos hace unos días y un poco lo que opinaba el vicepresidente de la IFB Pro League sobre Kaique. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=144" target="_blank" class="timestamp">[02:24]</a> Él me elogió varias veces y yo estoy sorprendido porque siempre recibí el feedback de él y el feedback que él me dio ahora es algo que yo esperaba, pero salí de ahí muy feliz, muy positivo y más motivado. Entonces, realmente estoy en el camino correcto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=164" target="_blank" class="timestamp">[02:44]</a> Yo no estoy iludido, ¿sabes? Porque, claro, hay todo el mundo que acompaña mi trabajo, gusta de mi persona, entonces ellos siempre van a apoyarme. Ahí tú tienes la duda, ¿no? ¿Será que ese pessoal me gusta de mí o ver si realmente tiene potencial en mí? Pero vindo de Tyler, yo estoy muy feliz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=186" target="_blank" class="timestamp">[03:06]</a> Pues ahí tenemos su particular feedback, evidentemente, de lo que le dijo Tyler Mannion en esa especie de cheque oculto o privado, porque esa es otra. También ha hablado de Sokaike, del hecho de que él no ha preferido en este arranque, en la categoría clásica, no mostrar el físico como hacen otros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=205" target="_blank" class="timestamp">[03:25]</a> Ojo también ahí a la pataletita que suelta. Pero desde luego, como podéis ver, evidentemente una cosa es los fans que él tiene, que evidentemente le van a decir siempre que es el mejor de todos y que etcétera, etcétera. Y él sabe sobredimensionar esas palabras y otra cosa ya es que te lo diga el vicepresidente de la IFB Pro League. Vamos a ver lo que opina sobre Ruth Diesel, que es otro de los contrincantes, seguramente el gran favorito, al menos a priori, el gran favorito para este Pittsburgh Pro donde debuta Kaique. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=235" target="_blank" class="timestamp">[03:55]</a> Es un gran atleta, él sabe analizar físicos y nosotros dos posamos en la frente del Tyler, entonces él pudo ver un poco de mi físico y yo vi lo de él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=247" target="_blank" class="timestamp">[04:07]</a> Y él hablando sobre proporción, que el tríceps y el bíceps, que tiene algo muy impactante, pero falta desejar varias otras áreas del físico. Y que en conjunto general, yo estoy bien equilibrado. Entonces, hasta mis pernas, porque pienso, estoy saliendo de la mesa, o creo que voy a tener un glúteo, tengo que marcar la más posterior de ombro, de glúteo, de femoral. Só que ahí, olhando, analizando bien y hasta recibiendo los feedbacks,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=275" target="_blank" class="timestamp">[04:35]</a> Entonces, ellos ficaron felices con el volumen y el controlamiento, la proporción del físico. Y eso para mí es lo más importante. Traer un equilibrio general que esperan en la clase física. Pues ahí lo teníamos, ¿no? Lo analizó también Ruth Diesel. Ambos quedaron, tanto Tyler como Ruth Diesel, sorprendidos por el equilibrio que había conseguido Kaiken en este proceso de mesa a clase. Tenéis que entender que cuando se produce este proceso, generalmente las piernas vienen o suelen venir en principio rezagadas</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=305" target="_blank" class="timestamp">[05:05]</a> Con respecto a lo que se pide en classic, evidentemente en men's las piernas supuestamente se valoran, pero bueno, se valoran por encima de un bañador, ya lo sabéis. Y en este caso hay que ponerlo en proporción, hay que generar esa X y han quedado en este caso gratamente sorprendidos, sobre todo por sus extremidades, bíceps, tríceps, hombro y evidentemente la conjunción de ese tren inferior.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=327" target="_blank" class="timestamp">[05:27]</a> Ahora es cuando ya se van a empezar a repartir las opiniones. Vamos a escuchar lo que tienen para comentar porque le preguntan y le inciden bastante en el tema del bad post. Y de aquí vamos a hilar a Josema. Estas son las principales críticas que suele recibir Kaike sobre ese tema del bad post y cómo las está gestionando.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=346" target="_blank" class="timestamp">[05:46]</a> es el Josema él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él él</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=376" target="_blank" class="timestamp">[06:16]</a> el Terence Ruffin y aparentemente el Terence Ruffin y el Kaique tienen las lías superiores al Josema, pero tal vez el Josema tenga un poco más de masa muscular que los dos, vamos ver eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=392" target="_blank" class="timestamp">[06:32]</a> Kaique, muchas personas hablaron que el Kaique es imbatible en las poses laterales, va a ser el más condicionado, tal vez que él ganhe un Pittsburgh y quebre la internet, pero el gente está muy ansioso para ver sus costas. Algunas personas especularon que sus costas tal vez no sean tan buenas como sus pernas u otras partes de su cuerpo. ¿Cuál es su respuesta con respecto a eso?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=420" target="_blank" class="timestamp">[07:00]</a> Cara, mi respuesta sobre eso es que, uno, no soy un cara de estar mostrando físico. Ahí, en esa preparación, decidí, tipo, vamos mostrar el físico realmente completo, en el stage, en el palco, en la versión Clássica del Kaique. Y el feedback que yo recibí del Tyler, dijo que mi pose de costa en la Classic estaba mil veces mejor que en la Men's. Entonces, solo escuchando eso, ya quedé muy feliz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=448" target="_blank" class="timestamp">[07:28]</a> Ojo al palo. Yo insisto, estoy intentando evitar dar grandes comentarios o grandes opiniones personales sobre lo que estamos escuchando. Pero yo creo que es bastante lo que le preguntan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=477" target="_blank" class="timestamp">[07:57]</a> Le pregunta, lo voy a volver otra vez a poner, le pregunta en este caso Terric El Guindy, que entre otros es juez del Mister Olimpia y una persona muy importante en Brasil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=486" target="_blank" class="timestamp">[08:06]</a> Le preguntan, ¿qué opinas de aquellos que están diciendo que el back post, veremos a ver qué pasa con él? Y lo que más me interesa de Kaike es la frase que deja de, estoy viendo a muchos que están posando y yo he optado por no mostrar mi físico. Vamos a escucharlo porque yo creo que hay un poquito de pataleta, ¿no? De soltarla ahí un poquito. Decir, bueno, aquí mis rivales están exhibiendo mucho y yo todavía no he mostrado nada. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=510" target="_blank" class="timestamp">[08:30]</a> Internet, pero el gente está muy ansioso para ver sus costas. Algunas personas especularon que sus costas tal vez no sean tan buenas como sus pernas o otras partes de su cuerpo. ¿Cuál es su respuesta con relación a eso?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=526" target="_blank" class="timestamp">[08:46]</a> Mi respuesta sobre eso es que, uno, no soy un cara de estar mostrando físico, y en esa preparación decidí que voy a mostrar físico realmente completo en el stage, en el palco, en la versión clássica físico de Kaique.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=543" target="_blank" class="timestamp">[09:03]</a> No soy de los que van exhibiendo el físico. Ahí lo dejo, ¿vale? Ahí ya le he introducido el nombre de Josema. Han introducido una opinión, en este caso Terrique el Guindy, hablando de que la cintura de Josema es más ancha que la de Kaike, que la de Rutisel, que tiene una línea menor de clásica, a pesar de que tiene una mayor densidad. Y a partir de ahí vamos a entrar ya de lleno en el territorio de Josema. ¿Por qué lo digo? Porque vais a ver como uno de los periodistas, podríamos decir, que están ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=570" target="_blank" class="timestamp">[09:30]</a> que es en este caso Rubén Gómez, el que está abajo a la derecha y flanqueado por dos espadas, le dice o le pregunta en este caso a Kaike, oye, se está hablando de Ruth Diesel, de ti, como una especie de batalla, pero se nos está olvidando aquí en la ecuación, Josema. ¿Qué opinas de él? ¿Lo ves como una posibilidad real para que pueda conseguir el título? Porque viene de ser el sexto del Mister Olimpia. Y vamos a escuchar lo que dice Kaike, insisto, vais a escuchar 90% halagos,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=597" target="_blank" class="timestamp">[09:57]</a> Y un 10% que desde mi punto de vista es, y está puesto en la miniatura y así es la frase literal, el palo del día. Vamos a escucharlo. Quiero ver la opinión de Kaique también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=607" target="_blank" class="timestamp">[10:07]</a> Él no descarta la posibilidad de Josema ser un nombre muy fuerte en esta competición, tanto como Kaique y él propio. Es un cara que ya fue en el top 6 del Mr. Olympia. Entonces quería saber de Kaique. ¿Qué que usted cree, Kaique, que Josema tiene de puntos que probablemente van a impactar y pueden superar a usted o Rolf Dizel en esta competición? ¿Ele es una amenaza para usted tanto como Rolf o no? Es una amenaza para cualquier competición. Él ya estreó en el top 6 del Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=637" target="_blank" class="timestamp">[10:37]</a> es un gran competidor, tiene un volumen muy legal, un condicionamiento espectacular. La dorsal es una de las mejores, si no la mejor que el Charafol de la Pro League. Con certeza, más campeonatos son solo de una pose. Voy a volver a repetir la parte final, porque como podéis ver todo es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=660" target="_blank" class="timestamp">[11:00]</a> Reconocer, bueno, su debut profesional, sexto del Mister Olimpia. Es un rival y es un potencial campeón para cualquiera de nosotros o contra cualquiera de nosotros. Su bad post probablemente sea el mejor de la Pro League. Pero, pero, pero, pero, y aquí es donde viene la película. Vamos a escuchar lo que tiene para decir después. Con certeza. Mas campeonato era feito solo de una cosa, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=688" target="_blank" class="timestamp">[11:28]</a> Ese, el campeonato no se gana con una pose, yo no sé si os parece a vosotros, lo mejor es rebuscarlo bastante, pero yo no lo creo, no se dice porque sí, o sea, va con un poquito de ahí, yo no sé si a lo mejor, la gente a lo mejor se espera que van a salir a la palestra los competidores y que a José más solamente lo van a llamar para el doble bíceps de espaldas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=712" target="_blank" class="timestamp">[11:52]</a> Yo creo que Josema tiene motivos más que suficientes, si lo vimos en la Olimpia del año pasado, para competir en cualquiera de las poses. O sea, es competitivo en cualquiera de las poses. Que tenga el mejor backpost de la liga profesional no significa que todo lo que no sea el backpost no sea competitivo. Es que si no, no puedes llegar ahí y ni mucho menos en tu edad profesional que dar sexto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=735" target="_blank" class="timestamp">[12:15]</a> Que es evidente que todo no es la pose de espaldas, por supuesto que no lo es, pero si eres competitivo en todas las demás poses y te das la vuelta y se apagan las luces, hombre, eso quizás lo que explique que un chaval de 23 años, de un país recóndito del mundo como es España, sobre todo a nivel del culturismo, se haya posicionado como sexto de la Olimpia. Aquí nadie regala nada y os garantizo que a los españoles les regalan todavía menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=759" target="_blank" class="timestamp">[12:39]</a> Entonces, como digo, el hecho de que un atleta como Josema, en su primera participación en la Olimpia, se ventile a atletas de la talla de Wesley Beeser, actual en ese momento campeón del Arnold Sport de Ohio, Michael Davul, gran campeón, Matt Grego, que era la gran apuesta americana de los últimos tiempos, Logan Franklin...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=780" target="_blank" class="timestamp">[13:00]</a> es que por encima de todos esos quedó Josemar el año pasado. Es que si no llega a ser porque es Ramondino y porque más o menos entre el Predatkin y la final, pues como que vale que vale, espabiló un poquito, es que se hubiera merendado a Ramondino, que entre otros es el mejor clasificio de la historia de Brasil y al que pretenden en este caso que Kaike pase por encima de él, porque también tienen bastante ganas, aparentemente por lo que yo veo, de ver caer a Ramondino.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=808" target="_blank" class="timestamp">[13:28]</a> Con lo cual yo insisto, estoy dando más opinión de la que me habría gustado este vídeo, pero me parece un poco sorprendente el hecho de que iba bastante bien, pero al final ha dejado ahí un poquito el palito. Como diciendo, sí, sí, bueno, pero poses de espalda hay una. Bueno, hay una, sí, es cierto que hay una. Solamente está el doble dices de espalda como obligatoria, pero les recuerdo, en este caso a Kaike, que también está la pose clásica favorita. Y esa es una pose obligatoria.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=835" target="_blank" class="timestamp">[13:55]</a> Y en la pose clásica favorita, puedes elegir una pose que sea de espaldas. De hecho, Josema elige la pose que también la tenéis en la miniatura, que es la de Arnold. ¿Os suele utilizarla?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=847" target="_blank" class="timestamp">[14:07]</a> Entonces por eso digo que eso de que es una, igual ya son dos. Y la pose que generalmente a él le viene que ni pintada, es precisamente la pose del side chest. Las poses laterales, que en este caso en Classic solamente hay una también, que es, como digo, la pose del side chest.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=867" target="_blank" class="timestamp">[14:27]</a> Y es más complicado meter esa pose como tu pose favorita de Classic porque generalmente casi nadie suele hacer sites de pose favorita de Classic. Con lo cual, insisto que creo que hay que tener paciencia y prudencia. Y creo que esta frase era desde luego... La parte final era desde luego prescindible, sobre todo porque Josema, insisto, es bastante competitivo en cualquiera de las poses y sobre todo va con mejoras, que eso es otra de las cosas que tampoco se dicen.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=895" target="_blank" class="timestamp">[14:55]</a> Como digo, vamos a escuchar los planes de Kaique ya para terminar de cara a si gana o no gana el Pittsburgh Pro. Y ojo, porque aquí pueden hacer una rivalidad. Porque Joseba, como todos sabéis, si todo sale como debería de salir, tanto gane como no lo haga, va a competir en el New York Pro. Y le preguntan por eso. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=917" target="_blank" class="timestamp">[15:17]</a> Quebra a internet. Quebra a internet. Quebra a internet. Quebra a internet. Você ganha o show, você quebra a internet. Todo mundo fica sem internet por 24 horas. Você continua competindo ou aí você só faz o Mr. Olympia?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=935" target="_blank" class="timestamp">[15:35]</a> No, no, ahí yo me enfocaría en el Olympia. Porque ahí es la que yo mostraría el trabajo y esa margen que yo voy a poder colocar de peso para traer un conjunto aún mejor para decirle, caraca, ese fue el 90% de Kaique. Imagina él con un kilín a más en ese grupamiento muscular. Ahí da un ánimo a más, cara.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=961" target="_blank" class="timestamp">[16:01]</a> Y si se quedara en segundo lugar, vamos supor Terence Ruffin ganha un show, o Rossema, segundo o tercer lugar. ¿Vocé iría para o New York Pro? ¿Vocé iría para otros eventos? ¿Logos después o esperaría un poco? ¿Cuál sería la estrategia? Depende de cuál sería el feedback. Vamos decir que, tipo, o Caixas, si llegase un poco más cheio, un poco más seco, o vamos decir que yo pegué segundo, cara, tú está allí, ahí yo haría.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=992" target="_blank" class="timestamp">[16:32]</a> Ahora es tipo, tú estás muy longe. Ahí yo entré en un off para mejorar, porque aún creo que puedo ser uno de los mejores.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=1001" target="_blank" class="timestamp">[16:41]</a> Pues ahí lo tenemos, ¿no? Todo va a depender, evidentemente, de lo que consiga lograr en este Pittsburgh Pro. Desde luego, me sorprende relativamente, porque en realidad no nos sorprende a nadie, de que tenemos bastante claro cuál va a ser el top 3. Otra cosa serán los órdenes. Pero como habéis podido escuchar a Terry Kelguindi, lo tiene bastante claro. Esto es una pelea entre Josema, Ruth Diesel y Kaique. Los órdenes ya los pondrá la tarima. De hecho, con la salida de Michael Daboul queda todavía más claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=1028" target="_blank" class="timestamp">[17:08]</a> A partir de ahí, como habéis escuchado, Kaique, bueno, si gana, pues directo a la Olimpia y a descansar y a mejorar de cara a la Olimpia y si no, pues seguramente haga el New York Pro siempre y cuando el feedback no sea un auténtico desastre. No le digan, no, mira, es que necesitan mucho más tamaño o demás. Yo creo que si no gana va a estar en el New York Pro seguro, porque yo creo que el físico no está desde luego para un desastre ni mucho menos. Puede perfectamente no ganar, pero eso no quiere decir que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=1052" target="_blank" class="timestamp">[17:32]</a> Que no vaya a ser competitivo ya desde el primer momento y que vaya a estar ahí. Y dudo mucho que le vayan a dar un feedback muy crítico como para no ir al New York Pro. Así que como digo, chicos y chicas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=1063" target="_blank" class="timestamp">[17:43]</a> Esta es la noticia del día, un caique que ha roto su silencio, si se puede decir así, desde luego ha hablado con los medios oficiales de la Olimpia, y sorprende en este caso, sorprende bastante las declaraciones, e insisto, con un poquito ahí de pataleta, con una posesora no se puede ganar, yo el físico lo muestro en tarima, otro no, en fin, la habéis visto ahí, habéis visto que ha dejado un poquito algún que otro mensajito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xvNjXvFMesM&t=1085" target="_blank" class="timestamp">[18:05]</a> Así que como digo, dejadme en la caja de comentarios que opináis. Fuerte like al vídeo. Mañana, a partir de mañana, ya estaremos en el VSpace tratando toda la actualidad de ese California Pro donde Germán Pastor se la juega. Y también, por supuesto, Antonio Valero. Así que suelta a los españoles. Y como siempre digo, chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 02/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
