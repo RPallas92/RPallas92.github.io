@@ -1,0 +1,596 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 03/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">03/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-kYxlZzFdl_I'>Kim ángel se Venga de Valdivia después de años</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-PegSOgO60CE'>"ESTÁ ANTE SU GRAN OPORTUNIDAD DE VOLVER AL OLYMPIA" Raúl Carrasco ANALIZA el CALIFORNIA PRO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-kYxlZzFdl_I">
+            <h2>Kim ángel se Venga de Valdivia después de años</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 03/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I" target="_blank">
+                    <img src="https://i.ytimg.com/vi/kYxlZzFdl_I/hqdefault.jpg" alt="Kim ángel se Venga de Valdivia después de años" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video documenta una sesión de entrenamiento de brazos entre Valdivia, King Angel y Nezkila (Rubiel).
+Se debate intensamente sobre la filosofía de entrenamiento, contrastando la necesidad de cargas pesadas para crear masa muscular con el trabajo analítico para pulir detalles.
+Destacan la genética y el físico descomunal de Rubiel, especialmente sus gemelos y brazos, a pesar de no priorizar su entrenamiento.
+Comparten anécdotas sobre entrenamientos brutales, lesiones y la importancia del estado mental (estrés/ansiedad) en la progresión física.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Asombroso Físico de Rubiel: Un Impacto Inmediato <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=50" target="_blank">[00:50]</a></h3>
+
+<p>Al inicio del video, Valdivia y King Angel reaccionan con sorpresa extrema al tamaño y la definición de Rubiel, especialmente sus gemelos. Lo describen como un "monstruo" que hace que incluso King Angel parezca más pequeño. Es el primer vistazo a la impresionante genética de Rubiel.</p>
+
+<h3>El Reto de los 10.000 Likes <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=125" target="_blank">[02:05]</a></h3>
+
+<p>Valdivia propone un reto a King Angel: si el video alcanza 10.000 likes, King Angel volverá para hacer una serie de tres entrenamientos juntos. Esto crea una expectativa para futuras colaboraciones y motiva la interacción del público.</p>
+
+<h3>La Filosofía de la Construcción Muscular: Peso Pesado vs Analítico <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=164" target="_blank">[02:44]</a></h3>
+
+<p>King Angel expone su firme creencia de que para construir masa muscular significativa, es fundamental mover cargas pesadas y superar los límites ("salvajadas"), no solo hacer ejercicios analíticos controlados. Argumenta que los analíticos sirven para pulir la masa ya creada.</p>
+
+<h3>Pulir los Detalles: Un Enfoque Necesario Después de Crear Masa <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=323" target="_blank">[05:23]</a></h3>
+
+<p>Complementando el debate anterior, King Angel explica que, una vez construida una base muscular sólida con peso, es necesario enfocar el detalle analítico en puntos débiles específicos. Pone el ejemplo de Joan Pradels y la necesidad de mejorar su espalda.</p>
+
+<h3>La Leyenda de los Gemelos de Rubiel <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=400" target="_blank">[06:40]</a></h3>
+
+<p>Mientras inician el entrenamiento de bíceps, Valdivia no puede dejar de mirar y comentar repetidamente los gemelos de Rubiel, calificándolos de "inhumanos" y "sin sentido". Se convierte en un gag recurrente y un punto de asombro por su genética.</p>
+
+<h3>Prioridades de Entrenamiento y Desproporción <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=491" target="_blank">[08:11]</a></h3>
+
+<p>Observando el físico de Rubiel, Valdivia y King Angel comentan que, a pesar de sus brazos descomunales, su hombro parece rezagado. Rubiel explica que no prioriza el entrenamiento de brazos y, de hecho, entrena hombro tres veces por semana para mejorar esa área.</p>
+
+<h3>Las Consecuencias de Entrenar Sin Límites: Anécdotas de Lesiones <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=672" target="_blank">[11:12]</a></h3>
+
+<p>Valdivia comparte experiencias pasadas de entrenamientos extremadamente intensos ("salvajadas") que casi le provocan hernias y lesiones. Describe un episodio en el que perdió la sensación en las piernas por minutos, destacando el alto riesgo de ese enfoque.</p>
+
+<h3>El Peligro de Mover Mucho Peso en Músculos Pequeños <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=1061" target="_blank">[17:41]</a></h3>
+
+<p>King Angel advierte vehementemente contra el uso de cargas muy pesadas en ejercicios para músculos pequeños como el bíceps. Cita múltiples ejemplos de culturistas fuertes que terminaron con roturas de tendón o musculares por esta práctica, recomendando hacer "el burro" en movimientos grandes.</p>
+
+<h3>El Impacto Oculto del Estrés y la Ansiedad <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=1980" target="_blank">[33:00]</a></h3>
+
+<p>Rubiel se sincera sobre un período reciente en el que el estrés y la ansiedad estancaron su físico, impidiendo que progresara en definición a pesar de seguir la dieta y el cardio. Subraya que el estado mental es crucial para el avance físico, más allá de la ciencia pura.</p>
+
+<h3>Comparando la Magnitud: Rubiel Junto a Íconos del Culturismo <a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&amp;t=2150" target="_blank">[35:50]</a></h3>
+
+<p>Valdivia compara el impacto visual del físico de Rubiel con el que sintió al ver de cerca a culturistas profesionales legendarios como Kai Greene, Phil Heath y Roelly Winklaar. Esto pone en perspectiva la magnitud del físico de Rubiel y su potencial genético.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=0" target="_blank" class="timestamp">[00:00]</a> El reencuentro con King Angel, pero no viene solo. Nezkila en acción. Cuidado hoy el vidiazo que tiene pinta. Le voy a dar me gusta ya de primeras. Que se ha marcado Valdivia con King Angel y Nezkila. Vamos a ver. Va sin bíceps el rubiel. Va sin bíceps. ¡Sube! ¡Vamos! ¡Vamos por dos! Si este vídeo llega a 10.000 likes, ¿te animarías a hacer como una serie conmigo de tres entrenamientos?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=28" target="_blank" class="timestamp">[00:28]</a> ¡Oh! ¡Vamos! ¡Eso es! Eso es, Rubien. Aprieta bien, aprieta, aprieta. ¡Vamos! No haya rías, no haya rías. Hace cinco repeticiones más. El Q ese lo mata, bro. Deja de hacer. Es que le sale solo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=50" target="_blank" class="timestamp">[00:50]</a> Mira Rubiel, por Dios Que deja pequeño al King Angel Y me pareció enorme cuando lo vi en persona Madre mía de mi vida lo de Rubiel Madre mía Rubiel ¿Qué es eso?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=66" target="_blank" class="timestamp">[01:06]</a> Bueno, amigos, bienvenidos un día más al canal. Día 3 por aquí entrenando. En el día de hoy encuentro que mucha gente… Pero ese gemelo no tiene sentido, por Dios. Quería ver a Don Kim y luego por aquí tenemos a Ruel. Un monstruo de la hostia. ¿Se han fijado los lazos gemelos que lleva? ¡Mira qué gemelos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=85" target="_blank" class="timestamp">[01:25]</a> Parece dos cabezas. Vamos a hacer entrenamiento de brazos. ¿No era gemelo eso? Solo gemelo y abdominales. Con ellos sería la hostia. Vamos a empezar con brazos entonces. Sí, vamos a darle caña. ¿Quién va a llevar el entreno?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=103" target="_blank" class="timestamp">[01:43]</a> Hablamos entre... ¿Cómo que yo? Yo creo que hay que confiar en él, ¿no? Vamos a hablarlo entre nosotros y vamos a ver. Empezamos por bíceps, luego tríceps. Yo creo que tres y tres, ¿no? ¿Te parece mucho? Seis ejercicios en total. Yo quiero ponerle una cosa a la gente. O sea, una propuesta que no sé si llegará. Si este vídeo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=125" target="_blank" class="timestamp">[02:05]</a> Llega a 10.000 likes. ¿Tú te animarías a hacer una serie conmigo de tres entrenamientos? O sea, que vuelvo aquí y hagamos tres días de entreno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=134" target="_blank" class="timestamp">[02:14]</a> Si este vídeo llega a 10.000 likes y que subes un reel haciendo remote con cuatro placas... Con cuatro placas. ...algo de ese entreno contigo. ¡Toma! Bueno, la puedes subir a YouTube. A Instagram, a YouTube, donde quieras. Vale. Yo te reto eso. Cuatro placas. Cuatro placas. Cuatro placas. Ah, hay que volver... Ah, ya cuatro placas se puede, coño. ¿Cómo no se va a poder Valdivia? A los viejos tiempos. Sí, bueno, cuatro... No, pero yo me pongo, pero si la gente cumple, hacemos los tres días. Sí, sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=164" target="_blank" class="timestamp">[02:44]</a> Mira, Valdivia, vamos a decir esto a la gente para que se entere, en fin, cualquier físico que vais así, como el de Fede que está por ahí, el de Jordi que está seguramente arriba, o yo, ninguno de esos físicos se ha creado haciendo analítico. O sea, para tener esa cantidad de masa muscular, todos hemos pasado por pasar por encima de los límites que teníamos, o sea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=188" target="_blank" class="timestamp">[03:08]</a> Él ahora se puede permitir de ser únicamente analítico, muy controlado. Pero para crear toda esta masa muscular tuvo que ir a fallos, por encima del fallo, trampear en algunos momentos. Y toda esa gente, o sea, el que veas, Nick Walker...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=205" target="_blank" class="timestamp">[03:25]</a> ¿Tú crees que hace realmente una jaca con dos placas? ¿Una de vidrio de cada lado? No, ahora lo hace, que aún así es cuestionable. Totalmente de acuerdo con King Angel. Esa es la realidad para crear un físico. Es la realidad. Los ejercicios analíticos no te van a poner con los físicos de un culturista pro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=223" target="_blank" class="timestamp">[03:43]</a> Ahora bien, los ejercicios analíticos te van a poner, van a pulir la masa que creaste, ¿vale? Haciendo todo tipo de burradas, de salvajadas, de mover cargas y cargas y cargas. Estoy totalmente de acuerdo con King Angel. No te vas a poner como ellos, tomando la química que quieras tomar, te va a dar igual, haciendo ejercicios analíticos. Y eso es una realidad como un castillo. Los analíticos para pulir lo que ya hay, sí. Para crear un físico, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=245" target="_blank" class="timestamp">[04:05]</a> pero ahora que se cree toda la polémica que sea Nick antes ponía 10 placas por lado en la jaca hacía press banca con 200 y algo el propio yo he visto hacer series de 8 y de 10 reps a CBAM con 280 270 kilos en peso muerto peso muerto convencional eh</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=266" target="_blank" class="timestamp">[04:26]</a> Yo lo he visto. Buscad sus vídeos. Ahí están. Doscientos y pico en sentadilla. Ahí están los vídeos. De Zeban. Que todo el mundo es el ídolo, Zeban. ¿Vale? Buscad los vídeos. Zeban. Sí. Ese al que todos imitáis haciendo el puto ejercicio este de hacer... De así. En la poleita. Como que se va a poner la espalda. Como Zeban por hacer el ejercicio este. El unilateral en... En polea alta. Ya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=286" target="_blank" class="timestamp">[04:46]</a> Lo lleváis claro. Mancuernas de 80 en press militar. Claro, ahora lo ven, no es que... Sí. Yo me acuerdo un día que hacía Nick antes. Yo me acuerdo un... No, pero tampoco hace mucho, ¿eh? Un press militar que llevo 80 o 90 kilos. Sí, sí. Yo creo que el peso alto de... Claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=303" target="_blank" class="timestamp">[05:03]</a> Porque todos pasamos por eso, de hacer muchas cargas, ya de pegas, en un peyote uno ganó mucha masa muscular, parece ya tirar, tirar más, educar más. No, no, tienes que mantenerte en el tiempo. Claro, pero por ejemplo en su caso, ya irá más a los puntos que más tiene que mejorar, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=323" target="_blank" class="timestamp">[05:23]</a> El problema es que tú cuando trabajas pesado no es concreto en un músculo, en una mejora. Es meter, meter, meter. Intensidad, intensidad, intensidad. Y tú te vas creciendo. ¿Qué pasa? Que llega un momento que si tu brazo reacciona más que tu hombro o mi pecho reacciona más que mi espalda, pues tengo que darle más detalle a la espalda. Y esto es lo que se le dice a Joan Pradels. Que perdona que lo saque ahora mismo aquí en la mesa. Joan Pradels...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=351" target="_blank" class="timestamp">[05:51]</a> Yo pienso personalmente, y mucha gente yo creo que también, que ya que ha creado el físico, tenga que pulir detalles de la espalda que tan atrás se le está quedando. Y eso no es malo. Eso no es malo. Él ha creado ese cuerpo increíble que tiene Joan, pero yo pienso, en mi opinión, que le podría venir muy bien enfocarse en puntos detallados sin hacer el salvaje y analítico para mejorar esos puntos que tiene atrás. ¡Ya está!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=376" target="_blank" class="timestamp">[06:16]</a> Y eso sí, sí que lo creo. Tengo que saber conectar con la espalda, tío. Entonces no puedes solo trabajar pesado, necesitas también analíticos. Gracias, Lord. Y con los años, intensidad más control van haciendo que vayas mejorando. Vamos a empezar con el primer ejercicio. A ver, ¿dónde queréis meterle?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=395" target="_blank" class="timestamp">[06:35]</a> Mancuerna. Mancuerna alterna, ¿no? Este ya va a tirar. Este ya lo estoy viendo, ¿eh? No, no, no, no. No, ya. De pie, ¿no? De pie, sí. A ver, para mí bíceps es un... Un músculo que no hay... No puedo dejar de mirar los gemelos de Rubiel, ¿eh? No tienen ningún sentido, ¿eh? Hay que... Mira que habré visto gente enorme en mi vida. Lo de los gemelos no tiene ningún tipo de sentido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=420" target="_blank" class="timestamp">[07:00]</a> Tienes que hacer el bestia porque si no, no conectas una mierda. Se carga mucho el antebrazo, el hombro... Entonces, hay que saber tener un poco de los dos, pero... bíceps tienes que saber mover el peso correctamente. Es que vaya bombas tiene el amigo, ¿sabes? Sí, sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=436" target="_blank" class="timestamp">[07:16]</a> Yo creo que hoy te vas a pasar el entreno mirándolo, porque esto no es normal. Pero, tío, si parece que ya va congestionado. Brother, la realidad es que... Qué barbaridad de brazo. Me duele el antebrazo, por eso llevaba ya 10 minutos aquí. Lo vi, se estaba congestionando para empezar el vídeo bien. Es verdad, lo hemos visto, es verdad. Lo hemos visto. Ha habido un momento que se ha escabullido y de repente lo ves al final del gimnasio ahí ya... Es algo que ya tengo en mente de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=465" target="_blank" class="timestamp">[07:45]</a> Pero tú, por ejemplo, Rubién, los brazos los tienes como medio vetados, en plan de que te dice no hagas mucho brazo. En general, pues no soy de hacer mucho rojo siempre y yo en ese momento estoy haciendo tres músculos por sesión de entrenamiento. Yo puedo hacer espalda, hombro y dos o tres ejercicios de bíceps. Sí, sí, sí. Entonces no es como que la semana pueda tocar el bíceps. No es una prioridad. No es una prioridad, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=491" target="_blank" class="timestamp">[08:11]</a> Tío, la cosa es que Rubiel, yo le he visto los entrenos y a ver, tampoco son unos entrenos muy locos los de Rubiel. No sé si lo habéis visto vosotros. Supongo que sí. Tampoco hace unos entrenamientos guau, ¿sabes? Que digas tú, es que por esto está así. Es que es una pasada. Y si lo priorizara, a lo mejor él tiene que priorizar un poquito más. Un poquito no, un poquito bastante. Está desproporcionado. De lo grande que es, se le ha quedado atrás el hombro. Es el hombro, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=517" target="_blank" class="timestamp">[08:37]</a> Sí, estamos trabando eso. De hecho, tengo trabando tres veces por semana. Tres. Claro, normal. Es que es una barbaridad lo de los brazos y se le ha quedado el hombro atrás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=531" target="_blank" class="timestamp">[08:51]</a> Frecuencia 3 de hombro, ¿no? Normal. Pero si es que tiene un cuerpo freak, o sea, freak en el buen sentido, de que es que van a llamar la atención siempre ese tipo de cuerpos. Es que es una locura. Vale. A veces es como mucho, pero a la vez no. Porque yo te meto al pecho y yo... No, pero hombre, el hombro se te recuperará. Eso son ya 20 kilitos, Jim, ¿eh? Sí, yo iba a decir dos de calentamiento y luego tres efectivas con un respost en la última, ¿no? Vale, vale, yo te sigo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=560" target="_blank" class="timestamp">[09:20]</a> Tú ya con 20 creo que es mi serie efectiva, o sea que... Sí, entonces coge 15 de calentamiento y 20 la primera efectiva. Y no ves para nada el fallo. O sea, como si fueran aproximaciones, ¿vale? Tú no vas al fallo el primero. Yo la verdad es que tengo más... Por ejemplo, hoy no vamos a ir al fallo del primero, pero siempre en el... Ahora que cambies mi rutina de entrenamiento, el primero voy al fallo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=581" target="_blank" class="timestamp">[09:41]</a> con muy poco con muy poca carga a altas repeticiones para meter sangre el tríceps mira el tríceps el tamaño que tiene mirar en la pierna que tiene ahí por brazos es inhumano</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=603" target="_blank" class="timestamp">[10:03]</a> Cada uno reacciona diferente. Por ejemplo, una vez que yo tengo el bicep lleno de sangre, da igual que sean 20, que sean 10... Hombre, ya, una vez que no levanto. Sí, sí, totalmente. Pero, tío, ¿cuánto puede levantar este tío de brazos? No, no, es el más fuerte del gimnasio. Lo único que no lo demuestra, porque no lo necesita.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=623" target="_blank" class="timestamp">[10:23]</a> Es que además, ¿sabes qué pasa? Que se le ve que tiene la típica genética también de que a nivel articular, de ligamentos y tal, va sobrado. ¿Te has lesionado mucho tú? ¿Te lesionas mucho? Lo único que yo tuve una molestia en el hombro...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=642" target="_blank" class="timestamp">[10:42]</a> Yo no puedo decir lo mismo. Es cierto que para las salvajadas que he hecho, demasiado bien estoy. Yo, la verdad, yo he hecho mucho el salvaje. Pero mucho, mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=672" target="_blank" class="timestamp">[11:12]</a> o sea yo creo que si retomo o sea me pongo a buscar vídeos de algunas barbaridades de las que yo he hecho diría o sea puedo yo creo que puedo hacer una recopilación si queréis si me lo ponéis en los comentarios una recopilación de todas las burradas que yo considere que son salvajadas que he hecho en mi vida</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=688" target="_blank" class="timestamp">[11:28]</a> si hay vídeos que yo creo que habrá alguno por ahí seguro de hace yo que sé mil años porque yo la lesión más tocha bueno los que me seguís lo sabréis es mi rotura de tendón de bíceps y bíceps y de la manera más tonta como quien dice porque yo he hecho cosas para herniarme 100% hermano para petar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=704" target="_blank" class="timestamp">[11:44]</a> Para petar. Y he sentido cosas dentro de mi cuerpo que han sido barbaridades. Y... O sea, yo hubo una vez que... Que durante minutos no sentía las piernas, tío. Durante minutos, tío. Hubo minutos que yo las piernas no las sentía, ninguna de las dos, tío. Me pasó en Marbella, en el gimnasio de mi amigo Mario, en Puerto Banús. No las sentía, hermano. ¿Sabes? No las sentía. Y nunca ha vuelto a pasar, pero... Eso en la casa ya todo el mundo... Vale, calentando...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=734" target="_blank" class="timestamp">[12:14]</a> Qué flipas, eh. Es que además, digamos, ¿vas a competir dentro de algunas semanas? Sí, la hemos fallado ocho o diez semanas. Claro, es que se le ve, tío. Tiene una piel muy bonita también. Muy fina.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=763" target="_blank" class="timestamp">[12:43]</a> Cerca el ten mucho del fallo, ¿ah? ¿Cerca del fallo? Sí. Luego sí que fallaremos. Esta aún no fallamos, pero... Dos. Tres. Bien. Cuatro. Bien. Uf. ¿Cuánto has pillado, Rubiel? 22,5. Sí. Qué barbaridad lo de Rubiel, tío. Vamos. Es una pasada cuando baja el tríceps tú.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=792" target="_blank" class="timestamp">[13:12]</a> ¿Qué es el tríceps? Es que es una barbaridad. Tengo siempre la mania bajada y meter el tríceps. Pero está bien. Este es un estiramiento completo. Vamos a ir controlado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=805" target="_blank" class="timestamp">[13:25]</a> ¿Le acaba de mutear la palabra p***? ¿Qué pasa ahora con este? ¿Cómo mueve los 27 con 5? ¿Valdivia? Bueno, no sé. Tendría que hablarlo por privado con él. ¿Te desmonetizan los vídeos a ti por decir palabrotas? Madre mía, entonces yo tendría que estar... A mí no me vería ni mi padre ya, entonces. De palabrotas que... ¿Qué va? El mono, ¿qué va? Hombre, ¿qué va? Que no, que no, que no. A él no lo sé. Vamos, ¿qué va? Cinco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=829" target="_blank" class="timestamp">[13:49]</a> ¿A cuántas has sido? El algoritmo no está tan así, ¿eh? Vale, vale, vale. Ah, que no recomienda. Editor, cortas la palabra. Que no nos recomiendan, hermano. 20. Debo ser a 10. 10 cada. Sí. Aparte se nota que como compite en breves... No, no, aquí aún no está definido. Está todo el año así, más o menos. Ahora está un poquito más definido. No, no, que sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=857" target="_blank" class="timestamp">[14:17]</a> Ahora va a apretar, de verdad. ¿A que sí, Rubio? Vamos. ¡Vamos! Muy bien. ¡Qué buenísima! Mete la actitud. Esto te cuesta. Vamos. ¡Vamos, Valdivia! Vamos. Eso es. ¡Vamos! Eso es. Tú dale. ¡Vamos! Esa es. ¿Qué hubo? ¿Qué hubo? ¿Qué hubo? ¿Qué es lo que hubo? ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=886" target="_blank" class="timestamp">[14:46]</a> ¿Qué hubo de qué? ¿Qué es eso? ¿Qué hubo? ¿Qué hubo? ¡Yep! ¡Yep! ¡Ahí! ¡Vamos! ¡Bien! ¡Buah, chaval!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=899" target="_blank" class="timestamp">[14:59]</a> El puto Kim está muy fuerte. Ya os digo que cuando estuvimos con él ahí en Mataró, el cabrón estaba muy fuerte. Imagino que ya estará empezando a apretar, ¿no? ¿O todavía no? Has tirado 27.5, ¿no? Tampoco estás lejos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=923" target="_blank" class="timestamp">[15:23]</a> A ver, no cambia mucho, pero... Es que aquí es respost, ¿sabes? Va a ser complicado. Vale, hacemos drop. Mejor. Ocho. Seis ocho. Ocho es mucho. Vamos al fallo. Sí, fallo. Y ahora sí que hacemos así. Para no alternar y más descanso. Bajamos un 20%, un poquito más. 30-20 en mi caso. Tú también 30-20.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=949" target="_blank" class="timestamp">[15:49]</a> ¿15? Pero yo te pregunto, ¿de normal cuánto tiras de... O sea, ¿cuánto te sueles poner o te estás calentando...? No, no, normalmente hago lo que he hecho, 25, 27, 30.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=960" target="_blank" class="timestamp">[16:00]</a> yo seguiré diciendo y se lo dije en persona que me encantaría en algún punto de su vida no sé cuándo que hiciera una pequeña preparación de fuerza tío porque yo creo que Kim tiene la capacidad de ser de esos pocos privilegiados en España de pasar de 250 en banca en España literalmente se cuentan con la mano los que a día de hoy que estén en activo levanten más de 250 o 250 en banca</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=989" target="_blank" class="timestamp">[16:29]</a> ibas a calentarte más todavía. No, no quiero. No me calientes, no me piques. El hijo p*** me conoce, ¿sabes qué? ¿Por qué no pruebas la de 40, Kim? Hombre, pero te podías tirar una de prueba, ¿no? ¿Hace cuánto...? No, no, no. Me está picando. De nuevo, hacía igual 40 como de p***. Pero 40 no levanta, ¿no? Eso pasa el pecho. Eso pasa el pecho. Pues el Estefan Matala este está con 40 kilos de mancuerna, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1019" target="_blank" class="timestamp">[16:59]</a> haciendo el curso no sólo que haga este forma tala porque no lo he visto vale pero levantar 40 kilos de bíceps de mancuerna para que sinceramente para que sea es uno es un músculo pequeñísimo en el que el riesgo de lesión es criminal pero eso no yo lo siento mira que me encanta la fuerza en general todo tipo de fuerza me encanta pero en bíceps no porque puede hasta que se parte hermano hasta que se parte hasta que se parte van son nuevas sitios</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1050" target="_blank" class="timestamp">[17:30]</a> La cámara está haciendo un volumen muy... Sí, sí, sí. Ahora mismo, claro. No, ya estoy bajando. No, no. Estefan, mínimo 20.000 calorías por comida.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1061" target="_blank" class="timestamp">[17:41]</a> Está pasando a open y claro. Recomiendo meter bíceps pesos pequeños mejor que grandes. Recomiendo meter el peso adecuado para ti. Yo, todas las personas que he conocido en mi vida fuertes que hacían el animal en bíceps, todas, absolutamente todas, terminaban con los bíceps o rotos de tendón o rotos de musculatura. Todas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1085" target="_blank" class="timestamp">[18:05]</a> Sí, a ver si os creéis que yo no he visto a tíos haciendo con 100 kilos 8 repes. Así de veces los he visto. Con 100 kilos en barra Z. Así. Todos mal. Todos reventados. Todos. No se salva ni uno. A ver, que lo hagas una vez, me callo. Pero que su entreno siempre fuese así. Cascados. Todos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1109" target="_blank" class="timestamp">[18:29]</a> Claro, para hacer el burro están grupos grandes, musculares. Tío, hace el burro en sentadilla. Hace el burro en banca. Y cuidado con la banca. Hace el burro en muerto. Hace el burro en press militar. Hace el burro en movimientos grandes, tío. Va a ser duro esto. Vamos. Bueno, en banca no hagas el burro, la verdad. Porque el riesgo me parece que es demasiado alto. No lo hagas. En un remo, claro. ¡Yo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1143" target="_blank" class="timestamp">[19:03]</a> Me dice al principio al entrar. No, no me calento. Hoy tranquilo. Si era de descanso. Vamos. Toma, toma, toma. Va, va, va. Día de descanso, bro. Ya está, ¿no? Sí. No, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1170" target="_blank" class="timestamp">[19:30]</a> Porque se las está tirando analíticas, ¿sabes? Muy bien. Miren, última. ¡Ya! Qué barbaridad lo de este timo, tío. Cuando hagas la bajada aquí, no vuelvas a martillo. Mantén recto, ¿vale? ¡Vamos! Impresionante. ¡Uf! ¡Vamos! Vaya fuerza de tener.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1202" target="_blank" class="timestamp">[20:02]</a> ¡Vamos! No tiene fina. Continúa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1210" target="_blank" class="timestamp">[20:10]</a> Realmente es porque el bíceps ya no le da el drive. No, no, pero, bro, que tiene una fuerza. Si llaman cuernos, mucho más. A ver, ¿prueba 40, bro? No, no. Hoy no. Pero una salida sin problema. El problema es que yo soy un picado, ahora tengo la macona ahí de 40, quiero probar. El hecho de que aceleres un poco el tempo no te va a restar sobre lo que vas a notar en el bíceps, bro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1233" target="_blank" class="timestamp">[20:33]</a> ¿Qué dices? ¿Que le dé más ritmo o qué? Puedes darle un poquito mientras no me des lumbar. ¿Sabes lo que quiere decir? Saca pecho arriba. Ahí. Bien. Dos. Bien, Valdivia. A él le cuesta hacer esto. Obvio. Para que vaya bien el codo. Tú balancea, tú. Para alinear. Alinear el tres. Vamos. Bici, hombre. ¡Tumba, tumba, tumba! ¡Qué ideal!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1262" target="_blank" class="timestamp">[21:02]</a> Es que no sé con qué brazo he empezado, Kim. Con el derecho o con el izquierdo. Está igual. Abre. Ah, es que estaba a costar. Como si fuera una barra. Y levanta un poco los codos. Eso. Va. Valdivia te pone fuerte sí o sí, eh. Te pone fuerte sí o sí en Valencia. Eso, eh. Ahí. ¡Chubo! ¡Chubo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1291" target="_blank" class="timestamp">[21:31]</a> Coge siete y medio. Siete y medio. Bueno, diez. Gracias, cabrón. A mí me ha hecho gracia, tío. No hables, vamos. Luego, luego, luego. Vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1310" target="_blank" class="timestamp">[21:50]</a> ¡Vamos! ¡Vamos! ¡No te cagáis encima! ¡Vamos! ¡Venga, Valdivia! ¡Vamos! ¡Me está haciendo gracia! ¡Claro, caro! ¡Bien! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1337" target="_blank" class="timestamp">[22:17]</a> Si se pone así... Si se pone así, tío, ¿qué vamos a tirarle ahora? Curl... No. ¿Tiramos aquí? No, no. En polea, bro. Polea con barra Z. O sea, voy a mover el banco a la polea, ponemos barra Z. Hoy tenemos entrenamiento con el señor Valdivia y con el monstruo Nexmonstrio. Madre mía. Nexzilla. Let's go.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1365" target="_blank" class="timestamp">[22:45]</a> Vaya tela, tío. Se ha centrado en culturismo. Sí, tiene futuro. El problema es el peso que tiene la amateur, bro, ¿qué va a hacer?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1378" target="_blank" class="timestamp">[22:58]</a> Pero, bro, no sé cómo va a entrar en el peso. Esto ya lo voy viendo efectivo, ¿eh? No. Vamos. Hermano, fijaros la barbaridad de lo que nos acaba de hacer Rubiel al mirarle. Que vemos a Kim pequeño. Os aseguro que Kim es grande. Que los brazos de Kim son una pasada, ¿eh? Os lo digo, ¿eh? Una pasada. Rubiel no ha querido… Como un niño pequeño. Rubiel no ha querido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1409" target="_blank" class="timestamp">[23:29]</a> Bien. Ayúdame. Vamos. Aquí puedes lucharlas, ¿ah? Vamos. Me he pasado un poco, ¿no? ¡Vamos! Vamos, vamos, vamos. Él lo hace solo, bro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1440" target="_blank" class="timestamp">[24:00]</a> Pero escúchame, me ha pedido ayuda. Se van a cargar a Valdivia. Valdivia ya no está. Está que no está. Su serie y me has bajado dos placas de lo que te has puesto tú. Le has puesto más aquí. Bro, ¿qué haces? Yo le puse 90. No, no, pero no ha acabado. Ha hecho tres reps. No te escapa, Valdivia. Tú descansa. ¡Tira! ¿Qué hubo? ¿Qué hubo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1462" target="_blank" class="timestamp">[24:22]</a> Yo te bajo y haces cinco más. ¡Quo! Cinco o seis, vamos. Una, dos y tres. Vamos. Esto es como un Red Force, bro. Ven. Vamos. ¡Apreta bien! ¡Vamos! ¡Quo! ¡Quo! Hace cinco repeticiones más. El cue ese lo mata, bro. Deja de hacer ya. Es que le sale solo. ¡Vamos! ¡Vamos! Aguanta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1489" target="_blank" class="timestamp">[24:49]</a> Va, va, va, va. Me has puesto… Tío, esto pesa un huevo. No, pero está bien, está bien. Está bien, dice. No estás concentrado por eso. No está concentrado, King, estoy contigo. Vamos a ver. Si me has puesto casi el peso que va a tirar este monstruo, ¿sabes? Si me hago tres muriéndome… No, bro. Te he puesto 49 y él se pone 86, bro. ¿Qué me estás contando? No, tú me has puesto… Que la gente se dé cuenta. 77 kilos me ha puesto. Me ha puesto. 77 kilos. ¿Hizo con tu demás?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1518" target="_blank" class="timestamp">[25:18]</a> No, pero… Él se contó de más. Claro. Y claro, si he hecho tres dejándome la vida, pues me he quedado sin fuerza para la siguiente. Vamos. Este pesa tanto que se le va el banco para adelante. ¡Buah! Mira esto, mira, mira. Yo quiero grabar esto. ¡Vamos! ¡Madre mía! ¡Vaya roca de bíceps! ¡Qué barbaridad, tío! ¡Qué barbaridad! ¡Madre mía! ¡Qué barbaridad! ¡Vamos! ¡Vamos! ¡Vamos, Miguel! ¡Vamos, vamos! ¡Dale! ¡Buf!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1548" target="_blank" class="timestamp">[25:48]</a> ¡Vamos! ¡Esa es! Qué puta barbaridad, tío. Bro, terrible. Qué flipas. Ojo, ahí va el bicho. ¿Qué hubo? ¿Qué hubo? Échale una manilla. ¿Qué hubo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1571" target="_blank" class="timestamp">[26:11]</a> ¿Qué hubo? ¿Qué hubo? ¿Qué hubo? ¿Qué hubo? ¿Por qué dice eso? Come on, man. Come on, man. ¿Pero por qué dice el que hubo? Baja más. Las que salgan, las que salgan. Vamos, vamos. Un paseo es esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1599" target="_blank" class="timestamp">[26:39]</a> Yo no quiero que me asista. Me voy a reír, tío. Va. Va, va, va. Para que salga. Sí, sí, bro. Puto Kim, la que se está haciendo ahí, ¿eh? Vamos. Vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1627" target="_blank" class="timestamp">[27:07]</a> Cinco segundos, una metapausa, vamos. Cinco, cuatro. Te ha venido desde el cielo y el otro lo está viendo. Eso es. Eso es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1643" target="_blank" class="timestamp">[27:23]</a> Qué loco, tío. Qué grande Kim, tío. Tíos, yo os voy a decir un detalle de Kim Ángel que me dijo allí en Mataró. Tío, no me acuerdo que si le pregunté... Le pregunté algo de la fuerza, ¿vale? Y me dijo... O cuál era el objetivo que tenía y me dijo... Hermano, yo tengo un sueño y tengo que cumplirlo. Y con eso lo he entendido. O sea, lo he entendido todo. Es como que el tipo me dio a entender como que se va a dejar el alma con tal de conseguir su sueño, tío. Y visto lo visto, es una verdad. Madre mía, chaval.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1671" target="_blank" class="timestamp">[27:51]</a> Aquí, en serio. Hasta que no te digan esto. No te rías. No te rías. No te rías. Si ríes cinco repeticiones más. Estoy hablando y claro es que... Vamos. Que duela. Dos. Esa es. Vamos. No se ría porque lo cacheteo. Luego se va a enfadar. Vamos, vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1699" target="_blank" class="timestamp">[28:19]</a> ¡Vamos! ¡Cachetealo, cachetealo! ¿Cuántas son? ¡Vamos! Tú dale. Mira, mira eso. Mira el bíceps. ¡Vamos! ¡Esa es! ¡Vamos! ¡Vamos! ¡Vamos! ¿Qué pasa?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1715" target="_blank" class="timestamp">[28:35]</a> ¡Lucha! ¡Lucha! ¡Lucha! ¡Lucha! ¡Esta! ¡Joder! Se van a cargar a Valdivia. ¡Vamos! ¡Vamos! ¡Vamos! ¡Vamos! Hay que forzarlo. ¡Vamos! ¡Vamos, Víctor! No busques excusas. ¡Vamos! Va, va, va. ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1730" target="_blank" class="timestamp">[28:50]</a> ¡Vamos! ¡Esa es! ¡Vamos! ¡Va, va, va! ¡Vamos! ¡Va! ¡Bien! Joder, cabrón. Me lo matan a Valdivia, me lo matan. De 31 a… Nos quedamos sin Valdivia. 18, así puede hacer algo. Dile que no haga bromas, ¿sabes? No estás haciendo ninguna broma. Es así, bro. El hospital está cerca, dice. ¡Vamos! ¡Joder! El hospital está cerca, la bicho. ¡Esa es! ¡Altitud!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1761" target="_blank" class="timestamp">[29:21]</a> Muy bien. Controla un poco. En este peso puedes controlar. Eso es. ¿Qué hubo? Díselo. ¿Qué hubo? Va, va, va, va. ¿Qué hubo? Díselo. Baja. No sueltes. No, baja. Deja estirar. Estira. Estira ahí. Vale. ¡Explosivo! ¡Vamos! ¡Explosivo! ¡Vamos! ¡Vamos! Ya sabes. Muy bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1787" target="_blank" class="timestamp">[29:47]</a> Joder, ¿no? Joder. Se te quitó la risa y todo. Joder. Bien ahí. ¡Vamos! Mira cuántas reps sacan. ¡Vamos! ¡Sube! Vamos, vamos por dos. ¡Venga! Una más. ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1812" target="_blank" class="timestamp">[30:12]</a> ¡Uff! ¡Esa! Míralo, tío. Es una barbaridad. ¡El hombro es una barbaridad! Madre mía. ¡Vaya anima! ¡Vamos! ¡Hostia! ¡Dalos todo! ¡Vamos! Es el Fede el que está por ahí gritando, ¿no? ¡Vamos! ¡Vamos! ¡Dalos todo! ¡Vamos! ¡Madre mía! ¡Sufre! ¡Vamos! ¡Esa es! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1842" target="_blank" class="timestamp">[30:42]</a> Brutal. Pero escucha tú. ¡Double Y! ¡Double Y! No está la luz. ¡Vamos! Animal. Vamos. La última micopransa. Y le da a su radio. Vamos. ¿Sabes qué sabrás? Es que el bíceps le toca el hombro. Es una barbaridad. Pero mira, mira. Que el bíceps le toca el hombro. Es una cosa… ¡Qué locura, chaval! ¡Eso es, Rubiel!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1872" target="_blank" class="timestamp">[31:12]</a> Qué locura, tío. Qué locura. Qué gusto verte entrenar así, bro. ¿Sí o no? Sí una pasada, tío. Para ganar pelados y no recogernos, vámonos. De bíceps. A ver, ponte Rubiel, a ver, saca para que vea la diferencia. Madre mía. Pues tampoco hay tanta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1898" target="_blank" class="timestamp">[31:38]</a> El color. Yo creo que sí. El color es muy difícil. Unos cuantos días más en Valencia y... Mira a pie el canela pelado. ¿Cuánto tiempo llevas entrenando? Yo inicié el costurismo del 2018. ¿El 2018? 2018. Pero bueno, ¿ya estabas fuerte o no? Yo hacía lanzamiento de martillo. ¿Lanzamiento de martillo? Bueno, para el lanzamiento de martillo tienes que estar muy fuerte, también te digo, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1929" target="_blank" class="timestamp">[32:09]</a> Hacíamos peso pero no trabajábamos así. Para rendimiento. Yo jalaba 180 kilos. Por arriba. Eso. Por arriba. Eso. Hermano, es natural, ¿no? Ni aunque te tomes toda la farmacia te pones como Rubiel. Ya te digo yo que Rubiel es un prodigio genético, hermano. Vamos. ¿Me ayuda un poco menos? Bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1958" target="_blank" class="timestamp">[32:38]</a> Es de dos series, ¿no? Ya con la calentada del anterior, vamos finitos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=1975" target="_blank" class="timestamp">[32:55]</a> Ahora yo estoy en la peor fase de la preparación, o sea, del culturismo, que es cuando has acabado el volumen y empiezas de fricción. Las primeras semanas lo que pasa es que tú tienes grasa, pero lo primero que haces es que te vacías. Y aún estás gordo, bueno, gordo. Yo tuve un tiempo que a mí me dio así como dos meses atrás. No, como un mes y medio me van a curar, si ya me mueves ella.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2000" target="_blank" class="timestamp">[33:20]</a> Yo estaba muy estresado. Había unas bailas de trabajo donde ya me disfrutaban. Yo no salía entrenar. Llego a la casa. A ver si yo iba a cocinar así. Cuando los campeones fuese una semana así. Yo con ese arrepiado duro. Me puse raro y yo así. Me senté. Me tranquilicé así. Diez minutos ahí. Y me bajó. Y ahí para acá no me sentió ninguna mía de asco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2029" target="_blank" class="timestamp">[33:49]</a> ¿Pero por qué te dio eso? Proba, estrés, estrés. Cuando está en alta pared, que tiene mucho estrés... Y yo, claro, en ese tiempo estaba que mi físico no avanzaba, porque estaba estancado. Da igual lo que hagas, puedes comer cero hidratos, hacer tres horas de cardio, que si tu cabeza no está... O sea, peso puedes perder, pero se te va a ver peor, no se te va a ver mejor, ¿sabes? O sea, por lógica, la ciencia es así. Si gastas más de lo que consumes, por cojones algo pasa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2057" target="_blank" class="timestamp">[34:17]</a> Pero tiene que pasar por el camino que tú quieres. Mejorando la piel, mejorando el porcentaje de grasa, no categorizando el músculo. Y cuando tú estás estresado... Qué bueno que Rubiel se sincere, tío. Porque yo me acuerdo que hace meses se rumoreaba eso de él. Y de que no era... Como que con la dieta era un poco perrete y tal. Y bueno, me está diciendo que no. Que eran problemas de ansiedad y que no avanzaba. Y claro, muy bien, muy guay. Qué guay que lo diga, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2082" target="_blank" class="timestamp">[34:42]</a> Y te retiene. Claro. Cortisol. Porque tú sabes que estuve en dos semanas de preparación y tú ya notas un avance. Yo estoy aquí. Dos semanas de preparación, yo cambio totalmente. Sí, sí. Y yo ya trae cuatro. Papi, yo hasta el cabo. Yo no es normal. Sí. Hablé compras, hablé compras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2100" target="_blank" class="timestamp">[35:00]</a> Yo tenía la cabeza así que yo... Y yo también me dijeron eso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2107" target="_blank" class="timestamp">[35:07]</a> Cálmate. La próxima vez que te pase, lo primero que tienes que hacer es comunicármelo a mí. Yo te salgo de fiesta, bro, y te digo que se te va la ansiedad. Bro, los domingos... Bro, los domingos, afro... Bro, los domingos, afrogem, afrohouse ahí en el marina, bro. Sí, una clase de pilates y ya está. Menudo golfo el king, ¿eh? ¿Pilates? ¿Pero qué pilates, tú?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2137" target="_blank" class="timestamp">[35:37]</a> No, pero estaría guapo entrando a una clase de pilates.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2147" target="_blank" class="timestamp">[35:47]</a> Tampoco es para tanto. Qué barbaridad es el bíceps. Es que no tiene sentido el bíceps, tío. Es terrible, tú. ¿Quieres poner más? Sí. Parece el Pokémon este de roca, ¿sabes? Es la persona que más te ha sorprendido en cuanto a tamaño. A ver, claro, yo es que he visto a todos de cerca. He visto a Kygreen, he visto a toda esta gente. No, no, pero no... ¿A Kygreen has integrado con él? No, hombre, evidentemente no. Bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2178" target="_blank" class="timestamp">[36:18]</a> Pero tú lo has visto de cerca, Kay Green, ¿no? Qué cabrones son, tío. Qué cabrones son. Lo he visto de cerca, Kay Green. Bueno, porque si no lo sabéis alguno, porque eso es antiguillo, Kay Green hizo un vídeo de adultos, ¿vale? Hace muchos años, sí, sí. Y de contenido para gente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2204" target="_blank" class="timestamp">[36:44]</a> De cerca. No la sabe, creo que no la sabe. No, a ver, no lo he visto, pero me lo han dicho. Me han dicho algo. En el Arnold Classic salió a hacer, ¿te acuerdas un posi individual? Con una careta o algo así. En 2016 creo que fue. O no, 2015. Pues yo lo vi ahí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2228" target="_blank" class="timestamp">[37:08]</a> Bueno, yo he visto de cerca, de cerca te digo, a un metro. A Kai Greene. Pero yo creo que el culturista que más me ha impactado... Hostia, Phil Heath fue una locura, tío. Y a Phil Heath lo vi a un metro mía, eh. Pero cuidado con el Royley Winclair ese. Cuidado, eh. Que también lo vi a... Nada, estaba a lo mía. En un Arnold. Y hostia, eh. Yo es que me quedé loco con los brazos del puto Phil Heath, tío. Me quedé loquísimo. Pero muy loco con los brazos de Phil Heath. Fue una cosa...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2253" target="_blank" class="timestamp">[37:33]</a> Pero da igual, aún así… Estamos hablando de un subcampeón de Miserólimpia. No, hombre, y que ese tío era el nombre de 130 y pico, ¿no? ¿Lo has visto así como Rubén? Entrenando o no. Claro, sí, pero si te digo, para… Yo creo que se me ha dicho que me lo van a dar una Olimpia para el Green, parce. O sea, me ha dicho que me tocó con Fijer y que… Déjale ir. No, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2283" target="_blank" class="timestamp">[38:03]</a> Él quiere entrenar como Nick Walker, pero no eres Nick Walker. ¿Puedes? Sí, sí que puede. Dos. Mejor que me pongas tres. ¡Vamos, vamos! Cuatro. Que quitas la mano y lo levanta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2300" target="_blank" class="timestamp">[38:20]</a> ¡Vamos, Valdivia! Sí, sí. Es todo por llorar, es todo por llorar. Sí, sí. Vamos, ahora solo esta, vamos. No, no, no, pero no me ayudes. Mira la frente, mira la frente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2330" target="_blank" class="timestamp">[38:50]</a> Vamos. Qué barbaridad, Kim, tío. Vamos. Bien. Vamos, vamos, vamos, vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2365" target="_blank" class="timestamp">[39:25]</a> Es que es insentido lo del bíceps. ¡Bien!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2378" target="_blank" class="timestamp">[39:38]</a> O sea, yo me acuerdo de ver Rubén la primera vez en Praga y es el típico que está en la trima y dice ¡Uff! Pero luego posaba y era, hay algo que no sé lo que es, pero me falla. Porque si no, este tío con la impresión que da, tiene que ganar. Pero había algo que decía... La simetría. Y era la simetría. Y el otro día que posó... El otro día que posó, pero se le veía como la clavícula estrecha, ahora ya no se le ve. Ahora es simétrico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2400" target="_blank" class="timestamp">[40:00]</a> Ya no se le ve una cintura cuadrada, se le ve la V, pero no sé por qué. Cada año mejor. Cuando uno hace un proceso... Podría pasar luego. Podría pasar para verlo, marica, no estás en una mierda. Tienes que buscarme la mejora en la generación de masa muscular. Claro. Pero podría pasar luego. ¿20 como antes o 25?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2427" target="_blank" class="timestamp">[40:27]</a> Vamos. Con 20 va bien, ¿eh? Sí, sí. Vamos. Vamos. Ven, ven. Ahí vas tú. No te ayudo. Vamos. Es locura. Es demasiado fácil esta. Bien. Muy bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2448" target="_blank" class="timestamp">[40:48]</a> Sinceramente, en este último ejercicio, más que el peso es saber poder continuar. Sí, vamos a anotar el músculo, pero... Sí, sí. Pero siempre cuando hay un entrenamiento de un response o de un poco de pelea, es terminar un ejercicio que puedas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2468" target="_blank" class="timestamp">[41:08]</a> Sentir a uno aunque estés congestionado. Claro, yo quería sentir, pero... Bueno, tríceps nos va a guiar... Joder, se ha ido casi todo el vídeo haciendo bíceps. Dos o tres de tríceps. Tres. Vale. Vamos a estar desfijados y repeticiones. Un poquito controladita. Vale. Y vamos a ver si llegamos y fallamos en el tercero. Se me hace súper raro un agarre así ancho. Voy a probar a ver qué tal. ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2499" target="_blank" class="timestamp">[41:39]</a> Qué barbaridad, tío. Bien. Vale, vale, vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2518" target="_blank" class="timestamp">[41:58]</a> Víctor ya nos está abandonando un poco, está desconectando. Su cabeza le cuesta pensar ya. O sea, han sido tres días demasiado intensos ya. Este es el último, ya está como... No, no. Le hablo, empecé a mirar la puerta de la salida. No, no, pero a ver, lo que has dicho es verdad. Lo que pasa es que como... Ya está muerto Valdivia. Estéis tirando 20-22 kilos, que para mí es mucho. Pues el cuerpo me tiene que hacer eso. Vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2543" target="_blank" class="timestamp">[42:23]</a> Si yo pongo la garra pequeña, mi espalda se va a contraer. Antes voy a tirar fuerza con la espalda y con el tríceps. Voy a tirar fuerza con la espalda y con el tríceps. Eso no quiero. Quiero tirar fuerza con el tríceps nada más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2558" target="_blank" class="timestamp">[42:38]</a> Vaya cosa, eh. Buena aplicación, Rubén. Sí, señor. Víctor, tú me vienes a hacer esa pregunta. Yo suelo entrenar con la barra lo más cerrada posible y aquí delante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2575" target="_blank" class="timestamp">[42:55]</a> Brother. Porque así es un empuje. Brother. Porque así es un empuje. Yo veo esto y digo... No, voy a probar lo que me dice. No, no, yo lo voy a probar. Entonces, yo suelo cerrar aquí delante en vez de cerrar aquí detrás. Y suelo coger barra cerrada y aquí. Pues, tío...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2591" target="_blank" class="timestamp">[43:11]</a> Pues hoy dice ese, voy a probar y la sensación es diferente. Noto que se me contrae en un sitio diferente de tríceps. Lo único que también me pasa es que si cojo un peso también más elevado del que yo puedo mover, ya mi cuerpo se amolda para poder moverlo y no puedo hacerlo. Claro, claro. Muy bien. Puedes a fallar, ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2621" target="_blank" class="timestamp">[43:41]</a> Yo te ayudo una vez que falles. ¡Vamos, Valdivia! Por dos, tres y punto. Pecho arriba, mantén el pecho arriba. ¡Bien! Esa ha sido buenísima. Dos iguales. Tú no acereres, yo te ayudo. Dame una. Es que se me carga, tío. Duele, ¿eh? Es que claro, si estás cambiando… ¿Duele? Sí, sí, sí. Entonces es bueno. Vas a tocar la cadera ahí. ¡Pam! Hasta atrás, hasta atrás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2648" target="_blank" class="timestamp">[44:08]</a> Sube casi hasta la cara. Mira. Sube, sube, sube. Estira lo máximo que puede y contrae lo máximo que puede. Qué barbaridad lo de Rubiel. No tiene ningún tipo de sentido. Está buscando el rango de movimiento más ancho posible. ¿Cuánto estás pesando ahora? 135. ¡135, qué barbaridad! 35 kilos en la leche, chaval. Casi un 80. Casi. Un 80. ¡Nos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2679" target="_blank" class="timestamp">[44:39]</a> La verdad es que es una pasada. Poder entrenar con estos dos monstruos para Valdivia tiene que ser una locura. Para mí sería una locura por lo menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2701" target="_blank" class="timestamp">[45:01]</a> Dice que estaba ligero con 130 kilos. ¿De qué? ¿Dominadas? Joder. Pero ahora ya no eres capaz. Yo... Yo tenía de récord 35 y este año hice 21. Imagínate.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2725" target="_blank" class="timestamp">[45:25]</a> Yo le veo y, tío, todavía le veo como con mucha más capacidad de tener más músculos, ¿sabes? Es que no, pero para él mejor no tener más. O las piernas a lo mejor, ¿no? Sinceramente, tú con más músculos va a ser peor siempre. O sea, ¿te has dado cuenta ahora? O sea, ¿has bajado kilos?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2745" target="_blank" class="timestamp">[45:45]</a> El rubier es impresionante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2763" target="_blank" class="timestamp">[46:03]</a> eso lleva diciendo tiempo que él tiene mucha capacidad para para coger masa muscular tío que es que tiene un don pero bueno oye es verdad que queremos verlo más estético un poquito más estético ahora si él tiene el físico freak y eso no tampoco va a hacer magia pero bueno puede pulir cosas como la está puliendo ahora</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2780" target="_blank" class="timestamp">[46:20]</a> ¿Qué pasa en eso? Hace un déficit calóricamente. Me mata porque bajó muy rápido. ¿Por qué? Bajas muy rápido hasta un peso. A partir de ahí ya... Exactamente. Como yo. Estaba en 115, cinco días de prepa, seis kilos y medio menos. Y ahora ya en 109, así, pam, no se mueve. O sea, a partir de aquí va a empezar a subir cardio, a bajar comida y poco a poco bajando. Hasta 100.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2808" target="_blank" class="timestamp">[46:48]</a> Con Francisco, con Fran. Basaba en eso, un hombre que me dice, no, vamos a quitar eso, vamos a gustar más de las cosas. Yo sé que vamos a usar la dieta y vamos a cambiar la vitamina C. Sí, claro. La vitamina C dice. Apretar un poco más con la vitamina C. Y aquí tengo un viaje para Italia. Bueno, próximo ejercicio de tríceps antes que me enfríe, tío. La vitamina C dice el cabrón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2838" target="_blank" class="timestamp">[47:18]</a> Pesa 30 kilos más que yo y ¿cuántos más que tú? ¿Te en cuenta? ¿Cuánto pesa más que tú? 30. Bueno, 28. ¿Pesa 136?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2865" target="_blank" class="timestamp">[47:45]</a> Ahora es que... Yo he puesto 209. A mí me saca, bueno, no lo sé, la verdad, 55... 57 kilos me saca los 58. ¿Más recto o más para adelante? Qué locura, ¿eh? ¿Así? Sí, ahí, ahí. ¿Y tú qué más? Dicho que acabas de empezar la preparación hace poco.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2894" target="_blank" class="timestamp">[48:14]</a> Yo empecé... O sea, realmente hice TRT. Acabé esta semana el TRT. O sea, la fase de recuperación de ayudas erogénicas. Estuve seis semanas. Cuatro, seis. Y ahora empezó preparación de definición. Pero ¿qué pasa? Que en el TRT dijimos vamos ya con una dieta... Porque estaba saturado. Comía 200 de arroz en seco en cada comida.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2919" target="_blank" class="timestamp">[48:39]</a> ¿Quién? 200. 200 de avena, 200 de arroz. ¿Y a 200 arroz en seco cuánto es en crudo? O sea, en crudo, perdón, en hechos. ¿Tú me estás comiendo? Come muy poco él. ¿Muy poco? ¿Lo notas mejor así? A ver, suelta. Una paella, literal, se come en cada comida. Es que tengo un lado distinto a otro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2949" target="_blank" class="timestamp">[49:09]</a> Encocido. Encocido ya. Sí. La primera vez. ¿Tú te imaginas a este monstruo? ¿Sabes? Pero, bro, que es una cucharada grande. Ya está. Brother.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=2974" target="_blank" class="timestamp">[49:34]</a> El alumno que hice profesional, uno de los alumnos que hice profesional, bro, voy a su casa y digo, ¿tienes las comidas listas? Te toca comer, ¿no? Dice, sí. Coge un cucharón de esos, hace así en la cazuela de arroz frío que tenía en la nevera, y coge la pechuga de pollo y empieza así. Digo, ¿qué haces? Pues esta cuchara sé que son 65 gramos de arroz. Digo, brother, crudo. Claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3003" target="_blank" class="timestamp">[50:03]</a> Claro. Y yo... ¡Joder! Y vino una amiguita y me enseñó a mí. Y me dijo, ¿será? Y ella me hablaba. Y me dice, ¿qué estás haciendo? Claro. O sea, pero no era algo que me sentí, lo comía, pero... O sea, en sí, no me hacía, digamos, que así daño porque... Porque tú puedes comer muy poco. Claro. Y me ha tenido muy buena energía. Pues mira, el trabajo que te has quitado de encima realmente, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3031" target="_blank" class="timestamp">[50:31]</a> Pero que no hay que hacer eso. Ha recortado alguna semanita. Claro, claro. Y cuando yo... En crudo. Claro. Esto es alucinante, tú. Qué barbaridad. O sea, ¿y qué? Y el hombro, ¿cómo se le monta aquí el posterior, tío?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3055" target="_blank" class="timestamp">[50:55]</a> Para que la gente vea... O sea, es que se le hace como... Mira, mira, mira, mira. Pero es que parece de mentira, tío. Es una locura, tío. Se llama separación muscular. Sí, sí, se llama separación muscular, pero parece como un muñeco, tío. Pero si vas a tirar yo creo que más de pectoral por la inclinación, ¿eh? Eso, más de recta. Pero cómo lo noto aquí. Yo creo que sabes por qué lo notas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3084" target="_blank" class="timestamp">[51:24]</a> Porque lo tiras como hacia afuera, claro, porque la máquina... No, no, no, no me va el pecho, ahí. Subo, subo, ahí. Eso. Es mucho peso para mí. Haciéndolo como él me ha dicho, me cuesta. Sí, pero no, tiene que costar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3111" target="_blank" class="timestamp">[51:51]</a> Claro, pero me refiero, no me noto cómodo. Los dete no han pensado ahí en el bicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3135" target="_blank" class="timestamp">[52:15]</a> Luego me dice, o sea, lleva 10 kilos más que yo. Y ahora queda quieto. Hace la vele. No, bro, simplemente pruebo de apretarlo. Sí, también. Vaya beneíto, que tiene el kilo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3152" target="_blank" class="timestamp">[52:32]</a> Es que, a ver, este ejercicio, si lo haces en plan... ¿Qué hago, el trapecio aquí arriba? No, no, no. Que aquí se pega así, no mete el trapecio. Pero si más de eso no mete el trapecio, ¿no? Porque eso, sobre el trigo. Ya no mete el hombro, el trapecio. ¿Así mejor? Sí. No, no, que está perfecto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3170" target="_blank" class="timestamp">[52:50]</a> Me ha dicho darle, darle. Una vez que ya me ha puesto en el medio, se viene aquí y dice… Sí, sí, yo también le doy. Ha ido a buscar el ángulo. Esto, súbelo. Edición, hay que subir eso. Valdivia se los conoce todos. Mira las piernas esas, tú. ¡Qué barbaridad! No, y Kim igual. Muy mejorado, Kim.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=kYxlZzFdl_I&t=3210" target="_blank" class="timestamp">[53:30]</a> Espaldas, ¿no? Espaldas, espaldas. Esta es la miniatura. Muy buen vídeo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-PegSOgO60CE">
+            <h2>"ESTÁ ANTE SU GRAN OPORTUNIDAD DE VOLVER AL OLYMPIA" Raúl Carrasco ANALIZA el CALIFORNIA PRO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 03/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=PegSOgO60CE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=PegSOgO60CE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/PegSOgO60CE/hqdefault.jpg" alt=""ESTÁ ANTE SU GRAN OPORTUNIDAD DE VOLVER AL OLYMPIA" Raúl Carrasco ANALIZA el CALIFORNIA PRO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video analiza el próximo campeonato California Pro Show de fisicoculturismo en la categoría Classic Physique.
+Se discute la participación de atletas españoles como Germán Pastor y Antonio Valero y sus posibilidades.
+Los comentaristas analizan a los principales rivales, destacando al turco Mustafa Gilmiz y otros competidores.
+Se evalúan los físicos de los atletas, sus fortalezas y debilidades, y se recuerdan éxitos pasados en este evento.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Previa del California Pro Show <a href="https://www.youtube.com/watch?v=PegSOgO60CE&amp;t=3" target="_blank">[00:03]</a></h3>
+
+<p>Se introduce el campeonato California Pro Show en Alicante y la participación de atletas españoles como Germán Pastor. Se anticipa un buen nivel de competición, destacando la mejora en el físico de Germán.</p>
+
+<h3>Presentando al Principal Contendiente <a href="https://www.youtube.com/watch?v=PegSOgO60CE&amp;t=63" target="_blank">[01:03]</a></h3>
+
+<p>Se identifica a Mustafa Gilmiz, un atleta turco que quedó tercero en el EMPRO, como el principal rival de Germán Pastor. Se menciona su físico impresionante, especialmente su tren inferior, a pesar de estar aún lejos de su peso de competición.</p>
+
+<h3>Análisis Detallado de Gilmiz <a href="https://www.youtube.com/watch?v=PegSOgO60CE&amp;t=205" target="_blank">[03:25]</a></h3>
+
+<p>Se profundiza en el análisis de Mustafa Gilmiz, destacando su condición extrema incluso fuera de peso. Se compara su densidad muscular y tren inferior con los de Germán, señalando también que su torso no es tan denso o amplio.</p>
+
+<h3>El Impacto del California Pro Anterior <a href="https://www.youtube.com/watch?v=PegSOgO60CE&amp;t=376" target="_blank">[06:16]</a></h3>
+
+<p>Se recuerda el California Pro del año anterior, que marcó el debut exitoso de Josema en Classic Physique y su primer pase al Olympia. Este evento es visto como un punto de inflexión que validó su decisión de cambiar de categoría.</p>
+
+<h3>Confirmación de la Lista y Favoritos <a href="https://www.youtube.com/watch?v=PegSOgO60CE&amp;t=481" target="_blank">[08:01]</a></h3>
+
+<p>Se revisa la lista de 9 competidores confirmados para la categoría Classic Physique en el California Pro Show. Se reafirma que Germán Pastor y Mustafa Gilmiz son considerados los principales favoritos para ganar la competición y obtener el pase al Olympia.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=3" target="_blank" class="timestamp">[00:03]</a> Pues sin salir de Classic, Raúl, este fin de semana tenemos un gran campeonato como es ese California Pro Show el domingo en el V-Space en Alicante. Y quería un poco comentarlo contigo porque tenemos ahí dos grandes presencias españolas, evidentemente yo creo que cada una...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=21" target="_blank" class="timestamp">[00:21]</a> con un físico diferente. Quería un poco que me lo comentaras tú. ¿Qué te parece o cómo crees que puede darse? Ahora luego veremos la lista definitiva. Pero yo creo que puede ser un buen campeonato, sobre todo para ver un German Pastor súper renovado. Porque este es el último check que tengo, que fue de la semana pasada. Ha hecho otro check donde se le ve todavía mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=42" target="_blank" class="timestamp">[00:42]</a> yo la verdad es que he visto un gran trabajo en este caso de Germán y de José Suárez y de por cierto una persona que ayuda en este caso a Germán y también ayuda a Josema en las poses como es el caso de Rubén y yo tengo que decir no sé a ti qué te parece pero ahora están ya muy muy muy limaditos con el límite del peso cosa que antes no ocurría</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=63" target="_blank" class="timestamp">[01:03]</a> Y yo creo que a día de hoy, y ahora veremos un poco el que yo creo que puede ser el gran rival en esta competición, que de hecho tú lo conoces porque estuvo en el EMPRO, Gilmith quedó tercero en el EMPRO. Quería un poco que me valoraras como ves a Germán.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=78" target="_blank" class="timestamp">[01:18]</a> Mira, estoy viendo a Germán ahora. No he tenido la oportunidad de verlo con detalle. Primero porque, bueno, he tenido visitas. Ya sabes que es la primera feria de Sevilla en mi pueblo. Por lo mismo, por lo tanto, hemos tenido fiestas. Yo he estado enfermo también, para los que no lo sepan. He tenido una infección y demás y he estado un poquito con antibióticos descansando porque me quería ir pleno a Estados Unidos. Entonces he estado un poquito descartado de las redes sociales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=106" target="_blank" class="timestamp">[01:46]</a> O sea, no me cabe duda de que tanto Germán como José han hecho un gran trabajo y seguramente han traído mejoras. De hecho, bueno, lo estoy viendo ahora aquí a Germán. Obviamente, desde aquí no puedo ver con total de detalle, pero estoy seguro de que traerá mejoras. Y después del California también, lo poco que he visto últimamente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=131" target="_blank" class="timestamp">[02:11]</a> de sus contrincantes. Más directo, así por encima, lo que he llegado a ver es Emanuel, que creo que es un chico italiano que lo he visto competir varias veces. Que es un chico con muy buena línea, muy buena armonía. Si es verdad que no destaca sobre todo en las retracciones escapulares de espalda por tener gran detalle, que es todo lo contrario que tiene Germán.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=159" target="_blank" class="timestamp">[02:39]</a> Tiene una retracción que el dorsal mayor lo lleva totalmente transparente y al final, tanto por densidad como por condición, Germán dice que aquí estoy. Eso a Emmanuel le falla mucho, pero sí es verdad que Emmanuel cuando hace el doble bíceps de espalda, se le abre escapularmente, se abre mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=180" target="_blank" class="timestamp">[03:00]</a> Se prima, se ve el tamaño y con bastante detalle. No es un atleta que descarte por la masividad, pero sí por la armonía. Tampoco suele llevar la condición que Germán lleva. Eso no quiere decir que en este campeonato no la lleve. Yo estoy opinando de campeonatos pasados, pero bueno, creo y lo estoy hablando porque creo que puede ser un rival directo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=205" target="_blank" class="timestamp">[03:25]</a> Pero también, y teniendo en cuenta campeonatos anteriores, este atleta que me acabas de nombrar, el que quedó tercero en el EMPRO, que es un turco que creo que a todos nos dejó con la boca abierta, sobre todo por su tren inferior, también es un atleta en el que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=225" target="_blank" class="timestamp">[03:45]</a> ya de por sí tiene una condición extrema estando 6 kilos por encima. Claro, al final un atleta en el que ya tiene una densidad muscular bastante buena y que se tiene que exprimir 5 o 6 kilos hasta llegar al peso, pues no tienes otra cosa que salirte con una condición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=246" target="_blank" class="timestamp">[04:06]</a> Flipante y al final con un tren inferior también muy potente. Pero ojo, que Germán también tiene un tren inferior bastante bueno y también es verdad que este chico que estamos citando tampoco es que tenga un torso muy denso, muy amplio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=264" target="_blank" class="timestamp">[04:24]</a> y un brazo también muy lleno. Eso sí, Germán también tiene un brazo bastante grande. Pero sí es verdad que a este chico al turco encima del escenario da miedo. Da miedo verlo. Por lo tanto, habrá que ver las mejoras que traen todos. Habrá que ver las mejoras que también trae Germán. Pero sin ninguna duda yo creo que es una oportunidad para...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=291" target="_blank" class="timestamp">[04:51]</a> para Germán. Habrá que verlo. Y de resto, tampoco he visto demasiado, Miguel. He visto un poco más a los directos. Pues yo, básicamente, cuando hice el contenido...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=307" target="_blank" class="timestamp">[05:07]</a> Hablaba bastante de que evidentemente para mí Germán es el favorito y ahora comentar un poco por qué también, no solamente por una cuestión de densidad sino también por una cuestión de línea y de los problemas que tiene Yilmiz el turco porque se habla poco de eso, se habla mucho evidentemente del tren inferior que es una absoluta pasada, eso no se puede poner en duda</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=325" target="_blank" class="timestamp">[05:25]</a> pero se habla un poco de las dos ginecomastias que lleva bastante notorias y luego aparte se habla de que y esto se puede ver también en tarima de una manera también un poco clara no sé si a lo mejor tendré las mejores imágenes para ello</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=341" target="_blank" class="timestamp">[05:41]</a> Pero desde luego es cierto que a él le salva el tren inferior para hacer una buena línea de X, pero la cintura es grande. La cintura es bastante ancha en comparación. Entonces, como digo, yo creo que es el gran contrincante que va a tener Germán. Luego también, evidentemente, hablaremos de Antonio Valero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=358" target="_blank" class="timestamp">[05:58]</a> Pero sí que es verdad que yo creo que la cosa va a estar ahí entre estos dos. Se va a meter evidentemente Ricotti, se va a meter por ahí seguro porque al final es un tipo que es muy competitivo. Un California que evidentemente el año pasado fue precisamente vuestro estreno en Classic con Josema, vuestro primer pase al Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=376" target="_blank" class="timestamp">[06:16]</a> Y que yo creo que os tiene que traer también buenos recuerdos, ¿no? Porque yo creo que fue un momento donde cambió todo. O sea, cambió todo, se cayó en algunas otras bocas sobre el tema de la decisión de Classic, sobre si Joseba podía funcionar o no en Classic y demás. Yo no sé cómo te acuerdas de aquello, Raúl, porque tuvo que ser un fin de semana bastante ajetreado, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=397" target="_blank" class="timestamp">[06:37]</a> Sí, bueno, yo dentro de mi incertidumbre, no intranquilidad, porque al final cuando tomo una decisión yo voy con la seguridad de la decisión que he tomado. De hecho, estaba seguro de que iba a sorprender, de que iba a encajar en principio al 98%,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=418" target="_blank" class="timestamp">[06:58]</a> Ya dependía también de la valoración y el feedback de los jueces, pero la verdad que fue un día bonito, un día feliz y bueno, un día que disfrutamos mucho, sobre todo hombre, de un campeonato como ejemplo y el nivel de todos sus atletas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=435" target="_blank" class="timestamp">[07:15]</a> Pues estoy viendo aquí, voy a ver si te lo puedo compartir para que lo veas tú también, estoy viendo aquí que están empezando ya a confirmar atletas y tenemos ahí, bueno, evidentemente lo que os contaba, Mustafa Gilmiz, también creo que es Maverick, no sé muy bien el apellido, por supuesto Ricotti, luego tenemos a Machine Jedes, que por cierto también fue Olympia hace unos años y ahora vuelve otra vez a las tarimas, Florian Torres...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=463" target="_blank" class="timestamp">[07:43]</a> Bueno, en fin, un nivel colombiano. Mira, aquí tenemos a Germán y a Antonio. Así que, mira, bueno, de hecho es más. Aquí está la lista totalmente, bueno, está un poco pequeña, pero te lo puedo decir. Bueno, esto es de bikini. También hay categoría bikini en el California.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=481" target="_blank" class="timestamp">[08:01]</a> Y aquí tenemos la de chicos que, bueno, básicamente son 1, 2, 3, 4, 5, 6, 7, 8, 9 atletas, 9 competidores. Y donde yo creo que, como hemos dicho, el principal favorito es Germán. Yo tengo claro que Germán y Gilmi, ¿no? Gilmi es muy capaz. Sí, sí, sí. También es verdad que no te lo he comentado antes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=502" target="_blank" class="timestamp">[08:22]</a> El tren inferior de Mustafa de espalda es muy bueno, es decir, es de los pocos atletas que he visto yo en el que presenta un femoral de espalda igual que de Josema. O sea, el femoral de Josema es algo que a todos los jueces, lo primero que se te va es al femoral. Y este hombre tiene un femoral que lo flipa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=PegSOgO60CE&t=523" target="_blank" class="timestamp">[08:43]</a> cuando lo veas en competición es impresionante yo creo que va a ser el primer rival directo de Germán pues veremos a ver qué se sucede porque desde luego que va a ser un gran campeonato y evidentemente darle toda nuestra suerte tanto a Germán como a Antonio para que lo hagan lo mejor posible y que pueda conseguir alguno de los dos el pase a la Olimpia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 03/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
