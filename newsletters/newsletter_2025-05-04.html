@@ -1,0 +1,488 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 04/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">04/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-61PEiLoljjU'>MI PRIMER CAMPEONATO INTERNACIONAL</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-y8W3eGa1IXE'>"ES DE MIS FAVORITOS Y LE INFRAVALORAN" Carrasco VALORA la EVOLUCIÓN del EQUIPAZO de PATRICK TUOR</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-61PEiLoljjU">
+            <h2>MI PRIMER CAMPEONATO INTERNACIONAL</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 04/05/2025 14:10</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=61PEiLoljjU" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=61PEiLoljjU" target="_blank">
+                    <img src="https://i.ytimg.com/vi/61PEiLoljjU/hqdefault.jpg" alt="MI PRIMER CAMPEONATO INTERNACIONAL" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video es un comentario del propio competidor sobre un antiguo campeonato de Strongman entre España y Portugal (año 2000).
+Analiza diversas pruebas como arrastre con arnés, peso muerto, yugo, cilindro y piedra.
+Recuerda a los compañeros de equipo (Roberto Rodríguez, Mario Alberto) y rivales (Fabio Silva).
+Relata momentos clave, destacando grandes levantamientos, percances (rotura de bíceps de un compañero, calambres propios) y cómo perdió la oportunidad de ganar el campeonato.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Inicio del Campeonato España-Portugal <a href="https://www.youtube.com/watch?v=61PEiLoljjU&amp;t=0" target="_blank">[00:00]</a></h3>
+
+<p>El presentador introduce el video, rememorando su participación en su primer o segundo campeonato internacional contra Portugal. Menciona a los competidores clave como Roberto Rodríguez (considerado el más fuerte de la historia de España) y Mario Alberto. Recuerda su aspecto físico de entonces.</p>
+
+<h3>La "Desgracia" de Mario Alberto <a href="https://www.youtube.com/watch?v=61PEiLoljjU&amp;t=211" target="_blank">[03:31]</a></h3>
+
+<p>Se anticipa un momento desafortunado para su compañero Mario Alberto en una de las siguientes pruebas. Mientras tanto, se muestra al "hombre más fuerte de Portugal", Fabio Silva, destacando su habilidad en los press de hombro, una prueba donde el presentador siente que no rindió bien.</p>
+
+<h3>Batalla Intensa en el Peso Muerto <a href="https://www.youtube.com/watch?v=61PEiLoljjU&amp;t=335" target="_blank">[05:35]</a></h3>
+
+<p>La prueba de peso muerto se describe como una "ruleta rusa" con pesos progresivos (hasta 360 kg). Se muestra la potencia de Roberto Rodríguez y la propia, llegando a levantar 360 kg. El presentador decide no intentar más, quedando empatado en puntos con Roberto en esa prueba.</p>
+
+<h3>El Yugo y la Trágica Lesión <a href="https://www.youtube.com/watch?v=61PEiLoljjU&amp;t=525" target="_blank">[08:45]</a></h3>
+
+<p>Comienza la prueba del yugo (455 kg), donde se destaca que algunos competidores anteriores cargaron menos peso. Se muestra el intento de Mario Alberto, quien sufre la rotura del bíceps durante el esfuerzo. El presentador logra completar la prueba rápidamente, aunque se hace daño en una pierna.</p>
+
+<h3>Calambres y la Oportunidad Perdida <a href="https://www.youtube.com/watch?v=61PEiLoljjU&amp;t=844" target="_blank">[14:04]</a></h3>
+
+<p>Durante la prueba del cilindro (log press), tras levantar 155 kg, al intentar un peso mayor, el presentador sufre calambres generalizados que le impiden completar el levantamiento. Reconoce que este fallo fue crucial y le costó la posibilidad de ganar el campeonato, ya que la siguiente prueba (la piedra) favorecía a su rival principal, Roberto.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=0" target="_blank" class="timestamp">[00:00]</a> Ah, mira, voy a hacer un campeonato. Esto fue el España-Portugal, ¿vale? Competimos contra Portugal en este campeonato. Fue mi primer campeonato internacional, si no me acuerdo mal. Si no me acuerdo mal. Estamos hablando de año 2000... No, no, no. No sé si era mi primero o mi segundo, no me acuerdo. Internacional, ¿vale? Competimos los tres más fuertes de España contra los tres más fuertes de Portugal. Mentira, compitieron cuatro. Cuatro portugueses. Roberto Rodríguez, un tío que... Bueno, no sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=24" target="_blank" class="timestamp">[00:24]</a> No puedo decir que nada más que, bueno, que ha sido una leyenda de la fuerza de este país. Tropecientas veces el hombre más fuerte de España. Quizá el hombre más fuerte de la historia de este país. Quizá. Quizá no. Yo pienso que ha sido el hombre más fuerte de la historia de este país. Roberto Rodríguez. Yo creo que ha sido el tío que más competiciones ha hecho internacionales. El tío que ha ganado muchísimas veces en el nacional. Bueno, o sea, una bestia. Bueno, Porrugo fue muy mediático. Fue muy bueno también, pero este hombre yo creo que para mí fue mejor. Vaya cebolla, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=53" target="_blank" class="timestamp">[00:53]</a> Mira qué cebollita, tú. Mira qué cebollita, tío. Vaya Pou, compadre. Míralo. Mario Alberto, mi buen amigo de Valencia. Bueno, Ramón no era de los más fuertes de España, pero nos faltaba una vacante. Pero era muy fuerte para su peso. En aquel momento ya no competía. Vamos a ver las pruebas directamente. Vaya pedazo de cara.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=75" target="_blank" class="timestamp">[01:15]</a> ¡Vaya pelazo! ¡Que me digan a mí! ¡Mira! ¡Mira! ¡Mira! ¡Mira! ¡Mira! ¡Que no tenía entrada! ¡Tenía salida, compadre! ¡Mira qué cabeza! ¡Y ahora estoy calborgota tú! Aquí os voy a contar una cosa, ¿vale? Fijaros en el arnés. Se va a partir. El arnés se parte, tío. Y ahí... Bueno, yo ahora voy a contar una anécdota que no me gustó, pero bueno. El arnés se va a partir cuando tire. Va, se parte. ¿Ves?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=100" target="_blank" class="timestamp">[01:40]</a> Pero ¿qué pasa? Yo sabía que como parase, Porruo no iba a parar el crono, porque lo conocía muy bien. ¿Sabes? Y eso me jodió un montón a mí, que se partiera el arnés. Pero bueno. Aquí no lo hice yo bien en esta prueba. Yo podría haberlo hecho mucho mejor. Tiene que haberme tumbado mucho más. Tiene que haberme tumbado mucho más. Pero bueno. ¡Venga, Antonio! ¡Antonio! ¡Vamos, Cebolla! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=129" target="_blank" class="timestamp">[02:09]</a> Mira qué envidia del bíceps sano. Ya no lo tengo, tío. Ala, tenía una pelota aquí. Mira qué pelotón tenía aquí. Morrillo de costanero le llaman. Vaya pelota tenía ahí tú. Ahí va Roberto Rodríguez. 155 kilos de peso. Tío, muy fuerte. Muy fuerte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=153" target="_blank" class="timestamp">[02:33]</a> Si no me acuerdo mal, creo que ganó la prueba él esta. Mario lo hizo muy bien también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=181" target="_blank" class="timestamp">[03:01]</a> Vamos a adelantarlo un poco. Ahora cuando se acabe Mario. Mario tuvo un percance aquí. Pobrecito, tío. Mi amigo Mario aquí. El hombre la fuerte de Portugal, que es este hombre. Varias veces el hombre la fuerte de Portugal. Fabio Silva.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=211" target="_blank" class="timestamp">[03:31]</a> Ahora, ahora, ahora en el siguiente vídeo... En la siguiente parte vais a ver lo que le pasa a Mario Alberto. Ya lo veréis. Este es el hombre fuerte de Portugal. Tío, muy fuerte en los preses, ¿eh? Muy bueno. En los preses de hombro. Yo lo hice muy mal en esta prueba, tío, de verdad. Pienso que lo hice muy mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=243" target="_blank" class="timestamp">[04:03]</a> Vale, ahora viene el peso muerto. Peso muerto, ruleta rusa. O sea, esto es sin parar, ¿vale? Vamos a ir tirando todo sin parar. Este es el hombre a fuerte Portugal. Aquí hay 2,70. Aquí voy yo, 2,70. Vaya cebolla. El cebollita. 2,70. Vaya explosión. Vaya explosividad. Mario Alberto, 2,70. Roberto Rodríguez.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=274" target="_blank" class="timestamp">[04:34]</a> Segunda ronda. 310 kilos. El subcampeón de Portugal. Muy bien. Logra fuerte Portugal con 310. Un agarre un poco raro. Pero bueno. Muy bien. 310 kilos. Para el Pou. El niño Cebolla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=308" target="_blank" class="timestamp">[05:08]</a> Roberto Rodríguez. ¡Vamos, vamos! ¡Uh, muy fuerte! Muy fuerte. Tengo que decir que en esta prueba Roberto me sorprendió muchísimo. 330 kilos. ¡No pienses arriba! ¡No pienses arriba! ¡No pienses arriba! ¡No pienses arriba! ¡Mira qué motiva el gordito! ¡Míralo, tío! ¡El motivao! ¡Pedazo de cara, tú! ¡No pesa! ¡Ah! ¡No pesa nada!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=335" target="_blank" class="timestamp">[05:35]</a> ¡Venga, niño Cebolla! ¡3.30! Está haciendo la del camionero. ¡Mira qué motivado! ¡Mira qué motivado el personaje! ¡Mira qué motivado! ¡Roberto! ¡3.30! ¡Muy bien, Roberto! ¡Muy potente! ¡350 kilos! ¡350 kilos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=362" target="_blank" class="timestamp">[06:02]</a> ¡Vamos, campeón! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=392" target="_blank" class="timestamp">[06:32]</a> ¡Muy bien! ¡360! ¡360 kilos! ¡Ahí va el bicho! ¡Sí! ¡Sí! ¡Sí! ¡Antonio! ¡Sí! ¡350 kilos arriba! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Sí! ¡Más! ¡Más!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=420" target="_blank" class="timestamp">[07:00]</a> ¿Cuántas horas? No me acuerdo. Vale, 360 hay ahora. 360 hay ahora. Me he equivocado. 360 hay ahora. 360.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=429" target="_blank" class="timestamp">[07:09]</a> ¡Ojo! ¡Dale! ¡Dale, gordito pilón! No sé dónde tengo la cara. Aquí Roberto me sorprende muchísimo. Aquí Roberto me sorprende una barbaridad. Yo no pensaba que Roberto va a hacer lo que va a hacer aquí. Mismo peso en barra. 360.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=454" target="_blank" class="timestamp">[07:34]</a> Yo aquí dije que yo ya no tiraba más. Él intentó 3.70, creo. Intentó 3.70. Yo dije que ya iba bien ahí. Y sería récord de España en ese momento. Bueno, aquí quedamos empate a puntos. Vale, este yugo pesó... Estamos hablando que pesó... Eran, pues... Un segundo que piense... 450 kilos. Vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=481" target="_blank" class="timestamp">[08:01]</a> ¡Esa palma! ¡Liciano! ¡Liciano! ¡Vamos Portugal! ¡Vamos! ¡Vamos! ¡Esa palma! ¡Liciano! ¡Liciano! ¡Liciano! ¡Corre! ¡Vuela! ¡Vamos! ¡Pasa muy bien! ¡Vamos bien! ¡Vamos bien campeón! ¡Aprieta! ¡Palante! ¡Palante! ¡Va muy bien! ¡Tienes tiempo! ¡Va! ¡Arriba! ¡Arriba!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=511" target="_blank" class="timestamp">[08:31]</a> Ya había que hacerlo en frío, además, tío. A mi amigo Mario. Y aquí viene la desgracia, amigos. Aquí viene la desgracia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=525" target="_blank" class="timestamp">[08:45]</a> Vale, ahora, ahora. Es que ya decía yo, digo, hay poco peso. Vale, esto es lo que había. Había 455 kilos. ¿Vale? 75 en cada palo. El yugo pesaba 155 kilos. Eso es. 455 kilos había aquí. Es que a los anteriores les han dejado con menos peso, ¿vale? Si os fijáis. A los anteriores, como eran más flaquitos y tal. Para que miréis el yugo, ¿veis? Hay como 100 kilos menos aquí. Y ahora va Mario. Ahora va Mario. 455 kilos. Una barbaridad, ¿eh? Aquí se partió el bíceps, tío. Mirad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=553" target="_blank" class="timestamp">[09:13]</a> Se lo parte, hermano. Se ha partido el biceo aquí. Se jodió hoy. Aquí va el segundo de Portugal. Esto es una barbaridad de peso, os lo digo. Es una barbaridad de peso. Sí, tío. Yo qué sé. Se le habrá estirado al apoyar el brazo. No sé. Digo que este peso es un peso grande. 4,55 es un peso grande. Pero no, no puede. Si os fijáis, no... Aquí va el hombre más fuerte de Portugal. 450 kilos. ¡Hola, la espirita! ¡Hola ahí! ¡Sacúden en manos! ¡Bravo, bravo!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=583" target="_blank" class="timestamp">[09:43]</a> No puede. Es una barbaridad de peso, tío. Aquí voy yo. ¡4,50! ¡Ahí va el bicho! ¡Ahí va el bicho! ¡Tiqui, tiqui, tiqui, tiqui, tiqui! ¡Vamos! ¡Vamos! ¡Dale! ¡Dale, cebolla! ¡Vamos! ¡Vamos! ¡El primero que acaba la prueba! ¡Dale! ¡Sí, señor! Me hice un poco de daño en la pierna, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=612" target="_blank" class="timestamp">[10:12]</a> Porque pisé mal, tío. Me hice daño en la pierna. Ahí va Roberto. Ahí va Roberto. ¡Sí, señor! ¡Vamos! ¡Vamos! Pensad que esta prueba es muy dura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=642" target="_blank" class="timestamp">[10:42]</a> Si no me acuerdo mal, esta prueba la gané yo. En la prueba anterior empatamos y en la prueba del camión me ganó Roberto. Aquí viene el cilindro, a tres intentos, al mejor de tres intentos. 140 kilos. Cuidado, eh. Qué barbaridad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=673" target="_blank" class="timestamp">[11:13]</a> 140 kilos. Ahí va. No sé qué me estaba pasando, tío. No podía estabilizar nada, tío. No podía estabilizar. Ahora estabilizo y tiro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=698" target="_blank" class="timestamp">[11:38]</a> Pero no me encontraba nada bien. Cuando esta prueba se me estaba dando muy bien siempre. Aquí va el hombre más fuerte de Portugal. El hombre más fuerte de Portugal. ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio! ¡Vamos, Fabio!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=728" target="_blank" class="timestamp">[12:08]</a> ¡Fácil! 155 kilos. Muy bien. ¡Fácil! ¡Uy! Ahí va, bloqueo. Muy bien. 155 kilos. Ahí voy yo. 155 kilos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=751" target="_blank" class="timestamp">[12:31]</a> ¡Bien! ¡Público! ¡Público! ¡Por Dios! ¡Dame! ¡Antonio! ¡Antonio! ¡Antonio! ¡Vamos arriba! ¡Ya lo tienes! ¡Bien cargado! ¡Joder, qué potente voy! ¡Vamos, vamos! ¡Arriba! ¡Bien! ¡Bien! ¡Muy bien! ¡Estamos empatados ahora mismo Roberto y yo! Creo que hay 165 kilos, si no me acuerdo malo. 170, es que no me acuerdo. No puede.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=785" target="_blank" class="timestamp">[13:05]</a> ¡Vamos, vamos, público de pie! ¡Vamos, vamos! ¡Qué huevos, eh! Cargándola dos veces, eh</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=802" target="_blank" class="timestamp">[13:22]</a> Yo cometí un error aquí, tío. Cometí un error gigantesco yo, pero bueno. Yo no sé qué me pasó aquí ahora, tío. Ahora aquí… La cago, tío. Era un peso que yo ya había levantado, pero que ahora cuando lo voy a levantar y me la llevo al pecho… Aquí comete un error gigantesco yo, tío. Me la llevo al pecho y me empiezan a dar calambres por todo el cuerpo. Calambres, ¿veis? La cargo… ¡Pam! Y ahí ahora me empiezan a dar calambres. Muchos calambres. Y no puedo, tío. No puedo aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=830" target="_blank" class="timestamp">[13:50]</a> No puedo, no puedo. Calambres. Nada más que calambres. Todo el cuerpo calambres. No puedo, no puedo. No puedo, no puedo. Tengo calambres, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=844" target="_blank" class="timestamp">[14:04]</a> No, no, no, que no, que no. Aquí la cagué, amigos. Os lo digo de corazón. Aquí la cagué. Aquí la giñé, la verdad. Aquí la cagué. No puedo decir otra cosa. ¿Por qué? Porque yo esta prueba tenía que haberla ganado. Si yo quería ganar el campeonato. La verdad. ¿Por qué? Porque ahora venía la piedra. La piedra era una piedra de 150 kilos creo que era o por ahí. Si no me acuerdo mal. Y en la piedra Roberto era mejor que yo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=862" target="_blank" class="timestamp">[14:22]</a> ¿Vale? Entonces ahí... Yo perdí la posibilidad de ganar el campeonato. ¿Vale? Pensad que empaté con él. O sea, Roberto me ganó a mí en el camión. Yo empaté con él en muerto en cilindro. Yo le gano en yugo y queda el desempate como tal. Aquí me... Sin más. Me arrepentí muchísimo, tío. Aquí voy yo. Yo lo hice muy mal, creo, ¿eh? A ver. A ver cómo lo hice, que no me acuerdo. A ver. Una... Ah, mira, bien. Una bien. Ah, ni me acordaba.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=890" target="_blank" class="timestamp">[14:50]</a> ¡Vamos, vamos! Tiene muy poco fondo yo en aquella época, tío. ¡Vamos, Antonio! ¡Vamos! Tiene muy poco fondo. A ver. ¡Dos! ¡Ah, mira! ¡Dos! ¡Vamos, más, más! ¡Uno más, Antonio! ¡Tres! ¡Dame tres, Antonio! ¡Dame uno más! ¡Vamos, vamos! ¡Ritmo, ritmo, Antonio! ¡Ritmo, ritmo! ¡A ver! ¡Uno más! ¡Dame tres! ¡Dame tres! ¡Ojo! ¡No me acordaba yo que hacía tres! ¡Hostia gordito! ¡Uno más, Antonio! ¡Uno más! ¡Os juro por mi vida que no me acordaba! A ver, la última.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=921" target="_blank" class="timestamp">[15:21]</a> Aquí no puedo, ¿no? ¡Ah, sí que puedo! ¡Hice cuatro! ¡Cómo pesaba la piedra! ¡Hice cuatro! Bueno, no está mal, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=941" target="_blank" class="timestamp">[15:41]</a> ¡Mira cómo se le ha pillado la mano! Esto es lo que dije. Fijaros en mis dedos. Aquí le dije yo al juez ¡Mira! Se me ha caído la mano así. Se me ha caído la mano así. Y le digo ¡Ayúdame! ¡Ayúdame! ¡Ábreme los dedos! Y eso fue culpa de…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=960" target="_blank" class="timestamp">[16:00]</a> Pues ¿de qué va a ser? De los bocadillos de pollo, como el Simón. No penséis que es eso, pero sí que es de otro tema. Aquí Roberto me da un parizón. Creo que Roberto aquí... La prueba de las piedras siempre se la ha dado Roberto, criminal. Yo le puse la... Él tenía que hacer cinco para ganar y ya está. Bueno, cinco no, con cuatro ya me ganaba, creo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=978" target="_blank" class="timestamp">[16:18]</a> a ver mucho brasilado siempre extraordinario 15 tiene que hacer para ganar 2 muy rápido roberto muy bueno roberto 3 muy fuerte roberto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=1008" target="_blank" class="timestamp">[16:48]</a> Cuatro. Tiene que hacer una más y me gana. Con una más me gana. ¡Dame ritmo, ritmo! ¡Dame cinco! Y ya está. ¡Ruido de pie! ¡De pie! ¡De pie! ¡Bravo! ¡Guau! ¡Espectáculo! ¡Guau! ¡Es rubio! Una barrida de cámara. Esa...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=61PEiLoljjU&t=1042" target="_blank" class="timestamp">[17:22]</a> Bueno, ahí perdí. Eso fue hace muchos años. Ahí perdí.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-y8W3eGa1IXE">
+            <h2>"ES DE MIS FAVORITOS Y LE INFRAVALORAN" Carrasco VALORA la EVOLUCIÓN del EQUIPAZO de PATRICK TUOR</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 04/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/y8W3eGa1IXE/hqdefault.jpg" alt=""ES DE MIS FAVORITOS Y LE INFRAVALORAN" Carrasco VALORA la EVOLUCIÓN del EQUIPAZO de PATRICK TUOR" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Conversación sobre culturismo profesional enfocada en el éxito del preparador Patrick Tour.
+Se analiza su trabajo con diversos atletas, destacando el potencial de jóvenes talentos y su historial consistente.
+El punto central es el atleta Fabián Mayer, su compleja trayectoria y un confuso problema de salud.
+Se debate cómo un preparador serio abordaría este caso, implicando que la salud del atleta estaría controlada.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Cuidado con la Cantera de Patrick Tour <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&amp;t=99" target="_blank">[01:39]</a></h3>
+
+<p>Se destaca el potencial y la calidad física de los jóvenes atletas entrenados por Patrick Tour. Se menciona la cintura y condición que traen, señalando a Kion como un ejemplo de competidor que empuja fuerte en su categoría.</p>
+
+<h3>Patrick Tour: El Preparador de Éxito Consistente <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&amp;t=202" target="_blank">[03:22]</a></h3>
+
+<p>Los ponentes elogian a Patrick Tour por su track record, señalando que es difícil encontrar un atleta que salga mal bajo su preparación. Se le considera un preparador muy efectivo, aunque quizás infravalorado.</p>
+
+<h3>El Enigmático Fabián Mayer: Problemas y Personalidad <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&amp;t=390" target="_blank">[06:30]</a></h3>
+
+<p>Se introduce el caso de Fabián Mayer, mencionando sus problemas pasados con su anterior preparador y su personalidad particular. Se recuerda su peculiar aparición en el último Mr. Olimpia, incluyendo anécdotas como ir vestido de oso.</p>
+
+<h3>La Confusa Situación Médica de Fabián <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&amp;t=504" target="_blank">[08:24]</a></h3>
+
+<p>Se discute la controversia sobre la salud de Fabián, quien primero mencionó un cáncer de colon y luego, al unirse a Patrick Tour, indicó un problema renal. Se expresa sorpresa por el cambio en el diagnóstico revelado públicamente.</p>
+
+<h3>El Aval de Patrick Tour Implica Control <a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&amp;t=706" target="_blank">[11:46]</a></h3>
+
+<p>Los interlocutores concluyen que si Patrick Tour ha decidido trabajar con Fabián, es porque asume que su condición médica está controlada. La seriedad y reputación del preparador sugieren que no se arriesgaría con una dolencia grave y activa.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=2" target="_blank" class="timestamp">[00:02]</a> se me acaba de ocurrir, porque es que le he visto por ahí danzando y quería preguntarte por este señor porque de hecho, tengo que desvelar que estuve hablando hace unos días con Patrick Tur con su preparador, ojo eh</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=14" target="_blank" class="timestamp">[00:14]</a> ...estuve hablando de aquí del señor... ...que no sé si lo ves pero es... ...que honest Raúl... ...yo sé que va a estar en el Pittsburgh... ...de hecho lo vais a ver allí... ...porque van a hacer un guest posing... ...él, Michael Davul, Ramón Dino... ...en fin, va a haber por ahí... ...atletas que están ahora fuera de competición... ...para dar un poco el espectáculo... ...y el espectáculo este tío... ...lo da solo... ...este como le dé por pasarse... ...dentro de unos añitos a Open...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=42" target="_blank" class="timestamp">[00:42]</a> yo veo complicado meterle mano. Sí, sí, sí, totalmente. Aparte, sorprendente, yo sigo muy de cerca. Bueno, nos seguimos con Patri Tour y ya sabéis que es uno de mis preparadores favoritos, lo sigo de muy cerca.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=60" target="_blank" class="timestamp">[01:00]</a> Y es impresionante el trabajo que está haciendo con Kion, ¿vale? De hecho, bueno, antes incluso de que fuese Olimpia, ya veíamos que venía empujando, igual que viene empujando Nija, creo que o Nihash, ¿no? Cuidado con este niño, cuidado que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=81" target="_blank" class="timestamp">[01:21]</a> que si sigue progresando a la velocidad que vienen todos los atletas de patrick tour al final son chavales jóvenes que vienen con carne fresca con su cintura en en su sitio vale que vienen a por todas con separación con condición y para mí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=99" target="_blank" class="timestamp">[01:39]</a> es uno de fíjate la línea que tiene no tiene una línea perfecta en los perfiles de triste mantiene su abdomen y yo creo que junto a kion pues oye son uno de los de los pocos 212 que pueden venir empujando para luchar con atletas tan consagrados como como obviamente ese es ángel carterón</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=126" target="_blank" class="timestamp">[02:06]</a> y bueno entre otros obviamente pero sin ninguna duda Kion oye no lo veo no lo veo mala idea incluso llegar a subirse a Open y dar guerra en Open o sea que muchas veces hablamos de Open y hablamos muy rápido de Open muchas veces hablamos de Open así muy rápido venga Open y no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=155" target="_blank" class="timestamp">[02:35]</a> cuidado, que para ser open hay que reunir muchas características y no todo el mundo la tiene, pero sin ninguna duda Kion yo creo que la tiene, tiene la estructura para hacerlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=173" target="_blank" class="timestamp">[02:53]</a> Yo, además, mira, aprovechando que estás tú aquí, que conoces bastante bien el circuito internacional y que conoces también bien a Patrick Tour, que como dices es uno de tus preparadores un poco de cabecera. Sí, sí. Y hablo con él. Sí, sí. Hablo con él también, sí, sí. Yo tengo que decir, Raúl, que ojito a este tío. No porque ahora lo estemos descubriendo, que no es el caso. Este hombre ya lleva preparando tiempo a gente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=202" target="_blank" class="timestamp">[03:22]</a> Pero es que podemos ir repasando la nómina de atletas y que me cuenten a mí cuál sale mal de todos estos. Porque, sin ir mal dejo, este mismo, que este compitió de hecho en el Arnold de Brasil, salió pelado hasta el hueso, o sea, increíble. Tiene a Estefan Matala, que ha tenido el par que hay que tener para decirle, oye, si vas a tener problemas para meterte en el Classic, vete a Open. Y fijaros cómo está luciendo Estefan Matala.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=226" target="_blank" class="timestamp">[03:46]</a> y está con 280 libras sí, sí, sí, ya te digo que oye, hay muy buenos preparadores en el mundo, cada uno esto es como todo, cada uno tiene su favorito igual que tiene su su atleta, pues</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=242" target="_blank" class="timestamp">[04:02]</a> estamos viviendo mucho tiempo a patrick y patrick es un preparador que creo que está un poco infravalorado dentro de todo lo que hay pero hoy es dentro de la normalidad de que un preparador puede fallar no el preparador no sino el contexto en el externo patrick tour es de los preparadores que además en suele encajar y suele dar el 100% con sus atletas</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=269" target="_blank" class="timestamp">[04:29]</a> Yo, ya lo digo, por más que lo veo y por más que… Es que, fíjate, Fran Barrios también, que también lo hizo muy bien en la categoría 2-2 este año. Mucho, bueno, por supuesto, que a la gente no se lo olvide. Cuidado aquí, porque esto es todo lo que quería hablar contigo, Fabián Mayer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=287" target="_blank" class="timestamp">[04:47]</a> que es otro de los que vuelve ahora de nuevo a competir y que estoy convencido de que este va a ser uno de los grandes rivales de José Manuel en el Mister Olimpia, seguro. Pero no tengo ninguna duda de eso. No sé a ti qué te parece, Fabián. Pues igual, Miguel, lo que te sigo contando. Atletas con línea, con progreso y que vengan de la mano de Patrick Tour, ya te digo yo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=312" target="_blank" class="timestamp">[05:12]</a> Que hay que temerle, ¿vale? Hay que temerle porque hace las cosas muy, muy, muy, muy bien. Pero sí, sí, de hecho este atleta, la primera vez que lo vi dije, oye, aguita porque reúne muchas cualidades para luchar dentro del top. Y una de las cosas que también...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=337" target="_blank" class="timestamp">[05:37]</a> Una de las cosas en la que reconocemos a Patriot es por la mejora año tras año que trae con sus atletas. Lo mismo podemos decir a un atleta, bueno, todavía le falta por llegar, pero la verdad que año por año da unos cambios radicales. Uno de los ejemplos que pusimos antes es de Logan. Algo que no nos esperamos y sin ninguna duda...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=366" target="_blank" class="timestamp">[06:06]</a> Bueno, en general es un gran atleta y seguramente va a dar ruido. De hecho, tengo que decir que un poco para cerrar el capítulo de Patrick, yo creo que era bueno tener ese reconocimiento por nuestra parte de un preparador como Patrick Tur, porque es que está por ver cuál es el atleta malo de todos los que lleva. Es increíble la nómina.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=390" target="_blank" class="timestamp">[06:30]</a> Pero quería hablarte precisamente de uno que ha salido hace poquitos días a la palestra. Y este es un caso que a nivel médico, fíjate lo que te digo, Raúl, me interesa hablarlo contigo, que es el caso de Fabián. Fabián el año pasado estuvo con... Estuvo llevando Fran Espín, de hecho consiguió el pase a la Olimpia con Fran en Charlotte. Luego hizo algún otro campeonato más y demás, pero nos desveló. Aparte de que es una letra un poco también peculiar, con una psicología un poco...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=418" target="_blank" class="timestamp">[06:58]</a> Un poco complicado de llevar, un poco complicado de atar, porque, bueno, pues con Fran se las tuvo un poquito tiesas, hay que decirlo así. De hecho, él mismo lo desveló y decidió parar la preparación con Fran, seguirla con otra persona. Luego recuerdo, bueno, tú estabas ayer en el Olimpia, que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=437" target="_blank" class="timestamp">[07:17]</a> Salió a hacer la presentación por dorsal, pero luego no hizo la presentación individual o algo por el estilo pasó. Sí, eso Limpia fue peculiar. Fue al pesaje vestido de oso también, creo. Exacto, exacto. Fue algo anecdótico. Tuvo varias cosas de esas que conforman una personalidad un poquito volcánica, vamos a decirlo así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=461" target="_blank" class="timestamp">[07:41]</a> Pero lo que más me sorprendió a mí fue que el año pasado, él mismo comentó en este programa que tenía un problema, un cáncer de, en fin, un cáncer importante de colon.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=474" target="_blank" class="timestamp">[07:54]</a> Pero ahora resulta claro, él dijo que después del Olimpia, bueno, que incluso en el Olimpia tuvo una experiencia complicada con este cáncer, que fue la que le obligó a no poder seguir compitiendo allí, que iba a dejar el mundo del culturismo para centrarse en esta enfermedad. Dejamos de tener noticias de Fabián y luego lo que nos encontramos es que Patrick Tour sube esta imagen y confirman que están trabajando juntos y después tenemos en este caso a Fabián,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=504" target="_blank" class="timestamp">[08:24]</a> Diciendo que el problema que tenía no era un problema de colon, sino que era un problema renal. Yo no sé si tú a lo mejor estás un poco al tanto de esto que te estoy contando, Raúl, pero desde luego yo no sé tú cómo gestionarías como preparador la preparación de un atleta que tiene una dolencia tan grave como esta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=525" target="_blank" class="timestamp">[08:45]</a> No estoy al tanto de nada, Miguel. No tengo ni idea. De hecho, yo creo que me sorprendí para bien cuando vi la publicación de Fabián que se estaba volviendo a preparar. Primero porque entiendo que si se está volviendo a preparar su enfermedad está totalmente controlada. Y al final, como tú bien dices, cada persona tiene una personalidad, una forma de ser totalmente respetable.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=552" target="_blank" class="timestamp">[09:12]</a> Y claro, sí, un poco extraño, por así decirlo. Al final, cuando hablamos de un cáncer de colon, a ver, si hablamos de un cáncer de colon, estamos hablando de que hay un diagnóstico. Hay un diagnóstico, no es creo que tenga un cáncer de colon. Si después no es un cáncer de colon y es una enfermedad renal o una patología renal, dependiendo de la gravedad,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=577" target="_blank" class="timestamp">[09:37]</a> Pues Miguel, pues me quedo igual que tú, vete a saber el contexto que hay ahí de todo. Lo importante al final, bueno, que él después de la Olimpia habrá hecho sus valoraciones, están totalmente libertad de cambiar de preparador y si tiene la oportunidad de volver a intentarlo, de volver a competir y tiene esa ilusión, pues mira, pues esa es la parte positiva.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=601" target="_blank" class="timestamp">[10:01]</a> Sí, yo lo comento sobre todo porque yo sé que tú, Raúl, tienes una gran cantidad de conocimiento sobre el tema de salud y demás. Y claro, a mí me sorprende que una persona, independientemente de la problemática que tengas, si es en el colon, si es de carácter renal y demás, y que incluso ya ha tomado la decisión de decirle, mira, cierro capítulo y me centro en esto porque no tiene ningún tipo de sentido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=626" target="_blank" class="timestamp">[10:26]</a> El hecho de que vuelva y sobre todo el hecho de que su preparador actual, que es Patrick Tour, del que hemos hablado hace dos minutos, le hemos puesto en la más de las alturas, yo imagino que tiene que tener conocimiento de lo que está pasando y que para acoger a un atleta como Fabián tiene que haberse documentado muy bien de qué es lo que realmente está pasando.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=648" target="_blank" class="timestamp">[10:48]</a> Claro, claro, totalmente. A ver, no creo que sea nada grave. Sí es verdad, Miguel, que los atletas profesionales o cualquier atleta que se esté preparando para algo y sufra mucho estrés físicamente a nivel externo e interno, pues obviamente pueden haber patologías e inflamaciones que al final no tienen que desencadenar en una enfermedad crónica.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=674" target="_blank" class="timestamp">[11:14]</a> Por lo tanto, muchas veces un atleta termina y por el estrés que rodea lo que es la preparación de una preparación profesional, pues se determina de que hay una analítica más grave o...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=691" target="_blank" class="timestamp">[11:31]</a> menos graves en el que al final se pone tratamiento todo se soluciona y al final desencadena en el que no es algo crónico y se decide poner de nuevo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=706" target="_blank" class="timestamp">[11:46]</a> entrar en una planificación para prepararse. Pero que al final, yo no sé, Miquel, son hipótesis, cualquiera sabe, pero lo que está claro es que si Patriotour ha decidido adentrarse en esta preparación con Fabián, no tiene que haber nada grave al respecto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=y8W3eGa1IXE&t=722" target="_blank" class="timestamp">[12:02]</a> Totalmente, yo opino exactamente lo mismo, yo creo que para poder coger este toro, yo creo que Patrick Turz ha tenido que informar bastante bien porque es un preparador muy serio, con mucha reputación y bueno, ya hemos visto la nómina de atletas que lleva, que no tiene la necesidad ninguna de tener que coger a un tipo como Fabián, que por otro lado es un tipo que tiene una proyección tremenda, de hecho el año pasado después del charlo de Tahiria Elmanion lo ponía por las nubes, con lo cual más claro que eso, imposible.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 04/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
