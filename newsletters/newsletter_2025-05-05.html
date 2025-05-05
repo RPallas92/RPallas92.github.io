@@ -1,0 +1,488 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 05/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">05/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-rTUEgInqYAo'>JOSEMA DEJA A RAÚL CARRASCO SIN PALABRAS</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-t8vKgDcjupg'>"ESTO ES IR CON EL TRABAJO HECHO" Carrasco ALUCINA con un JOSEMA que pone RUMBO a la GLORIA en EEUU</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-rTUEgInqYAo">
+            <h2>JOSEMA DEJA A RAÚL CARRASCO SIN PALABRAS</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 05/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=rTUEgInqYAo" target="_blank">
+                    <img src="https://i.ytimg.com/vi/rTUEgInqYAo/hqdefault.jpg" alt="JOSEMA DEJA A RAÚL CARRASCO SIN PALABRAS" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video documenta un check-in y sesión de entrenamiento de Josema junto a su entrenador Raúl Carrasco, a pocas semanas de una competición clave.
+Se muestra el impresionante físico de Josema, destacando su extrema definición, detalles musculares y venas, sorprendiendo incluso a su propio entrenador.
+Los comentaristas reaccionan con asombro ante el nivel de preparación y la calidad del físico presentado.
+Se discute el potencial internacional de Josema, considerándolo un fuerte candidato a ganar el Mr. Olympia en el futuro cercano.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>La Presión Antes del Encuentro Clave <a href="https://www.youtube.com/watch?v=rTUEgInqYAo&amp;t=58" target="_blank">[00:58]</a></h3>
+
+<p>Josema confiesa sentir una presión considerable antes de su revisión presencial con Raúl Carrasco. Explica que, con solo dos semanas y media restantes para competir, siente la necesidad de mostrar un físico perfecto al 100% a su entrenador.</p>
+
+<h3>Estrategia de Entrenamiento Final <a href="https://www.youtube.com/watch?v=rTUEgInqYAo&amp;t=139" target="_blank">[02:19]</a></h3>
+
+<p>Se detalla el enfoque del entrenamiento en las semanas previas a la competición. La estrategia se centra en ejercicios analíticos y de aislamiento, utilizando principalmente máquinas para afinar los detalles musculares en esta fase crucial.</p>
+
+<h3>El Impactante Físico es Revelado <a href="https://www.youtube.com/watch?v=rTUEgInqYAo&amp;t=369" target="_blank">[06:09]</a></h3>
+
+<p>Comienza la visualización del físico actual de Josema. Los comentaristas reaccionan con incredulidad ante su extrema sequedad, separación muscular, venas y detalles raros y sorprendentes como estrías en el dorsal.</p>
+
+<h3>La Sorpresa del Entrenador Confirmada <a href="https://www.youtube.com/watch?v=rTUEgInqYAo&amp;t=576" target="_blank">[09:36]</a></h3>
+
+<p>Se subraya la reacción de Raúl Carrasco al ver a Josema posando, especialmente en los detalles de definición. A pesar de su experiencia, Raúl parece visiblemente impresionado y orgulloso del nivel alcanzado, reafirmando que el trabajo ha sido excepcional.</p>
+
+<h3>¿El Primer Español en Ganar el Olympia? <a href="https://www.youtube.com/watch?v=rTUEgInqYAo&amp;t=609" target="_blank">[10:09]</a></h3>
+
+<p>Se plantea la seria posibilidad de que Josema, con solo 23 años, pueda convertirse en el primer español en ganar el Mr. Olympia. Se destaca su estatus internacional y la necesidad de seguir trabajando en aspectos como el inglés para consolidar su carrera global.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=0" target="_blank" class="timestamp">[00:00]</a> Vamos a ver a Josema que por lo visto ha hecho un check-in, un check-in, ¿cómo quiera llamarlo? Un posing con Raúl Carrasco. Nos va a enseñar el físico a días de competir. Lo que todo el mundo estábamos esperando. Josema enseña su físico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=15" target="_blank" class="timestamp">[00:15]</a> ¿Qué pasa chicos? Bienvenidos a un vídeo más para mi canal. No estamos en Madrid, no estamos en mi pueblo, estamos en Sevilla y pronto... Tiene una cara de agotamiento, tío. Tiene una cara de agotamiento el chaval, pobrecillo. Como habéis visto en el vídeo anterior, os dimos una explicación de cómo íbamos a plantearlo todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=33" target="_blank" class="timestamp">[00:33]</a> Y ahora haremos un entrenamiento de empujes. Tengo que decir que la comida ahora es más alta, pero ¡guau! Es como que estoy más reventado, ¿vale? Es normal. Tema de hambre ya en segundo plano, ¿no? Pero sí que es verdad que al comer más carbohidratos, ¡guau! Como que me cuesta mucho volver a nacer prácticamente, activarme también aquí en el entrenamiento. Pero bueno, tengo muchas ganas. Realmente ahora mismo… La cara no falla, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=58" target="_blank" class="timestamp">[00:58]</a> Estoy pensando ya en acabar el entreno porque tengo revisión con Raúl presencial y ya, joder, quedan dos semanas y media. Vosotros lo veréis a dos semanas o una semana, no sé. Y tengo la presión esa de decir, me tiene que ver bien 100%, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=73" target="_blank" class="timestamp">[01:13]</a> Quiero que reaccione de una manera que diga, vale, sí, lo he dejado como yo quería. Sí que es verdad que hace una semana le mandé un check y nunca me había dicho esto, que me dijo que, joder, mira, este check, de verdad me lo voy a guardar hasta en el escritorio del ordenador, para cuando realmente estemos en otra fase o seamos mayores, vea realmente la condición. Y así que nada, aquí tenéis al míster. Vamos a hacer, lo dicho, entreno de empujes, ¿no? Sí, correcto. Comenzaremos por pecho, luego haremos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=101" target="_blank" class="timestamp">[01:41]</a> Un poco de hombro y luego para terminar tríceps. Y nada, estaba diciendo que siempre tengo una presión esa de decir, hostia, a ver cómo me ves, ¿sabes? En persona, ahora ya no hay margen de error prácticamente y tiene que ser bien 100%. Así que nada, vamos al lío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=115" target="_blank" class="timestamp">[01:55]</a> La idea de estas dos semanas antes... Hermano, abstenerse comentarios sobre la química cuando estábamos hablando del próximo CEBAM. Hermano, no me jodáis. O sea, abstenerse. Y encima es español. Como si se come, vamos, piedra picada. Es trabajar analítico, ejercicio de aislamiento, es decir, dejar a un lado los preces con barra y aunque trabajaremos algún prece ahora en el pectoral,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=139" target="_blank" class="timestamp">[02:19]</a> Y en hombros, pero vamos a intentar que sea siempre en máquina convertible. Ya estamos a dos semanas de irnos a Estados Unidos y aunque estamos en una... Compite en el PitchBook Pro, me parece que el fin de... Es el 10-11. Sí, es la semana que viene. Pero qué es eso, tío. Mira eso, tú. Mira eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=168" target="_blank" class="timestamp">[02:48]</a> Mira la pata, tú. Mira qué barbaridad. No tiene piel, compadre. Quieres que llegue, pero que salga todo bien, ¿eh? Aunque es que es lo que digo, tío. Conforme trabajamos nosotros, hay poco margen de error, tío. Porque no hacemos locuras, no hacemos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=184" target="_blank" class="timestamp">[03:04]</a> Las puestas a punto no son que nos vamos a arriesgar. Hombre, este año yo al menos no tengo ninguna incertidumbre teniendo la experiencia de estos años pasados. El único pega es lo que hablamos en el anterior vídeo, el tema del pesaje que no hay mucho tiempo. No, pero ayer te comenté un poco la planificación por encima y es algo que no me preocupa. Si el trabajo con antelación está hecho</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=216" target="_blank" class="timestamp">[03:36]</a> Vamos viendo ese día a día, a cada momento por donde queremos ir y eso vamos a plasmar encima del escenario. Es un caramelo. Es un caramelo por ejercicio. Ya lleva tres caramelos. Un caramelo por ejercicio. Dos, arriba. Vamos. Vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=251" target="_blank" class="timestamp">[04:11]</a> 10, 9, 8, 7, 6, 5, 4, 3, 2, ¿preparado? ¡Ya! ¡Una, dos, tres! ¡Una, dos, tres! ¡Una, dos, tres!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=280" target="_blank" class="timestamp">[04:40]</a> Vamos a hacer una serie simplemente de elevación frontal con barras. Me flipa muchísimo. Lo haremos así. A ver. Guau, ya está. Ahora todos los pelos brócoli haciendo este ejercicio. Ya está, ya lo estamos viendo. Ahora todos los pelos brócoli haciendo este ejercicio. Ya lo hemos liado ya. Algo así en una mano con agarre neutro y después utilizamos un prono en la extensión por encima de la cabeza. Con barro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=311" target="_blank" class="timestamp">[05:11]</a> Es que hasta el brazo le ha mejorado, ¿eh? Acordaros que el bracillo de Josema que tenía, tío, el brazo le ha mejorado un montón. Espérate un momento. Compi, ¿sabes que tengo una empresa de desarrollo web y que estamos haciendo aplicaciones de todo tipo, web de todo tipo, landing page, todo lo que se te puede imaginar para llevar tu negocio a otro nivel? ¿Lo sabes? Bueno, ya lo sabes. Entonces, te voy a decir una cosa. Si te apetece que te pasemos presupuesto, que hablemos un poco de cómo va esto y de lo que tú quieres, háblanos al Instagram de AnalyticsMind, que te pongo en la descripción de este vídeo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=348" target="_blank" class="timestamp">[05:48]</a> A lo que hemos venido, ¿no? A lo que hemos venido. El entrenamiento está muy guay, pero necesitamos ver chicha.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=369" target="_blank" class="timestamp">[06:09]</a> Mirar la espalda, mirar el glúteo, cómo se le raja. Mirar la división entre músculo, compadre. Es que es increíble, tío. Increíble. Mira, mira, mira el dorsal, tú.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=390" target="_blank" class="timestamp">[06:30]</a> Eh, eh, acaba de hacer Raúl. ¿Lo que está señalando Raúl son estrías en el dorsal? ¿Lo que está señalando Raúl son estrías en el dorsal? ¡Que sí que lo son, tú! ¡Eso sí que lo he visto en mi vida! ¡Estrías en el dorsal por dentro, tú! ¡Qué barbaridad! ¡Qué barbaridad!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=417" target="_blank" class="timestamp">[06:57]</a> Hemos sacado detalles donde no los había. Hemos sacado detalles donde no los había, literal. Vaya barbaridad, tíos. Buah, la pena que no nos enseñan bien, tío. Mira los cuádriceps. Mira el frontal de la pierna. Literal que se le dividen todos los músculos, inserciones, todo. ¡Todo! ¡Qué barbaridad! Tiene un desarrollo importante en el adulto. Ya sé que se le ve a la pierna mucho más grande.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=448" target="_blank" class="timestamp">[07:28]</a> mirad aquí mirad aquí primero el glúteo y lo del glúteo es el que canta aquí el glúteo es el que canta si está definido de verdad o no Josema no está definido de verdad está a un punto sobrehumano pero mira el femoral como cuelga mirad toda la serie de venas que lleva ahí es que es que es que es increíble tú es que es increíble tú</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=471" target="_blank" class="timestamp">[07:51]</a> Es impresionante. Impresionante. En el último hemos conseguido un punto más de condición de separación. Mira, mira, mira, mira el culo, mira el culo. Mira eso, mira eso. Mira la espalda. Madre mía. Madre mía. Cría va a mitad. Este año se les tría hasta arriba. Mira qué locura, tío. Que le falta gemelo. Vete por ahí a la playa, corre a ver si te pega un algo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=504" target="_blank" class="timestamp">[08:24]</a> ¡Guau, tío! Es que es una puta... Es que estoy flipando porque, compadres, que este tío es español. ¡Que es español! ¡Que eso es lo loco! ¡Que este tío es español! ¿Sabes? No, no. De espaldas, a día de hoy podemos decir que Josema de espalda es el número uno. Josema se da la vuelta y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=527" target="_blank" class="timestamp">[08:47]</a> Y te tienes que callar. No hay nadie mejor que Josema ahora mismo en el mundo de espaldas. De espaldas nadie es mejor que él ahora mismo. Nadie. Nachi, hermano, estamos hablando de Clásic. ¿Estamos gilipollas o qué? Impresionante, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=547" target="_blank" class="timestamp">[09:07]</a> Mira, mira, mira, mira, mira. No es listo Raúl. No es listo Raúl. No es listo Raúl. Enseñando lo que, digamos, lo que más valor tiene en una definición. O sea, en el culturismo, ¿vale? Que cuando hacen el apretón en esa pose, ahí, si hay algo de agüilla, digamos que te tapa. Y si no hay agua, pues se ve eso que estamos viendo. No es listo Raúl. No tiene escuela, cabrón, ¿eh? Es increíble, tío. Lo de este niño no tiene sentido alguno, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=576" target="_blank" class="timestamp">[09:36]</a> Esto se llama llevar los deberes hechos. Pero bien hecho, ¿eh? Ya ves, tío. Ahora sí. Estás flipando, Raúl. Estás flipando, Raúl, tío. Estás flipando. Es que estás flipando, hermano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=594" target="_blank" class="timestamp">[09:54]</a> Está flipando. No sabe qué decir. Está flipando. Y está harto de verlo. Porque es que está harto de verlo. Y está flipando tú. Impresionante. De verdad os lo digo, ¿eh? Yo pienso que este año, Josema, y ojalá...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=609" target="_blank" class="timestamp">[10:09]</a> Josema, a ver, por punto, que es que voy acelerado en mi cabeza. Este año Josema va a pelear por un top 3, y yo digo más, va a pelear por ganar el Olimpia. Primero o segundo. Pero un top 3, 100%. Y yo digo, añado, que va a pelear por un primer o segundo puesto. 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=629" target="_blank" class="timestamp">[10:29]</a> La cosa que tiene que hacer José Ma, fuera del culturismo, como culturista no podemos decirle nada, nada. ¿Qué tiene que hacer José Ma? Ya sabemos, por lo menos, que internacional ya es. O sea, quiero decir, es un tío que lo están sacando en todos los debates de culturismo, en todos los programas de culturismo a nivel mundial, ahí en Estados Unidos, lo están sacando en todos los sitios. Eso es muy bueno. Eso es muy bueno, ¿vale? Eso es muy bueno. Que ya allí hablen de él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=654" target="_blank" class="timestamp">[10:54]</a> Eso es buenísimo. Eso es buenísimo. ¿Vale? Que no solo hablasen cuando fue a la Olimpia, sino que hablen durante todo el año. Luego...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=662" target="_blank" class="timestamp">[11:02]</a> ¿Qué tiene que hacer? Inglés. Tiene que aprender inglés. Que no puedan decir ninguna tontería. ¿Sabes? Inglés, hermanito. Eso yo creo que... O sea, ya lo están haciendo. Tiene que aprender inglés. Como sea. Que se desenvuelva bien con el inglés. Tiene que hacerlo. ¿Vale? Porque bueno, ya está currando. Ya está con una marca top de suplementación. ¿Sabes? Entonces, bien. Pues...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=690" target="_blank" class="timestamp">[11:30]</a> Yo creía que no me iba a sorprender. Creía que no me iba a sorprender. La verdad que me ha sorprendido. Este shakey era fundamental. ¿De shakey? A dos semanas. A nivel condición, queríamos rizar el rizo. Lo hemos conseguido teniendo detalles en muchísimas más zonas. A nivel desarrollo... Qué bueno, Raúl, tío. Qué bueno, Raúl, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=709" target="_blank" class="timestamp">[11:49]</a> Vale, que ya sé que a alguno ventajista ibas a decir, ya, a Josema da igual que lo coja un preparador malo o uno bueno, ya lo sé. Ya sé que Josema, digamos, que es un tío, es un prodigio, lo sé. Pero creo que Raúl es el mejor a día de hoy para poder llevar a Josema. Eso es lo único que digo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=727" target="_blank" class="timestamp">[12:07]</a> Para sorprender a Raúl hay que ser muy, muy bueno. Eh, dilo. Sí, sí, sí, lo estoy diciendo. O sea, yo creo que para los que no sepáis, que no todos tenéis que saber quién es Raúl. A ver, Raúl es un tío que históricamente en España, o sea, es de lo histórico, digamos, es uno de los pocos culturistas españoles que ha pisado la tarima de la Olimpia tres veces. Y como preparador es extraordinariamente bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=751" target="_blank" class="timestamp">[12:31]</a> O sea, es un tío con un bagaje brutal, ¿vale? Que ha visto de todo, de todo y de todos los colores, de todos los modelos, no le va a sorprender nada. Y que le sorprenda hoy mismo su propio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=766" target="_blank" class="timestamp">[12:46]</a> Bueno, no sé, llevarlo a alumno en pupilo es una lacuna, tío. Sí, sí, Ruiz también. Yo no voy a quitarle mérito a Ruiz. Ya sabéis lo que opino. Son etapas reales y esto en el culturismo pasa. Y voy a ser más cruel. Seguramente, si en algún momento, Josema con Raúl no puede, no sé, no está a gusto o no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=792" target="_blank" class="timestamp">[13:12]</a> estén bien de acuerdo en cómo llevar una preparación, pues José Mañez cogerá a otro preparador y Raúl no creo que se enfade. ¿Entiendéis lo que quiero decir? Porque es así. Porque el culturismo es así. El deporte individual es así. Aunque no se refleja tanto todavía aún en... Pero bueno, hablar de eso es absurdo, también os lo digo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=810" target="_blank" class="timestamp">[13:30]</a> Sus poses, pero con el tiempo seguirá mejorando. Al final es que tampoco teníamos tanto margen de mejora. Entonces, muy satisfechos con la mejora. Y sobre todo por la condición y separación que se le ve con este peso. Yo creo que sí, que el tamaño que ha mostrado ahora con este peso ha pesado 103,7, cerca de 104 kilos. Pero yo creo que este año podremos lograr</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=838" target="_blank" class="timestamp">[13:58]</a> la condición que queremos y la separación que queremos con 103 kilos, que ya estamos hablando de kilo y pico, dos kilos más que en su pico más alto comparado con el año pasado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=849" target="_blank" class="timestamp">[14:09]</a> Yo no tengo ninguna obsesión con el peso, ¿vale? Siempre partiendo de mantener esa... ¿Tú crees que Josema volvería con Ruiz y Raúl se retira? No. A ver, nunca digas nunca, pero yo no lo creo. Y Raúl, vamos a ver, Raúl se retira. La cosa es, ¿tú te crees que Raúl va a dejar tirado a Josema? ¿Estamos tontos o qué? ¿Estamos tontos o qué? O sea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=871" target="_blank" class="timestamp">[14:31]</a> Tú a un caballo ganador. ¿Lo vas a dejar ir? Por favor. Por favor. No digas más tonterías. Por favor. Vamos a ver. Y más Raúl. Raúl quiere que... Mira, si en el mundo del culturismo hay gente lista, Raúl está por encima de todos. Por favor. Que tú vas a dejar un caballo ganador a que lo coja todo el preparador. Anda, hombre. Por favor. Por mucha calma que quieras en tu vida. Jamás vas a dejar a un tío ahí arriba.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=896" target="_blank" class="timestamp">[14:56]</a> Hombre no, en la vida. Pero si es verdad que acercándonos a un peso más alto la pierna es lo primero que le mejora, sin ninguna duda. Por lo tanto esa es mi pequeña obsesión de llevarlo cercano a ese peso. Al final esta mejora en el detalle de la condición nos va a permitir desde el pesaje hasta las horas que tengamos el campeonato poder comer más, cargar más, que el agua, los fluidos tengan donde tengan que ir, intramuscular.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=927" target="_blank" class="timestamp">[15:27]</a> Mejor no puede ir la cosa, tío. Si lo queremos hacer mejor, no nos sale. Una semana y competir. Y estaremos muy pendientes. Me gusta y qué. Increíble. Bueno, yo creo que de cara al futuro, sí que todos tenemos pendientes de Josema. A ver cómo puede llevar todo lo que le está ocurriendo a la velocidad que va a su carrera. Cómo puede mentalmente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=951" target="_blank" class="timestamp">[15:51]</a> Es que no es fácil sobrellevar todo lo que le está pasando a Josema porque es una barbaridad lo que está pasando. Es una barbaridad, amigos. Es algo increíble, increíble, con 23 años. Y estamos normalizando que el tío con 23 años vaya a pelear con los mejores del mundo. Es una locura, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=rTUEgInqYAo&t=971" target="_blank" class="timestamp">[16:11]</a> Es una verdadera fumada, tío. Es que no tiene ningún tipo de sentido. Ningún tipo de sentido, tío. Yo creo que tiene muy buena pinta Josema. Yo creo que Josema puede ser el primer español en ganar el Olympia, tío. Porque no lo ha ganado ningún español. El que más cerca ha estado es nuestro Calderón, nuestra leyenda viva. Calderón, que ha quedado segundo y tercero y cuarto. Pero por fin parece que es alguien que puede llegar a ganar el Olympia, tío. Español. Ahora veremos a ver qué sucede, ¿eh?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-t8vKgDcjupg">
+            <h2>"ESTO ES IR CON EL TRABAJO HECHO" Carrasco ALUCINA con un JOSEMA que pone RUMBO a la GLORIA en EEUU</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 05/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=t8vKgDcjupg" target="_blank">
+                    <img src="https://i.ytimg.com/vi/t8vKgDcjupg/hqdefault.jpg" alt=""ESTO ES IR CON EL TRABAJO HECHO" Carrasco ALUCINA con un JOSEMA que pone RUMBO a la GLORIA en EEUU" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza el físico del culturista Josema antes del Pittsburgh Pro, basándose en un check realizado dos semanas antes.
+Se destacan las notables mejoras en condición, detalle y desarrollo muscular, especialmente en piernas y glúteos, sorprendiendo a su entrenador, Raúl Carrasco.
+Se compara brevemente con otros competidores y se discute la trascendencia estratégica de competir en Estados Unidos para su carrera.
+El presentador concluye que este es el mejor físico que Josema ha presentado hasta la fecha.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Josema en Ruta al "Nuevo Olimpia" <a href="https://www.youtube.com/watch?v=t8vKgDcjupg&amp;t=29" target="_blank">[00:29]</a></h3>
+
+<p>Se anuncia que Josema ha viajado a Pittsburgh para competir en el Pro, un evento de gran expectación. El presentador lo compara con un "nuevo Mister Olimpia" por la calidad del cartel. Este viaje marca el inicio de su semana de competición en Estados Unidos.</p>
+
+<h3>La Sorpresa de Raúl Carrasco Ante el Check <a href="https://www.youtube.com/watch?v=t8vKgDcjupg&amp;t=76" target="_blank">[01:16]</a></h3>
+
+<p>El presentador subraya la reacción de asombro de Raúl Carrasco al ver el físico de Josema en un check realizado dos semanas antes. Destaca que Raúl no suele ser efusivo en sus halagos en el momento de ver un físico, haciendo su sorpresa un indicador clave.</p>
+
+<h3>Desvelando las Mejoras Clave en el Físico <a href="https://www.youtube.com/watch?v=t8vKgDcjupg&amp;t=197" target="_blank">[03:17]</a></h3>
+
+<p>Se analizan en detalle las mejoras físicas de Josema mostradas en el check. Raúl Carrasco menciona específicamente el desarrollo importante en el aductor y una mejor condición y estriación en el glúteo, llegando más arriba que en años anteriores.</p>
+
+<h3>El Viaje a EE.UU. como Punto de Inflexión <a href="https://www.youtube.com/watch?v=t8vKgDcjupg&amp;t=443" target="_blank">[07:23]</a></h3>
+
+<p>Se discute la importancia estratégica de Josema compitiendo en Pittsburgh y Nueva York. El presentador cree que es un punto crucial para su carrera, permitiéndole ser visto por figuras clave de la IFBB Pro League y obtener feedback sobre si debe seguir en Classic Physique o pasar a Open.</p>
+
+<h3>Condición Extrema y Peso Óptimo Según Raúl <a href="https://www.youtube.com/watch?v=t8vKgDcjupg&amp;t=568" target="_blank">[09:28]</a></h3>
+
+<p>Raúl Carrasco comparte su satisfacción con la condición lograda, destacando los detalles y la separación muscular con un peso de casi 104 kg. Explica que lograr esta condición con un peso mayor permite una mejor carga de carbohidratos y gestión de fluidos antes de la tarima.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal, espero que estéis teniendo un arranque de semana fantástico y además una semana donde el final de la misma va a ser ese Pittsburgh Pro, ese campeonato que bueno, por cartel y sobre todo por expectación, pues podemos estar hablando perfectamente de un nuevo Mister Olimpia y donde en este caso Josema, nuestro Josema, bueno, pues ha tomado ya el vuelo, de hecho estará seguramente en estos momentos en el aire</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=29" target="_blank" class="timestamp">[00:29]</a> con el objetivo de llegar a la ciudad de Pittsburgh, de instalarse allí y por supuesto de competir este fin de semana. Pero antes parece que ha querido dejarnos la bomba aquí en España y desde luego que ha subido o ha dejado un nuevo contenido con un nuevo check, un check que se realizó, y esto hay que tenerlo también bastante claro, hace dos semanas, que la gente también lo tenga claro. Este check fue justo realizado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=53" target="_blank" class="timestamp">[00:53]</a> en la semana santa, previo a ese pequeño rebote que tuvo justo la semana pasada, pero que marca bastante el punto en el que está Josema, el punto en el que llega con un físico, probablemente el mejor físico de toda su carrera, le va a necesitar, porque evidentemente la competencia es durísima, con Ruth Diesel, con Kaique y con el resto de atletas que vayan a estar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=76" target="_blank" class="timestamp">[01:16]</a> en ese Pittsburgh Pro y desde luego, desde luego, y lo vamos a analizar ahora, al que sí que ha dejado totalmente sorprendido es a Raúl Carrasco. Quiero no solamente que nos centremos en el check, vamos a hacer una pequeña comparativa también con el último de Rutisel, pero sobre todo con la gestualidad y las palabras de Raúl, porque yo creo que, como todos sabéis, Raúl es bastante poco dado a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=98" target="_blank" class="timestamp">[01:38]</a> mostrar halagos sobre todo en el momento en el que ve el físico pero en este caso con Josema pues no se le ha podido escapar mucha de las muecas así que como digo vamos a pasar a analizar todo lo referente de Josema no sin antes obviamente no olvidarme los códigos de descuento código de descuento Iron Road en toda la web de Big os tengo que dar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=117" target="_blank" class="timestamp">[01:57]</a> ¡Suscríbete al canal!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=138" target="_blank" class="timestamp">[02:18]</a> del mercado en España en suplementación así que como digo aprovechad el código Iron Road además están sacando nuevos productos constantemente nuevos sabores así que como digo no os va a defraudar y con el código Iron Road vais a tener un 10% de descuento como digo vamos a pasar a analizar ese check el check de Josema que es un poco yo creo que ha sido la noticia del día el ver cómo va hacia Pittsburgh aunque como digo insisto estas imágenes aunque se sacaran ayer</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=166" target="_blank" class="timestamp">[02:46]</a> fueron grabadas hace dos semanas y yo creo que interesa también escuchar un poquito lo que comenta Raúl del mismo. Vamos a escucharlo. Hemos sacado detalles donde no los había.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=197" target="_blank" class="timestamp">[03:17]</a> Tiene un desarrollo importante en el aductor. Ya sé que se le ve a la pierna mucho más grande. En el glúteo hemos conseguido un punto más de condición de separación. El año pasado se le estiría a la mitad. Este año se le estiría hasta arriba.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=236" target="_blank" class="timestamp">[03:56]</a> Esto se llama llevar los deberes hechos, pero bien hecho. Ahora sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=254" target="_blank" class="timestamp">[04:14]</a> Pues ahí teníamos ese chat de Josema que he intentado rescatarlo, cortarlo un poco para que lo podáis ver más cercanamente. A mí me llama la atención varias cosas. Evidentemente aquí se puede valorar poco porque la calidad no es, porque Josema lo ha hecho como un pequeño en el vídeo y no es la mejor de las calidades para poderlo analizar. Yo imagino que también habrá un punto de estrategia en ello, en mostrarlo, pero no mostrarlo tan nítidamente. Pero en este caso yo,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=284" target="_blank" class="timestamp">[04:44]</a> Veo mejoras en prácticamente todo, porque con respecto a anteriores versiones, sobre todo la versión quizá la que tenemos más en la cabeza del Olimpia, veo un mayor bombeo, en el cuadriceps esto es una evidencia, esto yo creo que está claro, eso no quiere decir que José me vaya a tener dos piernas nuevas, pero sí que es verdad que veo un poquito de más bombeo, mucho mejor cortado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=304" target="_blank" class="timestamp">[05:04]</a> en la zona del sartorio, además esa mejora en los aductores, lo habéis escuchado antes a Raúl como incidía en ello, también hace que tenga una pierna o aparentemente en el visual una pierna más grande, con lo cual yo creo que son mejoras bastante claras. En el tema del abdomen, insisto, creo que en esta pose justo frontal no se nota tanto, pero creo que cuando él esconde y sobre todo perfila bastante el abdomen, el abdomen queda bastante difuminado, evidentemente la pose de relajado de frente es lo que hay y no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=334" target="_blank" class="timestamp">[05:34]</a> No puede esconderla porque tiene que enseñar esa pose al completo. Luego, por ejemplo, aquí yo creo que hay un tema a analizar, que de hecho lo comenta Raúl en el vídeo, me parece bastante increíble. Si os fijáis, la estriación en el glúteo, sí que es cierto que a Josema se le solía quedar en torno a la mitad, es decir, el glúteo estaba estriado, pero no se mostraba tanta esa estriación. Existía, pero no tan nítidamente como se ve ahora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=357" target="_blank" class="timestamp">[05:57]</a> en la parte de arriba del glúteo. Fijaros hasta dónde llega la estiración en el glúteo, ¿no? Muy, muy, muy arriba y eso evidentemente evidencia una condición de loco. Fijaros aquí cuando aprieta la última raya, lo arriba que está, ¿no? Yo creo que eso marca también una definición bastante clara. Aquí tenemos la pose del side chest. Yo creo que aquí José me ha ganado muchos enteros, sobre todo con la densidad del femoral. Creo que él ha ganado una partida ahí en la pierna.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=382" target="_blank" class="timestamp">[06:22]</a> Y luego de la espalda, pues qué decir. De la espalda yo creo que hay muy poquito que comentar. Parece imposible sacar una mejora más, pero da la sensación de que se le ha unido un poquito más de detalle todavía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=395" target="_blank" class="timestamp">[06:35]</a> Y yo creo que eso marca también mucho la diferencia. Y fijaros incluso en la zona del femoral, que prácticamente en el Josema, insisto, también parecía que había poco margen ya de mejora de lo que siempre ha presentado, pues en la zona más de los aductores todavía se puede ver un poquito más de mejora por esa condición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=414" target="_blank" class="timestamp">[06:54]</a> Como digo, pues un Josema que obviamente va a tener que batallar contra un hueso muy duro de roer, dejando un poco a Kaike fuera de la ecuación, que puede no ser así, pero bueno, evidentemente aquí lo tenemos con el último post de Ruth Diesel. Obviamente las tomas son diferentes, hay diferente luz, diferente tono, además una está más cerca de la otra, en el caso de Josema está un poco más cerca de él que la de Ruth, por eso quizás se le puede ver más grande, pero insisto que va a ser una batalla muy bonita, una batalla muy bonita, una batalla por el título...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=443" target="_blank" class="timestamp">[07:23]</a> que yo creo que Josema va a estar ahí peleando duramente por ello. Creo que Josema, esto ya es una opinión muy personal, pero creo que Josema toma un rumbo hoy, en estos momentos, hacia un punto de inflexión en su carrera, lo tengo muy claro, no necesariamente por lo que ocurra tanto en Pittsburgh como en Nueva York, sino por el hecho de dejarse ver por allí. Creo que es algo que le hacía falta y que necesitaba, que no se pudo producir evidentemente con el Arnold por cuestión de fechas, pero que sí que creo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=472" target="_blank" class="timestamp">[07:52]</a> que es un elemento muy positivo y que además va a ser un balance determinante en lo que vaya a ocurrir de aquí en adelante en su carrera. También porque va a tener la opinión en este caso tanto de Tyler Mannion como de Steve Wiberger, que al fin y al cabo son los dos que más opinión y criterio tienen en esto y que más mando tienen en la FV Pro League, para determinar si lo ven quedándose en Classic, si ven que le queda poca cuerda en Classic y debería plantearse el tema del Open en poco tiempo, muy poco tiempo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=500" target="_blank" class="timestamp">[08:20]</a> Si la tarima finalmente determina, imaginaros, Dios quiera, evidentemente, ponemos la mano en la madera, ¿no? Como aquel que dice, de que Josema pudiera ganar tanto en Pittsburgh como en Nueva York, pues imaginaros el destacazo encima de la mesa que supondría eso. Pondría el Classic patas arriba y pondría seguramente a Josema como ese atleta para competir o para estar ahí en esa terna con, bueno, con Urs Kalesinski, con Mike Sommerfeld por entrar en ese top 3.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=529" target="_blank" class="timestamp">[08:49]</a> Un poco ya poniéndonos evidentemente en el mejor de los casos, puede perfectamente no ocurrir. Yo personalmente creo, y esto es un vaticinio, yo personalmente creo que alguno de los dos se va a llevar. Si no se lleva el Pittsburgh, yo creo que el Nueva York puede tener amplias opciones de podérselo llevar. Pero bueno, eso evidentemente es jugar a la bolita de cristal y lo sabemos. Lo que en realidad sabemos es este check.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=548" target="_blank" class="timestamp">[09:08]</a> este último check de Josema que evidencia que el trabajo, como decía Raúl, está más que hecho, que vamos a ver al mejor Josema de toda su carrera y que evidentemente vamos a ver dónde se posiciona ese físico. Ahora vamos a escuchar a Raúl lo que tiene para decir porque yo creo que es muy interesante y con eso cerramos el vídeo. Me ha sorprendido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=568" target="_blank" class="timestamp">[09:28]</a> Creía que me iba a sorprender, la verdad que me ha sorprendido. Este Sheki era fundamental a dos semanas. A nivel condición, queríamos rizar el rizo. Lo hemos conseguido teniendo detalles en muchísimas más zonas. A nivel desarrollo, adductor, abdomen, el fondo, el lateral del tríceps...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=586" target="_blank" class="timestamp">[09:46]</a> aunque no se refleja tanto todavía aún en sus poses, pero con el tiempo seguirá mejorando, pero bueno, al final que tampoco teníamos tanto margen de mejora. Entonces muy satisfecho con la mejora y sobre todo por la condición y separación que se le ve con este peso. Yo creo que sí, que el tamaño que ha mostrado ahora con este peso ha pesado 103.7, cerca de 104 kilos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=613" target="_blank" class="timestamp">[10:13]</a> Pero yo creo que este año podremos lograr la condición que queremos y la separación que queremos con 103 kilos, que ya estamos hablando de kilo y pico, dos kilos más que en su pico más alto comparado con el año pasado. Yo no tengo ninguna obsesión con el peso, siempre partiendo de mantener esa condición, pero sí es verdad que acercándonos a un peso más alto...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=636" target="_blank" class="timestamp">[10:36]</a> La pierna es lo primero que le mejora, sin ninguna duda. Por lo tanto, esa es mi pequeña obsesión de llevarlos el cano a ese peso. Al final, esta mejora en el detalle de la condición nos va a permitir, desde el pesaje hasta las horas que tengamos el campeonato, poder comer más, cargar más, que el agua, los fluidos tengan donde tengan que ir, inframuscular.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=663" target="_blank" class="timestamp">[11:03]</a> Pues ahí teníamos esa reflexión de Raúl, obviamente esto fue previo a lo que ocurrió la semana pasada con ese pequeño rebote que ya nos comentó en el programa que no le preocupaba en absoluto, que de hecho era incluso por momentos un poquito parte del plan, el coger y que fuera con esos 105 aproximadamente kilos para poder luego hacer allí la puesta a punto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=682" target="_blank" class="timestamp">[11:22]</a> Así que, como digo chicos y chicas, esta es la noticia de la jornada, un Josema que pone rumbo, como digo, y además en la miniatura se lo ha puesto, rumbo evidentemente a la euforia, a un cambio también de dinámica para él, el hecho de poder estar un tiempo importante y prolongado en Estados Unidos, que le conozcan los que le tienen que conocer y que pueda hacer una gran labor en el PSU Pro, independientemente de si gana o no gana,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=707" target="_blank" class="timestamp">[11:47]</a> Yo creo que desde luego es de los que menos que perder tiene, esto lo digo claramente, tiene bastante menos que perder que Ruth Diesel y tiene mucho que ganar, porque si gana el campeonato desde luego que se posiciona de una manera brutal para ese presumible top 3 en Classic Physique y en el caso de no ganar, bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=t8vKgDcjupg&t=722" target="_blank" class="timestamp">[12:02]</a> Puede mostrar el físico que va a mostrar con mejoras en tan poco tiempo y evidentemente encontrar ahí el feedback de Tyler y de Steve de cara a si lo ven manteniendo esta progresión en Classic o si por otro lado ven que la etapa de Classic a lo mejor solamente dura esta temporada porque ya poco a poco va haciendo ya una transición al Open. Así que como digo, dejadme en la caja de comentarios si opináis, fuerte like al vídeo, suscribíos al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 05/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
