@@ -1,0 +1,379 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 06/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">06/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>John opina </strong>: <a href='#video-9ia_XpZTU3k'>DR QUIQUE GARVE: "EL DR CUCUMBER DESEÓ LA MUERTE DE MI HIJO"</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-9ia_XpZTU3k">
+            <h2>DR QUIQUE GARVE: "EL DR CUCUMBER DESEÓ LA MUERTE DE MI HIJO"</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John opina </span>
+                <span class="date">Publicado: 06/05/2025 10:44</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k" target="_blank">
+                    <img src="https://i.ytimg.com/vi/9ia_XpZTU3k/hqdefault.jpg" alt="DR QUIQUE GARVE: "EL DR CUCUMBER DESEÓ LA MUERTE DE MI HIJO"" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video expone la alarmante conducta de un médico que insulta, amenaza y se mofa de pacientes entubados y colegas.
+Se presenta el testimonio de un colega agredido, Enrique, quien denuncia la falta de ética y la necesidad de evaluar su aptitud para ejercer.
+Se discuten las graves violaciones al código deontológico médico y a leyes como la protección de datos y la autonomía del paciente.
+Los panelistas y Enrique expresan preocupación por su estado mental y piden una evaluación psiquiátrica forense urgente para apartarlo de la profesión.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Médico que Graba y Amenaza Pacientes y Colegas <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&amp;t=33" target="_blank">[00:33]</a></h3>
+
+<p>Se introduce la figura de un médico cuya conducta ha generado indignación en redes, mostrando clips donde insulta, amenaza y se mofa de pacientes entubados y colegas. Se revela un comportamiento agresivo y poco ético, generando un fuerte rechazo inicial.</p>
+
+<h3>La Escalofriante Amenaza a un Colega y Su Hijo <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&amp;t=111" target="_blank">[01:51]</a></h3>
+
+<p>Se presenta a Enrique, el colega agredido, quien relata cómo el médico lo atacó tras sustituirlo en un programa. La amenaza específica de desear la muerte de su hijo nonato es destacada como especialmente grave y motivo de su denuncia ante autoridades y el Colegio de Médicos.</p>
+
+<h3>¿Puede un Médico así Seguir Ejerciendo? <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&amp;t=190" target="_blank">[03:10]</a></h3>
+
+<p>Enrique enfatiza que su mayor preocupación no son las injurias personales, sino que esta persona continúe ejerciendo la medicina. Argumenta que ser médico requiere empatía y serenidad, cualidades de las que el doctor parece carecer, especialmente por sus alardes de decidir "quién vive o quién muere".</p>
+
+<h3>Delitos Penales y Éticos en la Consulta <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&amp;t=299" target="_blank">[04:59]</a></h3>
+
+<p>Se detallan las acciones legales emprendidas (querella, denuncia al Colegio de Médicos). Se subraya que grabar pacientes es delito (vulneración de intimidad), y se enumeran otras infracciones graves: vulneración de la ley de autonomía del paciente, secreto de historia clínica y código deontológico.</p>
+
+<h3>¿Trastorno Mental? Urge una Evaluación Psiquiátrica <a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&amp;t=480" target="_blank">[08:00]</a></h3>
+
+<p>Los panelistas sugieren posibles diagnósticos (histriónico, narcisista, sociópata) y expresan temor por el riesgo que representa. Concluyen que es indispensable una evaluación psiquiátrica forense para determinar su aptitud y piden medidas cautelares para apartarlo mientras se realiza.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=0" target="_blank" class="timestamp">[00:00]</a> Bueno, oye, ha pasado un ángel en esta mesa y yo creo que es que de repente, después de tanto conflicto, necesitamos todos respirar. Pues no vamos a respirar, porque vamos a hablar. El médico de Mario, el médico que ayer nos quedamos impresionados en sus redes sociales, cómo se mofaba de sus pacientes, los grababa entubados. ¿Tenemos ese momentito? ¿Podemos pedir ese momento? Sí, ¿no? Vamos a verlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=33" target="_blank" class="timestamp">[00:33]</a> ¿Lo tenemos o no lo tenemos? Vale. Es un médico corrupto que no tiene ni puta idea, además es bastante tonto, bastante, bastante tonto. Estás jodido. Y te juro, te juro, escucha esto, te doy mi palabra de honor, tú no sabes lo que significa eso, pero te doy mi palabra de honor de que no voy a descansar hasta que estés muerto o en la cárcel, ¿vale? Te doy mi palabra de honor de que tú, mientras yo viva, en esta vida no vas a encontrar descanso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=59" target="_blank" class="timestamp">[00:59]</a> Este hijo de la gran puta. Este. Este subnormal. Este impresentable. Estos dos impresentables. No tenéis principios. Sois escoria. Os vendéis todos como putas. Todos. No tenéis principios ninguno. Que te metes a metabolizantes y te pones hasta el culo. ¿Qué?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=74" target="_blank" class="timestamp">[01:14]</a> Las dos cosas, que lo sé todo de ti. Que es que, una vez más, que me subestimáis. Que lo sé todo de todos. Que yo cuando empiezo a hablar, lo sé ya todo de todos. No tengo límites. No tengo límites a la hora de plantarme en Quirón, en Málaga. Era en Málaga con el subnormal. No tengo límites de ningún tipo. No tengo límites.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=95" target="_blank" class="timestamp">[01:35]</a> Oye, una cosa que yo de verdad te lo digo, este hombre está trabajando como médico todavía. Cuando habla de estos insultos tan muy bonitos, se los dirige a un médico que le sustituyó a él, en no sé qué sitio, ahora nos lo contara, que se llama Enrique, que es un médico malagueño, ¿no? Efectivamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=111" target="_blank" class="timestamp">[01:51]</a> médico de familia, de medicina deportiva, se llama Enrique y es la nueva denuncia que acumula este otro médico que, como han visto, se encarga simplemente de mofarse, de insultar y de amenazar a otros pacientes y a otros colegas de profesión. Entre las perlas que le dijo a Enrique está la siguiente, atención, que esto es grave, estoy deseando que tu hijo nazca muerto. Enrique, entre otras cosas, lo que pide es que le evalúen de forma psiquiátrica. Hombre, va siendo urgente. Es que yo tengo otro caso en la cabeza</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=139" target="_blank" class="timestamp">[02:19]</a> Perdón, perdón. Presuntamente que es Noelia de Migo. En fin. Pues sí. No digo yo que sea un símil. Todavía él puede poner denuncias y todo porque él está habilitado. Él no está inhabilitado. Enrique. Hola. Cuéntame, ¿cómo conociste a este señor? Médico. Bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=160" target="_blank" class="timestamp">[02:40]</a> Yo no lo conozco personalmente. Yo lo sustituí en un programa de un canal de YouTube porque el periodista encargado de ese programa, vista su forma y sus maneras, pues decidió no seguir contando con él y me llamó a mí para estar hablando sobre salud y deporte. Bueno, no se lo tomó muy bien, la verdad. Y vaya, pues... Bueno, ataca de una manera...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=190" target="_blank" class="timestamp">[03:10]</a> de una manera con calumnias, con injurias. La verdad es que eso a mí no me preocupa. Yo lo que verdaderamente me preocupa es que esta persona pueda estar ejerciendo, porque creo que debe ser evaluado su actitud de cara a la posibilidad de poder ser médico y ejercer como tal. Porque esto es una cosa muy seria. Es una persona que no tiene reparos ninguno en afirmar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=217" target="_blank" class="timestamp">[03:37]</a> y en vanagloriarse de que él es quien decide quién vive o quién muere. Creo que una persona, además, que es especialista en aparato digestivo, que no pongo en duda su pericia como en el diagnóstico y en el tratamiento, pero ser médico es algo más que ser un buen técnico o tener ciertas facultades.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=239" target="_blank" class="timestamp">[03:59]</a> Absolutamente... Entonces, nosotros afrontamos una enfermedad con pruebas, preguntas, exploración física, pero antes que nada nos tenemos que dirigir al prójimo porque viene con miedo y está asustado. Eso es lo primero y primordial. Y creo que este hombre carece de esa empatía. Y después, que creo que no está suficientemente calmado como para...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=268" target="_blank" class="timestamp">[04:28]</a> Este señor es digestivo. Tiene un tubo de tres metros de fibra de vidrio en sus manos. Cuidado, que no es baladí. Pero, Enrique, tú lo ves ahí... Yo que soy... Que no tengo ni idea, ¿eh? Tengo un doctor en la mesa que es maravilloso, ya lo sabes, el doctor López Trigo. Pero tú ves... O sea, tú ves a este señor las cosas que dice. Cómo graba a un paciente intubado burlándose de él. ¿Tú crees que este hombre está bueno? Perdona la expresión que sea el lenguaje más coloquial de la calle. Yo lo veo y digo, este hombre no está bien de la cabeza, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=299" target="_blank" class="timestamp">[04:59]</a> Pero Toñi, yo estoy de acuerdo contigo. El tema es que yo me querellé contra él en su momento, pero bueno, no por esto, por calumnia, injuria, amenazas, coacciones. Está denunciado ante el Colegio de Médicos para solicitar una valoración de aptitud. El problema... Hombre, grabar a un paciente es una vulneración del derecho a la intimidad. Es un delito punible y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=325" target="_blank" class="timestamp">[05:25]</a> Y, bueno, eso tendrá que ver fiscalía si puede actuar de oficio o no. A mí lo que realmente me preocupa es eso, es que este médico tenga libre albedrío y que se vuelvan a repetir, se van a gloria, que en la época COVID en el hospital de campaña, de que él decidía quién vivía y quién moría. Eso creo que... Es tremendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=353" target="_blank" class="timestamp">[05:53]</a> Es alarmante. Jugar a ser Dios. Bueno, que lo dice. Pero no a ser Dios, sino a ser Dios para algunos, que es todavía peor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=362" target="_blank" class="timestamp">[06:02]</a> Sí, pero que lo dice. No, no, ¿cómo que lo dice? Que lo dice, que él se van a gloria, que lo dice. El delito contra la intimidad es un delito de revelación de secretos. Estamos hablando de unos delitos muy graves como para tomar medidas. Y va... Buenos días, Enrique, soy un compañero. Buenos días, ¿qué tal? ¿Qué tal? Y es que has hecho la misma reflexión que hacíamos ayer aquí nosotros, que ser médico es algo más que ser técnico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=388" target="_blank" class="timestamp">[06:28]</a> En la materia, ¿no? Y además va con... vulnera claramente la ley de autonomía del paciente, que estamos hablando de delitos penales. Vulnera el secreto de historia clínica, vulnera la protección de imágenes del paciente. Además es un sujeto que habla de escoria y de falta de principio en los demás. Sujeto así es la escoria de la profesión. Y a mí desde aquí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=413" target="_blank" class="timestamp">[06:53]</a> Es que el código deontológico, lo primero, una de las cosas, como bien sabrá, que dice que la relación entre profesionales debe ser cordial y desde el respeto. Eso para empezar. Ayer comentábamos que vulnera las cinco columnas del código deontológico. Una a una, miren la que miren, por la página que la miren, relación con pacientes, relación con compañeros, relación con la praxis, buena praxis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=435" target="_blank" class="timestamp">[07:15]</a> Pero luego tiene, perdóname, tiene información, por ejemplo, si no te conocía, tú lo sustituyes en un canal de YouTube y él la toma contigo, pero no te conoce, pero sí que te dice ojalá tu hijo nazca muerto. Cuando tu mujer está embarazada. Yo mi mujer, mi mujer, bueno, gracias a Dios mi hijo está divinamente, tiene nueve meses y está hecho un campeón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=459" target="_blank" class="timestamp">[07:39]</a> Pero mi mujer sí que lo pasó mal. Porque, claro, que te salga este hombre, además, de una manera repetitiva. Porque ayer me pedí a ver si conseguía las imágenes y tal. Estaba de guardia, no pude. Pero es que este hombre, además, es muy prolífico. O sea, grababa horas y horas de contenido y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=480" target="_blank" class="timestamp">[08:00]</a> Yo sí, y no sé si Enrique estará de acuerdo, pero vamos, no en este señor, sino en los supuestos esos que nos ponen para examinar. No, que a mí ya me van a examinar poco por la edad que tengo. Pero ahora que te ponen en el MIR casos clínicos, si a mí me ponen esto, digo que esto es el claro ejemplo de un trastorno histriónico de personalidad. O sea, tiene un trastorno de... Vamos, y por el bien de la profesión que lo tenga. Yo creo que tiene un rol narcisista importante. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=507" target="_blank" class="timestamp">[08:27]</a> Y después habría que valorar la valoración, o sea, valorar el sentido de culpabilidad, si tiene sentido de culpabilidad para valorar algunos rasgos sociópatas. Entonces, a mí el miedo que me da es que tenga un arrebato cualquier día y pueda hacer daño. Y el problema...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=531" target="_blank" class="timestamp">[08:51]</a> El problema yo no sé si Fiscalía puede adoptar alguna medida cautelar, porque el problema es que un estudio psiquiátrico forense para determinar si está apto desde el punto de vista psicológico para el ejercicio de la medicina, que estamos hablando de una profesión que es preciosa, pero que conlleva una gran responsabilidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=551" target="_blank" class="timestamp">[09:11]</a> Creo que debería valorarse el apartar a esta persona mientras se le valora si realmente está capacitado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=561" target="_blank" class="timestamp">[09:21]</a> que su pericia en el diagnóstico y en el tratamiento también me consta que cuando era residente en el hospital de Alto Orpón hablaba muy bien su jefe de él como técnico. Y encima podría haber sido un buen médico. Podría haber sido un buen médico, ya no lo es. Pero que una pena, ¿no? ¿Él está ahora en activo? ¿Él trabaja en un hospital ahora? En un hospital privado, creo entender.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=9ia_XpZTU3k&t=587" target="_blank" class="timestamp">[09:47]</a> Ha sido despedido. Ojalá que el colegio médico intervenga. Enrique, gracias. Un abrazo enorme. De nada, por Dios, gracias a vosotros.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 06/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
