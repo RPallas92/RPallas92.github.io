@@ -1,0 +1,578 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 07/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">07/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>John opina </strong>: <a href='#video-yFnzeKnv1w8'>EL SANTUARIO DE FAKE CUESTA ES UN MATADERO DE ANIMALES - frank cuesta churrero</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-yFnzeKnv1w8">
+            <h2>EL SANTUARIO DE FAKE CUESTA ES UN MATADERO DE ANIMALES - frank cuesta churrero</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: John opina </span>
+                <span class="date">Publicado: 07/05/2025 05:45</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8" target="_blank">
+                    <img src="https://i.ytimg.com/vi/yFnzeKnv1w8/hqdefault.jpg" alt="EL SANTUARIO DE FAKE CUESTA ES UN MATADERO DE ANIMALES - frank cuesta churrero" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video analiza críticamente la figura de Frank Cuesta basándose en audios filtrados y testimonios.
+Se le acusa de comprar animales para fines económicos y contenido, desmintiendo su narrativa pública de rescate.
+El presentador expone supuestas mentiras compulsivas, negligencia y maltrato animal, incluyendo envenenamiento.
+Se contrasta su imagen pública con las revelaciones, generando controversia sobre la autenticidad de su trabajo.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Reacción a Críticas Previas <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=30" target="_blank">[00:30]</a></h3>
+
+<p>El presentador inicia reaccionando a los comentarios recibidos en un video anterior donde criticaba a Frank Cuesta. Lee mensajes de seguidores que lo acusan de estar mal informado o de "patinar".</p>
+
+<h3>Audios Revelan Compra de Animales <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=190" target="_blank">[03:10]</a></h3>
+
+<p>Se presenta el primer audio filtrado donde Frank Cuesta habla explícitamente de comprar animales, como conejos y cobayas, para su propiedad en Tailandia, contradiciendo su imagen pública.</p>
+
+<h3>La Ceguera de la Defensa Fanática <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=307" target="_blank">[05:07]</a></h3>
+
+<p>El presentador lee comentarios de personas que defienden a Frank apasionadamente, creyendo ciegamente en su figura como héroe animal. Critica la falta de pensamiento crítico de los seguidores ante las evidencias.</p>
+
+<h3>El Santuario es Negocio, No Rescate <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=446" target="_blank">[07:26]</a></h3>
+
+<p>Se profundiza la acusación de que el supuesto santuario es un terreno privado utilizado para explotación económica. Se alega que los animales son recursos y que muchos morían por negligencia.</p>
+
+<h3>El Patrón de Mentiras Compulsivas <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=531" target="_blank">[08:51]</a></h3>
+
+<p>El presentador analiza cómo Frank Cuesta parece tener un patrón de mentiras habituales, incluso en temas menores. Sugiere que si miente en cosas pequeñas, es probable que toda su historia pública sea fabricada.</p>
+
+<h3>Compra a "Proveedores" de Animales <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=801" target="_blank">[13:21]</a></h3>
+
+<p>En un nuevo audio, Frank habla de conseguir animales a través de "proveedores" o traficantes. Menciona gastar grandes sumas de dinero en comprar bichos, no rescatarlos.</p>
+
+<h3>"Farmear" Animales para Videos/Cursos <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=931" target="_blank">[15:31]</a></h3>
+
+<p>Se escucha a Frank hablar de "farmear" o recolectar animales (serpientes, tortugas, lagartos) para tener un stock. Su objetivo es utilizarlos para videos y cursos que organiza, viéndolos como material para explotar.</p>
+
+<h3>Falsas Historias y Reemplazo de Animales <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=1107" target="_blank">[18:27]</a></h3>
+
+<p>Se mencionan casos como la falsa malaria o el reemplazo de animales muertos. Un audio revela cómo Frank planeaba sustituir un loro fallecido sin informarle a su pareja, priorizando el "show".</p>
+
+<h3>Desprecio por Animales: Vistos como "Inversión" <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=1247" target="_blank">[20:47]</a></h3>
+
+<p>En un audio, Frank se refiere a la compra de suricatas como una "inversión" porque "a la gente le gustan las putas suricatas". Esto muestra un trato utilitario y despectivo hacia los animales y su audiencia.</p>
+
+<h3>Audio: Trampas y Veneno para Depredadores <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=1374" target="_blank">[22:54]</a></h3>
+
+<p>Se reproduce un audio donde Frank Cuesta habla de poner trampas para matar gatos y otros depredadores que acechan su propiedad. Aunque el presentador entiende la frustración, el tono es violento.</p>
+
+<h3>Falsa Liberación de Animales en Cursos <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=1631" target="_blank">[27:11]</a></h3>
+
+<p>El presentador interpreta que Frank simula liberar a los animales en sus cursos. Sugiere que los animales son comprados para el evento y luego soltados, a pesar de haber vivido en cautividad, lo que podría ser perjudicial para ellos.</p>
+
+<h3>El Plan de Envenenamiento Masivo <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=2063" target="_blank">[34:23]</a></h3>
+
+<p>Un audio revela que Frank planea envenenar perros y otros animales que se acerquen a su "santuario". Habla de poner veneno y alambre de púas alrededor del perímetro de su propiedad.</p>
+
+<h3>Manipulación con Acusación de Acoso <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=2343" target="_blank">[39:03]</a></h3>
+
+<p>Frank denuncia que Chi acosó sexualmente a su hija de 14 años. El presentador lee el mensaje enviado por Chi, desacredita la acusación de acoso y señala la supuesta manipulación de Frank para generar victimismo.</p>
+
+<h3>La Cobra Olvidada, Muerte por Negligencia <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=2761" target="_blank">[46:01]</a></h3>
+
+<p>Se presenta el caso de una cobra escupidora supuestamente entregada a Frank Cuesta para ser cuidada. Las imágenes y audios sugieren que la cobra murió por negligencia, posiblemente de sed, abandonada en un recipiente.</p>
+
+<h3>Audio: La Amenaza Violenta al Ciervo <a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&amp;t=4254" target="_blank">[70:54]</a></h3>
+
+<p>Se escucha un audio donde Frank Cuesta habla de vengarse de un ciervo que lo atacó, amenazando con matarlo. Esto contradice su imagen pública de protector y lo muestra tratando a un animal bajo su cuidado como un enemigo.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1" target="_blank" class="timestamp">[00:01]</a> Diferentes temas. Gente. Donación, gente. El franco está como si nada. El tío sigue con el circo porque este se hizo a sí mismo. Mira, para los tontos que me siguen, les da igual lo que digan. Así que mira, con esta gente gavenero. Vamos a dejar ahí unos vegetalillos. Se está yendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=30" target="_blank" class="timestamp">[00:30]</a> todos aquí pidiendo bocadillo. Van moderando los comentarios, vigilan mucho que nadie diga nada malo, pero claro, en los comentarios recientes, pues, claro, los comentarios recientes, que es un aluvión, tardan en borrar los comentarios, ¿no? Esto es un fraude, fuiste mi héroe, un referente, la persona que más admira es pequeño... Bueno, hasta aquí está moderado, o sea, hasta hace...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=57" target="_blank" class="timestamp">[00:57]</a> Cinco minutos, no ha tenido un tiempo de moderar y todos los comentarios son 6.11. Me tengo que desuscribir a su canal. ¿Estoy suscrito? No, pero no es más que no. Ya sabemos lo que pasó, Frank. Lo que haces con los animales. No mames. Pinche pelotudo. La relación de Antonio es graciosa, ¿eh? ¡Hermano, no! ¡Hermano!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=78" target="_blank" class="timestamp">[01:18]</a> Hola, ¿qué tal? ¡Ah! ¡Ay! ¡Ah! ¡Aléjate! ¡Oh! ¡Buenas! ¡Oh! Ha sido inesperado, ¿eh? Se me ha colado un Seza Blue, tío. ¡Uf! Es agradable, macho. ¡Uf! ¡Oh! Qué mal cuervo se me ha quedado, ¿eh? ¡Joder! Esto no se hace. ¡Internet!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=100" target="_blank" class="timestamp">[01:40]</a> ¡Ordenador! ¿Qué más has hecho, tío? ¡Uf! ¡Qué repelente, colega! ¿Os acordáis de Soy Edu? ¡Feliz Navidad! Ese anuncio que fue una tortura psicológica y un experimento sociológico. ¿Os acordáis? Los mayores. Era asqueroso, tío. Inducía la autólisis. ¡Hola! Soy Edu. ¡Feliz Navidad! ¿Os acordáis, no? Que era todo el día. Los anuncios se repitían todo el día. Y durante meses, tío. La gente al final ya con el edu de las narices.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=128" target="_blank" class="timestamp">[02:08]</a> ¡Pues claro! ¡Vamos a verlo! Este tío en Outerplay, no lo conocía. Tiene... Bueno, le falta un cromosoma y habla raro, pero hace bien los vídeos, veréis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=151" target="_blank" class="timestamp">[02:31]</a> Esto es público. No me lo he entendido. Yo no sé cómo se habla así. Pues tengo un cabello en YouTube. Tuca habla en gran parte de Antoñita la Fantástica. Puedo hacer muchas cosas mal en la vida. Puedo ser Antoñita la Fantástica. Bueno, que... Dice gran parte, dice el vídeo completo, ¿no? El motivo de peso. Y es que para mí particularmente este señor se ha caído con todo el equipo, mi gente. Chip definitivamente ha soltado una bomba que tumba por completo el cuento del santuario.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=181" target="_blank" class="timestamp">[03:01]</a> ¿Por qué hablan así, tío? Y lo que es peor tiene que ver con los más inocentes de toda esta historia. Los animales. ¿Qué ha hecho? Pues publicar una serie de audios que tenía en conversaciones con Fran, que en muy buen lugar no... A ver, a ver, a ver, a ver qué decía o hacía por privado. Escuchemos uno de los audios. Acabo de comprar 10 conejos y 10 cobayas. Eh...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=211" target="_blank" class="timestamp">[03:31]</a> flipa, o sea, eso hay que llenarlo de bichos el santuario sorpresa, ni era santuario ni en nada es su casa, una parcela que tiene en Tailandia, donde el tío que no es tonto lo empezó a llenar animales para hacer vídeos, y ya está y nada más, tío ¿que al tío le hacen grasa a animales? pues sí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=234" target="_blank" class="timestamp">[03:54]</a> También hace gracia que es un nubric que tiene un tigre en una jaula metido. Es que la gente es tan subnormal que por tener un animal en casa ya consigue creer mejor persona. Y hay gente que tiene animales salvajes encerrados en jaulas por la sensación de lujo y exclusividad de tener, no sé, tío, un tigre, ¿verdad?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=253" target="_blank" class="timestamp">[04:13]</a> Pero vamos a ver el vídeo que le dediqué yo a la señora monstruosa a seguir. ¿Por qué no hacen más vídeos, tío? Aquí, vale. Siguiente. Los comentarios que me dedicaron. A ver. Fíjate. 74% de me gusta solo. O sea, un porronazo de dislikes. Un montonazo, ¿eh? Frank, te han pillado. Eres un trilero y todo el mundo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=282" target="_blank" class="timestamp">[04:42]</a> A ver los comentarios. John, me encanta tu canal, pero aquí la ha cagao. Patinada. Patinaste, primo. John, generalmente te banco y tienes razón. Frank ha dedicado su vida a los animales. Algo noble, sin lujos, pasando enfermedades con una novia que se chutaba hasta los poros. Es que es verdad. ¿Pero tú te crees que la novia se chuta y él no? Es que es impresionante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=307" target="_blank" class="timestamp">[05:07]</a> Rescataba Fauna. La rehabilitaba para liberarla. ¿Cómo la peña se cree eso? Me alegra entrar en los comentarios y ver que la gente te está diciendo las cosas como son. No tienes ni idea, John. Este tío ha peleado toda su vida. La has cagao. Frank ha hecho más por este sucio mundo que vivimos que muchos de nosotros. Incluyente a ti y a mí. La peña es gilipollas. Es literalmente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=329" target="_blank" class="timestamp">[05:29]</a> Te sacan un tío diciéndote que él salva animales y los tiene ahí en su casa y la peña se lo cree. Yo puedo ir ahora a grabar los perros que hay en casa y decir que los he salvado del tráfico perruno. Y la gente se lo cree. Payaso nivel Dios.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=345" target="_blank" class="timestamp">[05:45]</a> Cuando te lo propones, tu mayor patinada, acuérdate. No te enteras, macho. Aquí has patinado. Yo soy... Me dedico al patinaje artístico, ¿sabes? Yo no te has enterado nada. Me encanta tu canal, pero estás mal informado. Has pegado un patinazo a nivel Dios. Has patinado mucho con la información. Has pecado informarte poco y mal. Hay una cosa que se llama deducción. Análisis, sentido crítico y deducción. Unes puntos y las cosas se caen por sí solas y se ve el pufo a kilómetros. Pero bueno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=374" target="_blank" class="timestamp">[06:14]</a> ¿Tú dónde te pones los aspectos morales y fantasías personas que tienes? La nutria. La chispa. Ya la gente ya está. Ya Frank es la mejor persona del mundo. Te has columpiado, John. Te has colado. Te has pelado por los animales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=389" target="_blank" class="timestamp">[06:29]</a> Ah, está su santuario. O sea, su parcela prima se llama santuario. Y la gente le repite. Es un santuario. Bueno, es un santuario, tío. Es muy fuerte, tío. Echaz porquería. Bla, bla, bla. Te estás columpiando. Este contenido está de más. Bueno, las cejas afeitadas. Con el tío respeto has metido la pata hasta el fondo. He hecho comentarios, ¿eh? La mayor patina en su canal. Se te ha ido, John. Se te ha ido. Es todo erróneo, John. Has patinado hasta el fondo. Anormal, me llama, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=417" target="_blank" class="timestamp">[06:57]</a> ¿Y quién no miente una vez en esta vida? Madre mía, tío. Es que la peña, de verdad. Se agachan, le dan por culo y te van a justificar, ¿sabes? Se ha resbalado y se lo ha metido. Y me ha sonomizado. Y vale, pues nada. Eso es accidental, ¿no? Sí. Menudo 360 viral flip te has marcado aquí. Patinada histórica. Acribillado por ignorante. Vives de criticar a la gente. Que hace algo digno en la vida, ¿sí? Traficado con animales. El tío es un traficante de animales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=446" target="_blank" class="timestamp">[07:26]</a> El santuario resulta que es un terreno privado suyo donde tiene animales como recursos para explotación económica y que se le morían los animales a docenas, a centenares. Lolito, si prostituyese mujeres, su casa la llamaría santuario holístico y a nadie le dice nada exactamente. Pájaro estás hecho, John. Claro, los comentarios hace dos meses. Los comentarios que se dan cuenta son recientes, claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=471" target="_blank" class="timestamp">[07:51]</a> Una patinada... Ya quisieras tú amar a los animales como lo hace Fran. Tú sueles un criticón. Tú eres tonto, tío. Es más tonto que una vida, la verdad. ¿Qué haces tú sentado criticando? Él hace lo suyo. Protege a los animales. Pero gilipollas, los animales no hace falta... Bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=488" target="_blank" class="timestamp">[08:08]</a> Los animales, que no sé, tío. Hablan de animales como bebés. Y se tragan eso que el tío lo... Es que vamos a ver. Pero tú no ves que es una historia peliculera. De fantasía. Donde él siempre es el protagonista de la buena película. Que rescata animales del tráfico. Que lo quiere matar. Se graba haciendo un tiroteo. No, por favor, tío. Que eso es un normal. Eso es tonto, pero no que te lo diga, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=513" target="_blank" class="timestamp">[08:33]</a> Te lo puedes creer un tiempo, pero no te lo puedes creer. Si tú eres fan de Frank Cuesta y has visto bastante contenido suyo, hombre, es que está que flipas, tío. Lo fuerte es que aquí ya se ha demostrado que había mentido unas cuantas veces. Faltaba saber todo lo que se ha descubierto recientemente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=531" target="_blank" class="timestamp">[08:51]</a> Pero en base de las mentiras, tú ya deduces, si no eres un imbécil y no estás llevado por la emotividad, ya puedes deducir que si te miente con tantas cosas estas sin mucha importancia y ves que el tío utiliza mentira como algo habitual, es que probablemente todo lo demás sea mentira. Y si encima...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=552" target="_blank" class="timestamp">[09:12]</a> El tío tiene la mayor tasa de supervivencia a accidentes del mundo porque ha sufrido más accidentes y atentados y ha estado a punto de morir más veces que el Indiana Jones. Pues hombre, ya te da para sospechar, tío. Lolito, tú, aunque seas de costa, eres algo rural. John.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=570" target="_blank" class="timestamp">[09:30]</a> Pues que la gente de ciudad es tan manipulable e ignorante que les dices que arar un terreno es malísimo y ahí los tendrás en contra de arar. Sí, sí, como en Casteldefels que cortaron pinos para hacer un bloque de viviendas y la gente se reunió para llorar. De rodillas. Sí, sí. Y lo digo en serio, ¿eh? Definición de cuñao. Vas a borrar este vídeo. Y ahora acá falla estrepitosamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=590" target="_blank" class="timestamp">[09:50]</a> Patinazo histórico, John. La gente estaba aquí. ¡John! Más decepcionado. Resulta que eres un idiota. Sí. Hombre, muy listo no soy, pero vamos, tan tonto como tú no lo sé, seguro. Te estás columpiendo bastante, hostia. Entre el columpio y el patinaje, tío, me voy a poner un tutú, ¿sabes? Bueno, y los comentarios que bloqueé... Claro, cuando hay gente insultando pasándose, lo bloqueo, evidentemente. Estuve dos días ahí bloqueando gente, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=616" target="_blank" class="timestamp">[10:16]</a> Ni tan siquiera me creo que esté enfermo. Se afeita las cejas para dar pena. Nunca me atreví a decirlo, pero siempre lo he pensado. La cagaste, te pasaste pueblos. No sé frenar con el coche. Me voy siempre tres pueblos para adelante. Frank es el mejor. Vaya cagada de dietas marcado. No estás bien informado. Coge las palabras que te convienen. Él ha hecho mucho por animales. Es que al final te das cuenta que es todo un factor emotivo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=643" target="_blank" class="timestamp">[10:43]</a> En que le atribuyen al tío ser buena persona. Anda, John, borra bien una cagada. Vaya columpia y contenido. Métete con los que de verdad juegan a los demás. Has patinao. Siempre estarás a tiempo de pedir perdón. Si te voy a pedir perdón ahora. Por aquí no, John. Por aquí no. Cagada monumental.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=658" target="_blank" class="timestamp">[10:58]</a> Borra, John. Ahora que puedes. Puedes salvar tu dignidad, John. Tu prestigio. Tú estás tejeversando a la herdad. Santiago, tío. Ve tan neurólogo, ¿eh? Envidioso. Tú sí que mientes. Estás mirando la jeta. Tony Herrera. Sigo a John, pero te equivocas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=674" target="_blank" class="timestamp">[11:14]</a> Ay... Patinada... En fin... No es justo que hables así de un tío que su vida es estar en un santuario dedicándose a animales. Macho, vete a ver la lista de Schindler. Vete a ver películas estas de fantasías, tío. Es que de verdad. Yo la envidia... La Lola. La envidia que tienes a Frank te dice gasoices, estupideces y mentiras. Con Frank no. Bea. Es que a lo mejor son dogmáticas. Con Frank no. ¿Por qué? Porque no. Y ya está. Y se cae tan pancha. Es que le vi besando un conejito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=703" target="_blank" class="timestamp">[11:43]</a> Y claro, si ves a un conejito, crees buena persona Por cierto, en mi casa, los conejos estos salvajes que hay por ahí Se han reproducido, tío Y hay unas bolillas pequeñas de pelo que corren de... Que casi no los veo, ¿sabes? Como siempre, piando haz toque Prejuzgando y sin esperar la versión de Frank Muy fácil enseñarte que un animal herido Que es el Frank, pobre Frank Yo no opina, busca conseguir like Suscriptores sentados, sin mucho o mejor nada Que esfuerzo, que diferencia de Frank Cáete un rato, anda</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=729" target="_blank" class="timestamp">[12:09]</a> Mira guapito, dice la Lena Que encima, la Lena tiene Tiene el avatar, el Andrés Rie Dios mío, Elena, tío Me necesito alguna cultural De catetos que miran Mierda esta del Andrés Rie Bueno, perdón por si no le gusta esto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=746" target="_blank" class="timestamp">[12:26]</a> Mira, guapito. Mentiras, ¿verdad? Él hace por animales lo que jamás podrás hacer. ¿Tú qué eres, con H? Un triliro difamar. ¿Eso qué es? Es muy fácil y a ti te cuesta poco. Mejor vive tu vida y déjala a los demás. Anda, vete a paseo. ¡Gilipollas! Anteponer un par de mentiras por la inmensa labor que ha hecho por los animales. Los animales no son bebés. Viven en el bosque. Déjalos en la selva, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=776" target="_blank" class="timestamp">[12:56]</a> Bueno, y creerte que el tío lucha contra los traficantes en el nombre. El consejo es que John ha patinado. Han metido la pata con este vídeo. El consejo era ese, ¿eh? John ha patinado aquí demasiado. Y demasiado, ¿eh? Las cagao bien. Vamos, la peña, tío. Es que... No defenderían así ni a un familiar, fiestamente, sí. ¡Mongolos! ¡Mongolos! ¡Venga! ¿Qué? Habéis quedado humillados, ¿eh? ¡Mongolos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=801" target="_blank" class="timestamp">[13:21]</a> Me encanta, mi gente. Si no hay demanda, no hay negocio. Si no hay demanda, no hay negocio. Atentamente, el demandante. O sea, eso hay que llenarlo de bichos. ¿Para qué rescatar si es más fácil comprar, no? Y no la tienen. Lo que pasa es que muchas veces quiero una serpiente, quiero algo y no la tienen. No me la consiguen. Y es una putada. Entonces, he ido a casa de este, tenía un montón de bichas y digo, venga, me llevo todo esto. Y me he gastado 20.000 vas en bichos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=829" target="_blank" class="timestamp">[13:49]</a> Va a los traficantes. Tiene fecha. Con ese asco que tiene. El guarro este. Es que más... Me acuerdo que mi padre cuando hace 15 años o así con señal de la tele me decía es que es un tío desagradable. Es muy mal hablao. Te voy a cagar. Y se va para allá a un arbusto y va a matar un pino. Era un tío con esa actitud. Andando así siempre con la gorra para atrás. Es lo que parecía. Y ahora resulta que el tío... Bueno, es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=853" target="_blank" class="timestamp">[14:13]</a> Lo malo es que yo no puedo decir en un medio público, bueno, como se llame esto, que dejar registrado según qué cosas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=860" target="_blank" class="timestamp">[14:20]</a> ¿Me entendéis? Por eso os lo he dicho muchas veces, pero indirectamente. No puedo decir directamente. Pero claro, huele a la pesta, este, simple deducción, saber que si Ayugé tenía un snorkel de estos de submarinista para meterse coca, pues él tiene pinta que no se queda atrás. ¿Vale? Es que eso de creer, no, es que la Ayugé era malísima y el otro es un ángel. No, la Ayugé era malísima y el otro es igual. Si no se casan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=887" target="_blank" class="timestamp">[14:47]</a> Si no, no prospera en relación, ¿eh? Vas a conocer a una chica y es muy toxicómana y tú vas a decir, no, lo acepto. Eso es tonto, tío. Y encima el tío, bueno, la leucemia... Tampoco lo podía decir nunca. Porque ya lo que dije en aquel vídeo, imaginaos, la que me cayó. Si llego a decir lo que pensaba de la leucemia, vamos, me dirían hijo de tal, eres lo peor. Bueno, en fin, y todo me callaba, pero bueno, bichos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=916" target="_blank" class="timestamp">[15:16]</a> O sea, así, a lo bestia. Y... Pero es que hay que tenerlas. Hay que tener un montón de bichas. Una tortuga cabezona. Así que bueno, es que hay que recolectar. Hay que recolectar. Y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=931" target="_blank" class="timestamp">[15:31]</a> Está farmeando, ¿te das cuenta? El tío está farmeando como si fuera un videojuego, recolectando animales para explotarlos ahí en los vídeos. ¿Esto para dónde va? Para un café de búhos. ¿Para dónde van las nutrias? Para un café de nutrias. Y todo lo que tú andabas comprando, aquí tendré. Por eso te digo que yo estoy encargando ya para tener, o sea, hay que tener como, yo calculo que habrá que tener unas 30 serpientes, ¿vale? Unas 10 tipos de tortugas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=955" target="_blank" class="timestamp">[15:55]</a> y unos 10 tipos de lagartos. Y con eso nos lo hacemos, ¿vale? Entonces yo calculo que eso, 50 animales para ir haciendo aquí, allí, esto, lo otro. Pero... Pero sí, tiene que quedar de puta madre. Y aparte lo bueno es que cada vez que hagamos el curso, o sea, bueno, cuando terminemos este curso, lo que hacemos es soltar los bichos. Es decir, nos vamos a soltar los bichos. Que eso mola. Todo el mundo soltando bichos, tío. A la gente le encanta. Mira, vamos a poner la relación de Antonio. Vamos a poner la relación de Antonio que... que me sale mal por él, pero que es cómica involuntamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=985" target="_blank" class="timestamp">[16:25]</a> No, no, no. Hermano, la verdad. Bueno, a todo el mundo, todo el mundo. Ya me extrañaba, eh. Yo me lo olía, eh. El Frank este, no sé qué. ¿Qué ha hecho, tío? ¿Qué ha hecho? ¿Qué ha hecho Frank, hermano? ¿Qué ha hecho? Se supone que Frank ha hecho algo, ¿vale? Yo tengo que deciros que, para que no sepáis, que Frank ha sido un ídolo mío durante mucho tiempo y sigue siéndolo hasta este momento que no he leído nada. Ni sé nada de lo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1011" target="_blank" class="timestamp">[16:51]</a> es que me pida sin posibilidad chispa de duda vale bravo enigmas voy a buscarlo Frankuesta matagato así que claro que lo he puesto en Instagram está en el grupo del Tegram gracias por compartirlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1024" target="_blank" class="timestamp">[17:04]</a> Puedes matar al hombre, pero no le hay idea. Foto buenísima. Aquí está Paco Sanz. Y al lado está el espíritu resucitado en versión más maligna. Este tío hace bueno al Paco Sanz. ¿Os acordáis del Paco Sanz? Ese que tenía mil tumores. Y se grababa. Y luego se publicaron los videos que salen. Este es peor persona que el churrero original. Paco Sanz. Paco Sanz era un tío que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1052" target="_blank" class="timestamp">[17:32]</a> salía ahí, hacía un poco el payaso y cobraba, pues que encima el Franco este, asesino, bueno, asesino no, maltratado a animales, traficante a animales, manipulador, pero claro, el Paco Sanz a la que se vio el pastel...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1069" target="_blank" class="timestamp">[17:49]</a> ¿Pero este pavo? ¿Se has tapado todo? Y tiene un borrazo y sigue haciendo vídeos como si nada, ¿eh? O sea, no tiene berrigoza ninguna, ¿eh? Coño, manda el dinero a la hostia, así decía Paco Sanz. Franco Hesta sube el 16 de junio. La siguiente foto con el título Chispas y Jeep se han unido al grupo de río dentro del parque nacional. Aparte ahora, y por fin, vivirá como un otro salvaje. Todo falso. La foto había agarrado en el artículo del sitio... Voy a poner lo de él. A ver, primero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1092" target="_blank" class="timestamp">[18:12]</a> Es que es muy fuerte, tío. Es que el tío es mentiroso compulsivo. Puso una foto, el cutre, chispas y jibib ya se han unido a grupo en el río dentro del Parque Nacional. Y aparte ahora vivirá como un tío salvaje. Y te coge la foto...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1107" target="_blank" class="timestamp">[18:27]</a> De un artículo de una revista. De hace tres años, ¿no? Bueno, es que este tío... La mentira para documentarles es trabajo, ¿eh? Es ridículo, ¿eh? Pero Chispita me parece que se murió. Directamente, ¿sabes? Y coge y te monta eso. La falsa malaria de Frank Cuesta. En 2018 dice que se trajo de África un animal invasor. La imagen que puso el tío...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1128" target="_blank" class="timestamp">[18:48]</a> Se la descargó de un periódico llamado The Herald. Nunca tuvo malaria. Bueno, no sorpresa, ¿no? Chi muestra en exclusiva una imagen de un chat donde muestra cómo Franco está. Decía que se le murió el loro y este con un cinismo pide un cambiazo, como hizo con el otro loro, con la roja. He dicho que te lo llevaste esa noche y que lo están tratando. Y sabe que el loro ahí finiquitado, ¿no? Vamos a decir a Paloma que está en el veterinario y en una semana le digo a AT que me dé otra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1156" target="_blank" class="timestamp">[19:16]</a> Y el chip, porfa, no traigamos más un loro más, hombre. O los loros son más... O los loros son míos de ahora en más. No puede pasar eso por Dios.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1165" target="_blank" class="timestamp">[19:25]</a> O sea, el tío es un aniquilador de loro. Bueno, ni más en general. Es que encima es una persona que miente sin necesidad. Se le muere el loro a la paloma. Creo que es su pareja ahora. No sé qué es. La paloma. A mentirle. No, no, diga la verdad, paloma. Diga la verdad. O sea, es un tío que miente sistemáticamente. Se ha muerto el loro, pues se ha muerto el loro. Pero claro, cuando se mueren todos animales... No traigan más loros. Son inútiles, man. Pobrecito, güey, pinche tu madre. ¿Para qué estudian la concha de su madre? Tú diles que está en el veterinario y ya está bien, dice Frank.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1193" target="_blank" class="timestamp">[19:53]</a> Yo dije a T que me consiga uno. Y no lo tocará nadie más que nosotros. Un cojón está bien, no mames. No traigas más. Ahí no se puede. ¡Boludo! Tres cacatúas ya. Y ahora esto. No se puede. Deja el rojo y el verde. Y es suficiente. Me ocupo yo al 100%. No digas que ha muerto. Obviamente. Muy fuerte, ¿eh? Un año. Llevo intentando conseguirla más o menos un año. Pero es que es de Australia y es muy difícil pillarla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1222" target="_blank" class="timestamp">[20:22]</a> Hay que pillarla probablemente en un zoo o alguna cosa así. Pero llevo un año pidiendo y no hay manera. Pero sí, mola, mola mucho. Va a comprar animal a un zoo. Más ilegal imposible, tío. Compra animales en un zoo. O sea, a ver, ponelo de vuelta, a ver. Llevo intentando conseguirla más o menos un año. Pero es que es de Australia y es muy difícil pillarla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1247" target="_blank" class="timestamp">[20:47]</a> Atención, Frank admite que no le importan animales, que solo los compra para monetizar y que la gente le done. Yo feliz. Acabo de pillar tres suricatas pequeñas, que las criara esta ahí en el refugio durante un par de semanas. Y me las han dado bastante baratas, me han dado las tres por 30.000. Así que bueno, es una inversión, pero es que hay que tener suricatas. Que es que a la gente le gustan las putas suricatas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1277" target="_blank" class="timestamp">[21:17]</a> ¿Vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1301" target="_blank" class="timestamp">[21:41]</a> El tío, fuera de los audios Debe hablar con un desprecio de los seguidores Ahí con la joroba ¡Ah, la gorra para atrás blanca, tío! Soy tonto, ¿eh? Vengo a tener la gorra para atrás ¡Qué rabia, tío! Mi reino por una gorra blanca El tío ahí ¡A ver, chi! ¡Ahí está la puta solicata! ¡Qué tengo que hacer el vídeo! ¡Joder! ¡Que a la gente le mola la solicata, hombre! Y luego para allá ¡Ah, tía! ¡Se me ha ahogado la solicata! ¡Mi canto, tío! Llamando al traficante ¡Boscame la solicata, hombre! ¡Hombre!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1331" target="_blank" class="timestamp">[22:11]</a> ¡Deme cuatro! Porque se me mueren dos enseguida por el tiempo que me duran. Es así, tío. Literal. Su hermano, Tony Joalán. Mestre, eres de mi zona, ¿eh? Un guía de reservas de animales me dijo que Frank traía los animales de cualquier sitio y los ponía en el bosque y hacía ver que se los encontraba. ¡Qué crack, tío! Es el Paco Sanz, pero mutado en un súper trolero, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1354" target="_blank" class="timestamp">[22:34]</a> Porque veía animales en unos días que el guía había visto una vez en 30 años. Claro, el guía este, de las animales, encontrar animales que no era común, ¿no? Es que es para reírte, ¿eh? Frank, luego de que un gato haya acabado con gallinas, conejos, por su propia negligencia, teniendo instalaciones en decadencia, admite poner trampas para matar gatos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1374" target="_blank" class="timestamp">[22:54]</a> Bueno, no quiero defender al sujeto este indefendible. También te digo que cuando un gato o un animal te mata a todos los animales, además son animales que matan por placer de matar. O sea, te cuela un zorro, un lobo, un perro y te mata todo el gallinero. Todo. Bueno, ahí lo dejo, ¿eh? Pero bueno. El gallo, la gallina, todo. Los patos, todo. O sea, lo voy a matar a este hijo de puta y mañana le voy a atender una puta trampa y lo voy a matar a otros. Pero además con gusto al hijo de puta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1404" target="_blank" class="timestamp">[23:24]</a> A ver, sé que es asqueroso, ofensivo, pero bueno, entiendo que te pasa a ti. Que tú tienes un gallinero, por ejemplo. Esto le pasa mucho a los granjeros. Tienes un gallinero y a día siguiente te levantas y no te queda ni un animal vivo. Ni uno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1420" target="_blank" class="timestamp">[23:40]</a> El coste económico, aparte que son tus animales, y tú los cuidas, y viene ahí un perrillo ahí, se cuela y juega a matar, porque le gusta. Y claro, no es normal que mata a gatos, que te diga. Es que me acuerdo un artículo escrito por un cazador, decía, los gatos solo les falta volar, son depravos perfectos. El daño que hace en el ecosistema, los malditos gatos salvajes, es tremendo. Pero bueno, dejo ahí para que vosotros opinéis, digáis vuestras opiniones, hay gente que le pasa asqueroso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1447" target="_blank" class="timestamp">[24:07]</a> Fíjate que la gente se ha escandalizado más con el vídeo del gato, agonizando que por todo lo que dice. Y es estúpido, ¿sabes? Pero bueno, esa es la emotividad, la falta de raciocinio. Si al final miran un gato porque mata muchos animales. O sea, casi que hace un bien al ecosistema, pero bueno. Hay que colocarlo encima de la mesa en un pote que no se pueda caer, ¿vale? Que ahí la suís, no pueden subir. Y ponerlo por la noche. Voy a hacer un mix de comida de gato con polvo de veneno. Lo mezclo bien, que se lo coma el hijo de puta y que reviente por dentro. Lo siento mucho, pero es lo que hay. Si tienes un gato, lo guardas en casa. Pero es loco, es que además...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1478" target="_blank" class="timestamp">[24:38]</a> Yo lo siento. Sé que es una salvajada lo que ha hecho. Pero si tienes un gato, lo guardas en casa. Lo que dice él. Porque el gatito es muy bonito. Pero el gatito suelto es como los perros que tengo aquí en el jardín. Los bodegraos andaluces. Dentro del recinto, macho, matan un exterminio, matan todo. Pasan pajarillos, saltan, se lo comen. Luego un erizo, lo revientan. Los conejos no lo pillan. Los conejos corren tanto que pasan y ni lo ven. Pero macho, a mí me pone enfermo, que te diga. Me matan todos animales. Bueno, el gato aquí. Hay un vídeo que el gato agoniza. Bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1508" target="_blank" class="timestamp">[25:08]</a> Le acusa de negligencia por no hacer un gallinero para protegerlos. Esto para mí no es el problema de Frank Cuesta, en mi opinión. Todo. O sea, cualquier granjero, cualquier persona que cuida animales, cualquier persona que tenga animales, que te venga un animal de fuera y te mate todo. Todo. Un gato grande, de color naranja, lo ha matado todo. Se ha repillado llevándose que no es para comerlo. Llevándose un conejo matándolo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1535" target="_blank" class="timestamp">[25:35]</a> Y ha matado todo. Es que lo ha matado todo. Está todo desperdigado, todo destrozado. El gallo, la gallina, todo. Los patos, todo. O sea, lo voy a matar a este hijo de puta y mañana le voy a atender una puta trampa y lo voy a matar a... Pero además con gusto al hijo de puta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1552" target="_blank" class="timestamp">[25:52]</a> Hay mucha magos aquí, ¿eh? Las mujeres están ahí ¡Ay, un gato! Las mujeres en su canal... ¿Cómo puede matar un gato? En el mundo de los granjeros y eso Es lo que hay El gato es muy bonito, pero... Los gatos exterminan todo, ¿eh? Es como los lobos, por ejemplo Los zorros Hostia Si puedes tener mil gallinas, tío Que no te cae ninguna viva, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1582" target="_blank" class="timestamp">[26:22]</a> Bueno, dejámoslo del gato porque, oye, le está haciendo un drama como si fuera un ser humano, ¿no? Sigue comprando serpientes, escuchemos. Sí, por eso te digo que yo estoy encargando ya para tener... O sea, hay que tener como... Yo calculo que habrá que tener unas 30 serpientes, ¿vale? Unas 10 tipos de tortuga y unos 10 tipos de lagartos. Y con eso nos lo hacemos, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1610" target="_blank" class="timestamp">[26:50]</a> ¿Escucháis? ¿Oís algo de que ha rescatado animales del tráfico? Lo compra todo. Lo compra todo. A los traficantes. Yo calculo que son 50 animales para ir haciendo aquí y allí esto y lo otro. Pero... Pero sí, tiene que quedar de puta madre. Y aparte lo bueno es que cada vez que hagamos el curso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1631" target="_blank" class="timestamp">[27:11]</a> O sea, bueno, cuando terminemos este curso lo que hacemos es soltar los bichos. Es decir, nos vamos a soltar los bichos. Que eso mola. Todo el mundo soltando bichos, tío. Entiendo que simula que los animales que él rescató y rehabilitó los sueltan para que vivan en el mundo en el medio libre, ¿no? En los cursos que organizaba de pringados que iban ahí al santuario, bueno, a su casa, que el santuario no tenía nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1660" target="_blank" class="timestamp">[27:40]</a> Es que es cómico, ¿eh? Si el tío compra animales...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1663" target="_blank" class="timestamp">[27:43]</a> Tú, traficante, tráeme los animales que el viernes tengo aquí y todos tocan pagar el curso. ¿Vale? Y cuando viene la gente... ¡Gente! Aquí está. Estos animales los rescaté. Estaba en un tiroteo ahí con un akashnikov ahí. Un husajariano y había un vietnamita ahí. Yo salté y cogí dos tortugas galápagos, uno en cada brazo. Corría bien, explotaban coches. Como los vio que hacía, ¿sabes? Que lo intentan matar. Se inventa ahí la historia. De estar los tíos flipando. ¡Dios, Frank, yo quiero ser como tú! Y las chicas llorando. ¡Ay!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1692" target="_blank" class="timestamp">[28:12]</a> ¡Qué bueno eres, Frank! Y van ahí, cogen al animal, lo meten ahí en el río. Tortuga, huela libre. Y le ponen la música a esa y su barco lo llamó Libertad, ¿verdad? ¿Cómo se llama? Que cantaba esa babosada. Y el animal ese, pues igual cría en cautividad y lo tienen ahí y el pobre animal se muere. Luego hay perdido. Se va al bosque diciendo, ¿ya qué coño hago? Yo estoy acostumbrado a vivir en la jaula.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1715" target="_blank" class="timestamp">[28:35]</a> Se queda ahí diciendo, dice, hijo de puta, Frank este, qué cabrón. Y encima le ha dicho a la gente ahí que me ha rescatado y que estoy revitado y la pobre tortuga o el bicho, pues que no puede hablar, pues cagándose en todo, ¿sabes? Y ahí se muere de hambre el animal o devorado. Qué bicho más malo Frankuesta este, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1735" target="_blank" class="timestamp">[28:55]</a> Peral es eso. Gracias. Hay un comentario que quiero leer porque decía Angel Witch, ¿dices eso? Es que los zorros o estos animales te exterminan todo el gallinero y se comen uno. Es eso, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1750" target="_blank" class="timestamp">[29:10]</a> Es que también... Hiperproteger la vida... De un depredador... Como un gato... Eso no tiene mucho sentido... No hay que matar al gato... Pero hombre... Tampoco hay que ver... Si hay que sacrificar a un gato... Como si fuera aquí la sesenta una persona... Que es un depredador... El gato lo sueltas... ¿Qué hace? Pues bueno... Te hace un exterminio tío... Que no queda nada vivo eh... O sea tú... Mi padre tenía una enorme jaula... Con pajaritos... Ahí en el jardín muy bonito... ¿Y sabes qué hacen los gatos? Se quedan ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1778" target="_blank" class="timestamp">[29:38]</a> Y luego con la uña, no sé cómo lo hacían, le cagaban la uña cuando el pájaro se ponía en la jaula aquí en el pecho y lo mataba, tío. Y al final mi padre, pues bueno, no puedo tener pájaros porque los gatos hacían eso. No podían comer al pájaro, pero le cagaban la uña. Una cosa rarísima, tío. En serio, ¿eh? Compra animales. Lo usa para los vídeos y los cursos. No hay rescate, ni policía, ni traficantes. Todo es teatro para YouTube. YouTube. Ah, es que los desconfigura. Ahí va, ahí va.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1806" target="_blank" class="timestamp">[30:06]</a> Acabo de comprar 10 conejos y 10 cobayas. Flipa. Loren, tremendo hijo de P los gatos. Hombre, no, tío, son animales. Son depredadores. Tampoco hay que demonizar a la gata ahora. Pero el gatito te hace eso. O sea, tu gatito es muy bonito, como dice Frank. Quédate en tu casa. Porque el gato se va a un palomar y luego no queda ninguno vivo. Eso hay que llenarlo de bichos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1839" target="_blank" class="timestamp">[30:39]</a> Mientras corte la hierba esa de los cojones, yo feliz. Acabo de pillar tres suricatas pequeñas, que las criará esta ahí en el refugio durante un par de semanas. Y me las han dado bastante baratas, me han dado las tres por 30.000. Así que bueno, es una inversión, pero es que hay que tener suricatas. Que es que a la gente le gustan las putas suricatas. Con qué asco lo dice, tío, con qué desprecio, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1866" target="_blank" class="timestamp">[31:06]</a> Bueno, acusa de que los animales no están cuidados, que siempre enferman y mueren. Y que el santuario, más que un santuario, parece el Auschwitz animal, ¿sabes? Cuesta dice que compra los animales. También dice que son una mierda. Lo uso para sus vídeos. A ver. 20, a ver, compra animales otra vez. El Paleta tiene trabajo para un par de días porque le he dicho que haga ahí un...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1892" target="_blank" class="timestamp">[31:32]</a> un chisme de agua para las nutrias y que me cambie el váter. Así que tiene un par de días de trabajo por delante el tío. Así que bien, por si hay alguna cosa. Es un amor de persona de Franco esta, ¿eh? Amor por los animales. ¿Y cómo se expresa? Es un tío dulce, agradable. A ver, la empresa tiene que hacer esta, de la mierda aquí. Yo me llevo aquí dos patos, un gallo y una gallina. No sé qué mierda más me llevo. Dos patos, un gallo y una gallina y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1921" target="_blank" class="timestamp">[32:01]</a> Y no sé qué otras mierdas, hijo, pero bueno. Es que te tienes que reír, tío. Es que te tienes que reír. Le tiene unas colas a un animal el tío ese. Va para allá con la chepa, se la corre para atrás con las chanclas, arrastrando los pies, vestido como lo que es, con sus bermudas todo guarro. ¡Totay! Dame dos sonicatas esta mierda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1949" target="_blank" class="timestamp">[32:29]</a> ¿Qué tienes? Un búfalo. Es pequeño. Tiene un año. Muy viejo. Y es un bebé. Que la gente llore. ¡Qué mierda! O sea, ¿qué tío más asqueroso, tío? ¿Qué tío más asqueroso? Y yo me llevo aquí dos patos, un gallo y una gallina. No sé qué mierda más me llevo. Dos patos, un gallo y una gallina y no sé qué otra mierda. Pero bueno. No le importan los animales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=1978" target="_blank" class="timestamp">[32:58]</a> Es buenísimo, tío. La ilusión que tiene el tío con los animales, ¿eh? De verdad. Es un corazón maravilloso. ¿Con qué amor rescaten animales de Frank Cuesta, eh? De verdad, John, ¿tú qué haces ahí sentado criticando, eh? Frank Cuesta ha hecho más que tú en toda tu vida, desgraciado. Él ama a los animales. John, ama a los animales. ¿Tú qué has hecho por los animales, eh? Desgraciado. Gordo, vago, criticón. Ama a los animales. El tío es puro amor por los animales.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2007" target="_blank" class="timestamp">[33:27]</a> trabajo por delante el tío. Así que bien, por si de alguna cosa. Y yo me llevo aquí dos patos, un gallo y una gallina. No sé qué mierda más me llevo. Un amor por animales, de verdad. Patos, un gallo y una gallina y no sé qué otra mierda, pero bueno. No sé qué mierda llevo. Tengo ahí montada en el coche, ahí afixiando los animales. Ha montado...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2035" target="_blank" class="timestamp">[33:55]</a> Que no se me muera la suricata, que me ha costado 30.000 bahts. Es así el pavo, es así asqueroso. Quedan dos suricatas y una tiene un mordisco. O sea, me cago en la puta que parió, tío. De verdad, esto es insufrible. Es insufrible. Puto país de mierda, puta gente de mierda, putos perros de mierda. De verdad. Hay que venir con petardos, hay que sacar esos perros, hay que llamar al paleta que eleve un poco más la puta valla.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2063" target="_blank" class="timestamp">[34:23]</a> Y poner veneno todos los putos días. Voy a poner veneno todos los putos días de mi vida ahí afuera para que mueran todos los putos perros. Quedan dos shurikas. ¡Ah, qué buena barriga, tío! Voy a llenar todo de veneno, tío. El tío hace un perímetro...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2082" target="_blank" class="timestamp">[34:42]</a> ...de veneno alrededor para que cualquier animal que se le acerque a... ...a santuario, lo llama el tío Morro... ...se muera envenenado. Espectacular, tío. Espectacular, madre mía. Qué crack, eh. Hay que resolver esto porque es una movida. Es que acaba con las suricatas que eran dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2100" target="_blank" class="timestamp">[35:00]</a> Me he encontrado una iguana que vivía afuera destrozada. O sea... Entiendo... También, tío. Si te montas ahí un terrenito peinado a animales, pues puede ser que pase esto, ¿no? Se le mueren de enfermedades porque no están en condiciones para vivir ahí y encima, claro, se le cuelan animales de fuera y los mata, ¿no? Lo que sea. Yo entiendo todo. Pero me voy a cargar todos los perros. Voy a seguir poniendo veneno hasta que mueran todos los perros alrededor. Lo siento mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2129" target="_blank" class="timestamp">[35:29]</a> por los perros, por todo, pero están dejando los perros por ahí y los perros van matando mis animales y yo tengo que cuidar de los animales. Así que al depredador malo lo mato y se acabó. Normal que la policía la haya detenido, ¿eh? Porque tiene que haber un anillo de perros muertos y animales muertos alrededor del santuario, todos envenenados. Sí, archipiélago santuario, psicopatón, sí, sí. Si los animales hablaran serían como Alexander Solzhenitsyn, ¿sabes? Madre mía, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2157" target="_blank" class="timestamp">[35:57]</a> De alambre para matar perros. Bueno, ya salgo del banco. El alambre con púas va encima de la valla. O sea que va por encima. Si saltan se van a comer el puto alambre, pero por todos lados. La valla queda igual, pero por encima de la valla hay que poner tres filas de pinchos para que no puedan pasar. Que si intentan saltar, que se encuentren con los putos pinchos. Fila de alambre para matar perros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2184" target="_blank" class="timestamp">[36:24]</a> No sería más inteligente poner una valla alta. Una valla alta es esta, pero va a dinero, ¿no? Hoy mismo se va a mentir del capullo este con su chuchi. El pájaro loro aguacamayo azul original murió hace tiempo con los pulmones llenos de agua. Sustituyó, como siempre, al pájaro sin decir nada a nadie, porque el show debía continuar. La prioridad es el show, las visitas, el dinero. Y bueno, al final están animales, que es el recurso económico de explotación.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2210" target="_blank" class="timestamp">[36:50]</a> No se pueden permitir este tipo de atrocidades. Están matando, muriendo y ocultando animales por negligencia en el santuario. ¿Qué santuario? ¿Qué negligencia? Es simple explotación económica a lo industrial de animales. Ya está. Es un circo. Como los circos antes, cuando están regulados, que los animales volvían siempre desnutridos. Engañaba a Paloma con la muerte de animales ocultándole el original y sustituyendo animales por otro parecido, como si fueran los zapatos que cambian, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2240" target="_blank" class="timestamp">[37:20]</a> Sí, sí. Uno farsante, tío. Mira, las mujeres se maquillan antes de hacer un vídeo, ¿verdad? Es afeitar las cejas. Me quieres destruir. Me puedes destruir en 10 minutos. Conoces toda mi vida. Bueno, pues no sé, tío. Pues no es normal eso, ¿eh? Yo expliqué en un directo que sí, que yo le llamo veneno. ¿Por qué? Porque este era muy pesado con el tema de... Prank, el mata perros, mata gatos, se adelanta al audio de Chi donde dice que va a matar a todos los perros envenenándolos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2272" target="_blank" class="timestamp">[37:52]</a> Bueno, los animales no monetizables, básicamente. Y hace un vídeo, pues, cruzándose, ¿no? El veneno. Y yo siempre dije, veneno no. A él, claro. Los voy a envenenar a todos. Los voy a matar a todos. Los voy a destrozar a todos. ¿Por qué? Porque yo no quería que él trajera veneno aquí. Yo no quería que trajera veneno aquí. Yo tengo muy mala experiencia. Va, venga, tía, tía para allá. Queremos decir hoy, voy a ayudar a los animales, voy a comprarlos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2296" target="_blank" class="timestamp">[38:16]</a> Va, hace falta esto. Banalizando con el acoso. Estoy hasta la polla de las personas que utilizan el acoso para cualquier puta mierda de internet. ¿Vale? Lo dije ayer y lo vuelvo a repetir hoy. ¿Ok? El acoso es a una persona que no le dejan hacer su vida con naturalidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2317" target="_blank" class="timestamp">[38:37]</a> Que tiene que cambiar de teléfono porque no le dejan utilizar su teléfono con mensajes asquerosos. ¿Vale? Que no puede salir a la calle porque hay una persona vigilando todo su movimiento y no le deja hacer su vida con normalidad. ¡Otra puta cosa es el acoso! ¡Gilipollas! ¡Que se estáis riendo de las víctimas de acoso! ¿Qué es un normal este? ¿Quién es? ¿Qué acaso? Si tiene cuatro millones de sus citares en YouTube. Madre mía, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2343" target="_blank" class="timestamp">[39:03]</a> Este ser, este ser al que apoyáis, este ser al que decís basado, este ser al que decís que es la hostia, este ser, este ser le manda a mi hija este mensaje. Este mensaje le manda a mi hija. El tío denuncia que su hija de 14 años ha sufrido acoso sexual.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2366" target="_blank" class="timestamp">[39:26]</a> De parte de Chi, porque el Chi se despidió de la hija de Fran Cuesta diciendo, hola Zen, esto no va de ti, my dear, mi cariño. No dejes que te mientan sobre mí. Entiende que papá es un mentiroso compulsivo y que no tiene que permitir que las mentiras sigan. Siento si te he decepcionado. Tu tío Chi te sigue queriendo y te apoya en todo lo que necesites.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2396" target="_blank" class="timestamp">[39:56]</a> ¿Dónde está aquí el acoso sexual? ¿O acoso? ¿Él qué dice? This is not about you, my dear. Hola, Zen. Esto no es sobre ti, querida. No les permite... Bueno, si lo sé, no lo traduzco porque lo está haciendo él, pero bueno, es igual. ...que te mientan sobre mí. Por favor, entiende que papá es un mentiroso compulsivo y hay que decirlo antes que las mentiras continúen creciendo. De verdad que siento mucho si te hago sentir mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2426" target="_blank" class="timestamp">[40:26]</a> El tío Chi aún te quiere y te ayudará en lo que necesites. Esto, esto, esto es lo que tú le has enviado a mi hija. A mi hija de 14 años. A mi hija de 14 años. Primero, my dear, a mi hija, en tu puta vida se lo habías dicho. Y ahora le dices my dear. Eres un guarro. Eres un guarro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2456" target="_blank" class="timestamp">[40:56]</a> ¡Es un guarro! ¡Ja, ja, ja! Ha sido un saludo no por... My dear. ¿Cuándo ha visto esto la policía? Coques, el Chi es un extra trabajador del Frank Cuesta que estaba ahí en el santuario, bueno, en su casa. ¿Cómo, cómo, cómo? ¿Qué ha hecho? Primero, my dear, a mi hija, en tu puta vida se lo habías dicho. Y ahora le dices my dear. Eres un guarro. Es un manipulador enfermizo y patético, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2486" target="_blank" class="timestamp">[41:26]</a> Eres un guarro. Cuando ha visto esto la policía, se han asustado. ¡Qué mentiroso es, tío! Se montó en las películas. Le fue a la policía tarandesa. Mira qué mensaje le ha enviado. Le ha dicho, hola, cariño. Soy tu tío que te quiere. Te apoyo. Adiós. Y la policía...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2508" target="_blank" class="timestamp">[41:48]</a> Habrán dicho cosas ahí en tailandés, no sé mitad del tailandés. ¿Cómo es el tailandés? Habrán ahí escandalizado los enanos esos de metros y medio marrones ahí diciendo, Dios mío, señor Cuesta, esto es indecente. Es pedo. La policía se ha asustado. Es que es cutre el pavo, ¿eh? Y cuando ella ha dicho que tenía miedo de lo que estaba pasando, que no entendía por qué llegaba este mensaje. Tenía miedo la niña.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2537" target="_blank" class="timestamp">[42:17]</a> No, el nombre está ahí puesto. Él ha puesto su nombre. Cualquier persona, repito, cualquier persona que le dé voz mediática a esta persona... ¿Qué? Está apoyando el acoso a una menor. Anda, hombre. Acuéstate. Vete a dar una vuelta ahí por el campo tailandés.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2561" target="_blank" class="timestamp">[42:41]</a> Cualquier persona que apoye... Yo estoy apoyando al Chi. Bueno, porque me cago en el culo, pero bueno. Estoy difundiendo mensajes de Chi, los audios. Yo apoyo el acoso a una menor, ¿sabes? ¡Hombre! ¡Tira para allá! Te pega una colleja ahí en la gorra esa que tienes blanca. ¡Tira para allá! ¡Fantasma! ¡Anda, hombre! Manipulador de asqueroso, tío. ¿Qué tío más rastreo? ¡Anda! ¡Vete a matar animales, que es lo tuyo! Es como un israelí, pero en versión selvático, ¿sabes? ¡Dala review!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2588" target="_blank" class="timestamp">[43:08]</a> ¿De cuándo es el mensaje este? Del año 2018. ¿Alguien tiene el email de Frank Cuesta? No encuentro la manera de poder ofrecerle debatir conmigo cara a cara, ¿verdad? Dallas, ¿no? El Dallas quería debatir con Frank Cuesta en el año 2018 y le contesta a Frank Cuesta. Gracias por la invitación, Dallas, pero no me quiero mezclar contigo más porque tengo una hija y me da miedo que intentes quedar con ella a solas cuando ella tenga 13 años, ¿no? Anda, hombre. Al Dallas le soltó un bocazo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2617" target="_blank" class="timestamp">[43:37]</a> No olvidemos la difamación que Fran Cuesta hizo tragar a Yuye. Me pasan documentos que demuestran que Fran Cuesta mintió mientras recaudaba dinero para pagar su divorcio. Las tierras de Yuye, supuestamente, le recompra jamás fueron de Yuye porque tampoco lo fueron de Cuesta. Tenemos los documentos de las tierras. El dinero era para comprar a un dueño al margen de todo, no para recomprar algo que él mismo dijo que Yuye lo había vendido. Parte de la querella de Yuye contra Fran Cuesta versa sobre esta estafa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2646" target="_blank" class="timestamp">[44:06]</a> Madre mía, tío. Bueno, aquí hay una cosa tan de esas que pone. Qué fuerte, ¿eh? Yo sé que el tiro es mentiroso, pero es que es todo superado que yo me imaginaba, ¿eh? Sé que era un embustero, un cutre, un manipulador, pero es que es muy bestia, ¿eh? Cuando encontré una cobra escupidora en mi casa y se la llevo para que la cuide...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2673" target="_blank" class="timestamp">[44:33]</a> Y nunca hizo ni el video que la encontramos, ni la cuidó, ni nada. Dale, dale play. Así es escupidora, es verdad. Sí, sí, sí. Es cobra escupidora. O sea, qué bueno. O sea, la ve desde mí con una bolsa. Cobra escupidora. ¿Dónde la pone? Miren dónde la pone. La cobra viva. ¿Cómo mierda hay cobra escupidora? Sí, ¿eh? Normal. Normal. Normal es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2705" target="_blank" class="timestamp">[45:05]</a> Esa cosita, boludo. ¿La ves ahí? No, no, es una cobrita. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva. Viva.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2726" target="_blank" class="timestamp">[45:26]</a> Él dijo que tú la habías llevado muerta y que no sabes. Pon el otro. La gente ve que está viva, que se levanta, que está perfectamente y él solo mirar el morro y la parte de arriba ya se da cuenta que es escupidora. El otro día grabó un video donde fue a agarrar un escupidore y no sabía que era escupidora. Increíble que el único animal rescatado de todo el santuario lo rescataste tú. Es el único rescate que se ve. El único rescate que se conoce. A ver cómo estaba la cobra escupidora al tiempo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2761" target="_blank" class="timestamp">[46:01]</a> Ya inmóvil, ¿no? No puede ser... Qué fuerte, colega, tío. Esto es muy fuerte. ¿Dónde está lastimada la cobra? ¿Dónde está lastimada la cobra? ¿Dónde? La dejó morir. La dejó morir. Sin agua, sin nada. Ay, brother. No, no, no. Esto es terrorífico, brother. Esto es terrorífico. Es una puta película de terror, cabrón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2784" target="_blank" class="timestamp">[46:24]</a> La dejó secar. Nunca la revisó. Sí, la dejó ahí encerrada. Nunca la revisó ni nada. La dejó secar ahí. No la vimos nunca, ¿o qué? Está seca la serpiente. Se ha muerto de sed. Sí, sí, el tío ve... ¡Hombre, la escupidera! ¡Qué buena la colección! Venga, para hacer dinero. A la bolsa. Y luego... ¡Frank! La serpiente. ¿Qué serpiente? Esa que... ¡Ay!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2812" target="_blank" class="timestamp">[46:52]</a> ¡Hostia! ¿Cómo está? Está muerta. ¡Joder, tío! Ahora tengo que comprarme una. Literal, ¿eh? ¡Madre mía! Cuenta 200 seguidores y en tía alguna. Tiene la misma veracidad que un peruano random. O sea, es una racista y gilipollas, ¿ves? La gente no se lo cree, ¿eh? La cobra esta me ha dejado flipado, ¿eh? O sea, le rescata a una cobra el chi y el tío le deja morir de sed. Es muy fuerte, ¿eh? ¡Qué fuerte, tío!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2845" target="_blank" class="timestamp">[47:25]</a> Animales que lógicamente estaban privados de su libertad. ¿Por qué? Va la cosa tomando buen nivel. Lleva otras dos serpientes. Ahora tenemos como ocho tipos de serpiente ya. Y cinco de tortuga. Cinco o seis, no sé. Tengo que empezar a encargar lagartos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2874" target="_blank" class="timestamp">[47:54]</a> Tengo que empezar a encargarla a Arthur, tío. Pero bien. Y para el jungle... Se me había ocurrido... ...Gualabies pequeños. Un par de gualabies pequeños, que te parece. O algo así. Hay que meter algún bicho ahí que se mueva por el suelo. Una vez más. Hay que meter un bicho ahí que se mueva por el suelo. Lo tomo por saco. Yo feliz. Acabo de pillar tres suricatas pequeñas. Que las criara esta ahí en el refugio durante un par de semanas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2905" target="_blank" class="timestamp">[48:25]</a> Y me las han dado bastante baratas. Me han dado las 3 por 30.000. Así que, bueno. Es una inversión, pero sí hay que tener suricatas. Que a la gente le gustan las putas suricatas. Pobrecito, es que está muy chiquitín. De estos hemos rescatado cientos. Hemos rescatado un búho que iba para Japón para un café de búhos. Bueno, chavales. Qué mentiroso, qué mustero asqueroso rastrero, tío. Iba a un café de búhos el búho que ha rescatado, ¿sabes? Y lo coma por teléfono.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2935" target="_blank" class="timestamp">[48:55]</a> Os quiero enseñar algo. Esto lo hemos rescatado ayer por la noche después de casi tres días detrás de los que se lo llevaban. Aquí tenemos tres tortugas. Hemos rescatado seis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2951" target="_blank" class="timestamp">[49:11]</a> No es de los años que más hemos rescatado porque no estoy dedicado realmente a rescatar animales... ¡Qué trolero, tío! ¡Qué trolero es! ¡Qué embustero! Pero así todo estamos rescatando un montón de animales. O mejor dicho, ¿alguno fue salvado de verdad? ¿Qué pasa, chavales? Bueno, como todos los años, vamos a hacer un video resumen.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=2973" target="_blank" class="timestamp">[49:33]</a> de lo que hemos hecho, de los animales que hemos rescatado, que hemos preparado, que hemos liberado. Oye, oye. No sé, no sé. Dímelo tú. Sí, las maras las traerán esta semana, antes del campamento. Traerán las maras y... y alguna cosa más, supongo. Pero vamos, si funciona eso es la hostia, porque el sitio queda perfecto. Llevo intentando conseguirla más o menos un año, pero es que es de Australia y es muy difícil pillarla. Hay que pillarla probablemente en un zoo o alguna cosa así. Pero llevo un año pidiendo y no hay manera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3003" target="_blank" class="timestamp">[50:03]</a> Pero sí, mola, mola mucho. Me encanta cuando le das este tipo de dosis heroicas. Tres días detrás de los que se lo llevaban. Suma y sigue, Fran. Tres días persiguiendo a los traficantes, hasta que pudo rescatar a animales. Qué humano más quebroso, tío. Lo siento, ¿eh? Suma y sigue. Esta pandemia realmente me ha dado la razón en algo. Y es que si no hay demanda...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3028" target="_blank" class="timestamp">[50:28]</a> No hay negocio. Bien, a ver qué nos cuenta del búfalo. No, no, no, que va, era para comentarte varias cosas. Bueno, me ofrecen un mini búfalo, pero claro, tiene dos años. Un pigmi, pero son 100.000 bats. Es enano, o sea, es un búfalo enano, ¿vale? Mide 50 centímetros o 60 de alto. Pero les he dicho a ver si tiene un bebé, porque es que ya con dos años es la hostia. Y luego lo que he pensado es que en el refugio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3054" target="_blank" class="timestamp">[50:54]</a> y lo quiere coger el bebé y cuando crezca, ¿qué hace? ¿lo sacrifica? ¿lo deja morir de hambre como a serpiente? psicopatón, lo robaba también de los zoos, sí, sí eso ha salido también audio de esto de que el tío tenía algún contrato, un zoo que se lo suministraba ahí de estrangis también, robándose las jaulas ya que están cerradas y tal, las voy a preparar bien y voy a poner 24 horas de directo pongo pajaritos, pongo mierditas y tal</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3082" target="_blank" class="timestamp">[51:22]</a> No, por eso, que ni de coña, que yo no tengo 100.000 para gastarme en eso ni de coña. Pero que me lo ofrecieron, me mandaron un mensaje un tipo y me ha dicho que no, que no, que no. Lo que pasa es que claro, es que es pigmi. Es una mierda, o sea, tiene dos años y le está pegado a un niño y es como el niño.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3098" target="_blank" class="timestamp">[51:38]</a> Pero no, no, ni cagando. Yo bichos ya de esos caros, ni cagando. Oye, pues hizo cuentas porque finalmente llegó el bichito. Trajimos a Pam y a Ricky, ¿de acuerdo? Un toro y una vaca que estaban en un centro, no los querían, esto y lo otro, no criaban, no sé qué, no sé cuánto. Y me preguntaron si me podía coger un búfalo, ¿vale? Que les nació mal. ¿Qué quiere decir? Nacieron búfalos normales, que son animales así. Y hace unos años nació un búfalo que es enanito, es enano, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3129" target="_blank" class="timestamp">[52:09]</a> Entonces, esto es un búfalo que tiene dos años ya. ¿Vale? Tiene dos añitos y es así. Entonces, ¿qué pasa? Que no crece. En este caso es una hembra. Es una hembra. Y le digo, pues tráela. Total. Sí, ya puestos. Qué mentiroso, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3156" target="_blank" class="timestamp">[52:36]</a> Eres muy buena gente y lo acogiste porque el animalito nació mal. Un búfalo, ¿vale? Que les nació mal. Cabrita, vengan al santuario, os lo pido. He encargado una cabrita a un macho para tener un macho ahí en el otro lado, por si queremos preñar a las hembras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3175" target="_blank" class="timestamp">[52:55]</a> Fíjate qué persona que nos ha dado y dice, he encargado a este que me busque, así... Es que aquí no hay, tío. Hay que ir a Australia a un zoo, no sé qué. Y luego hace el vídeo del animal que le llega. Lo hemos rescatado. Iba tres días detrás de los traficantes. Me dispararon, pero al final he conseguido. De vez en cuando. Pero he corregado un macho como mamagoti, pero un machito. Porque no entiendo nada. ¿Cuándo paso de rescatar a contar historias y monetizar? Este tío no ha rescatado al animal en su vida.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3205" target="_blank" class="timestamp">[53:25]</a> Ojo, ojo. ¿Qué? ¿Aquí estaréis mejor, más segura que en ningún sitio? Bueno, depende. Son las tres de la mañana. Acabo de llegar hace un rato. Ahí está la cabrita que le han brodido una serpiente. No se puede poner ningún bloqueador ni nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3234" target="_blank" class="timestamp">[53:54]</a> Me ha debido morir una Russell. Y... Y se está muriendo. Llámalo. Lo tiene cualquiera. Todo meramente estético y espectáculo, mi gente. Y voy a poner 24 horas de directo. Pongo pajaritos, pongo mierditas y tal. Todo un circo. En este caso, el circo de la mentira. Oye, estoy pensando en hacer un cambio estructural del santuario. Es decir, utilizar la sabana de otra manera. Porque no utilizamos realmente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3264" target="_blank" class="timestamp">[54:24]</a> Y la plataforma esa mola mucho. Y con los avestruces para la gente es una putada. Y sería claro, los avestruces, si nos quedásemos con dos aquí, dejarlos fuera, dejarlos por el santuario, y meter más bichos de estos que corren así y tal, tranquilos por la sabana. Ahora los ciervos esos están muy bien, las maras están muy bien, habría que meter algo que se viera y tal, y que la gente los viera correr y que pudiera interactuar. De alguna manera se me está ocurriendo, no sé, también molan sí que esté un avestruz allí o algo, que con uno no pasa nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3294" target="_blank" class="timestamp">[54:54]</a> El tío solo atiende a criterios estéticos temporales, es decir, que le den para hacer los vídeos y luego al animal que le den. Yo me acuerdo que yo lo vi y dije, ¿cómo la gente se traga esta patochada? Que el tío sale cuando ya empezó a hacer cositas de chí y cuando empezaba y después, no, cuando lo soltaron en libertad condicional, ¿no? Después de la detención. Y el tío dice, ¿qué cojones?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3322" target="_blank" class="timestamp">[55:22]</a> ¡Venga, a correr, amigos! Empezó a correr y todos los animales siguen detrás. Ahí la destruye esto, ¿no? Y todas las mujeres iban diciendo ¡Ay, Frank! Es que eres tan bueno. Te quieren tantos animales que te siguen porque te quieren.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3337" target="_blank" class="timestamp">[55:37]</a> Señora, ¿qué animal tiene hambre? Que a la hora de comer le está siguiendo porque a la hora de comer es que más se ve. ¿Sabes cuando sale el... Yo tengo perro en el jardín. Cuando salgo a la hora de comer los perros están ahí corriendo ahí y se ponen todos... Si falta un perro, uno se pone nervioso y empieza a ir lejos a llamar al otro. Pues sin ladrar, no sé cómo lo hace. Y vienen para llamar y viene otro de la montaña y viene, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3361" target="_blank" class="timestamp">[56:01]</a> Pues el tío con animales que tienen hambre y que por la hora de comer van a interesarse, como diciendo, bueno jefe, la comida, que nos están muriendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3368" target="_blank" class="timestamp">[56:08]</a> Y el tío andando y los animales se acercan y el tío como que le vienen por amor a los animales, ¿no? Oh, mira, es que saben que estoy mal. No sé qué les comentan estas mujeres latinas estas, estas chochonas de 50 años, ¿no? Y españolas, ¿no? Diciendo, ¡ay! Los animales sienten los sentimientos heridos de ti, Frank. Eres un hombre sensible. Los animales los sienten. Son unas paja mentales. Que el animal tiene hambre, que la hora de comer. Y se pone a correr los animales diciendo, ¡cabullo! La comida. Y corriendo detrás. Y el tío...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3397" target="_blank" class="timestamp">[56:37]</a> Vamos, ¿qué cojones? Esto lo puedes encontrar en un directo estos de ahora un mes o así, ¿eh? Paris Jackson, en un vídeo salía que le pegaran unos tiros y en otro paraba coches que llevaban animales y los paraba como en GTA V. Sí, sí, un teatro, pero auténtico insulto a inteligencia, ¿eh? Y la peña se lo creía, tío. Es muy fuerte, ¿eh? No sé, estoy pensando en eso, en hacer una reestructuración, poner algo allí que mole, ¿sabes?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3423" target="_blank" class="timestamp">[57:03]</a> Oye, ¿sabéis si el amiguito de Fran, el abogado de cartón Pablo Franco, con lazos tan lindos, tan leales, que creyó que se estaba inventando un cáncer en esta... Este hombre, ¿por qué habla? ¡Hacía tropicones! ¿Qué pasa? ¿Que tiene respiración de esta mecánica y tiene aquí metido el tubo y un pulmón mecánico? Porque habla que se ahoga, ¿no? El tío este. Voy a escuchar otra vez. Con lazos tan lindos, tan leales, que creyó... Parece que respira entre palabras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3451" target="_blank" class="timestamp">[57:31]</a> ...que se estaba inventando un cáncer... ...en esta exposición que hace... ...en esta exposición, güey, que va a escuchar esto... ...de cómo Frank conseguía animales de... ...hombre, cara guaper, está suscrito, tío. Dios te lo pague con un hijo como Frank Cuesta, ¿vale? ...de forma alternativa... ...esconde algún tipo de delito... ...es para un amigo. Mira, Frank...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3471" target="_blank" class="timestamp">[57:51]</a> Recoge animales provenientes del atraso. Bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3500" target="_blank" class="timestamp">[58:20]</a> Alguna vez ha pagado por ellos, ¿vale? Pues porque los tratantes de animales no se querían deshacer de ellos, etcétera, etcétera. Otras veces se ha ido al aeropuerto porque se pillaban animales que iban para la venta ilegal y coge el policía que está allí y llama a Frank y le dice, oye, hay aquí esto, esto y esto. Y llega Frank, lo recoge, le da unos bats y se lo lleva. Y mientras tanto, Frank, ¿qué hace? Pues bueno, dice que va a poner no sé cuántas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3531" target="_blank" class="timestamp">[58:51]</a> Gracias por suscribirte, Lord Calleja. Dice Squall Leonhart, 89. John, Frank tiene un complejo de inferioridad enorme. Está obsesionado con inventarse mierdas para ganar la validación de la gente y que le digan cosas buenas. Cuando no provoca a la gente para que le insulte y luego victimizarse para que la gente le dé una caricia y diga lo bueno que es.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3553" target="_blank" class="timestamp">[59:13]</a> Encima va de líder de la manada de los animales para engordar su frágil y barato ego basado en mentiras. Puede ser exactamente lo que dices, tío. Denuncia por la información que se anda filtrando estos días. Primeramente se han mostrado documentos privados. Documentos privados. Habla en X. Y digo documentos privados porque se han enseñado documentos de tierras que son nuestras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3583" target="_blank" class="timestamp">[59:43]</a> Me da igual quien haya enviado, eso se verá. Se han mostrado documentos privados económicos de Kik sin permiso en varias plataformas, en varios canales. Se han mostrado supuestamente pagos o recibos</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3606" target="_blank" class="timestamp">[60:06]</a> de una compra particular. Cualquier foto, cualquier vídeo que se saque de aquí y que no haya grabado o que no haya sacado yo esa foto es un vídeo o una foto ilegal. Se han mostrado... ¡Oh, qué tío más lento, tío! Es peor que decirle Castro, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3630" target="_blank" class="timestamp">[60:30]</a> Conversaciones privadas. Ahora bien, no sé de qué audio hablan cuando dice que están generados por I. Daniel Jomi, hay un audio donde dice que va a apuñalar al ciervo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3643" target="_blank" class="timestamp">[60:43]</a> que lo atacó porque es el macho alfa. Ah, es verdad, que es el ciervo que le metió la cuernamenta en el pecho. Y en un audio dice que lo va a matar como venganza, en serio. Y el tío en público decía que es normal, que fue culpa suya, en serio. Eso lo he escuchado. Squall, por eso Frank odia tanto a veterinarios y biólogos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3661" target="_blank" class="timestamp">[61:01]</a> Porque se siente inferior. Él tiene conocimiento cero de animales. Pero te enseña a serpiente para decirte, se llama así, y mira qué bonita es, mira qué bonita. Y ahí se queda la cosa. Describe lo que veo cualquiera. Sí, sí, es que esto es lo que tiene internet. Me pasaba en un directo que me preguntaban sobre temas de mecánica, porque tuve un tema mecánico, porque yo era administrador y yo no soy mecánico, ¿eh? Y la gente, varios, dicen, Dios, John, sabes un montón de mecánica, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3684" target="_blank" class="timestamp">[61:24]</a> Y yo flipando, que yo sea mecánica, si yo no tengo ni idea de mecánica. Pero claro, te pone webcam, dice cuatro cosas de mecánica y parece que sabes, no tengo ni idea de mecánica. Pues pasa lo mismo con el Franco esta. Es decir, el que es profesional y ha estudiado, pues tiene un cúmulo de conocimiento que no lo puedes demostrar en una webcam. Así es, tío, es el efecto negativo de las redes sociales. Se han sacado audios de Whatsapp.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3712" target="_blank" class="timestamp">[61:52]</a> Psicopatón, la leucemia de Frank es como un catarro primordial, así como mis gripazos que van y vienen. Privados. Están circulando audios de IA. Yo vi un vídeo también, pero lo han retirado supuestamente. Cállate, mentiroso. Qué más mentiroso. Porque ya no lo puedo ver. Pero particularmente lo que hemos escuchado en este vídeo apostaría porque son reales. A ver, sinceramente, a mí la vida sentimental sexual de Frank me importa más bien poco. Incluso el tema...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3741" target="_blank" class="timestamp">[62:21]</a> Yo los comentarios no tengo tiempo de leerlos. Con Yuji. Yo te digo esto, tú me dices aquello, ahora te denuncio y demás. Las mentiras aisladas. Invento muchas historietas. Ya lo sé. Bueno, pues ¿qué pasa? Cuando tú las compras, estás haciendo algo muy, muy malo. Y es que vas a conseguir... Suricatas, obviamente. Bueno, vamos a dejar ahí dos peladillas. Y cada suricata son 20.000 bahts. ¿Sabes? Y hay que comprar 5, 100.000 bahts. A ver dónde cojones hago yo pasta para que no parezca que se nos... Es que es toda una puta mierda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3771" target="_blank" class="timestamp">[62:51]</a> Incluso puedo entender, y esto se ha descubierto que era más habitual de lo que parece, que cuando fallecía un animal, le buscaran un sustituto parecido para no golpear emocionalmente a la audiencia. Pero cagarte en este lema, Fran, me da que no. Si no hay demanda, hay negocio. Y eso vale para todo. Y Fran. Zorro, no es nada contigo. Perdona la situación...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3796" target="_blank" class="timestamp">[63:16]</a> Es ridículo, tío. Deja de adelantar más porque... Me cae súper bien, pero es que me... Es que... Es que... Mentira de chispitas. Frank Cuesta sube el 16 de junio 2023 en la siguiente foto con el título. Chispas y Hip Hip ya se han unido al grupo en el río dentro del parque nacional a partir de ahora y por fin vivirán como una nutria salvaje. Todo falso. La foto la había agarrado de un chispas... Note. Note. ¿Qué coño?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3822" target="_blank" class="timestamp">[63:42]</a> No, que yo estaba enamorado de esa nutría, tío. La falsa malaria de Frank. Por eso es que se llama... Es decir, que en mi... No me hagas esto, hombre. Si muestran exclusivamente un imágenes de su voz más... Tú dile todo esto, Frank. Hermano, ¿qué dices? Todos eran con... O sea... Ese audio suena un poco raro, ¿no? La verdad, es un poco raro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3839" target="_blank" class="timestamp">[63:59]</a> Claro, a ver. Yo feliz. Acabo de pillar tres suricatas pequeñas que las criará esta en el refugio durante un par de semanas y me las han dado bastante barato. Me han dado las tres por 30.000. Así que bueno, es una inversión, pero es... ¿Cómo que inversión? ¿Cómo? Es una inversión, pero es que hay que tener suricatas. Que es que a la gente le gustan las putas suricatas. ¡No! ¡No! ¡Compadre! Pero, a ver, a ver, a ver. Espérate que tengo ahí un lapso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3866" target="_blank" class="timestamp">[64:26]</a> Soy un aprendiz comparado con el chi, ¿eh? Lo que he hecho yo con Cucumber es de risa comparado con la demolición controlada que le ha metido a Francoesta. ... una cosa que no entiendo nada. Espérate, espérate, espérate. Espérate porque me voy a caer para atrás. Vamos a ver. Que compraba suricatos, pero si llevaba una camiseta. Ha mezclado suricata con un gato. Porque yo no quería que él trajera Venedo aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3889" target="_blank" class="timestamp">[64:49]</a> Claro, es que si ponen los audios así, el chi parece un santo. Claro, si tú me... ¡Que no, Antonio, que no! Solo me... Tirando un poco para atrás. Claro, es que al cabrón del Frank lo conocía todo Cristo en los mercados. Tío, no me lo quiero creer, de verdad. No me lo quiero creer, tío. No me lo quiero creer esto, tío. Por Dios que salga Frank diciendo que es mentira. ¡Aunque sea mentira! ¡Que miénteme a la cara, Frank! ¡Miénteme a la cara, Frank! Exactamente. Eso le gusta mucho a la gente. Todos los CEOs de Frank quieren que le mientan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3916" target="_blank" class="timestamp">[65:16]</a> Miénteme a la cara, Frank. Miénteme, Frank. ¡Frank! Te voy a creer. Sal y dices mentiras, por lo que sea, tío. ¿Sabes? No dice que la compre. Pero, amigo. Amigo, ¿cómo que no dice que los compre? Acabo de comprar 10 conejos. A veces quiero una serpiente, quiero algo y no la tienen. No me la consiguen. ¿No me la consiguen? ¿Cómo que no te la consiguen, cabrón? ¿Cómo que no te la consiguen?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3939" target="_blank" class="timestamp">[65:39]</a> Está hablando como si fuera de un proveedor. No me la consiguen. En caso, si utilizamos el argumento, la excusa… Hostia, ¿habéis visto en Mercader de Venecia cuando al Shylock, a Robert De Niro… No, al Pacino, perdón. Al Pacino le dicen que su hija ha vendido el diamante, un diamante muy gordo. Y el Shylock dice… ¡No, ese diamante! ¡Lo compré! ¡En Frankfurt me costó tanto dinero! Y se pone a llorar. ¡No! Me recuerda a Antonio, ¿sabes? ¡Oh, Frank! ¿Qué me has hecho?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3969" target="_blank" class="timestamp">[66:09]</a> O sea, será a los traficantes, a los que hacen… Juan, tú no tienes un rayazo ahí abajo. Está con la posición de rayado máximo. Es total. Está hablando de que le solicita… Y es una putada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=3982" target="_blank" class="timestamp">[66:22]</a> No sé quién es este Entiendo que es un contacto que tenían en común Un amigo de allí Tenía la casa llena de bichas y le he dicho Venga, me llevo todo esto Bichas son serpientes, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4007" target="_blank" class="timestamp">[66:47]</a> En la cara de Antonio Kinepar, lo siento. Hay que tenerlas, tío. ¿Hay que tenerlas por qué? ¿Cómo, cómo me dices eso, Frank, compadre, tío? Me he tirado. Me he visto como, como, como, yo qué sé, como 300 vídeos tuyos. Me he visto el Wild Frank entero. Me he visto el Frank de la jungla entero. Hostia, tío, usted parece un fulina gitano, ¿eh? Me he visto todo lo que subías, compadre, hasta hace, yo qué sé, hasta que, hasta hace 6 o 7 meses.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4035" target="_blank" class="timestamp">[67:15]</a> ¿Cómo que no puedes hacer esto, Frank, hermano? ¡No me puedes hacer esto, tío! ¡No me puedes hacer esto, compadre! ¡No me puedes hacer esto, tío!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4046" target="_blank" class="timestamp">[67:26]</a> Hermano, Fran… … que lo que tienes es un refugio. La idea, el concepto que nos has vendido a todo el mundo, que además te ha estado apoyando… Claro, yo también me incluyo, compadre. ¿Cómo no me voy a incluir? Si me flipa todo lo que hace. Bueno, no sé si decir… No sé si decir porque quiero creer que todavía esto es mentira y quejía. Yo te he defendido en todos lados, compadre. He hecho vídeos tuyos de todo tipo, tío. Te he defendido en todos los sitios. Me cago en mi prima. Es que no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4074" target="_blank" class="timestamp">[67:54]</a> Las primas vi en los vídeos, ¿veis? ¿Este qué dice? No, la de veces que he dicho yo que este tío iba a dejar a Feli Rodríguez de la Fuente, lo iba a dejar como si fuera nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4084" target="_blank" class="timestamp">[68:04]</a> Mira, te pasa, Antonio. Te río la fuente, que se tira un crack. He hecho 500 veces. Uy, 500.000. No, tío. No, de verdad. Os prometo que me está afectando, tío. De verdad. Que las cosas funcionen y te vayan bien por la injusticia que dijiste que estabas sufriendo era que el santuario fuera un refugio para los animales. Que el santuario fuera un lugar seguro para las especies que estuvieran en peligro, que estaban maltratadas, que estaban bajo los mandos del narcotráfico. Y que nunca ibas a monetizarlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4112" target="_blank" class="timestamp">[68:32]</a> Es que yo me acuerdo. Aquí no va a venir cualquiera. Me acuerdo que decía eso. Aquí no va a venir nadie que yo no quiera. Aquí el que venga a currar. De eso yo me acuerdo de los vídeos que yo vi, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4124" target="_blank" class="timestamp">[68:44]</a> ¡No, hombre, no! Que a mí no me importa que gane dinero con los vídeos. Vale, me faltaría más. Que gane dinero con las donaciones. ¡Me importa una mierda! Pero que todo lo que han montado ahora resulte que tú lo has hecho peor. Por Dios, miénteme, tío. Miénteme y dime que es mentira, tío. Dime que es mentira, tío. ¡Compi! Que tengo un puto vídeo en Twitter defendiéndolo cuando fueron los policías a su casa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4151" target="_blank" class="timestamp">[69:11]</a> Hay que insononizar esa habitación, ¿eh? Hay que poner aquí espumas acústicas de estas para... No sé, para su propia salud mental, ¿no? Porque esa voz retumbando por esas cuatro paredes, tío... Al final todo es loco. Mira qué cara de radio se pone en el más más, tío. ¡El refugio, tío! ¡Es que no tengo un Twitter subido en YouTube, compadre! ¡Oís! No puedo creerlo, tío. Os juro que no lo puedo creer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4175" target="_blank" class="timestamp">[69:35]</a> ¿Qué dice? ¿En serio lo que dice aquí? Frank ha dicho muchas veces que él es más relevante que Félix Rodríguez de la Fuente. Pero que como en español, pues no lo valoran. Como si Félix Rodríguez de la Fuente fuera francés, ¿o qué? En serio, no puede ser que dijera eso. Es un normal ese. No puede ser. Joder, tío. ...que podías conseguir de manera más legal y legal... Joder, Antonio, está en las últimas ya, ¿eh? ...da igual porque la ilegalidad cuando se utiliza para combatir otra ilegalidad muchas veces tiene matices y en el caso del rescate de animales tíos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4200" target="_blank" class="timestamp">[70:00]</a> Ok, pero la versión que nos contó era otra. Claro, si es que a ver si me entendéis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4224" target="_blank" class="timestamp">[70:24]</a> entender, hermano. No sabemos que los zoológicos son una puta mierda. ¿De qué año es este audio? No lo sabemos. No lo sé. Lo puso Chi. Igual Chi lo ha dicho. No lo sé. No he estado metido tanto en el... Cuando terminemos este curso, lo que hacemos es soltar los bichos. Nos vamos a soltar los bichos. No entiendo esto. Intuyo que lo del curso es la gente que ha pagado... ...a lo del ciervo. Frank Cuesta admite en el audio que se enfrentaría a Cuché con un ciervo al que debía cuidar. Esto es carretea salvaje. Él me quiere matar, pues yo lo mato.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4254" target="_blank" class="timestamp">[70:54]</a> Lo trató como un enemigo, no como animal bajo su protección. Resultado, encerrado, desnutrido y convertido en trofeo. En serio, tío. Yo lo tengo claro, ¿eh? Esta mañana lo he tenido claro. Yo voy con el cuchillo ahora. La próxima vez, si me engancha, de ahí no sale. Lo siento mucho, pero esto es... Esto es carretera salvaje. O sea, tú me quieres matar, yo te mato al final. Porque es que no puede ser, no puede ser.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4285" target="_blank" class="timestamp">[71:25]</a> O sea, tiene todo el campo, tiene todos los bichos y va a por mí. ¿Por qué? ¿Porque soy el macho alfa? Pues vamos a ver quién es el macho alfa aquí. Yo lo tengo claro, ¿eh? Madre mía, tío, es para flipar. Ha llegado allí, ¿no? Y luego enseña la parte bonita de cómo meten en la selva animales que vienen. Por 30.000.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4307" target="_blank" class="timestamp">[71:47]</a> Mejor no escuche el siguiente audio porque casi yo me estáis diciendo... No, hermano, no me lo puede hacer peor, tío. No me puede hacer peor esto, hermano. Ya estoy sufriendo, compadres. Como sea peor, yo ya... No, hombre, no me lo puede hacer peor. Es imposible. Tú eres el puto claro ejemplo... Esto fue cuando lo de Plex, ¿no? Lo del capibara, que compró un capibara y eso. Alquilo, alquilo un capibara.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4325" target="_blank" class="timestamp">[72:05]</a> Lo que eres es eso que está ahí. Eso es lo que eres. Así de sucio eres tú. Así de asqueroso eres tú. ¿Qué teatral es el pavo usted? Ahora, viendo este clip, choca bastante haber escuchado unos audios así. Sí, porque... Es que no me creo... O sea, Fran no ha dicho nada de esto, tío. Tenemos... Estoy igual que Ricky, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4344" target="_blank" class="timestamp">[72:24]</a> a los patos a no sé qué un gato y tal yo lo entiendo el problema es que hemos visto antes hemos visto un vídeo de él negándolo que no era que era comida de no sé qué y ya y laxante está claro que claro que eso es lo que haría una persona normal el problema quizás es que es frank no hay tres hay un montón</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4364" target="_blank" class="timestamp">[72:44]</a> No es legal si no tienes el permiso de las dos partes. No es legal. Pueden decir misa. Pero niégamelo, tío. Frank, miénteme por tu vida. Miénteme, hermano. Miénteme. ¿Cómo hace el perro Sánchez con su votante? Miénteme, hermano. Miénteme, Frank, tío. Miénteme. No es legal. En Tailandia, desde luego, no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4386" target="_blank" class="timestamp">[73:06]</a> Antonio está perdiendo La cordura El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat El chat</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4416" target="_blank" class="timestamp">[73:36]</a> Claro, esto si no me equivoco Sí que puede consentirse, en España al menos Sí que puede conllevar un delito Que sería revelación de secreto supongo Si está compartiendo información sensible O delicada que afecte a la persona De alguna manera me refiero Si se comparte un audio en el que Imagínate la persona dice Que sería como información delicada Quizá tengo un tumor o algo así que no quieres que se haga público O imagínate un audio en el que alguien dice Acabo de perder 250.000 Pero</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4443" target="_blank" class="timestamp">[74:03]</a> para crear aquí un ecosistema... Se supone que es mentira. La gente ha colaborado pagando contigo por una buena causa, no por entretenimiento. No han pagado Netflix. No. Han donado como cuando donaban a Cruz Roja, aunque Cruz Roja ya sabía lo que pasó. Donaban porque creían que ese dinero iba a ir para una buena causa. No para entretenerse. Para entretenerse pagan Netflix. Compadre. Y porque creo que en este momento tengo que dar alguna explicación. Pero no esperéis que voy a dar explicaciones de absolutamente todo porque ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4473" target="_blank" class="timestamp">[74:33]</a> No es todo, yo creo que lo primordial y lo básico sería el tema de los animales, tío. Lo de comparar a los animales, claro, eso es lo principal. Los animales, primordialmente lo que tendría que recibir. Mi vida privada, mi vida profesional, bueno, mi vida privada, está siendo destrozada de una manera brutal. A ver, los de Kik, menos bocata y más suscribiros, por favor. De acuerdo. Aquí se está intentando... La gente quiere saber lo de los animales. Tu vida privada yo creo que a nadie le importa, ¿verdad, Frank? Ismael, muchas gracias por suscribirte.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4504" target="_blank" class="timestamp">[75:04]</a> Pues ya está, yo creo que esto ha visto por sentencia, ¿no? Lo de Frank. Tuyo no es nada y lo que es el vídeo, 100%. Pero no me quiero creer por el aprecio que te tengo y por todo lo que he vivido yo mirando mi móvil y mi ordenador. Tus vídeos y la tele no te he trallado. Ya te digo que si fueras otra persona al 200% te hubiera trallado ya, dinamitado. Lo tengo clarísimo. Así que yo necesito, si quieres mi canal...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=yFnzeKnv1w8&t=4530" target="_blank" class="timestamp">[75:30]</a> Te lo ofrezco para hablar del tema. Pero hazlo. O en el canal de quien sea. O en el tuyo propio. Hazlo. A mí lo de tus hijos, con todo el respeto, no me incumbe. Lo de tu pareja o no pareja. Madre mía. Madre mía, tío.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 07/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
