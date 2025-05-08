@@ -1,0 +1,381 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 08/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">08/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Miguel Navarro</strong>: <a href='#video-CjDVWd0IUfE'>ÚLTIMAHORA| ¡GOODVITO FUERA DEL PITTSBURGH PRO POR LESION! ¿ES SUFICIENTE para RENUNCIAR a COMPETIR?</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-CjDVWd0IUfE">
+            <h2>ÚLTIMAHORA| ¡GOODVITO FUERA DEL PITTSBURGH PRO POR LESION! ¿ES SUFICIENTE para RENUNCIAR a COMPETIR?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 08/05/2025 12:28</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE" target="_blank">
+                    <img src="https://i.ytimg.com/vi/CjDVWd0IUfE/hqdefault.jpg" alt="ÚLTIMAHORA| ¡GOODVITO FUERA DEL PITTSBURGH PRO POR LESION! ¿ES SUFICIENTE para RENUNCIAR a COMPETIR?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video informa sobre la inesperada retirada de Gutvito del Pittsburgh Pro de culturismo.
+El motivo es una lesión muscular en el dorsal que le impide posar correctamente y competir a su nivel.
+Se analiza la gravedad de la lesión y se muestra el comunicado oficial del atleta.
+La decisión se considera acertada para permitir su recuperación de cara al Mr. Olympia, donde era visto como un fuerte contendiente.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Noticia de Última Hora: Gutvito se Retira <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&amp;t=2" target="_blank">[00:02]</a></h3>
+
+<p>El video comienza anunciando la triste noticia de la baja de Gutvito del Pittsburgh Pro de culturismo. Explica que el motivo es una lesión en la zona del dorsal que le impide competir.</p>
+
+<h3>El Doloroso Comunicado de Gutvito <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&amp;t=106" target="_blank">[01:46]</a></h3>
+
+<p>Se lee el comunicado oficial de Gutvito, donde detalla su lesión muscular en la espalda y cómo le afecta. Anuncia su retirada del campeonato para centrarse en la recuperación de cara al Mr. Olympia.</p>
+
+<h3>La Evidencia del Desgarro y Decisión Inteligente <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&amp;t=174" target="_blank">[02:54]</a></h3>
+
+<p>Se muestran imágenes de la lesión de Gutvito, un desgarro en el dorsal derecho, y se analiza cómo le causa asimetría y dificulta el posado. Se destaca que retirarse fue una decisión inteligente dadas las circunstancias.</p>
+
+<h3>De Ganar el Arnold a la Baja Inesperada <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&amp;t=212" target="_blank">[03:32]</a></h3>
+
+<p>Se recuerda el reciente y espectacular nivel de Gutvito mostrado en fotos y su victoria en el Arnold Brazil un mes antes. Se contrasta su pico de forma con la súbita lesión que frena su temporada.</p>
+
+<h3>¿Qué Esperaba el Olympia de Gutvito? <a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&amp;t=338" target="_blank">[05:38]</a></h3>
+
+<p>Se reproduce un análisis de Olympia Television sobre el Pittsburgh Pro, donde consideraban a Gutvito un contendiente clave. Lo situaban con opciones de estar en el primer callout, destacando su potencial.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal y tenemos noticia de última hora, noticia triste en este caso porque Gutvito ha anunciado en sus redes sociales su abandono, su baja de este Pittsburgh Pro que se disputa este fin de semana. Una lesión, en este caso en la zona del dorsal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=21" target="_blank" class="timestamp">[00:21]</a> Parece que es la que ha limitado al bueno de Gudvito de estar en un Pittsburgh Pro donde por cierto tenía bastantes opciones de hacerlo bien, no digo de ganar, pero sí de por ejemplo meterse en el primer callout. Así que vamos a ver todo lo que ha dicho Gudvito, de dónde venimos, hacia dónde vamos y por supuesto hablar un poco...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=38" target="_blank" class="timestamp">[00:38]</a> también de las previsiones en Estados Unidos del Open así que como digo vamos a pasar a ello porque ha sido una noticia de última hora muy importante evidentemente por supuesto recordaros los códigos de descuento ya los conocéis código Iron Road en toda la web de Big que por supuesto os daros las gracias por el apoyo que le estáis dando al código y también recordaros ese código de descuento Iron Road en toda la web de Agonji donde por cierto tenéis este pack ganador de su nuevo drop el drop back in the game así que aprovecharlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=66" target="_blank" class="timestamp">[01:06]</a> Porque por la compra de dos camisetas os podéis llevar una tercera de regalo con el código IRONROAD. Y como digo, vamos a pasar a analizar todo lo que ha tenido que ver con la actualidad de Good Vito. Porque Good Vito, ¿quién lo iba a decir? De hecho, estuvimos hablando durante bastante tiempo, no poco además...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=85" target="_blank" class="timestamp">[01:25]</a> del nivel que mostraba en redes sociales, que es algo también muy habitual en Good Vito, mostrar un nivel bestial en redes sociales, mostrar fotos desde luego muy impactantes y evidentemente en este caso llegamos a la noticia que la tenemos aquí y que os la voy a traducir ahora</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=106" target="_blank" class="timestamp">[01:46]</a> Vamos a leerlo donde dice que con gran tristeza anuncia que no participará en el Pittsburgh Pro Champions League debido a una gran lesión muscular en la espalda que sufrió hace una semana y no me informé antes tratando de aliviar los síntomas preparando mi cuerpo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=125" target="_blank" class="timestamp">[02:05]</a> para el campeonato siguiendo una estricta rutina. Además del intenso dolor que estoy dispuesto a soportar, el músculo hinchado no me permite posar correctamente y negativamente afecta a mis proporciones. Vine a este campeonato para ser un digno competidor, yo creo que en la previa lo era, y mi objetivo era lucir mejor que hace un mes, que ahora veremos las imágenes de Gus Víctor justo hace un mes cuando ganó el Arnold de Brasil.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=149" target="_blank" class="timestamp">[02:29]</a> Pero ya que eso se está volviendo imposible, así que junto con mi entrenador se tomó la decisión de concentrarme en recuperar mi cuerpo y prepararme para el Mister Olimpia. Esto no es solo una ruptura completa de los músculos de espalda, sino una pequeña ruptura de las fibras musculares. Dentro de un buen volverá mi rutina de entrenamiento gracias a todos los que me apoyaron. Y sube aquí imagen eje, como podéis comprobar en el dorsal derecho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=174" target="_blank" class="timestamp">[02:54]</a> pues tiene un desgarro muscular bastante considerable. Y ya no solamente es que esto se pueda ver en la tarima, que evidentemente se va a ver, porque el hematoma está ahí, sino que parece que le dificulta bastante, fijaros, a la hora de abrir el dorsal con respecto al otro dorsal. Le genera una simetría que estoy completamente seguro que es lo que ha llevado a tomar esa decisión. Fijaros aquí la diferencia del dorsal con esta de aquí. O sea que con lo cual...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=200" target="_blank" class="timestamp">[03:20]</a> Una decisión bastante inteligente de Gutvito. Entiendo que tenía muchas ganas de competir, pero desde luego con eso ahí y con la limitación que provoca eso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=212" target="_blank" class="timestamp">[03:32]</a> desde luego que ha sido una decisión más que inteligente. Aquí tenemos el que ha sido, al menos el que sigue siendo hasta hace 21 minutos, el último post de Good Vito, donde se le ve espectacular. Ya, de hecho, en otros posts lo hemos ido viendo. Fijaros estos de aquí, este, o en concreto este, que también levantó mucho revuelo sobre el nivel. Hay que decir que esto fue hace cinco días, o al menos esta foto fue publicada hace cinco días, seguro que fue de algunos días antes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=242" target="_blank" class="timestamp">[04:02]</a> Y aquí no se vislumbra ningún tipo de problema en el dorsal. Parece que este tipo de situación, este tipo de problema ha llegado más adelante y como vemos, evidentemente complica muy mucho a Gudvito el hecho de poder competir, de poder ser importante en la tarifa y mostrar el nivel que nos tenía acostumbrados. Como digo, un Gudvito que se os parece, ya para cerrar un poco el círculo de su actualidad,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=269" target="_blank" class="timestamp">[04:29]</a> Vamos a analizar qué fue lo que pasó en ese Arnold de Brasil, porque evidentemente Gudvito, ahí lo tenéis, mostró un nivel altísimo. Sí que es cierto que no se corresponde con las imágenes que sube, pero ya sabéis que las imágenes al final son muy satinaditas, con mucho contraste, mucha definición, etc. Luego esto evidentemente en tarima.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=290" target="_blank" class="timestamp">[04:50]</a> No se muestra tanto ese punto de condición, aunque se lo vio muy bien. Evidentemente de Gumbito sobra decir el tren inferior que tiene, que es uno de los mejores de la categoría profesional. De eso no puede caber tampoco ninguna duda. Y en este caso es evidente que era de largo. Compitió ahí de hecho mano a mano con Leandro Paredes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=309" target="_blank" class="timestamp">[05:09]</a> Era de largo el atleta más importante y así de esa manera se llevó el título, ahí lo tenemos, se llevó el título del Arnold de Brasil. Confirmó que iba a salir el PSU Pro y finalmente pues no ha podido estar y evidentemente es una baja muy sensible porque era un atleta que yo estoy convencido de que iba a estar peleando con los Nick Walker, Martin Fittwater, por supuesto Michael Crizo, William Bona por entrar evidentemente en esa...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=338" target="_blank" class="timestamp">[05:38]</a> Hablando un poquito del Open, la web oficial, o mejor dicho, el programa oficial del Mr. Olympia, la Olympia Televisión, con Terry Kelguín de la cabeza, ha querido también valorar el Open. Ha mostrado sus favoritos, porque vais a ver que evidentemente tiran mucho por directo, pero uno de los que destacaban en la previa, con opciones de hacer algo importante, era el caso de Gutvito. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=361" target="_blank" class="timestamp">[06:01]</a> Esto es lo que va a ser insane. Men's bodybuilding, Derek Lunsford. He es Mr. Olympia. He won the Arnold Classic, and he said, Tarek, I want to win the first Pittsburgh Pro. I want that title. And yes, based on the past results,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=383" target="_blank" class="timestamp">[06:23]</a> He es el favorito de ganar. ¿Puedo ser defeated? ¡Absolutamente! Ve a algunos de los otros nombres. Nick Walker, Guadavido, Martín Fitzwater, Bonek. Todos están llegando a él. Pero Derek es, por los resultados que he tenido en el Olympia de Arnold, el favorito. Ahora, más que solo ser el favorito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=404" target="_blank" class="timestamp">[06:44]</a> Si Derek loses a este show, eso realmente pone un marco en su resumen. Él fue el favorito y no le dio. Es un peligroso para ser, especialmente porque él just won el arnold. Si él barely wins por un punto, o alguien le da un tiempo difícil, entonces tenemos que mirar a Samson y decir que Samson es todavía el favorito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=428" target="_blank" class="timestamp">[07:08]</a> Ahora, si Derek absolutamente obliterates el campeonato y wins convincingly, entonces tenemos que ponerlo como el favorito para ganar el Olympia. Así que para Derek, no es solo para ganar o proteger contra un campeonato, sino para cómo ganar, si ganas el show. Esto es algo que todos ustedes tienen que ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=451" target="_blank" class="timestamp">[07:31]</a> Nick Walker, redemption, redemption. If he wins this show, he shuts up the entire world. Bob Ciccarillo will be embarrassed for the rest of his life. Nick Walker storms the stage and says, yes, you guys forgot about me. I never left.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=472" target="_blank" class="timestamp">[07:52]</a> Now Nick Walker can play second, third, fourth, fifth. But everybody's going to be looking at his performance. After missing two Olympias, we want to see Nick Walker on stage. We want to see the physique. We want to see some of those massive poses.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=489" target="_blank" class="timestamp">[08:09]</a> He is under pressure. He knows it, but I think Nick Walker can handle it. Martin Fitzwater, fourth at the Olympia. Can he deliver a victory? Absolutely. He's got to surpass Nick Walker because he lost to him at New York and then he's got to attack Derek Lunsworth. Martin Fitzwater can make a name for himself if he wins this show.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=516" target="_blank" class="timestamp">[08:36]</a> And yes, he has shown he can do that. The wild cards. Good Evito. Man, some of his updates online. Insane. Michael Criso. He is massive. And William Bonek. He just won the Detroit Pro. He's the most experienced. I also want to mention Leandro Perez. He took second in Brazil. And it looks like he's going to deliver a powerful performance.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=544" target="_blank" class="timestamp">[09:04]</a> Pues ahí lo teníamos, eh. Good Vito, que desde luego que para la previa, para la oficialidad del Olimpia, para Terrique el Guindy, entraba desde luego en esa pareja o en ese hipotético primer callout a cinco, con Derek, por supuesto, que es el gran favorito, con Nick Walker, con Martin Fidwater, que tendrá su particular batalla. Y luego en ese siguiente escalón, que era donde realmente todos situábamos a Good Vito, estaba Good Vito, estaba Michael Cricio y estaba...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=568" target="_blank" class="timestamp">[09:28]</a> William Bonac, entre otros. Así que desde luego que es una baja muy sensible, una baja que veremos a ver lo que supone y que yo creo que también hasta cierto punto es buena precisamente para el que en su momento fue su competidor en el árbol de Brasil, de Leandro. Entonces puede ser que a lo mejor por ahí consiga aprovechar y entrar en ese primer calauto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=592" target="_blank" class="timestamp">[09:52]</a> Así que, como digo, noticia de última hora, noticia fresquita, noticia desde luego triste, obviamente, porque nos habría gustado ver un gutvito diferente al del Arnold de Brasil, que era su primera participación en la temporada. Seguramente habría llegado, sobre todo a juzgar por las imágenes, mucho más refinado, que era lo que se le pedía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CjDVWd0IUfE&t=611" target="_blank" class="timestamp">[10:11]</a> Y evidentemente esto implica para ver qué es lo que va a pasar de cara a la Olimpia, si va a competir antes de la cita, si va a lo mejor a esperar y salir ya en la Olimpia directamente, así que veremos a ver qué es lo que pasa con la actualidad de Good Vito. Así que como digo, dejadme en la caja de comentarios qué opináis y sobre todo estas predicciones de Terrique el Guindy como las veis. Dadle un fuerte like al vídeo, suscribíos al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 08/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
