@@ -1,0 +1,397 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 10/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">10/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Miguel Navarro</strong>: <a href='#video-R97mlG0yu-Q'>¡CAIKE DESVELA SU FÍSICO A UN MES...Y JOSEMA ES MUY SUPERIOR! Las IMÁGENES que le hacen FAVORITO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-R97mlG0yu-Q">
+            <h2>¡CAIKE DESVELA SU FÍSICO A UN MES...Y JOSEMA ES MUY SUPERIOR! Las IMÁGENES que le hacen FAVORITO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 10/05/2025 10:03</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q" target="_blank">
+                    <img src="https://i.ytimg.com/vi/R97mlG0yu-Q/hqdefault.jpg" alt="¡CAIKE DESVELA SU FÍSICO A UN MES...Y JOSEMA ES MUY SUPERIOR! Las IMÁGENES que le hacen FAVORITO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza los check-ins y físicos de Kaike, Root Diesel y Josema antes del Pittsburgh Pro de culturismo Classic Physique.
+El presentador compara sus formas y condiciones, destacando la superioridad de Josema en varios aspectos, especialmente en las poses de espalda.
+Se discuten las posibles debilidades de Kaike y Root Diesel, como la espalda de Kaike o el tamaño percibido de Root Diesel.
+Finalmente, el presentador posiciona a Josema como el gran favorito basándose en lo visto hasta el momento, a horas del evento.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Josema Emerge como Gran Favorito <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&amp;t=44" target="_blank">[00:44]</a></h3>
+
+<p>El presentador, basándose en los check-ins disponibles, afirma con contundencia que Josema es el competidor que llega en mejor forma. Destaca su condición, separación y densidad por encima de Kaike y Root Diesel.</p>
+
+<h3>Análisis del Físico de Root Diesel <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&amp;t=296" target="_blank">[04:56]</a></h3>
+
+<p>Se presenta el físico de Root Diesel justo antes del pesaje, reapareciendo tras un año. Se debate si ha ganado masa, pero el presentador y otros expertos lo ven pequeño en comparación con Kaike y Josema, lo que podría ser un factor en su contra.</p>
+
+<h3>Las Incógnitas de Kaike al Descubierto <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&amp;t=493" target="_blank">[08:13]</a></h3>
+
+<p>Se revelan imágenes de Kaike posando, resolviendo las dudas sobre su físico completo. Aunque algunas poses como el Side Chest destacan, el presentador señala carencias importantes, especialmente en la espalda, comparándolo desfavorablemente con Josema.</p>
+
+<h3>La Brecha Abismal en Poses de Espalda <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&amp;t=697" target="_blank">[11:37]</a></h3>
+
+<p>Comparando las poses de espalda de los tres atletas, el video subraya la clara superioridad de Josema. Se considera que la diferencia es "abismal" en el doble bíceps de espalda y que Josema no tiene rival en estas poses.</p>
+
+<h3>Predicción Final Antes de la Tarima <a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&amp;t=856" target="_blank">[14:16]</a></h3>
+
+<p>Horas antes del inicio del evento, el presentador reitera su opinión. Considera a Josema superior a Kaike y, aunque espera ver a Root Diesel en tarima, cree que Josema cotiza más al alza como favorito absoluto para el Pittsburgh Pro.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal y llegó la jornada del sábado. Llegó el día del Peaceful Pro y se han hecho públicas por parte de la NPC los check-ins tanto de Kaike como de Root Diesel. No se ha hecho oficial el check-in de Josema, todavía no tenemos esas imágenes completas, aunque ayer tuvimos ya imágenes en su canal de YouTube.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=24" target="_blank" class="timestamp">[00:24]</a> Y tengo que deciros una cosa, vamos a intentar volver a seguir en la senda esta de la objetividad subjetiva, ya sabéis evidentemente que todos los españoles tiramos hacia un lado y eso es una evidencia, pero yo creo que ya la cosa es un clamor, o sea, quiero decir, no solamente es por parte de España, estábamos hablando también de gente en Brasil alucinando con el físico de Josema, en Estados Unidos no se habla de otra cosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=44" target="_blank" class="timestamp">[00:44]</a> Y vamos a ver comparativas, sobre todo entre Kaike y Root Diesel, porque son los que más fáciles de comparar son entre los dos, porque tenemos los dos check-ins completos. Pero vamos a meter en la ecuación a Josema y lo que hemos visto de Josema. Insisto, siendo objetivo, es de largo, y lo vais a comprobar ahora, de largo, el más superior de los tres. De largo, en condición, en separación, me atrevería a decir que incluso en densidad. A mí me ha decepcionado bastante Kaike.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=72" target="_blank" class="timestamp">[01:12]</a> ...y lo vamos a ver y quiero que me dejéis en la caja de comentarios lo que opináis... ...insisto, estas imágenes también son antes, son previas... ...al pesaje que se produjo ayer por la noche, hora española... ...tarde, hora en Pittsburgh... ...pero claro, es que lo que hemos visto de Josema también era antes de eso... ...entonces están todos, todos prácticamente, que me voy a ahogar... ...todos en igualdad de condiciones... ...vamos a verlo todo, vamos a analizarlo todo... ...voy a intentar ser lo más informativo y objetivo posible...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=98" target="_blank" class="timestamp">[01:38]</a> Pero, insisto, una evidencia. Para mí, a día de hoy, antes de subirse a la tarima, a escasas, no sé, 10 horas aproximadamente del evento, para mí, Josema, a día de hoy, es el gran favorito, y lo puedo decir así de claro, el gran favorito para el Pittsburgh Pro. Luego veremos a ver qué pasa. Luego veremos a ver las puestas a punto, cómo van. Luego veremos a ver los jueces, qué determina, qué determina Steve Weiberger, que es el juez central. Pero viendo lo que yo he visto hoy, lo que vais a ver ahora...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=125" target="_blank" class="timestamp">[02:05]</a> Para mí no hay dudas. Para mí el que mejor llega, con diferencia de más, con diferencia, es Josema. Así que, como digo, vamos a pasar a analizar todas las imágenes. Por supuesto, no sin antes olvidadme ya que los conocéis, los códigos de descuento, código Iron Road en toda la web de VIP, para que tengáis ese 10% de descuento en toda la web. Además, aprovecharlo y daros la enhorabuena, bueno, daros las gracias más bien por el apoyo que le está dando al código en este último mes. Y, por supuesto, código Iron Road en toda la web de Agonjin con ese pack 3x2.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=154" target="_blank" class="timestamp">[02:34]</a> Del Drop Back In The Game. Como digo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=158" target="_blank" class="timestamp">[02:38]</a> Vamos a pasar a analizar todo lo que tenemos en materia Classic, luego traer otro contenido en materia de Open, que también hay bastantes cosas jugosas, pero al ver esto yo creo que he tenido que coger y parar un poco, porque desde luego que es lo más apremiante de todo, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=186" target="_blank" class="timestamp">[03:06]</a> donde quedaron muy conformes y muy a gusto y muy satisfechos con el feedback que le había dado Tyler, en este caso a Josema, habíamos escuchado y escuchamos en el vídeo de ayer, que por cierto también os doy las gracias por el apoyo del vídeo, estamos a tope con ese Peacebook Pro y lo estáis recompensando con vuestra atención y vuestros likes, así que desde aquí daros las gracias, y como digo, estas eran las imágenes que teníamos, son imágenes generalmente todas del backpost,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=212" target="_blank" class="timestamp">[03:32]</a> Expansión trasera, doble bíceps de espalda, pose clásica, etc. Las poses que al fin y al cabo puede ejecutar Josema dentro de la tarima de Pittsburgh en lo referente al back post. Hasta aquí todo correcto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=227" target="_blank" class="timestamp">[03:47]</a> Pero en este caso la web o mejor dicho el canal de YouTube de la NPC ha querido publicar los posings tanto de Kaike como de Rude Diesel. Vamos a ver primero el posings del que para mí era hasta hace bien poco y debería serlo por la trayectoria que tiene el gran favorito para el evento porque es el atleta que más nombre tiene y que más alto ha llegado en la categoría Clásic de los tres.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=251" target="_blank" class="timestamp">[04:11]</a> que es en este caso Ruth Diesel, que reaparece, reaparece, después de una temporada, de un año inactivo, supuestamente, supuestamente, con el debate o la duda de si ha metido o no ha metido más carne, yo creo que algo más ha metido, pero, pero, insisto, se le sigue viendo, o creo que se le va a seguir viendo pequeño, y esto ha sido un debate del que no solamente nos hemos mojado en España por una cuestión partidista, es que también lo hemos escuchado en Estados Unidos, leyendas...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=279" target="_blank" class="timestamp">[04:39]</a> Por ejemplo, si no hay mal lejos, leyendas como, en este caso, como Son Rey o como Boz y Cherilo, los dos han apuntado que cuando Ruddy se ponga al lado de Kaique, pues evidentemente al lado de Kaique y al lado de Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=296" target="_blank" class="timestamp">[04:56]</a> pues se le va a ver más pequeño que ellos dos y eso puede ser algo que vaya en su contra. Y este es el físico que tenemos de Rudd Diesel a tan solo, o mejor dicho, justo antes del pesaje y entiendo que justo antes de empezar a cargar. Tampoco sé hasta qué punto Rudd Diesel ha tenido que ir muy en cuenta con el tema de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=314" target="_blank" class="timestamp">[05:14]</a> del peso, tengo entendido por imágenes que hemos visto y no sé si las podré rescatar que Ruth Diesel ha tenido que medio colgarse de una no sé si una barra o algo de eso para poder dar la estatura creo que además las tengo por aquí ahora os las voy a enseñar mientras vemos el post y nos voy a enseñar esas imágenes de las que estamos hablando que son estas de aquí intentando colgarse para ganar algún centímetro extra</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=344" target="_blank" class="timestamp">[05:44]</a> Así que, como digo, tampoco creo que haya ido muy ligero en cuanto al límite de peso. Y este es el posting de Root Diesel. Insisto, no es ninguna locura a nivel de condición ni de separación. No lo es. Es cierto que ser físico seguramente será el físico más bonito de la tarima. Eso es algo de lo que habíamos hablado bastante. Que si van a tirar única y exclusivamente teniendo en cuenta la línea, pues evidentemente Root Diesel es el gran favorito. Esto lo hemos dicho siempre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=367" target="_blank" class="timestamp">[06:07]</a> Es un atleta que en el bombeo de frente del cuádriceps, y creo que se van a poder ver fotos aquí, bueno, imágenes aquí, creo que es quizá, bueno, quizá y sin el quizá, por qué no decirlo, superior al resto. Creo que en el tren inferior ese bombeo en relación con la cintura no lo tiene nadie. Esto también hay que decirlo, hay que decirlo todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=385" target="_blank" class="timestamp">[06:25]</a> Pero insisto en que creo que esas mejoras, presumibles mejoras de las que parecía que iba a hacer gala Ruth Diesel, yo lo voy dejando un poquito en el aire. Insisto, este físico se va a ver muy mejorado con respecto a esta versión. Se va a ver un físico muy mejorado de la tarima seguro cuando empiece a cargar y cuando empiece a hacer la puesta a punto su efecto. Pero como digo, estas son las imágenes de Ruth Diesel en ese posting, en esa estancia en la sede de los Manion.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=413" target="_blank" class="timestamp">[06:53]</a> Hay un debate también sobre si este post-in es el previo de aquella vez que fueron tanto Kaike como Root Diesel a esta serie hace unas semanas o es de hace poco tiempo. También es cierto que hay ese debate. ¿Por qué lo digo? Porque no hay imágenes de Root Diesel y de Kaike. No hay imágenes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=435" target="_blank" class="timestamp">[07:15]</a> ...de ellos en los últimos días pasando por aquí... ...porque de otras cosas se habrían cruzado con Josema, etcétera, etcétera... ...y no ha habido imágenes de ese tipo, solamente ha habido imágenes con Josema y demás... ...en el tema del POSI, entonces desconocemos si estas imágenes son de hace dos semanas... ...pero lo que realmente me interesa es ver el físico... ...y viendo el físico, insisto, vemos un físico con un poquito más de densidad... ...no mucho más, tampoco se espera de gran cosa...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=461" target="_blank" class="timestamp">[07:41]</a> En cuanto a condición y separación lejos del nivel, insisto, vamos a ver lo que nos vamos a encontrar en Tarima. Esto puede ser una aproximación y ya está. Y esta es la propuesta de Ruth Diesel, donde verá de la venta viaja y verá a este hombre, porque no habíamos visto nada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=476" target="_blank" class="timestamp">[07:56]</a> Y evidentemente dentro de no ver nada se especulaba con absolutamente de todo. Hemos visto gente que alucinaba y no para menos con la condición que lleva en el pectoral, la separación que lleva en los brazos, etc. Pero siempre decíamos, nos falta por ver a caeque completo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=493" target="_blank" class="timestamp">[08:13]</a> Nos falta por ver a Kaike posando. Nos falta por ver las piernas de Kaike. Nos falta por ver el bad post sin camiseta de tirantes de Kaike. Bueno, pues todas esas incógnitas sí que se han resuelto aquí. Otra cosa es lo que veamos en Tarim, insisto. No sé si estas imágenes son de esta misma semana o son de cuando la visita de Ruth Diesel con Kaike. No lo sé. Pero independientemente de lo que sea, la única pose ganadora que veo de Kaike es esta que tenemos aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=520" target="_blank" class="timestamp">[08:40]</a> El sidechess es de largo el que más me parece o más me sugestiona o más me gusta con respecto al resto de poses. Creo que es la que mejor le queda. Insisto, creo que estas imágenes...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=536" target="_blank" class="timestamp">[08:56]</a> en honor a la realidad, me atrevería a decirle que son de hace 2-3 semanas cuando fue la visita de Kaike y de Ruth Diesel a esta estancia, pero realmente me interesa para ver cómo va cada uno y sobre todo para ver a Kaike que era la gran incógnita, ¿vale? Y en referencia a eso, yo insisto, fijaros el backpost, para mí hay mucha distancia con respecto a Josema. En el backpost y en el backpost frontales, sinceramente, yo creo que da para competir con él, sinceramente, da para competir con él. De hecho,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=566" target="_blank" class="timestamp">[09:26]</a> He podido hacer una comparativa entre los dos, las tenéis ahí, con las diferentes poses. Si fijaros la diferencia que hay en cuanto a la línea de X en el relajado de frente, fijaros la diferencia que hay.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=581" target="_blank" class="timestamp">[09:41]</a> Insisto que a Keike todavía le queda por trabajar. Lo que habló de la espalda de Raúl Carrasco, que lo mataron en Brasil, bueno, yo creo que queda también bastante confirmado, que evidentemente Keike va a tener que hacer un trabajo bestial en eso. Aquí tenemos la pose de lateral y a mí personalmente, que queréis que os diga, pero a mí no me disgusta para nada la versión de Keike en esta pose.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=602" target="_blank" class="timestamp">[10:02]</a> La verdad. De hecho, me gusta incluso más que la de Ruff. Ahora bien, de espaldas se le nota una cintura menos hecha, por así decirlo, más, digamos, por hacer. Por eso digo que, insisto, que estas imágenes creo que son de hace dos o tres semanas, cuando se produjo esa visita tanto de Kaique como de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=622" target="_blank" class="timestamp">[10:22]</a> de Root Diesel a la sede de los Marios, pero nos permite ver por dónde va la cosa. Es decir, seguramente estos dos estén más o menos como están ahora, pero si están más apretados tienen menos tamaño, también os lo digo. Entonces, también hay que valorarlo todo. Y yo insisto que la espalda de Kaik es bastante deficiente con respecto ya no solamente a la de Root Diesel, sino luego, evidentemente,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=641" target="_blank" class="timestamp">[10:41]</a> a la de Josema y tenemos el doble dice de frente para mí mucha diferencia con respecto a Ruf o sea creo que es público y notorio y yo creo que sobre todo el vídeo evidencia que Kaike igual va con un hype bastante loco cuando en realidad bueno igual quizá la cosa no sea para tanto si metemos en la ecuación a Josema</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=664" target="_blank" class="timestamp">[11:04]</a> Si metemos en esta ecuación a Josema en las pocas poses en las que estos tres más o menos los hemos visto, insisto, Josema, estas imágenes son de esta última semana. También os digo, imágenes de esta última semana con un vuelo transoceánico de por medio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=677" target="_blank" class="timestamp">[11:17]</a> con un pequeño rebote o crisis, o llamémoslo como queramos, el lunes anterior por el tema de la dana donde se subía 106 kilos, etc. Depletado, porque evidentemente está la semana de puesta a punto, quiero decir que a pesar de que las otras dos versiones sean de hace tres semanas aproximadamente, la versión de Josema tampoco es ni la definitiva ni la mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=697" target="_blank" class="timestamp">[11:37]</a> Pero es evidente que en las poses de espaldas, y también la gente dice, bueno, es que solamente hay una pose de espaldas. Mentira. Porque dentro de la primera ronda tenemos el semi-relajado de espaldas, que está también en cuenta. No es una expansión en realidad, pero bueno, el semi-relajado de espaldas, como queramos llamar, está también en cuenta. Entonces, aquí la tenemos, no en comparativa, pero sí en la ronda de poses. Y aquí, en el doble bíceps de espaldas, yo creo que la diferencia, en fin...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=725" target="_blank" class="timestamp">[12:05]</a> me atrevería a decir que es abismal. Entonces, pues, como podéis comprobar, yo creo que Josema, la verdad es que llega en un punto exageradamente bueno. ¿Vale? Más imágenes que quiero mostrar, porque quiero un poco ya acercarnos más a la actualidad, ¿no? A lo que estamos viendo últimamente. Estas imágenes, estas imágenes que os voy a enseñar, ¿vale? Son imágenes de Kaike,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=753" target="_blank" class="timestamp">[12:33]</a> de hace muy poco tiempo. Aquí tenemos a Kaike haciendo esta pose, una pose preferida clásica, si lo queremos llamar así, y yo insisto en que a pesar de que en el tren inferior de frente es superior a Josema,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=775" target="_blank" class="timestamp">[12:55]</a> Yo tengo que ver esa cintura al lado de la de Josema, lo digo sinceramente, por supuesto tengo que ver la condición y la separación y la dureza con la que va a salir Josema, que yo no lo tengo tan claro en el tema de Kaique. De hecho Kaique ha subido más imágenes porque se ve que ya está su entrenador en Pittsburgh, aquí lo tenéis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=795" target="_blank" class="timestamp">[13:15]</a> Y yo tengo que decir desde mi punto de vista que yo veo a Kaike por debajo de Josema en estos momentos. Voy a la tarima, insisto, todo esto son especulaciones hasta que se llega a la tarima. Pero yo insisto en que yo a día de hoy, si esto fuera la bolsa, las acciones de Josema cotizan al alza de una manera espectacular por encima del resto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=813" target="_blank" class="timestamp">[13:33]</a> Luego tengo que hablar también, evidentemente, de Road Diesel, que algo también ha subido en los últimos días. Lo digo sobre todo teniendo en cuenta que el post-it que hemos visto probablemente sea de la visita que hicieron hace semanas, en este caso, a la sede de los Marion. Estas serían las últimas imágenes que tenemos de Road Diesel.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=829" target="_blank" class="timestamp">[13:49]</a> Yo insisto, en cuanto a línea, nada que decir, pero vuelvo a repetir, no solamente juega a la base de la línea aquí, y lo hemos visto a la hora de juzgar en muchos campeonatos, donde por ejemplo, sin ir más lejos, en el California la semana pasada, había un atleta con más línea, pero un atleta que lo superaba en otros aspectos y ganó, como en el caso de Mustafa sobre Germán. Aquí tres cuartas de lo mismo, vemos un atleta con una línea bestial, buen punto de condición, buena separación, pero es que lo que no es normal es lo que acabamos de ver de Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=856" target="_blank" class="timestamp">[14:16]</a> Entonces, por eso digo que vamos a ver qué es lo que ocurre y vamos a ver cómo llega cada uno. Pero para mí, en estos momentos, e intentando ser lo más objetivo posible y sin intentar que se note demasiado el apoyo y el cariño que le tenemos a Josema, yo qué queréis que os diga. Vamos a dejarlo en que para mí no va la zaga de ninguno de los otros dos. Para mí es superior a Kaike, eso sí lo digo. Y en el caso de Ruth Diesel yo tengo que verlo, pero para mí en estos momentos cotiza más al alza. Para mí, por ejemplo, este más post de Ruth Diesel...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=885" target="_blank" class="timestamp">[14:45]</a> que supuestamente desde hace un día, imagino que también antes del pesaje y antes de cargar y antes de todo, yo insisto en que este back post para mí se me queda pequeño al lado de Josema. Entonces, vuelvo a repetir, para mí en las poses de espalda no hay rival posible. No hay rival posible para Josema. Y luego en las poses de frente yo creo que Josema puede competir. Evidentemente se le podrá ver con menor nivel a lo mejor con respecto a Arnud Diesel, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=911" target="_blank" class="timestamp">[15:11]</a> Insisto en que esto hay que competir y hay que verlo. Así que como digo chicos y chicas, esta es la última hora de lo que tenemos en Pittsburgh. De lo que tenemos en un evento que va a empezar en tan solo 7 horas. A las 7 horas española empezaremos con ese directo. Empezaremos seguramente un poquito antes, 6, 6 y media con la previa. Y a las 7 empezarán el pre-jacking de las categorías profesionales masculinas. Así que como digo, estar muy atentos porque lo que se viene es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=939" target="_blank" class="timestamp">[15:39]</a> tremendamente espectacular. Y por supuesto, dejadme en la caja de comentarios qué opináis de todo esto. Insisto, creo que las imágenes, creo que todas las imágenes son las de tanto las de Kaike como las de Ruth Diesel. Yo me atrevería a decir que son de hace dos o tres semanas. De la visita que tuvieron, o hace un mes, de la visita que tuvieron</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=R97mlG0yu-Q&t=957" target="_blank" class="timestamp">[15:57]</a> a la sede de los Manion evidentemente pero nos permite ya vislumbrar sobre todo en el caso de Kaique que era el que más se tapaba el que menos quería mostrar su físico por dónde van los tiros y si el hype quizás está siendo demasiado excesivo así que dejadme en la caja de comentarios si opináis fuerte like al vídeo suscribíos al canal y como siempre digo chicos y chicas siempre a más</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 10/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
