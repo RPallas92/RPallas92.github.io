@@ -1,0 +1,390 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 11/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">11/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Victor Valdivia</strong>: <a href='#video-dtiryisJO9o'>FINAL INCREÍBLE CLASSIC PHYSIQUE JOSEMA VS RUFF DIESEL - Victor Valdivia</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-dtiryisJO9o">
+            <h2>FINAL INCREÍBLE CLASSIC PHYSIQUE JOSEMA VS RUFF DIESEL - Victor Valdivia</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Victor Valdivia</span>
+                <span class="date">Publicado: 11/05/2025 01:47</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=dtiryisJO9o" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=dtiryisJO9o" target="_blank">
+                    <img src="https://i.ytimg.com/vi/dtiryisJO9o/hqdefault.jpg" alt="FINAL INCREÍBLE CLASSIC PHYSIQUE JOSEMA VS RUFF DIESEL - Victor Valdivia" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza una competición de culturismo Classic Physique, centrándose en la comparación y desempeño de varios competidores como Josema, Rube Diesel y Kaike.
+Se comentan los físicos, las poses y las rutinas individuales, destacando la línea estética y la condición de cada atleta.
+Brevemente, se interrumpe la narración para promocionar la posibilidad de obtener una titulación oficial para ser asesor online en fitness.
+Finalmente, se anuncia el podio, con Josema quedando segundo y Rube Diesel llevándose el primer puesto, analizando sus puntos fuertes.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Análisis de Físicos y Líneas Estéticas <a href="https://www.youtube.com/watch?v=dtiryisJO9o&amp;t=32" target="_blank">[00:32]</a></h3>
+
+<p>El video comienza analizando a los competidores, destacando la decepción con el físico de Kaike para Classic y comparando la condición de Josema con la línea más armoniosa de Rube Diesel. Se debate sobre qué tipo de físico se valora más en la categoría.</p>
+
+<h3>La Oportunidad del Asesoramiento Online <a href="https://www.youtube.com/watch?v=dtiryisJO9o&amp;t=113" target="_blank">[01:53]</a></h3>
+
+<p>El presentador hace una pausa en el análisis para hablar de su trabajo y la posibilidad de trabajar desde cualquier parte del mundo como asesor online. Explica que el primer paso es obtener una titulación oficial como el CPE en un año y anima a usar ese tiempo para crecer en redes sociales.</p>
+
+<h3>Inicio de las Rutinas Individuales <a href="https://www.youtube.com/watch?v=dtiryisJO9o&amp;t=347" target="_blank">[05:47]</a></h3>
+
+<p>Comienzan las rutinas individuales de los competidores del Top 4. Se muestra la expectativa por la rutina de Josema, analizando sus poses favoritas y destacando su extrema definición.</p>
+
+<h3>La Rutina Épica de Rube Diesel <a href="https://www.youtube.com/watch?v=dtiryisJO9o&amp;t=600" target="_blank">[10:00]</a></h3>
+
+<p>Llega el turno de la rutina individual de Rube Diesel, muy esperada por su capacidad para la pose estética. El presentador reacciona con asombro ante su dominio escénico y la calidad de sus movimientos, considerándola espectacular.</p>
+
+<h3>El Veredicto Final: Resultados del Podio <a href="https://www.youtube.com/watch?v=dtiryisJO9o&amp;t=907" target="_blank">[15:07]</a></h3>
+
+<p>Se anuncian los resultados de la competición, creando gran expectativa. Finalmente, Josema queda en segundo lugar, siendo Rube Diesel el ganador. Se comenta el potencial de Rube Diesel de cara a futuras competiciones como el Mr. Olympia.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=5" target="_blank" class="timestamp">[00:05]</a> Es que va trillao como nadie. Va trillao como nadie. Es que este tío ya se me pone a hacer las suyas, tronco. Empieza con las suyas y no se puede ver más estético. Es que saco los prohibidos. Claro, la condición de Josema es lo que hace que se te vayan los ojos. Pero luego el físico de Rundis el segundo. Van a decir el segundo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=32" target="_blank" class="timestamp">[00:32]</a> Ahí lo tenemos, chicos. La decepción de Kaike. Quedó chiquito. Es que la verdad que tengo que seros honestos, eh. Kaike, la verdad que... No... No le estoy viendo para nada con un físico de Classic, eh. O sea, le veo como un abdomen muy recto. Las dorsales arriba. Sí que luego al final... Va súper tellado, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=62" target="_blank" class="timestamp">[01:02]</a> Pero no veo esa línea estética de Classic, tío. Ostras, casi Josema. Ahí le tenemos. ¿Cuál es vuestra opinión de Kaike, chavales? ¿Creéis que realmente tiene la línea de Classic?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=92" target="_blank" class="timestamp">[01:32]</a> Yo sí que pienso que al final va a llegar a ser un físico muy espectacular, pero no sé si va... A lo mejor, bueno, son unos dorsales más trabajados. Tengo que decir, chavales, que hay una de las cosas que más me gustan de mi trabajo y es al final poder viajar y poder trabajar desde cualquier parte del mundo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=113" target="_blank" class="timestamp">[01:53]</a> Y esto no es una cosa que solamente puedas hacer dedicándote a lo que yo me dedico, sino que dedicándote al asesoramiento online. Es un trabajo que te va a permitir poder trabajar desde cualquier sitio y aparte con una flexibilidad brutal. Algunos se os preguntarán, vale Víctor, ¿y qué es lo que tengo que hacer? ¿Cuál es el primer paso? Pues el primer paso es tener la titulación oficial. Y a día de hoy la vía más rápida es con el CPE, que es sacándote el certificado, que esto lo puedes hacer en cuestión de un año, es 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=138" target="_blank" class="timestamp">[02:18]</a> en online y es una de las mejores decisiones que puedes tomar si te gusta el fitness y el culturismo y quieres generar ingresos con ello básicamente porque durante todo ese año en el que tú estés estudiando para sacártelo vas a dedicarlo también a crecer en redes y el día de mañana pues seguramente vayas a poder tener un muy buen inicio dentro de este mundillo y vas a poder tener un trabajo que a día de hoy para mí es de los mejores sí que es cierto que tienes que hacerte un hueco</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=161" target="_blank" class="timestamp">[02:41]</a> Pero por eso, en ese año, es lo que vas a tratar de hacer. Entonces no tiene mucha más historia. Os dejo un link en la descripción donde vais a poder acceder a un dosier de 20 páginas de información respecto al CPE. Y ya, si queréis, podéis contactar con FGeneration y comenzáis con ello. Os dejo con el video. Ok, vamos allá. Top 4. La cosa está bien, pero que bien tensa. José Marrúb Diesel. Ahí tenemos. Pro Laspret.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=198" target="_blank" class="timestamp">[03:18]</a> Es que lo que están comentando es que al final las formas que tiene Ruff con los cuádrices bombeados hacia los lados hace que se vea un físico más armonioso. Está la cosa apretada. Están hablando de que al final es muy impresionante la condición de Josema y que eso es lo que hace que al final los glúteos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=228" target="_blank" class="timestamp">[03:48]</a> Estaba viendo que este hijo ha subido toda la nalga por arriba. Y al final, pues claro, la condición de Josema es lo que hace que se te vayan los ojos. Pero luego el físico de Rub Diesel es más armonioso para lo que es classic físico, ¿no? Digamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=262" target="_blank" class="timestamp">[04:22]</a> Es que la verdad que no vi algo tan apretado, tío. Y al final son físicos distintos, ¿no? Entonces... Uy, tío, cómo también se le ven a la espalda a Rube Deezer, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=289" target="_blank" class="timestamp">[04:49]</a> Pero, tío, los femorales de Josema, madre mía, tío. Qué barbaridad. Es que está la cosa en el aire, tío. Es que me quedo analizando bien y al final es lo que comentan, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=318" target="_blank" class="timestamp">[05:18]</a> Que va a ser un poco ya más lo que vayan buscando los jueces, ¿no? O sea, lo que valoren más. Pues... Van con las individuales de Classic. Vamos a ver, porque la rutina de poses no sé si lo van a hacer los seis mejores o... La verdad que tiene un fisicazo este tío, ¿eh? Muy buena línea.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=347" target="_blank" class="timestamp">[05:47]</a> Tengo curiosidad por la rutina individual de Josema. Ahí lo vamos. Nuestro hombre Kuk. Vamos a ver qué es lo que tiene que ofrecer en el día de hoy. Rutina individual.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=379" target="_blank" class="timestamp">[06:19]</a> Es que al final se nota que falta llenar, tío. Pero es que daos cuenta que si está 5 o 6 kilos por debajo de su peso es que solo puede llenar de un show para otro, ¿sabes? En plan, con lo definido que está. Pero sí que es cierto que lo que no me acabo de gustar es la espalda, tío. O sea, es que se le parte aquí por la mitad. No me gusta nada, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=409" target="_blank" class="timestamp">[06:49]</a> Por lo demás sí que veo... Sí que la veo bastante bien. ¡Ostras! ¡Osema, chavales! Esto... Estaba pillando, mirad, abriendo la ventana. Vamos a ver, rutina individual. A ver cuál es la que se marca. Vamos a ello.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=439" target="_blank" class="timestamp">[07:19]</a> Clavando la pierna. Cómo le gusta esta pose. Cómo le gusta. Y qué bien le queda. Ahí tirando de oblicuo, cargando el side triceps. Yo pensaba que iba a parar el side chest, pero... Es que va trillao como nadie. Va trillao como nadie.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=468" target="_blank" class="timestamp">[07:48]</a> A ver, sin duda es más espectacular que Rook Diesel. O sea, eso lo tenemos claro. Saber esta relación tamaño-sequedad es algo suyo. Bueno, señores, prepárense porque en nada sale Rook Diesel. Vamos a ver qué nos trae. También os digo que la rutina de poses tampoco están durando tanto, ¿sabes? No están dejando ahí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=499" target="_blank" class="timestamp">[08:19]</a> Chiste sería que no ganase el Nukes. Tío, como se lo lleve Nick. Ahora mismo, la verdad, por cierto, muy buen físico el del tipo este. La verdad que ha sido una sorpresa en el día de hoy. Los quadriceps son bien locos, chavales. Lo único que va con los ojos muy abiertos, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=526" target="_blank" class="timestamp">[08:46]</a> Es que, tío, parece uno de estos... No es un mapache, tío. ¿Cómo son...? Hay un animal, tío, que va así con los ojos muy abiertos. ¿Cuál es? ¿Un hurón? No sé yo si es un hurón. El lémur. Puede ser el lémur, ¿eh? El de verdad. El de... El de Malagascar. ¿Es tal cual? El suricato. No sé, pero... Joder. Se parece al de Malagascar, es verdad, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=557" target="_blank" class="timestamp">[09:17]</a> Bueno, ahí tenemos a Anton, chavales. 21 añitos. Pues es que es lo que os digo, tío. No sé si le veo más pequeño que la otra vez que salió. O es que al salir con los big boys se me hace pequeño. Que yo creo que va a ser eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=598" target="_blank" class="timestamp">[09:58]</a> Y luego que a lo mejor las luces no son unas luces tan espectaculares. Que no hemos dicho nada. ¿Qué os han parecido las luces de este evento? Bueno. Luego contéstenme a eso. Rube Diesel. It's time. Vamos a ver las combinaciones. Este tío lo sabe. Que la gente espera. Una rutina de poses épica.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=638" target="_blank" class="timestamp">[10:38]</a> la espalda tío es que este tío ya se me pone a hacer se me pone a hacer las suyas tronco empieza con las suyas y no se puede ver más estético mira eso mira eso dijo en las reglamentarias puede que te me acerques pero aquí ya sé que no va a haber chance mira eso</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=671" target="_blank" class="timestamp">[11:11]</a> ¡Bah! Maldita sea. Es que sacó los prohibidos. Sacó los de... Los de la caja fuerte. Ojo, la verdad que tengo una expectación por ver qué acaba pasando, tío. Es que claro, tú ves la rutina individual de Josema y ves la de este tío... Mira eso, tío. Mira eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=706" target="_blank" class="timestamp">[11:46]</a> No, pero si es que... Ha hecho la pose de las bolas de dragón, tío. Sí, que no. Tío, se siente clásico. Este no se siente clásico, chavales. El se siente clásico es cuando aparece...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=724" target="_blank" class="timestamp">[12:04]</a> Un pelado que no posa bien, pero se hace el legendario en el escenario, ¿sabes? Entonces ahí ya sí que ese es un se siente estético. Pero Rude Diesel no procedía porque... Pero no me jodas, tío. ¿Y los 31 se hacen aquí, tío? Pero... Pero esto que estaban de petardos ahí en... Estaban de petardos y dijeron ¿Quién podemos traer para dar los premios de Classic?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=750" target="_blank" class="timestamp">[12:30]</a> Tráeme a los Trentwins. Madre mía, tu zip y zape me traen aquí. Esto es alucinante. Pero se equivocaron de decir, oye, oye, oye. Pero si a estos no les hemos invitado. Que a estos no había que dejarlos pasar. No que pasasen. Si es que no me hacéis caso. Que no había que dejarlos pasar. Bueno, chavales, que estamos aquí con un postdown. Que estamos de jajás y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=782" target="_blank" class="timestamp">[13:02]</a> Mira, cuidadito, eh, Kaike, que se lo lleva para... para el lateral a Ruth Diesel. Josema le sigue. A la que Kaike va partidísimo, tío. Pues después de esto, chavales, tenemos la entrega de premios. Y luego creo que van a ser las rutinas individuales de los Open y entrega de premios.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=812" target="_blank" class="timestamp">[13:32]</a> Ahora sí. Vamos allá, chicos. Es el momento. Lo que sí que tengo claro es que Rube Diesel va a estar ahí dando batalla en el top este año en el Olimpia. Casi Josema, chavales. Finalmente. ¿Que ha sido cuarto puesto o quinto? Uy, este c*** está grande, eh. Está grande.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=842" target="_blank" class="timestamp">[14:02]</a> Tiene un poco, ¿no? Como la cara del malo de los Minions, ¿no? Creo que era. Vale, vamos con el tercer puesto. Y a partir de aquí... Saldremos de dudas. El momento de la verdad. Espérate, que si no está aquí el micro no queda bien la cosa, macho. Ahí. Se va un poquito el micro. Sí, José Mastay en el lateral derecho repensativo. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=877" target="_blank" class="timestamp">[14:37]</a> El tipo de Madagascar. Tercer puesto. Merecido. ¿No? ¿Cómo? ¿El Bombas? ¿El Bombas? ¡Vamos allá! ¡Madre mía! ¡Cómo le dé el primer puesto booster a Josema!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=907" target="_blank" class="timestamp">[15:07]</a> Le va a dar los trucos. Vamos allá, chavales. Se lo lleva Josema. El segundo. Van a decir el segundo. Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=934" target="_blank" class="timestamp">[15:34]</a> Segundo puesto, Josema, chavales. Se lo lleva el Ruffles. Le ha puesto contra las cuerdas. Eso, vamos, segurísimo. Fíjate. Le ha salido la sonrisa a los 10 segundos. Estaba cagao. A ver. Qué bonito, Chris Bamster dándole el pase a los limpia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=963" target="_blank" class="timestamp">[16:03]</a> A Rob Diesel. A ver. Esto quiero verlo yo. Nos cuenta que eran los... Los dos rivales. Pues nada, chavales. Otro hueso duro de roer. Pero Izebub, ¿dónde está?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=994" target="_blank" class="timestamp">[16:34]</a> Pero no estaba Cebun por ahí, chavales. Si le he visto entrando, ¿no? O me falla la vista. Ah, Cebun se lo dio a Josema, pero... Pero eso no lo apuntaron. Hombre, al final Josema quedó en top 6. Ruth Diesel ha quedado por delante. Y Ruth Diesel todavía tiene mejora. De aquí a la Olimpia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=1025" target="_blank" class="timestamp">[17:05]</a> O sea que... Cuidadito. Cuidadito que la batalla va a estar ahí. Pues no sé si Cosema va a hacer algún evento más, la verdad. ¿Alguien tiene algo de info?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=1045" target="_blank" class="timestamp">[17:25]</a> No, yo no pienso que sea robo, ni mucho menos. O sea, al final ambos competidores tendrían un nivelón. Pero es que Rube Diesel es que tiene una línea, tío. Mira eso. Es que mira, mira. Es que tiene una línea, macho. Y luego le ves en la individual que es tremendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=dtiryisJO9o&t=1072" target="_blank" class="timestamp">[17:52]</a> Es que la gente, claro, la gente no se da cuenta, pero que este tío es el... De los únicos dos que han estado ahí detrás de Cebu, quitando a Soberfield el año pasado. Rube Diesel y Ramón Dino. O sea, estás hablando del máximo nivel. Se me cayó José, me ha quedado el nuque. Fudo con el nuque, chavales.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 11/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
