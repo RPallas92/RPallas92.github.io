@@ -1,0 +1,411 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 12/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">12/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Miguel Navarro</strong>: <a href='#video-TSWpqyVxXgM'>¡JOSEMA y WALKER, los GRANDES VENCEDORES del PITTSBURGH PRO! La CRÍTICA los ENSALZA y CBUM ALUCINA</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-TSWpqyVxXgM">
+            <h2>¡JOSEMA y WALKER, los GRANDES VENCEDORES del PITTSBURGH PRO! La CRÍTICA los ENSALZA y CBUM ALUCINA</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 12/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM" target="_blank">
+                    <img src="https://i.ytimg.com/vi/TSWpqyVxXgM/hqdefault.jpg" alt="¡JOSEMA y WALKER, los GRANDES VENCEDORES del PITTSBURGH PRO! La CRÍTICA los ENSALZA y CBUM ALUCINA" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza las repercusiones y los "vencedores morales" del Pittsburgh Pro de culturismo, destacando a Josema y Nick Walker.
+Se discuten las opiniones de figuras relevantes como Chris Bumstead y comentaristas brasileños sobre las actuaciones.
+Se enfatiza el impacto generado por Josema a nivel mundial y la inesperada gran forma de Nick Walker, pese a no ganar.
+El presentador adelanta una semana intensa de contenidos sobre culturismo en el canal.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Los Vencedores Morales del Pittsburgh Pro <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&amp;t=32" target="_blank">[00:32]</a></h3>
+
+<p>El presentador introduce el tema principal: el análisis de los resultados del Pittsburgh Pro y cómo Josema y Nick Walker, pese a no ganar, salen muy reforzados de la competición por el impacto generado.
+Se adelanta que se comentarán reacciones de figuras como Chris Bumsted y opiniones de Brasil.
+La semana se presenta intensa con programas y entrevistas.</p>
+
+<h3>Josema: Impacto Mundial Más Allá del Segundo Puesto <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&amp;t=222" target="_blank">[03:42]</a></h3>
+
+<p>Se analiza la actuación de Josema en Classic Physique, quedando segundo pero logrando su objetivo de "pegar un puñetazo encima de la mesa".
+Se destaca su excelente condición, densidad y separación, reconocidas incluso en Brasil.
+El impacto generado a nivel mundial se considera superior a su sexto puesto en el Mr. Olympia anterior.</p>
+
+<h3>Reacciones Sorprendidas desde Brasil <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&amp;t=325" target="_blank">[05:25]</a></h3>
+
+<p>Se reproduce un audio de comentaristas brasileños alabando la condición y detallamiento de Josema tras verlo en la presentación.
+Figuras importantes del culturismo brasileño expresan su asombro y elogian el físico del español.
+Esto subraya el gran impacto internacional que Josema ha conseguido.</p>
+
+<h3>Nick Walker Contra Todo Pronóstico <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&amp;t=512" target="_blank">[08:32]</a></h3>
+
+<p>El presentador entona el "mea culpa" por no esperar una gran versión de Nick Walker, pero reconoce que superó expectativas y puso en apuros a Derek Lunsford.
+Se discute que, aunque Sunray cree que estaba igual que en el New York Pro, el presentador y otros lo vieron mejor.
+Se adelanta la opinión de Chris Bumstead, que se sintió inspirado por la actuación de Nick.</p>
+
+<h3>La Inspiradora Derrota de Nick Walker según Chris Bumstead <a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&amp;t=580" target="_blank">[09:40]</a></h3>
+
+<p>Se escucha a Chris Bumstead analizar la batalla entre Nick Walker y Derek Lunsford, confesando su indecisión sobre el ganador.
+CBum expresa la profunda inspiración que sintió al ver la decepción de Nick, destacando la vulnerabilidad y la energía que surge de una derrota así.
+Considera que esa energía puede ser un motor poderoso para mejorar y un gran paso hacia el futuro, algo raro y admirable en el deporte.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo del canal. Jornada de lunes en una semana que se prevé intensa dentro del mundo del culturismo. Estamos justo en la semana después del Pittsburgh Pro y arrancando ya esa peak week de cara al New York Pro, donde tendremos a Ángel Calderón y también a Josema, entre otros. Por supuesto, daros las gracias por el apoyo al canal en este fin de semana. Ha sido un fin de semana bestial en cuanto a ese apoyo, así que desde luego daros las gracias. Pero esto no acaba aquí. Esto solamente ha hecho nada más que empezar, porque dejamos el Pittsburgh Pro</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=32" target="_blank" class="timestamp">[00:32]</a> De hecho, vamos a hablar precisamente de eso, de la repercusión que se ha generado y de los grandes vencedores morales, que a lo mejor, evidentemente, a ellos les habría gustado también ser vencedores en tarima, pero desde luego son vencedores morales por cómo salen de reforzados de cara, no solamente al New York Pro, sino de cara a lo que queda de temporada y en ese caso son tanto José Mike Classic como...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=53" target="_blank" class="timestamp">[00:53]</a> Nick Walker en el Open, vamos a hablar de eso, vamos a hablar de la repercusión de lo que se ha generado, ojo porque ha hablado Chris Bamsted que no suele hablar de este tipo de cosas, ha analizado sobre todo la categoría Open, me sorprende que no se haya metido en el Classic y también tenemos ahí obviamente palabras de sonreo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=69" target="_blank" class="timestamp">[01:09]</a> Palabras de Brasil alabando a Josema. Así que todo ello lo vamos a analizar, insisto, en una semana que se prevé súper intensa. Tenemos esta noche el programa de Iron Road a las 11 de la noche. También me habéis dicho, ¿qué pasa con las chicas? No diste las chicas. Tranquilos. Las chicas lo quise dejar para el lunes porque está Alexis y va a comentar, por supuesto, la participación de Sandra Colorado, de Rupetizco, de Ivana Escándar. Bueno, no es española, pero casi, ¿no? Como si fuera...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=93" target="_blank" class="timestamp">[01:33]</a> También española, la aleta bikini de Fran Espín, Maurín Blanquisco. Todo eso lo vamos a analizar, como digo, esta noche a las 11 de la noche. El martes viene Raúl, el jueves viene Fran Espín. Esta semana va a ser, insisto, auténticamente brutal en el canal. Así que ojalá que estéis dando el mismo apoyo que me habéis dado este fin de semana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=114" target="_blank" class="timestamp">[01:54]</a> Vamos a pasar a analizar absolutamente todo lo que tenemos por delante, que no es poco. Por supuesto, recordad los códigos. Código de descuento Iron Road en toda la web de Big. También os tengo que dar las gracias por el apoyo que le estáis dando al código de Big. Y por supuesto, también recordaros que Big está esta semana con este estreno. El estreno de la proteína, de la mejor proteína del mercado en cuanto al valor de la proteína. 91% de proteína ISO.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=140" target="_blank" class="timestamp">[02:20]</a> en un bote de 750 gramos, pequeñito, muy bueno para, por ejemplo, si tenéis que hacer algún tipo de viaje, también lo podéis transportar, es espectacular. Sabor piruleta, el mítico sabor de fiesta. Así que, como digo, aprovechadlo porque está súper rebajado, creo que está en torno a los 30 euros, 750 gramos de proteína y con el código Iron Road tendréis un 10% de descuento. Entonces, como digo, aprovechad que están justo sacando este nuevo sabor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=168" target="_blank" class="timestamp">[02:48]</a> Yo ya lo he pedido, no quiero perdérmelo. Así que como digo, darle para adelante en este caso con Big y con el sabor a piruleta de fiesta porque desde luego que nos va a defraudar. Y por supuesto, como nos va a defraudar, el 10% de descuento código Iron Road en toda la web de Agonjin con ese pack de 3x2 en todo el drop de back in the game. Ojo al drop back in the game porque yo tengo ya varias camisetas que me llegaron la semana pasada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=193" target="_blank" class="timestamp">[03:13]</a> Y son brutales, de hecho la blanca en algún momento en Instagram a lo mejor me habéis visto con ella, la de Agonjin, en fin, como digo, aprovechad porque no os va a dejar a nadie indiferentes. Y como digo, vamos a pasar a analizar todo lo que ha dado de sí, ¿no? Esta repercusión o estas palabras, ¿no? De la gente, en este caso en el Pittsburgh Pro, porque a pesar de que obviamente, y esta fue una de las imágenes de la jornada, Josema quedando segundo por detrás de Ruth Diesel,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=222" target="_blank" class="timestamp">[03:42]</a> Ha salido muy reforzado. Al fin y al cabo, el objetivo principal de este periplo en Estados Unidos, evidentemente, es ganar. Esto está claro. No va precisamente a darse un paseo a Estados Unidos, sino que va con el objetivo de conseguir la victoria. No pudo ser. Es cierto que el atleta que le ha ganado no es precisamente un 2 nadie. Estamos hablando de uno de los mejores Classic Physique de la historia. Probablemente en cuanto a la línea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=246" target="_blank" class="timestamp">[04:06]</a> Quizá el mejor Clásico de la historia en algo en lo que él ya no puede competir, porque la línea es la que tiene, se quiere decir, él ya no puede hacer grandes mejoras en eso. Precisamente donde sí que puede meterle mejoras y ya depende más de él y de su preparador es precisamente en lo que ha sido excelso y en lo que vamos a escuchar que destaca también Brasil. No solamente que lo destaquemos aquí en España, sino también en Brasil, que es esa condición, esa densidad, esa separación...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=270" target="_blank" class="timestamp">[04:30]</a> Entonces, todo eso evidentemente lo ha trabajado y lo ha demostrado en tarima. Yo creo que el objetivo principal, y recuerdo la previa hace unas semanas ya, bastantes semanas, cuando José me anunció el tema del PISUM PRO, el objetivo principal era pegar un puñetazo encima de la mesa y decir aquí estoy yo. Yo creo que ese objetivo se ha conseguido y no es que se haya conseguido para nosotros, se ha conseguido para el mundo. Y eso es precisamente lo que vengo hoy a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=297" target="_blank" class="timestamp">[04:57]</a> enseñaros esa repercusión precisamente en Brasil que no digo que sea ni mucho menos territorio hostil pero me refiero es un sitio muy importante es un mercado muy importante donde obviamente generar un impacto tiene una trascendencia brutal donde precisamente había un competidor en este caso brasileño que era Kaike que venía con mucha proyección así que como digo vamos a escuchar lo que opinaron los brasileños nada más para Josema porque es cuanto menos sintomático de que el golpe encima de la mesa se ha dado y con crece vamos a escucharlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=325" target="_blank" class="timestamp">[05:25]</a> Ahora que voy a hablar con ustedes, ¿tá? Está viendo la largura. Ninguém consegue pegar este cara en el detallamiento, en la densidad. Impresionante la edad. Ahora estoy impresionado por el José. ¡Vale a ver! ¡Vale a ver! ¡Vai ver lo que estoy hablando! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver lo que estoy hablando! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale a ver! ¡Vale</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=355" target="_blank" class="timestamp">[05:55]</a> y yo voy a hablar con ustedes, este cara personalmente es asustador</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=371" target="_blank" class="timestamp">[06:11]</a> es asustadona. Y detalle, es un hombre que crece en la pose, porque de ropa parece un niño. Pues esta era la opinión de los brasileños viendo a Josema en la presentación, porque este es el reel de la presentación, de hecho lo tenéis en el canal de Max Titanium, y como digo, me sorprende también bastante ver a Zancanelli, que es un tipo que ha quedado bastante bien en el Olympia del año pasado, evidentemente por detrás de Josema, pero muy bien, en una muy buena clasificación, diciendo estoy muy impresionado con Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=399" target="_blank" class="timestamp">[06:39]</a> Tengo que decir, y lo tendremos esta semana porque yo he hablado por privado con Raúl, que no solamente es el público brasileño, que en Estados Unidos gente, por ejemplo, como Neil Hill, como por ejemplo, sin ir más lejos, Stefan, gente que estaba por allí, gente que lleva muchos años dentro del mundo del culturismo,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=416" target="_blank" class="timestamp">[06:56]</a> Y no solamente es que destacara en el nivel de Joseba, es que para muchos en el Preyat King le dijeron que lo veían claro ganador. O sea, por eso digo, no solamente, ya no hablamos de si debió ganar, si no debió ganar, no estoy hablando de eso, estoy hablando del impacto que generó, ¿no? Del impacto y de lo reforzado que sale de cara no solamente al New York Pro, sino a todo el periplo que va a hacer en Estados Unidos, a la importancia en cuanto a imagen de marca que puede tener, no solamente para contratos publicitarios, no me estoy refiriendo a eso, sino sobre todo también en cuanto a ese posicionamiento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=445" target="_blank" class="timestamp">[07:25]</a> de un atleta en Estados Unidos, porque yo voy a decir una cosa, el Classic Physique hay que reconocer que para ellos, y os lo digo de verdad porque me ha costado encontrar muchas opiniones de Classic y no he encontrado prácticamente ninguna repercusión de Estados Unidos, de la gente que suele comentar, de los de Palumbo, etc. Se centran mucho en el Open.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=466" target="_blank" class="timestamp">[07:46]</a> Yo creo que es más lo que ha pasado y el impacto que se ha generado quedando segundo en este Pittsburgh Pro que de lo que generó quedando sexto en el Olympia. Es una opinión personal, es una impresión personal y el martes, es decir, mañana hablaré con Raúl, hablaremos con Raúl de este tema porque yo creo que el impacto de lo que ha ocurrido este fin de semana es superior a haber quedado sexto del Mr. Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=484" target="_blank" class="timestamp">[08:04]</a> Así que, como digo, ya estáis viendo que incluso el público brasileño afirma, reconoce y sin ningún tipo de problema la superioridad en este caso de Josema y sobre todo, como digo, ese impacto. El hecho de que había sido la persona que más le había impactado en cuanto a ese punto de condición y esa separación. Por otro lado, el otro gran reforzado de la jornada</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=512" target="_blank" class="timestamp">[08:32]</a> Nosotros que Nick Walker. Yo tengo que decir que aquí en el caso de Nick Walker, y lo dije en el directo anterior y lo vuelvo a repetir, yo tengo que entonar el mea culpa porque yo no esperaba gran cosa de Nick Walker. Es más, yo esperaba una versión muy similar a la del New York Pro. Y tengo que decir, y también escucharemos a Sunray, que Sunray dice que está más o menos con el New York Pro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=533" target="_blank" class="timestamp">[08:53]</a> Yo no estoy de acuerdo con Sunray. Que la estructura evidentemente da que sea la misma porque no hay otra. No quiere decir que saliera igual que en el New York Pro. Donde para mi gusto salió mal. Incluso para el propio Nick Walker. Y aún así ganó a Martin Fickwater. Pero lo que vimos el fin de semana fue un Nick Walker poniendo contra las cuerdas a Derek Larnford. Vamos a escuchar las palabras de Chris Bamstead.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=552" target="_blank" class="timestamp">[09:12]</a> Porque yo creo que Chris Baxter está, y lo digo sinceramente, al borde de volver. Porque vais a escuchar palabras de me ha inspirado Nick Walker, lo que ha hecho es muy bueno para el deporte. Incluso da la sensación de que para él y para mucha gente del público, y de hecho hay votaciones en páginas web, debería haber ganado Nick Walker con bastante claridad. Esto ya, como digo, es valoración de los jueces.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=578" target="_blank" class="timestamp">[09:38]</a> Vamos a escuchar lo que ha dicho en este caso Chris Babsted, que yo creo que es superinteresante sobre la reflexión que deja de Nick Walker y de lo que ha hecho Nick Walker en el Pittsburgh Pro. No he compartido mi opinión sobre algo así, pero viendo el show de la noche entre Nick y Derek, estaba pensando tan profundamente sobre lo que vi y me sentía que realmente quería compartirlo. Pero estaba viendo el show y no sabía quién iba a ganar, estaba pasando de vuelta y de vuelta. Y luego, al final, cuando llamaban a Derek como ganador, el nivel de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=608" target="_blank" class="timestamp">[10:08]</a> La letdown, la disapointmenta en Nick y lo que podía sentir al principio y lo que podía ver era tan fuerte que fue inspirador. Fue algo que me motivó y me hizo emocionado sobre el sport y la conducción competitiva. No creo que la gente entiende cómo raro es ver algo así y cómo vulnerable es para un atleta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=630" target="_blank" class="timestamp">[10:30]</a> para trabajar tan duro, para ponerse en la posición de perder, para creer en ellos tan duro y para ponerse en algo que no tienen control de competir en cualquier cosa. Es una cosa muy difícil y vulnerable, y no muchas personas en su vida nunca experiencean ese nivel de desigualdad porque nunca trabajan mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=649" target="_blank" class="timestamp">[10:49]</a> to earn that and the amount of stored potential energy that comes from that is absolutely insane and to be able to take that kind of lesson and revert that to your life when shit happens and you know you think you have a plan for something and it falls short or you don't get what you want or worse to be able to look at that not as punishment but as preparation to be able to take that energy and like when I was sitting in the crowd I could literally like seeing Nick's face sitting there I could feel the energy just filling up with</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=676" target="_blank" class="timestamp">[11:16]</a> Y si, si ganas, hay mucha energía que viene de eso. Pero luego, a la vez, a la vez, a la vez.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=683" target="_blank" class="timestamp">[11:23]</a> Pero cuando pierdes algo así, hay mucha energía que puedes poner hacia el buen, hacia el mejor, hacia el mejor, hacia hacia el mejor, hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia hacia</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=709" target="_blank" class="timestamp">[11:49]</a> Eso es admirable. Eso es algo que es raro. Tal vez no es saludable o conducir a la vida normal, pero nada es la construcción del cuerpo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=716" target="_blank" class="timestamp">[11:56]</a> Pero para ser capaz de mirar a un competidor así y ver ese nivel de desigualdad, hay una gran lección de entender la cantidad de energía que viene de eso, que tienes que trabajar mucho por tanto tiempo, para tener sucesos y setbacks de vuelta y de vuelta, para poder llegar a ese punto y sentir algo tan profundo. No creo que la gente entiende cómo raro eso es. Y, you know, me sentía goosebumps en el público. No tenía ni una reacción al el show. Estaba estaba ahí pensando sobre todo esto. Yo pensaba, wow.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=744" target="_blank" class="timestamp">[12:24]</a> Hay mucha emoción en eso y la gente nunca va a experimentar en su vida. Y mientras que se siente malo ahora mismo, está leiendo por el gran paso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=754" target="_blank" class="timestamp">[12:34]</a> como la progresión, la mayor vuelta, la mayor sensación de emociones positivas en el futuro, cuando vuelve a esto y usa para lo mejor, para prepararse para ser mejor, y toma esa energía y pone detrás de él, para empujarlo hacia adelante. Creo que eso es increíble y es una lección poderosa para la vida, poder tomar sus cortesiones y sentarse en ellos, y ser pido. Estoy seguro que si estuviera pido, debería estar pido. Espero que si perdiera en Olympia, hubiera sido exactamente lo mismo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=780" target="_blank" class="timestamp">[13:00]</a> porque te amas y te preocupes con algo que estás trabajando tan duro, deberías ser desappointado. Pero para poder tomar eso, después de que puedas trabajar con los emociones de angustia, triste y triste y triste, y para poder poner eso detrás de ti y volver a trabajar y usarlo para sentirte, para hacer ti mejor.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=795" target="_blank" class="timestamp">[13:15]</a> Fires me up. That gets me excited. Emotions has always driven me in sport more than anything. And that was one of the first things since retiring where I was like, damn, I got goosebumps eating the cat. I am fired up. Not enough to get me back on stage. But it was fun to watch. The battle between the two was fun to watch. You have to have a lot of respect and appreciation for people who work so hard and put so much on the line towards something. So it was really cool to see. And I think important thing to take from that, at least that I took from that. So, yeah.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=825" target="_blank" class="timestamp">[13:45]</a> Yo, al margen de lo que dice Denny Walker, que estoy bastante de acuerdo Yo por las palabras, de verdad, este tío Yo creo que no hay ninguna duda de que en algún momento va a volver O sea, es que si se emociona con esto O se va a emocionar con cualquier cosa Cuando llegue el Olimpia a tres cuartas de lo mismo O sea, antes o después está condenado a querer volver Y por otro lado, estoy bastante de acuerdo Al final, lo que se notó bastante Sobre todo en la final Y esto lo comenté ayer en el vídeo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=853" target="_blank" class="timestamp">[14:13]</a> Fue sobre todo esa imagen de Nick Walker, bueno, pues disgustado por la derrota, o por el segundo puesto, además de la derrota, y sobre todo procesando, rumiando, yo creo que él siempre va con una gran confianza al evento, creo que…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=871" target="_blank" class="timestamp">[14:31]</a> Ayer, o mejor dicho el sábado, pudo ganar. Tuvo sus opciones de ganar, de hecho. Y lo hablaremos en el programa de esta noche de Iron Road. En cuanto a las puntuaciones, acabaron empatadas. Es decir, en el pre-Jadkin ganó, en este caso, Nick Walker. Y en la final ganó de Llanford. Ambos por un punto. Finalizaron los dos con 15. Esto nos lo explicará también bastante...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=893" target="_blank" class="timestamp">[14:53]</a> bastante bien Alex. Y el que también ha querido dar su opinión, ya para cerrar el vídeo, ha sido en este caso Sonray, que ha sido un poquito más contundente contra Nick Walker, aunque lo destaca, pero sabéis que veníamos ya en una previa de bastante beef, Sonray, Pozichelillo, Nick Walker, etc. Así que vamos a escucharlo porque yo creo que es interesante.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=911" target="_blank" class="timestamp">[15:11]</a> No, no, no, no, no, no, no, no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=928" target="_blank" class="timestamp">[15:28]</a> ¡Suscríbete al canal!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=951" target="_blank" class="timestamp">[15:51]</a> Bueno, listen, Nick picked up where he left off on stage. I mean, he is exactly where I think he left off in New York. But again, I think there's too many things that Derek, we cannot criticize him about. We can start picking Nick apart, most notably, especially in between poses Nick. The waist is wide, stomach is smooth, lots of deep breathing, heavy breathing.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=975" target="_blank" class="timestamp">[16:15]</a> que detrás de su physique, pero es formidable. Creo que tiene Martín. Creo que tiene Martín. Sí, Martín estaba llorando mucho. Sí. Estaba llorando. Estaba llorando bastante. Estaba llorando un poco. Estaba llorando, por supuesto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=991" target="_blank" class="timestamp">[16:31]</a> Pues ahí lo teníamos, ¿no? Un poquito siendo críticos con Nick Walker, que no digo que no. También tiene su punto de crítica a la hora de controlar el abdomen, aunque yo creo que Nick Walker lo hace bastante bien. Y yo desde mi punto de vista sí que es verdad que vi un Derek un puntito por debajo con respecto a la versión del Arnold y creo que eso se podría haber penalizado. Pero insisto, los jueces también lo hicieron y finalizaron, como digo, el cartelín.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=1010" target="_blank" class="timestamp">[16:50]</a> 15 a 15 empatados y eso como digo lo vamos a comentar esta noche en Dairon Road así que como digo chicos y chicas reforzado Josema reforzado Nick Walker acaba de arrancar la temporada esto no ha hecho nada más que comenzar insisto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=1025" target="_blank" class="timestamp">[17:05]</a> Lunes, 11 de la noche. A las 11 de la noche hoy, por supuesto, programa de Iron Road. Martes estará Raúl. Los contenidos irán saliendo a lo largo de la semana, pero bueno, el martes estará con nosotros Raúl. Miércoles, programa de PCA. Jueves estará con nosotros Fran Espin. Sábado, New York Pro. Y domingo, Hércules Cup. O sea, más no se puede hacer en el canal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=TSWpqyVxXgM&t=1042" target="_blank" class="timestamp">[17:22]</a> Así que como digo, gracias por el apoyo que nos estáis dando, gracias por el reconocimiento que nos estáis dando e insisto, se ven una semana de culturismo brutal y esto, insisto, no he hecho nada más que comenzar. Así que como digo, dejadme en la caja de comentarios opinar y todo esto, fuerte like al vídeo, suscribiros al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 12/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
