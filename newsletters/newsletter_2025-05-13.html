@@ -1,0 +1,439 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 13/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">13/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Benlliure Reacciona</strong>: <a href='#video-2APSDUet1O4'>ADRIÁN HERRERO SE ENGAÑA A SÍ MISMO Y TRATA DE ARGUMENTARLO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-2APSDUet1O4">
+            <h2>ADRIÁN HERRERO SE ENGAÑA A SÍ MISMO Y TRATA DE ARGUMENTARLO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Benlliure Reacciona</span>
+                <span class="date">Publicado: 13/05/2025 13:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=2APSDUet1O4" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=2APSDUet1O4" target="_blank">
+                    <img src="https://i.ytimg.com/vi/2APSDUet1O4/hqdefault.jpg" alt="ADRIÁN HERRERO SE ENGAÑA A SÍ MISMO Y TRATA DE ARGUMENTARLO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video es una reacción de varios creadores de contenido (Fufi, Adrián Herrero, Antonio y el presentador) a otro video sobre entrenamiento, centrándose en técnicas de powerlifting y powerbuilding. Critican la técnica de sentadilla barra baja y peso muerto, el uso de material de soporte como cinturón y rodilleras, y la aparente contradicción entre las técnicas usadas y los objetivos declarados (no buscar más kilos). Se discute sobre la prioridad del entrenamiento, la eficiencia de las técnicas para diferentes objetivos (fuerza vs. hipertrofia) y la fiabilidad de la proyección de RMs. Finalmente, se cuestiona la falta de argumentos sólidos y la claridad en los objetivos del entrenamiento mostrado.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Reaccionando a una "Reacción de Reacción" del Entreno <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=0" target="_blank">[00:00]</a></h3>
+
+<p>El video comienza con el presentador introduciendo a sus invitados (Fufi, Adrián Herrero, Antonio) para reaccionar a un video de entrenamiento. Anticipan que comentarán técnicas y opiniones, ya que el contenido trata sobre entrenamiento, un tema que les interesa debatir. Mencionan que Antonio suele tener opiniones fuertes.</p>
+
+<h3>La Sentadilla Barra Baja y su Objetivo <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=189" target="_blank">[03:09]</a></h3>
+
+<p>Analizan la técnica de sentadilla mostrada, identificándola como barra baja, propia del powerlifting para mover más kilos. Critican que si el objetivo es mejorar el cuádriceps, esta técnica no es la más adecuada, abogando por una sentadilla más vertical con barra alta para enfatizar ese músculo.</p>
+
+<h3>Prioridad en el Entrenamiento y el Material <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=327" target="_blank">[05:27]</a></h3>
+
+<p>Discuten que si el entrenamiento es una prioridad, se busca el mejor material posible, cuestionando las excusas sobre el gimnasio disponible. Se enfatiza que la prioridad lleva a buscar las condiciones adecuadas, aunque impliquen desplazarse o invertir en equipamiento.</p>
+
+<h3>La Profundidad de la Sentadilla y Morfología <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=399" target="_blank">[06:39]</a></h3>
+
+<p>Se critica la poca profundidad en la sentadilla mostrada y, honestamente, también en las propias sentadillas de los reactores en el pasado. Reconocen que la morfología individual influye, pero sugieren que técnicas como el uso de zapatillas con drop podrían ayudar a mejorar la profundidad, aunque sean menos eficientes.</p>
+
+<h3>El Propósito Real del Material de Soporte <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=878" target="_blank">[14:38]</a></h3>
+
+<p>Abordan el uso de rodilleras y cinturón, afirmando que su objetivo principal es aumentar el rendimiento y permitir mover más kilos, no solo proteger o dar comodidad. Califican de "hipócrita" decir que no se busca tirar más peso cuando se usan estas ayudas.</p>
+
+<h3>Contradicciones en el Uso del Cinturón y Rodilleras <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=965" target="_blank">[16:05]</a></h3>
+
+<p>Se señala una aparente contradicción: la persona usa cinturón, rodilleras y barra baja, técnicas asociadas a levantar el máximo peso, pero supuestamente no busca mover más kilos. Argumentan que si no fuera por la ventaja en carga, no usaría este material ni esa técnica específica.</p>
+
+<h3>La Fiabilidad de Proyectar 1RM desde Altas Repeticiones <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=1640" target="_blank">[27:20]</a></h3>
+
+<p>Cuestionan la validez de proyectar el peso máximo (1RM) a partir de series de muy altas repeticiones (como 30), indicando que la fiabilidad es casi nula más allá de 8 repeticiones. Explican que las fórmulas de proyección se desvirtúan y que cada movimiento y técnica requieren su propia consideración.</p>
+
+<h3>Falta de Claridad y Argumentos Sólidos <a href="https://www.youtube.com/watch?v=2APSDUet1O4&amp;t=2234" target="_blank">[37:14]</a></h3>
+
+<p>El presentador resume su crítica principal: la persona del video no ofrece argumentos claros ni fundamentos para justificar su entrenamiento. Observan contradicciones entre lo que dice y lo que hace, como usar material de powerlifting sin querer tirar más kilos, dando una imagen de control que no se corresponde con sus acciones.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=0" target="_blank" class="timestamp">[00:00]</a> Muy buenas a todos chicos, aquí estamos, un nuevo vídeo para mi canal. Hoy vamos a ver, creo que es la reacción, de la reacción, de la reacción, de la reacción. De verdad, o sea, podría haber comentado algo del, o sea, del fiestero olímpico, de Pittsburgh y tal, pero es que tampoco lo veo muy interesante. Digo, bueno, por lo menos aquí se habla de entrenamiento. Vamos a ver un poco qué podemos aportar y vemos un poco las opiniones. Tenemos a Fufi, a Adrián Herrero y a Antonio. Antonio siempre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=29" target="_blank" class="timestamp">[00:29]</a> sus entrenos también hasta comentarlos entonces por eso lo hacemos y a la gente pues le gusta entonces veamos caña pero no tranquilo amigo que no es nada personal tranquilo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=63" target="_blank" class="timestamp">[01:03]</a> Yo lo he insultado, ¿eh? Lo siento, pero yo lo he insultado. O sea que no me doy por acudido. Relájate un poco. Muchas veces cuando pasa este tipo de cosas es porque realmente no hay argumentos sólidos o las opiniones que sueltan no tienen capacidad estas personas para poder argumentar el por qué piensan así, ¿no? Yo todo lo que digo, digo, o sea, lo argumento y explico el motivo de por qué lo comento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=98" target="_blank" class="timestamp">[01:38]</a> pasar ese tipo de cosas pero bueno está bien porque cuando más lo hacemos más visualizaciones tienen y así me voy a intentar antonio que sí que sí que está está picado está lo han tocado la moral</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=125" target="_blank" class="timestamp">[02:05]</a> pero la sensación de que de que como siga si se va a poner de verdad locura yo también dijo eso yo tampoco dije yo también dije eso yo pensamos bastante igual es que eso es fácil es fácil</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=164" target="_blank" class="timestamp">[02:44]</a> Vamos a avanzar un poquito el vídeo y vamos a los argumentos y vamos a que explique exactamente cada una de las cosas. El entrenamiento que vimos es tal cual un entrenamiento de power. Aquí no hay ninguna duda. Hace una barra baja, luego un peso muerto humano que sería un accesorio de la variante de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=189" target="_blank" class="timestamp">[03:09]</a> una variante como tal del presupuesto convencional un sumo en el que era en este caso y luego algo de ejercicios a nivel de la espalda y prensa si no recuerdo mal o sea un híbrido para no la barra baja se hace de culturista en culturismo lo siento pero cualquier persona que haga una barra baja es con el objetivo de tirar más kilos por tanto estaría enfocado a nivel de power sí o sí si no lo haces una barra baja así que primer error</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=217" target="_blank" class="timestamp">[03:37]</a> Si, tú lo dejarás porque harás rollo más power building. Pero realmente una barra baja lo hacen los powerlifters. ¿Qué sentido tiene posicionarte la barra más abajo? Si al fin y al cabo estás involucrando más los glúteos, el femoral, la espalda baja.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=230" target="_blank" class="timestamp">[03:50]</a> Si quieres hacer una sentadilla en la que el objetivo sea mejorar el cuádriceps, para que haces una sentadilla, va a tratar que se trabaje la verticalidad, esté vertical, y el trabajo se enfatice en el cuádriceps. Ahí es un híbrido entre una sentadilla, entre un buenos días, entre un todo, en el que el fin es llevar la carga A desde el punto A hasta el punto B, sin importar cómo. Como si tiene que ir a un chino.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=276" target="_blank" class="timestamp">[04:36]</a> pero en tu caso por lo que vemos también que la intensidad los básicos no es muy elevado porque yo no sabía qué es lo que hacía de qué manera entrenaba para qué y eso es un poquito de culturismo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=308" target="_blank" class="timestamp">[05:08]</a> No sé, tío, no me quiero quedar echado el otro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=327" target="_blank" class="timestamp">[05:27]</a> bueno el material que tengo para mí ya es un error al final como para ti es una prioridad esto tú buscas la vida como sea para poder entrenar las mejores condiciones entonces lo de materia que tengas si ya vamos con esa excusa para ti esto no es una prioridad porque si no te preocuparía por lo menos ir en el gimnasio que tienes abajo de casa o el final es más cerca que el material sea adecuadamente porque yo cuando era pequeño me iba al de infinidad de que me pilla tomar por culo en mi casa sabes para poder entrar en condiciones</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=350" target="_blank" class="timestamp">[05:50]</a> O sea que todo depende de la prioridad que tú tengas. No era por un tema de reso, ya lo sé. Porque me tiré cinco años yendo al gimnasio y no había subido en mi vida un pillón trabajando. Esto es verdad. Realmente es así. Yo lo que hago es...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=383" target="_blank" class="timestamp">[06:23]</a> cuando tú vas a ver las piernas más dificultad tienes para bajar y más inflación tiene que haber eso es la realidad a ver qué dice</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=399" target="_blank" class="timestamp">[06:39]</a> Mira, no por nada. Aquí ni Adrián, ni Antonio, ni yo. Porque Antonio cuando hacía sentadillas también, la profundidad que tenía era malísima. Y yo también. O sea que ninguno de los tres estamos por hablar de hacer una sentadilla válida. Porque Antonio bajaba, vamos, como yo, o ahí, ahí, ahí. Muy mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=438" target="_blank" class="timestamp">[07:18]</a> vas a comparar la sentada de rubén que es una sentada súper vertical con la sentadilla tuya que te entiendas como un chino y que no tiene nada que ver las palancas que tiene rubén con las palancas que tienes tú no te compares no por nada pero tiene nada que ver entonces sí sí sí sí sí sí sí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=468" target="_blank" class="timestamp">[07:48]</a> va a parecer que la longitud de mi mano es inferior. Por lo tanto, lo que buscamos es la sentadilla. Yo en mi caso intento</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=480" target="_blank" class="timestamp">[08:00]</a> Esto realmente en el ejemplo no es real y no se puede comparar porque hay más valores a tener en cuenta. El hecho de que amplíes mucho el stance, como digo, va a hacer que también la inclinación a nivel del tronco sea mucho mayor y creo que hay alternativas para tener mejor movilidad, para hacer una sentadilla que en este caso podría ser unas zapatillas, por ejemplo, con drop. Por poner un ejemplo, va a mejorar el tema de profundidad y va a hacer que tengas más oxifresión y a la hora de bajar sea mucho más sencillo. Otra cosa es que luego, cuando tú utilices las zapatillas con drop, seas menos eficiente. Pero lo que está diciendo no es correcto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=518" target="_blank" class="timestamp">[08:38]</a> Tengo dos pares que no estuve hace años. Pero es lo que te digo. Nunca me he llegado a sentir cómodo con ellos. Por lo tanto, al final opté por hacer la sentadilla que estoy haciendo. Es que es increíble como ciertas personas opinan, no digo fucio, pero ciertas personas opinan sin tener idea de nada. Nosotros os pensáis que yo no he probado absolutamente todo hasta conseguir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=546" target="_blank" class="timestamp">[09:06]</a> pero es que realmente lo de la comodidad aquí es relativo o sea en la sentada barra baja no buscan la comodidad en la sentada barra baja nunca va a estar como tienes que buscar obviamente lo que más tiene te encuentres pero también si hacemos una barra baja busca lo más que tiene te encuentres pero también cumpliendo la normativa por así decirlo porque si tú eres muy cómodo realizando estantes pero luego a la hora de bajar se dificulta mucho tendrás que buscar un equilibrio no</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=578" target="_blank" class="timestamp">[09:38]</a> dice otra cosa que por ejemplo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=618" target="_blank" class="timestamp">[10:18]</a> Respecto a la técnica no estamos hablando, o sea, tú haces esa sentadilla de barra baja porque, como digo, te consideras más eficiente realizándola de esa manera, pero si la barra baja, como ya hemos dicho, es una sentadilla de power. Entonces, respecto al tema de la profundidad se complica mucho, tal y como la vienes haciendo. Por tanto, habría que modificar diferentes cosas para que la sentadilla tuviera la profundidad que debiera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=645" target="_blank" class="timestamp">[10:45]</a> Todavía no va con peso, que muchas veces con peso es mucho más fácil bajar. Hay eso que hay siempre tanto peso que baja y luego no sube. Eso ya es increíble. Pero si quieres hacer la técnica con la barra suelta, cuesta un poquito. Estas otras, si quieres entrenar la técnica, no puedes utilizar pesos muy bajos porque la técnica cambia. Entonces, por eso, un arroba 6, arroba 7, arroba 5, ni muy pesado ni muy ligero. Tiene que ser ahí un peso intermedio porque si no, cuando empiezas a meterte peso, la técnica se vuelve</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=674" target="_blank" class="timestamp">[11:14]</a> la técnica que trabajaba con unas características adecuadas pero mejor la técnica con 20 kilos por la hora todo el mundo la técnica bien pero sí que yo bajó hasta ahí y aquí sí que rompe bien pero es así pero ok</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=703" target="_blank" class="timestamp">[11:43]</a> en las repeticiones que se va a guardar porque de hecho es de otro color y pudiera tener menos y bajar más vertical porque me matigaría mucho menos en la sentadilla</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=744" target="_blank" class="timestamp">[12:24]</a> depende de la barra obviamente conforme la barra esté más posicionada más baja en los lados las muñecas van a ser mayores entonces dependerá del tipo de barreras y una barra vista las muñecas las menores es una barra baja la verdad que yo nunca he tenido ningún problema</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=805" target="_blank" class="timestamp">[13:25]</a> ¿Vale? ¿Cómo abren las piernas? ¿Qué es eso? O sea, realmente, hacer power siendo datos una putada. Que no está haciendo power, pero se tendría en power. Yo sé que mi público powerlifter, que sé que estáis ahí, nos está sangrando ahora mismo la puta retina en los ojos viendo esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=830" target="_blank" class="timestamp">[13:50]</a> pero no hay peso es que haber cuidado cuidado que las efectivas de 40 tampoco es que no hay peso a ver no hay pesos y si tienes una sentadilla de 300 kilos pero si haces efectivos con 140 kilos si el pecho de tampoco no flipemos este</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=878" target="_blank" class="timestamp">[14:38]</a> vamos a ver el objetivo de ponerse un cinturón o de ponerse en este caso unas rodilleras cuáles tú para que te puedes unas rodilleras para aumentar rendimiento no para tirar más kilos no sentadilla pues entonces la gente trata de sacar el máximo partido a su material no te la pones para proteger no nos la pones para tirar más kilos su material soportivo es un material que hace de tirachinas por eso la gente lo usa</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=916" target="_blank" class="timestamp">[15:16]</a> La ley nueva es que las rodilleras que tienen que emplear son unas rodilleras SBD y no se permiten las rodillas rígidas que habían de rollo líncer y tal. Esa es la nueva norma. Pero rodilleras se van a seguir usando. O sea, de hecho es un nicho de mercado. No lo van a quitar nunca. Pero yo sé de gente que usaba 3XL y 4XL y usaban a presión una L. Yo no sé. Que no me aprietan mucho. Las coderas nada. No me aprietan nada. Tampoco voy a comprar. Pero es que esto es mentira, tío. O sea, si no te aprietan, quítatelas. Si no te aprietan las rodillas, quítatelas. ¿Para qué te las pones entonces? Si no hace nada...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=946" target="_blank" class="timestamp">[15:46]</a> ¿Para qué te las pones? Es que tampoco nos engañemos, tío. O sea, te ponen las rodillas porque te dan kilos. Te pones el cinturón porque te dan kilos. No seas hipócrita, ¿no? ¿Sabes? O sea, el objetivo de aquí y de hacer una barra baja es poder tirar más kilos. Si no, no lo harías. Venga, vale, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=965" target="_blank" class="timestamp">[16:05]</a> no me interesa mover más kilos y entonces para qué cojones haces una barra baja tío o sea eso que se lo cuentes a otro bien pero amigo que no nos vas a engañar sabes que si tú haces una barra baja te pones un cinturón y te pones unas rodilleras tu objetivo es hacer una progresión de cargas y poder tirar lo máximo en sentadilla si no harías una barra baja si no haces una sentadilla barra alta con estar cerradito con un drop tratando de bajar e involucar lo máximo posible los cuálices ah por favor que no llevamos dos años en esto venga va</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=997" target="_blank" class="timestamp">[16:37]</a> se pone la armadura de gaso porque su armadura de gaso literal conocido 30 kilos y encima de cuenta que no es objetivo no estirar kilos sabes que venga y por dentro</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1031" target="_blank" class="timestamp">[17:11]</a> es que es muy loco es que yo lo pienso igual o sea es que es que no funciona así sabes es que el material que lo pones cuando ya tienes un bagaje ya lo dicho muchas veces emplear rodillas y cinturón para tirar 100 kilos 60 días 120 kilos me da igual que peses 70 kilos tío no sabes esto como todo pues hay que construir la casa por los cimientos y no por el tejado el material soportivo es un extra cuando ya tienes un nivel</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1060" target="_blank" class="timestamp">[17:40]</a> Y me hace sentir más cómodo. Mentira, no te hace sentir más cómodo, tío. Ponerse el cinturón es un puto coñazo. Te hace tirar más kilos, ¿vale? La frase cambiada. No te hace sentir más cómodo. Te hace tirar más kilos. Si no te diera más kilos, no te lo pondrías. Si te restara kilos, no te lo pondrías. Y por cierto, recordad que todos los meses hago dos sorteos de 150 euros en LifePro con mi código JordiVen y pidiendo cualquier cosa ya entras en el sorteo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1086" target="_blank" class="timestamp">[18:06]</a> Pidiendo una simple crema de arroz, ya entras directamente en el sorteo y no hace falta hacerle captura. A tope y cuelgo los ganadores siempre por Instagram. Estate pendiente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1114" target="_blank" class="timestamp">[18:34]</a> Pero es que yo creo que se contradice porque si tú dices que en un objetivo no estirar más kilos y te pones el cinturón porque te va a tener un RD más bajo, es como que no tiene sentido, ¿no? O sea, no sé. Esa rodillera me utilizaba jamal para hacer sentadilla porque son la marca estoica. Pues es lo que estaba comentando antes, son unas rodilleras que la verdad no me quedan muy apretadas, no de gruesas no sabría decirte, no lo sé. Son unas rodilleras y ya está. O sea, no son más obvios, ¿eh? Si es la duda.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1154" target="_blank" class="timestamp">[19:14]</a> el valor de rodillas supuestamente no está bien porque no hay una estación respecto a la rodilla respecto a la punta del pie</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1182" target="_blank" class="timestamp">[19:42]</a> Y aquí el argumento que él va a dar, que no lo he escuchado pero me lo imagino ya, es que realmente pues el cuerpo se adapta, ¿vale? Sí, obviamente se adapta a diferentes circunstancias y un malo o así tampoco va a ser excesivo, bueno, no va a ser excesivo, pero que si pudiera mantener la rodilla alineada respecto a la punta del pie, o sea, mejor, ¿vale? Cada uno tiene su morfología, cada uno tiene su anatomía, cada uno tiene su técnica en el sentadero y obviamente como digo, si el tejido se adapta no habría problema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1205" target="_blank" class="timestamp">[20:05]</a> pero bueno también hay corrientes que dicen que bueno que no hay ningún problema de lumbar yo al fin y al cabo no estoy de acuerdo respecto a eso pienso que se mantiene el lumbar neutro mejor y aún así habrá seguir la gente diciendo que hay estudios porque hay estudios es así pues no que el tejido se adapta y que no pasa nada por chapar un peso muerto lo dicho yo no estoy de acuerdo independientemente que haya estudios</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1235" target="_blank" class="timestamp">[20:35]</a> yo no lo veo para nada peligroso básicamente porque no es nada acentuado pero lo dicho si mantuviera más la posición</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1265" target="_blank" class="timestamp">[21:05]</a> sería mejor que se adapte y que tal vale que sí que no tiene ningún problema y ninguna molestia vale pero si mantuviera la posición lo veo lo veo mejor ya que vuelva algo es una viene por un tema del medio o un tema del pie puede ir por diferentes circunstancias al cabo no deja de ser una compensación</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1289" target="_blank" class="timestamp">[21:29]</a> cuando le pongas el play otra vez porque si no la pausa no existe prácticamente sí sí</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1325" target="_blank" class="timestamp">[22:05]</a> Exacto, que la banca, la fumada que te pegaste, eso era una roba 7 y aún lo estamos esperando. Para ganar masa muscular, haces una sentadilla, como ya he dicho, barra alta, manteniendo la verticalidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1353" target="_blank" class="timestamp">[22:33]</a> es más efectivo el lectura que criticas que más de gracia de una persona hace un remo lo hace de forma estricta y no tiene que mejorarlo porque porque si no porque si no la técnica de algún lado ya no pues no hacer una barra baja es lo mismo que decir que para algún lado ya no sé qué sentido hacer una barra baja si al final causa involucra otra musculatura por lo mismo que haciendo un remo trampeando hacia algún lado ya de alguna manera te pondrá fuerte</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1404" target="_blank" class="timestamp">[23:24]</a> que empieza a calentar dice que los 100 kilos como peso luego 140 que está muy orgulloso porque es poco o sea porque es muy fácil es no se decía 140 tampoco es que haya un asalto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1427" target="_blank" class="timestamp">[23:47]</a> Yo nunca voy a competir, ni me gusta competir, ni nada parecido. Muchas veces lo he pensado, digo, si yo fuera a un gimnasio donde hay máquinas buenísimas con perfiles de resistencia adaptados al perfil de resistencia del músculo, etcétera, etcétera, o sea, máquinas excelentes donde puedes delinear muchísimo, penear las repeticiones, etcétera. O sea, máquinas de muy alta calidad. ¿Lo haría todo de máquinas? Es posible. Si tengo todo ese material, pues es posible que me hiciera todo de máquinas. ¿Pero estarías en tu zona de confort?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1457" target="_blank" class="timestamp">[24:17]</a> para que puedas</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1471" target="_blank" class="timestamp">[24:31]</a> yo tampoco y eso que antonio es no sé dice lo que lo que se le pasa por la mente y la evidencia de mis huevos y todo o sea lo que le pinta siendo claros pero bueno ya ha dicho que para mí siempre tiene que haber mínimo ejercicio mandando en cada sesión creo que es un pesado es un pesado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1532" target="_blank" class="timestamp">[25:32]</a> que no sabe que si haciendo esto va a tener más hipertrofia, pero tampoco quiere competir en y mejorar en fuerza. No me queda claro. No me queda claro. No me sé la rutina completa. No sé el volumen total muchas veces porque no lo indican. No sé los descansos que están haciendo. Entonces no se puede opinar. Muy poco peso. Mi máximo de peso monotonormal son 170 por 5 y 165 por 7, que de hecho lo dejé aquí en la barra, 165 por 7, porque acabo de venir de viaje.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1557" target="_blank" class="timestamp">[25:57]</a> Y ya están puestos los 165 por 7 que dice cuando me fui. Ahora estoy empezando la primera semana y bajé a 135 por 8, pero la semana que viene le voy a poner 145. La semana siguiente, 155. Y así voy a progresar el ejercicio otra vez. Para intentar que ya no sean 165 por 7.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1611" target="_blank" class="timestamp">[26:51]</a> de un mes o sea acabé la última semana de piernas que saque récord en práctica y luego ya me fui de viaje y estuve entrenando en otra gimnasio donde volví a empezar otra vez desde abajo si no entendéis el contexto inteligente más de aproximación 135 a 33 será que lo sacas sería un m de</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1640" target="_blank" class="timestamp">[27:20]</a> tío esto esto o sea lo de los cálculos que hace esto es cierto o sea ya se ha visto que cuando tú proyectas una rm y probablemente por encima de 8 repeticiones ya es para nada fiables hay cero fiabilidad vale ya te digo yo que 130 kilos 30 repeticiones yo lo hago y no tengo 360 vale entonces cuando tú quieres estimar un rm para empezar a que cada movimiento debería tener su propia fórmula de rm y cada cada técnica porque no lo iba a hacer un peso muerto convencional adaptación que pueda tener a cargas con peso muerto sumos para empezar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1671" target="_blank" class="timestamp">[27:51]</a> Entonces, lo de sacar un RM proyectado en base a 30 repeticiones, no sé, me parece algo, no tiene ningún tipo de sentido. Si sacas tu RM proyectado, que sea cuando realmente tú te conoces y como máximo, máximo, máximo que sean 8 repeticiones, como máximo. A partir de ahí, la fórmula y la proyección se desvirtúa mucho. 360 a una repetición. ¿Cuándo serían a 135 a 8 el RM? Pues el RM saldría a 170. RM.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1711" target="_blank" class="timestamp">[28:31]</a> bien para ti por nada está fuertísimo de hecho los powerlifter más fuerte de españa son naturales tenemos la gente en menos 105 kilos tenemos al toni que tira 340 de 60 y natural y pesa 105 kilos tiene 350 de peso muerto eso está fuerte vale entonces tú puedes plantearlo de una forma u otra tú puedes compararte o tratar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1739" target="_blank" class="timestamp">[28:59]</a> gente es luego de tal o puedes pensar no es que había en herrero hace con 130 kilos pues obviamente hay que ser realistas pero depende de tu mira tus miras enfocarlo de una forma otra no digo que tampoco te compare con tu director y porque te vas a frustrar pero lo dicho depende de donde tengas tu objetivo y tú pues eso más allá de decir hoy en un futuro optó a esto me gustaría para esto voy a trabajar para seguir pulsando o me conformo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1775" target="_blank" class="timestamp">[29:35]</a> no lo hago porque literalmente si hago el sumo de verdad estoy incómodo porque las puntas de mis pies tocan los discos a los lados que me incómoda que cualquier tipo no está incómodo si vives 1 90 y pico no cabes la barra del episodio por otro lado el clásico no lo hago porque salvo como salvo como muy horizontal te metes bloques te metes bloques y así partes una posición mucho más ventajosa estoy muy horizontal entonces dije bueno qué ejercicio podemos traer</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1822" target="_blank" class="timestamp">[30:22]</a> Y también es verdad que le metemos una pausita abajo para quitarle peso a la barra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1847" target="_blank" class="timestamp">[30:47]</a> pesados con este tema de que haya menos fatiga escúchame estoy cansado de siempre de para que haya menos fatiga vamos a ver para que entrenas para fatigarte no es para que haya una adaptación y que el cuerpo se adapte a ello y la siguiente sesión de pueda superarlo para que se produzca con el tema del estímulo que tú estás dando hay una súper compensación</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1867" target="_blank" class="timestamp">[31:07]</a> Entonces, ¿por qué siempre tratamos de no fatigar, no fatigar, no fatigarnos? Si el objetivo del entrenamiento es fatigarte y, como digo, provocar una adaptación para que el día siguiente vengas y puedas aumentar la carga y el cuerpo se haya adaptado a eso. Es que, quiero decir, es que lo del tema de no fatigarte ya me cancha un poco, siendo claros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1900" target="_blank" class="timestamp">[31:40]</a> es que lo ha faltado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1929" target="_blank" class="timestamp">[32:09]</a> para mejorar de tratar de aplicar la sobrecarga progresiva que llegamos a la muchísimas veces mejorar en carga mejoras repeticiones diminuir el tiempo de descanso aumentar el volumen mejorar la técnica tiene que ser más de esas variables y esto es mantener durante el tiempo esa realidad ya lo he dicho muchas veces que x culturistas como pues el nick walker entre con cuatro discos en la prensa por lado no implica que sea lo ideal para ningún que ya tiene el cuerpo hecho cuando pesas 125 kilos secos si quieres entrenar con el walker hasta entonces no tienes así</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1960" target="_blank" class="timestamp">[32:40]</a> Si te estás pasando o no te estás pasando en cuanto a entrenamiento y tal,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=1974" target="_blank" class="timestamp">[32:54]</a> antes a la hora del descanso de cómo afectaba de si ha puesto un minuto bien ha aumentado lo que sea pero es que esto puede ser por miles de variables por el 3 por estas castillas de trabajo por a nivel laboral por problemas personales por muchas cosas entonces no esto puede ser una variable más pero de ahí determinar tu entrenamiento si tienes que emplear una forma u otra o tienes que hacer una cosa u otra no veo que tenga sentido tampoco</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2010" target="_blank" class="timestamp">[33:30]</a> sobre 10 si tienes 10 es perfecto pero lo dicho esto es muy relativo que yo hoy tengo variabilidad cardíaca 10 voy a tirar el rey me voy a tirar a todos no me salía una mierda de día y luego de otros días que tenía cuatro y eso que se ha probado yo se llamaba hrv si no reforma</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2046" target="_blank" class="timestamp">[34:06]</a> Antonio le está gustando el vídeo, ¿eh? Le está gustando el vídeo que poco más y se va a dormir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2072" target="_blank" class="timestamp">[34:32]</a> y más como digo con las cargas que emplea que tú lleves todo muy tan los pros la élite no lleva tan utilizado esto como lo llevo lo siento y él que no sabemos al final ni por qué entrenar a los sectores por hipertrofia por por estética por por lifting no sabemos ni por qué lo hace porque realmente como hemos dicho ni lo deja claro y todo esto</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2102" target="_blank" class="timestamp">[35:02]</a> es una mierda porque si las máquinas son diferentes</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2116" target="_blank" class="timestamp">[35:16]</a> se mide en pesos libres en barras y en mancuernas la prensa y todo lo guiado no tú quieres ver lo fuerte que estás con una sentadilla y de muy fuerte que estás coge un peso muerto y como lo fuerte que estás coge un presente con mancuernas y uno fuerte que estás en un país en máquina no es que aquí pues en máquina de pongo cinco discos perfecto porque cada uno tiene su prensa en su gym y toda la parte si queréis medir la fuerza con el resto lo hacéis en sentadilla eso muy</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2154" target="_blank" class="timestamp">[35:54]</a> estamos los de acuerdo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2191" target="_blank" class="timestamp">[36:31]</a> 140 kilos, 300, pero es lo que te digo. Me vengo a esta y es totalmente diferente. Habría que ver cómo lo hace. ¿Ha dicho que quiere hacerlo el ruir 1 o el ruir 2? A ver cómo hace las últimas repeticiones. Pues que es un mucho recorrido el cabrón. Eso es cierto, ¿eh? Eso es cierto. Pero hay que meterlo. Si quieres que te crezca las piernas, hay que entrenar como un puto de mente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2225" target="_blank" class="timestamp">[37:05]</a> La prensa es una florida. A mí, personalmente, me gusta mucho más la jaca que la prensa. Y a mí, yo no tengo mi gimnasio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2234" target="_blank" class="timestamp">[37:14]</a> está fingiendo realmente este vídeo lo está haciendo porque está justificando el entreno y todo está haciendo pero para mí no da argumentos ni fundamentos claros y realmente no deja claro cuál es función o sea me pongo la rodilla con cinturón porque no quiero tirar más kilos y porque no me quiero fatigar pero luego me pongo el cinturón o sabes que es un plan que no se acaba de tener sentido es ahora ti</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2262" target="_blank" class="timestamp">[37:42]</a> Es que llegar a estos rangos de intensidad en sentadilla es muy complicado porque la espalda empieza a ceder. De hecho, a lo mejor para Navidad, ya veremos. De la zona que yo soy de España, son mis padres. Pero tío, es que es enorme. Es que es enorme. Es que es súper largo. ¿Qué pasa? Si pudiera tener el espaldo más atrás, me tumbaría un poquito. Así podríamos trabajar un poquito más el recto femoral. Pero bueno, es lo que igual va a trabajar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2294" target="_blank" class="timestamp">[38:14]</a> bueno hasta aquí el vídeo de hoy para mí parecer no argumenta lo suficiente y no o sea que realmente tampoco tiene que dar explicaciones pero yo sigo opinando lo mismo no aplica lo que sabe realmente y lo dicho también es</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2323" target="_blank" class="timestamp">[38:43]</a> lo veo no lo veo mal o sea tu puesta de tu opinión pero luego realmente igual no te gusta entrenar o realmente no para no estando tu prioridad lo único que el problema es cuando tú das la sensación de que sigues tu prioridad y que lo llevas tanto controlado entonces si das esa imagen y luego hacer lo que haces cuando dices como como que no tiene sentido pero bueno es mi opinión espero que se ha gustado el vídeo estoy muy de acuerdo con antonio y con su fin se ha suelto con sufrir yo lo que digo al fin acabo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=2APSDUet1O4&t=2350" target="_blank" class="timestamp">[39:10]</a> Yo creo que pensamos igual. Y luego también hay que tener claro que dentro de la gente que reacciona hay gente que le gusta, o sea, que entrena y luego aparte reacciona o que le da caña a esto. Y luego hay gente que reacciona y que luego si eso puedes entrenar algún día. Hay que saber las diferencias. Aquí está como hay gente que entrena para comer y hay gente que come para entrenar. Tú decides quién eres. Así que chicos, espero que os haya gustado el vídeo y nos vemos en siguientes. Un saludo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 13/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
