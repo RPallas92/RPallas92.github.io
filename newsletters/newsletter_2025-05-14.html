@@ -1,0 +1,378 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 14/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">14/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Miguel Navarro</strong>: <a href='#video-CvxEjJ1lLo0'>"A LLORAR A LA LLORERÍA" Carrasco ASUME la VICTORIA de Ruff y ADVIERTE un MEJOR JOSEMA en NYPro</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-CvxEjJ1lLo0">
+            <h2>"A LLORAR A LA LLORERÍA" Carrasco ASUME la VICTORIA de Ruff y ADVIERTE un MEJOR JOSEMA en NYPro</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 14/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/CvxEjJ1lLo0/hqdefault.jpg" alt=""A LLORAR A LA LLORERÍA" Carrasco ASUME la VICTORIA de Ruff y ADVIERTE un MEJOR JOSEMA en NYPro" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video es una conversación entre Miguel y Raúl Carrajo sobre el reciente Pittsburgh Pro de culturismo y el próximo New York Pro.
+Analizan la actuación de Josema en Pittsburgh, el debate sobre el juicio y el feedback recibido.
+Raúl explica la visión del equipo sobre el resultado y su enfoque en la mejora continua.
+También detallan los desafíos logísticos del New York Pro, como la incertidumbre del horario y el impacto del pesaje tardío.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>Felicitaciones por Pittsburgh y Buenas Sensaciones <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&amp;t=17" target="_blank">[00:17]</a></h3>
+
+<p>Miguel felicita a Raúl y al equipo por su actuación en Pittsburgh. Pregunta sobre las sensaciones post-competición y si el resultado confirmó su nivel.</p>
+
+<h3>El Debate sobre el Juicio en Pittsburgh <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&amp;t=130" target="_blank">[02:10]</a></h3>
+
+<p>Se aborda la controversia en redes sociales sobre el resultado del Pittsburgh Pro. Discuten si la decisión se basó en estética o tamaño y la interpretación de las puntuaciones de los jueces.</p>
+
+<h3>Plan de Mejora Continua del Equipo <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&amp;t=224" target="_blank">[03:44]</a></h3>
+
+<p>Raúl comparte el feedback positivo recibido y su visión sobre el resultado del concurso. Reafirma que el plan para Nueva York y futuros eventos es seguir evolucionando y mejorando el físico.</p>
+
+<h3>Logística del New York Pro y Horarios Tempranos <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&amp;t=293" target="_blank">[04:53]</a></h3>
+
+<p>Pregunta sobre el horario del New York Pro, mencionando un posible inicio muy temprano a las 8 AM. Se discute la necesidad de obtener información precisa sobre la programación del evento.</p>
+
+<h3>El Reto del Pesaje Tardío y la Incertidumbre del Horario <a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&amp;t=433" target="_blank">[07:13]</a></h3>
+
+<p>Se explica la dificultad del pesaje el viernes por la noche, que obliga a Josema a restringir comida y bebida durante muchas horas. Raúl añade que los horarios pueden variar, citando una experiencia personal de cambios inesperados.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal, chicos y chicas? Bienvenidos a un nuevo vídeo en el canal y fijaros a quién tengo aquí conmigo desde Nueva York. Raúl Carrajo, ¿qué tal, Raúl? ¿Cómo estás? Hola, Miguel, muy bien. Buenas noches. Buenas noches para nosotros, sí, porque para vosotros son más o menos las 5 o las 6 de la tarde, más o menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=17" target="_blank" class="timestamp">[00:17]</a> Y nada, tío. En primer lugar, antes de nada, daros tanto a ti como a Josema como a todo el equipo la enhorabuena. Porque la verdad es que disfrutamos un montón. Disfrutamos de una jornada de culturismo brutal, bestial. Ahora luego nos contarás evidentemente todo lo que sucedió por allí, que no lo pudimos ver. Todo lo que se pudo mover entre bambalinas, que seguro que fue mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=38" target="_blank" class="timestamp">[00:38]</a> Pero en primer lugar, daros la enhorabuena y por supuesto, desearos toda la suerte del mundo para dentro de tan solo cinco días. Y preguntarte un poquito sensaciones, valoración, porque yo sé que tú justo después de la visita a Tyler saliste muy reconfortado con esa opinión, pero yo creo que lo que dictaminó la tarima a pesar del segundo puesto, Raúl, fue todavía más confianza y más confirmación del puñetazo en la mesa que querías dar en este fin de semana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=62" target="_blank" class="timestamp">[01:02]</a> Bueno, muchas gracias a parte de todo el equipo. Y sí, efectivamente, Miguel, desde el inicio de nuestra fase ya aquí en Pittsburgh, empezando por el día del entrenamiento, de la grabación, del check de Tyler, empezamos a recibir...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=81" target="_blank" class="timestamp">[01:21]</a> información positiva como es el feedback que pudisteis ver y demás más bueno todo lo acontecido hasta hasta día de hoy que incluso lo puedo definir como mucho más de lo esperado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=96" target="_blank" class="timestamp">[01:36]</a> Antes, hace un rato lo hablábamos, ¿no? Siempre hemos ido siguiendo unos pasos en la carrera profesional de Cosema, queriendo tener unos objetivos en esa carrera deportiva. Y bueno, yo creo que superaba con creces, pero todavía...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=114" target="_blank" class="timestamp">[01:54]</a> Todavía queda acá, sin ninguna duda. Además, claro, está hablando evidentemente mucho de lo que ocurrió en esa final, que podríamos llamar final a dos, entre Josema y Ruth Diesel. Nosotros en el programa evidentemente no hemos catalogado esto porque...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=130" target="_blank" class="timestamp">[02:10]</a> Ya sabes tú cómo funcionan las redes sociales y aquí todo el mundo robo, robo. Nosotros no hemos hablado para ningún momento de eso. Pero sí que es verdad que sí que hay una especie de debate sobre, bueno, vamos a ver, esto cómo se puntúa, porque un día me tiran por línea, otro día me tiran por densidad y tamaño, etcétera, etcétera. De hecho, aquí en España lo hemos visto recientemente. Nos ha pasado tanto en el California como en el torneo este que hubo también el pasado fin de semana en Hungría con las decisiones de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=155" target="_blank" class="timestamp">[02:35]</a> de Germán y de Ferran, que optaron por un físico menos estético en ese sentido. Yo no sé si, porque también se reía un poco en ese sentido de aceto, decía, yo no sé si habrá preguntado al FIBA, pero es que no habrá hecho ni falta, porque ¿qué le van a decir? ¿Qué van a mejorar? Si ya no hay posibilidad de decir, no, pues tendría que haber salido de esta manera o haber salido de esta otra. ¿No es un poco con qué plan vais para Nueva York?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=181" target="_blank" class="timestamp">[03:01]</a> Más o menos repetir el mismo físico, porque al fin y al cabo el rival es el mismo. No sé un poco cómo lo vais a hacer. Bueno, mira, Miguel, ten en cuenta que tu audio se me corta constantemente, pero percibo la pregunta que me estás haciendo, ¿vale? Vale, vale.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=200" target="_blank" class="timestamp">[03:20]</a> Bueno, en principio, nosotros hemos recibido feedback a nivel personal de muchos atletas, muchos preparadores, como la primera persona que me crucé en backstage cuando fui a hablar a Josema fue Neil Hill, que me dio su feedback, Mauro Sassi, Flex Legui, Clarida también nos cruzamos, más todo un poco el feedback que hay relacionado en redes sociales,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=224" target="_blank" class="timestamp">[03:44]</a> en el que, bueno, algunos lo denominan de robo y otros. Y Miguel, a llorar a la llorería. Aquí tenemos margen de mejora, ¿vale? Para nosotros no fue un robo, fue justo vencedor. Yo no creo que se haya inclinado el classic por una estética o por masa muscular, porque al final la victoria de Ruff la denominó un juez, ¿vale? Por un punto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=248" target="_blank" class="timestamp">[04:08]</a> Por lo tanto, ya te digo, no creo que haya un cambio de criterio. Yo creo que todo sigue igual. Al final, de todos los jueces, hubo un poco de imparcialidad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=263" target="_blank" class="timestamp">[04:23]</a> Y poco más. Y después, pues el plan. Sobre el plan de Nueva York, pues el plan de Nueva York o el plan de cualquier otro evento sucesivo, que en este caso después de Nueva York será seguramente el Mister Olimpia, ya veremos, es seguir evolucionando y mejorando. Porque desde mi punto de vista, desde mi punto técnico, hay una mejora. Hay una gran mejora todavía. Desde mi punto de vista hasta donde yo entiendo el culturismo y la categoría clásica.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=293" target="_blank" class="timestamp">[04:53]</a> Como decía, Raúl, el New York Pro dentro de tan solo 4 o 5 días. Es el sábado por hora de aquí de España, el playa de aquí de por la tarde. No sé si vosotros tenéis un poco de constancia porque yo he visto horarios de que empieza a las 8 de la mañana hora de allí. No sé si os han citado tan pronto porque en el otro, en el Pittsburgh,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=312" target="_blank" class="timestamp">[05:12]</a> eran esas horas, a las horas a las que salía el campeonato, no sé si amateur o natural, no sé lo que había en Pittsburgh y después salían los pros. Pero no sé si se han citado tan pronto, porque he visto el horario a las 8 de la mañana. No sé si eso es así o daréis otra información vosotros. No, mira, en principio no tenemos ninguna información. De hecho, mañana vamos para Nueva York, para el Powerhouse. Intentaremos sacar una información más precisa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=336" target="_blank" class="timestamp">[05:36]</a> Sí sabemos obviamente a la hora que es el pesaje, cosa que para Josema al final es una putada. Para cualquier competidor que el día del pesaje se levante con el peso, tiene que tener el agua y la comida al mínimo para poder dar el pesaje. Pero eso es algo que ya tenemos asimilado, es que tampoco queda otra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=354" target="_blank" class="timestamp">[05:54]</a> Y sobre la competición, sí, tenemos constancia de que empieza temprano, 8 o 9 de la mañana, pero sí me quiero enterar, me quiero enterar bien porque incluso en Pittsburgh recuerdo que me guié un poco por la planificación del cartel que decían que empezaba, si no recuerdo mal, los men's, los classic, no, bully building y classic y no fue así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=379" target="_blank" class="timestamp">[06:19]</a> Empezó Bodybuilding primero. De hecho, creo que Crizo ni me llegó. Llegó tarde. No sé si fue por eso, pero yo creo que eso desvaría un poco. Entonces, al final, siempre hay que asegurarse presencialmente de los horarios y de todo. Así que mañana tendré un poco más de información.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=395" target="_blank" class="timestamp">[06:35]</a> Sí, porque yo además, bueno, te lo voy a compartir. No sé si a lo mejor a ti te llegará la imagen que te voy a compartir, pero bueno, yo te la voy a compartir. Que es lo que yo he visto en la web del New York Pro. Y en cuanto al ordenamiento en la previa, luego esto ya sabes tú que esto lo van variando y lo van moviendo, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=410" target="_blank" class="timestamp">[06:50]</a> Empezarían Woman Physic, Men Physic, Wellness y dejarían para el final el Classic y el 212. Pero para el final de ese pre-jacking, de esa sección, porque es que luego a partir de las 12 de la mañana, hora de Nueva York, quedaría lo que es culturismo, por así decirlo. Woman Bodybuilding, Figure, es verdad que me dejan bikini ahí por medio y Men Bodybuilding. Entonces, por eso te digo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=433" target="_blank" class="timestamp">[07:13]</a> No sé muy bien el ordenamiento, pero incluso empezando a las 8 de la mañana me da la sensación de que tenéis tiempo porque hay tres categorías por delante. Sí que es verdad que es bastante curioso lo del tema del pesaje porque imagino que lo tendréis el viernes por la tarde. Sí, el viernes por la tarde, 8 o 9 de la noche.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=452" target="_blank" class="timestamp">[07:32]</a> O sea, imagínate, ya de por sí, 5 de la tarde, quieras o no. Porque, hombre, por ejemplo, para Pittsburgh, él levantarse por la mañana, que obviamente aquí nos levantamos temprano, sí hizo su primera y segunda comida, pero después llega un momento que de las 12 o 1 del mediodía hasta el pesaje, que eran 6 y 7 de la tarde, ¿no? Creo que era.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=471" target="_blank" class="timestamp">[07:51]</a> claro, ya la comida la tiene que cortar y aguantarse para dar el peso exacto. Entonces, imagínate aquí la idea de aguantar hasta que lleguemos a ese peso, que normalmente es día del pesaje, tenemos el peso, no hay problema, pero tiene que aguantar, tiene que aguantar bebiendo los justitos, comiendo los justitos, incluso no comiendo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=CvxEjJ1lLo0&t=490" target="_blank" class="timestamp">[08:10]</a> Y sobre lo de New York Pro, fíjate, Miguel, que yo compitiendo en un New York Pro de la semifinal a la final, yo me fui al hotel a descansar, no me quedé allí y al llegar cambiaron la distribución de la salida de las categorías. De hecho, me tuve que meter en el escenario sin aceite ni nada, sin que yo ya soy perro viejo en esto y no me fío nada.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 14/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
