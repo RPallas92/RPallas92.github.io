@@ -1,0 +1,431 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 15/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">15/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-wuWjO6Uute0'>JOSEMA NOS ENSEÑA LO DURO QUE ES COMPETIR EN EL PITTSBURGH PRO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-wuWjO6Uute0">
+            <h2>JOSEMA NOS ENSEÑA LO DURO QUE ES COMPETIR EN EL PITTSBURGH PRO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 15/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=wuWjO6Uute0" target="_blank">
+                    <img src="https://i.ytimg.com/vi/wuWjO6Uute0/hqdefault.jpg" alt="JOSEMA NOS ENSEÑA LO DURO QUE ES COMPETIR EN EL PITTSBURGH PRO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video documenta las últimas horas de preparación del culturista Josema antes del pesaje y la competición Pittsburgh Pro. Muestra los estrictos protocolos de comida y fluidos, la dificultad física y mental del proceso final de corte de peso, y la reacción tras obtener un segundo puesto. A pesar de no ganar, se destaca el gran impacto y reconocimiento mundial que logró, superando las expectativas iniciales y preparándose para futuros eventos.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Ajuste Final: Lucha contra la Báscula <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=31" target="_blank">[00:31]</a></h3>
+
+<p>Josema se pesa en las horas previas al pesaje oficial, mostrando su peso con la ropa. Está a pocos gramos del límite de su categoría, confirmando que el protocolo de corte de peso va según lo planeado.</p>
+
+<h3>Estrategia Nutricional: La Carga de Carbohidratos <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=94" target="_blank">[01:34]</a></h3>
+
+<p>El preparador Raúl explica las comidas de carga de carbohidratos (arroz, ternera, galletas de arroz) antes del pesaje y la competición. Detalla la importancia de la cantidad exacta y el tipo de alimentos para optimizar la recuperación y plenitud muscular.</p>
+
+<h3>El Peaje de la Preparación Extrema <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=269" target="_blank">[04:29]</a></h3>
+
+<p>Josema muestra la realidad del proceso, visiblemente fatigado y Moribundo, explicando que el final de la preparación es el momento más duro. Se enfatiza la dificultad de dar el peso exacto y la deshidratación.</p>
+
+<h3>Pesaje Exitoso y Recarga Inmediata <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=460" target="_blank">[07:40]</a></h3>
+
+<p>Se anuncia que Josema ha dado el peso exacto requerido en la báscula oficial. Inmediatamente después, comienza a ingerir la primera comida y líquidos post-pesaje para iniciar la recarga antes del show.</p>
+
+<h3>Impacto Global Post-Competición <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=1563" target="_blank">[26:03]</a></h3>
+
+<p>Tras la competición, se analiza el resultado (2º puesto) y se celebra el enorme impacto mediático y el reconocimiento mundial que Josema ha logrado. Se subraya que, a pesar de no ganar, ha "roto el juego" y es el más comentado en el panorama del culturismo.</p>
+
+<h3>Reflexión y Polémica del Resultado <a href="https://www.youtube.com/watch?v=wuWjO6Uute0&amp;t=1677" target="_blank">[27:57]</a></h3>
+
+<p>Se discute el resultado del Pittsburgh Pro, señalando que, aunque Ruf Diesel ganó, la percepción general y el reconocimiento están con Josema. Se insinúa que la decisión pudo deberse a la necesidad de clasificar a otros atletas para el Mr. Olympia.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=0" target="_blank" class="timestamp">[00:00]</a> Vamos a ver a Josema dentro de todo el Pittsburgh, todo lo que ha hecho, desde dentro. La competición desde dentro. Quiero dar un golpe fuerte sobre la mesa. 2024 tenía hambre y no confía en mí. 2025 tengo más hambre y confía en mí. Vale. Tengo que decir que pantalón no me lo voy a quitar, pero son medio kilo más el pantalón. Y a ver el peso que tenemos a un día. Bueno, a horas de pesaje.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=31" target="_blank" class="timestamp">[00:31]</a> Justo lo que pensábamos y queríamos realmente. He dado 100,2. Menos 500 gramos son 99,7. Estoy a 400 gramos de peso. Y nada, ahora sí que es verdad que hago la mínima. Haremos... ¿Qué pesaje tenía que dar? 99,3, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=47" target="_blank" class="timestamp">[00:47]</a> Igual que hemos estado haciendo toda esta semana. Y poco más. Ya lo que me diga Raúl. Eso fue en principio lo que me dijo ayer Raúl. Si me levantaba en medio kilo más que el pesaje. Así que nada, de todas formas está ahí fuera y se lo voy a decir el peso. Y ya que me diga al 100% lo que vamos a hacer. 100 con 2, 100 con 3. Más o menos si le quitas el pantalón. 99 con 7, 99 con 8. Justo lo que hablamos ayer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=74" target="_blank" class="timestamp">[01:14]</a> Lo hemos clavado, ¿vale? De puta madre. Entonces lo que vamos a hacer hoy lo hacemos igual que ayer, lineal, y no hacemos ningún cambio, ¿vale? Vale, perfecto. Ya está el pesaje y ya pues el pesaje va moviendo. Vale, perfecto. Se acerca el juego. Se acerca. Qué bueno Raúl, tío. Qué buenísimo, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=94" target="_blank" class="timestamp">[01:34]</a> ¡Buah, tío! A mí me tenia una raya, ¿era? Para poder llegar a dar el peso exacto. Ahora que come, que no come... ¿Qué estamos cocinando aquí, Raúl? Pues en principio esta es la segunda comida de carga. Una la tengo en el frigo y esta es la segunda, que ya casi está lista, teniendo el puntito. Y...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=112" target="_blank" class="timestamp">[01:52]</a> En principio, claro, teniendo en cuenta que el pesaje más la capa de tinte, son las dos comidas más importantes. Por lo tanto, aquí ya tiene una de 400 gramos de arroz en seco. Estas son otros 400 gramos de arroz en seco, que le voy a hacer una mezcla con príceps, que son príceps saladas. Eso es un alimento que yo utilizaba cuando competía. Es muy parecido en un tipo de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=137" target="_blank" class="timestamp">[02:17]</a> de carbohidratos con un poco menor índice glucémico que las tortas de arroz. A mí me gusta mucho más. Y bueno, después de esas dos comidas tenemos también la ternera preparada. En estas dos comidas las vamos a hacer con una ternera que compramos ayer al 10% de grasa. No quería en este caso más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=156" target="_blank" class="timestamp">[02:36]</a> contando el tiempo único que tenemos hasta la competición. Por lo tanto, tampoco que la carga de las comidas sean muy pesadas con mucha grasa. Los gustos ya son comidas contundentes, comidas de 400 gramos de arroz y 250 gramos de ternera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=173" target="_blank" class="timestamp">[02:53]</a> Ay, no sé si se verá en la cámara, pero esta olla es grande. 400 en seco. Me cago en su padre. Señores, toca lo que toca. Proteína hidrolizada pro de Profis. Vale de vainilla, la más pura que hay. Fijaros, 98%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=190" target="_blank" class="timestamp">[03:10]</a> Por supuesto, esta proteína la podéis conseguir con mi código de descuento Antonio G. Es la más limpia que hay. Para mí, la mejor. Y además, no te sientas mal al estómago, que es lo típico, ¿no? Que te compres una proteína y luego lo paga de ir al vácer y de peerte y de todo. Por supuesto, con la leche esta de almendra, que es la que estoy tirando. No sé tú a qué estás esperando. Dale. El arroz para la talla. Pablo, el problema es que si no se enfría el arroz...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=209" target="_blank" class="timestamp">[03:29]</a> Con la misma calor se sigue cociendo, cociendo, cociendo y al final se convierte en una papilla. Vamos bien. Vamos bien. No hay nada alarmante. Sí es verdad que todavía no ha dado el peso. Todavía quedan bastantes horas y estamos siguiendo el protocolo. Ahora veremos, pero ¿cuánto puede ser en hecho? 800 gramos por lo menos. Un kilo 200, yo qué sé. El agua...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=237" target="_blank" class="timestamp">[03:57]</a> Y nada, en principio. Si tenemos que tirar de enema, tiraremos de enema y todo no. Pero bueno, a mí no me preocupa el peso. El peso lo va a dar. Para mí, al final, el punto más importante es este. El tiempo que tenemos desde el pesaje hasta competir. Que nunca... Mira, cuando he pesado, he pesado por primera vez en mi vida, he pesado comida desde hace un año para acá. Yo nunca he pesado la comida, no voy a cañaros. Yo ahora siempre a ojo. Claro, entonces, por eso, nunca he pesado después de haber hecho el crudo, o sea, en seco el arroz. Nunca lo he pesado después, entonces no lo sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=269" target="_blank" class="timestamp">[04:29]</a> Y a ver si está moribundo, tío. Chicos, aquí os voy a mostrar la realidad, sinceramente. En plan… La única manera de que estoy cómodo es tumbado, ¿vale? Está muerto, compadre. Es que es normal, tío. Si es que no puede dar el… Es que le cuesta mucho dar el peso ya, tío. Me lo han dado… Va a llegar el día que va a salir con la cara como… ¿Os acordáis, Cebam, en el último pesaje? Que salió con… Así. En el pesaje.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=296" target="_blank" class="timestamp">[04:56]</a> Muerto, pues igual. A las 6 de la mañana y me he bebido 150 ml de café. Estaba a 800 gramos encima del peso. Y luego he hecho clara y demás y hemos hecho la primera comida normal. 75 de arroz, huevos y ya sin agua. Después he hecho una segunda comida de avena, de 75 con proteína. Ahora ya sin beber, bueno, sin beber desde que me he levantado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=321" target="_blank" class="timestamp">[05:21]</a> Me ha dado Raúl ahora un snack, que creo que lo habrá enseñado ya. Sí, está muy bueno, pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=327" target="_blank" class="timestamp">[05:27]</a> Voy a ver, voy a mear ahora. Estaba a 200 gramos por encima, así que guay. Lógicamente no queremos comer. Quizás podría comer ahora, pero no queremos jugárnosla, ¿vale? Porque eso sería un estrés aparte más. Pero para que veáis la realidad, tío. Tiene que ser durísimo. A mí, hoy, es el día más duro de todas las preparaciones. Pero sé que esto se va a acabar pronto, ¿vale? Y ya veré. Y Josema tiene pinta de ser un jalaor. ¡Qué flipas, tío!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=352" target="_blank" class="timestamp">[05:52]</a> Josema tiene pinta de que se pone a comer y come como un monstruo, vamos. Tiene pinta, tío. Encima tengo preparador y cocinero, tío. Me ha hecho las comidas Raúl. Es que, tío... Bueno, al filmer también ha podido comer, ¿eh? Al filmer también, ¿sabes? Y nada, voy a mear a Raúl y a ver si yo creo que estaré ya en el peso. Voy a echar una merrailla. Es preocupante porque ya vas a estar ya. No, sí. Y nada, eso que básicamente este ha sido el día uno de los más duros de la preparación, ¿eh?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=376" target="_blank" class="timestamp">[06:16]</a> Pero bueno, estamos ahí ya y enseguida vamos a comer, vamos a disfrutar. Me va a subir el ánimo. Yo soy de los que quiere ver. Quiero ver a Josema ganándolo todo, por supuesto. Pero yo quiero ver que Josema, cuando deje ir el cuerpo, cuando deje ir a ver lo que da en Open, tengo muchas ganas de verlo. Bueno, yo en cuatro o cinco años. Yo soy de los que dice que yo creo que Josema es este año y el que viene. Y luego ya, no más. Que se tira para Open. Pero bueno, ya lo veremos. Porque sí que verá que tengo que ir a tintarme ahora y mañana es la mañana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=405" target="_blank" class="timestamp">[06:45]</a> Temprano haré dos capas. Y ya sobre todo a ir a apretar, disfrutar, sonreír, sentir ese apoyo y demostrar todo el trabajo que llevamos. ¡Ya está! Ahí está. Estamos... Está en el peso. Mira, pues cómete otro. Con esto y que me va a dar pirapas ahora un poco esto, vamos, de eso la doy. No sé si la cámara lo capta, hay estrellaciones en el femoral. ¡Qué barbaro!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=435" target="_blank" class="timestamp">[07:15]</a> clave. ¡Qué barbaridad! Cuando sale eso es que hemos llegado al límite, a donde hay que llegar. ¡Qué locura, tío! Esto es todo el puto. Te iba a decir cómo estás sentado por eso. Eso no es aire, como las tortas de arroz. Te están masticando de aire. Eso lo masticas. Y en saliva... Pero no se ha pesado todavía, ¿no? O sea, digo, en la comida en convicción.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=460" target="_blank" class="timestamp">[07:40]</a> Chicos, pesaje completado. Hemos dado, creo que justo, ¿no? Lo ponía en libras. Justo, al límite. 219. Y nada, ahora he hecho la comida de 400 gramos de arroz en seco con 200 de ternera y casi un litro de agua. Esto me faltaría un litro de agua, ¿vale? Y ahora nada, camino al tinte. Me daré la primera capa y con ganas ya de llegar a casa y poder descansar y estar comiendo en casa, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=490" target="_blank" class="timestamp">[08:10]</a> Así que es verdad que cuando me tinto lo paso mal porque me hielo, me congelo literal. El tinte está súper frío y la primera impresión es lo peor. Pero bueno, vamos a por todas. Qué bien me cae este tío. Hostia, hay arroz ahí, eh. Dios mío, eh. Dios mío. Ahí, ahí, ahí, eh. Joder. En principio la idea...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=519" target="_blank" class="timestamp">[08:39]</a> al peso y viendo la condición que teníamos y haciendo valoraciones con 107, con 106, con 105, con 104, la idea aquí era subirlo con unos 103, 104 minutos. Pero sí es verdad que dentro de las observaciones, de las anécdotas, de lo que José me ha ido hablando con...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=538" target="_blank" class="timestamp">[08:58]</a> Entre ellos obviamente están en el pesaje y van hablando y obviamente podemos ver a un biesel que por lo que vemos y por lo que ha dicho va a cortar el agua 24 horas. O sea, va asado. Entonces acabamos de hacer un check con Josema, ahora va a ser su tercera comida. Por lo tanto mañana pienso que con 101 largos o 102 kilos vamos a hacer lo más grande y lo más cero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=563" target="_blank" class="timestamp">[09:23]</a> Pero vamos a ir poco a poco, al final no tenemos que olvidar que está clasificado para el Ministerio Olimpia. Este al final es un campeonato importante para que se posicione y también para probar y hacer una puesta a punto que no es nueva, es diferente respecto a una condición superior gracias al trabajo de este.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=583" target="_blank" class="timestamp">[09:43]</a> Así que de momento, eso. Ahora última comida. Nos levantaremos a las seis, cinco y media de la mañana. Haremos otro chef y ahí también valoraremos la comida y el agua o los fluidos que iremos bebiendo. Es lo que te he dicho antes. No me estás pidiendo un pago al cuerpo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=602" target="_blank" class="timestamp">[10:02]</a> Si Raúl no lo sabe, ¿quién cojones lo sabe? Y se lo que va a pasar. Y eso me da una tranquilidad. Hermano, ¿el film va con un dron?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=638" target="_blank" class="timestamp">[10:38]</a> Y la idea, bueno, lo que hablamos ayer, la idea era subir con 103-104 kilos, y es verdad que ayer con 99.3, cortes muy muy muy profundos, y la idea era subir unos 2 y medio o 3 kilos arriba, manteniendo la profundidad. Una realidad, sea pesado, a las 5 de la mañana, 101.6, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=666" target="_blank" class="timestamp">[11:06]</a> los fluidos y con las comidas. Yo creo que estaremos en torno a 502 largos, 103 kilos en competición. La condición es tremenda. Y nada, ahora hacemos tres comidas ya con los hidratos moderados. Subimos las grasas. Primera comida, 150 gramos de arroz, 5 huevos. Bueno, Sema ahora comentará el tema de las comidas. Bueno, básicamente son 150 gramos de arroz, 5 huevos. Segunda comida, bajamos a 100 gramos de arroz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=693" target="_blank" class="timestamp">[11:33]</a> Imagino con pollo, ¿no? Sí. Y la última de 75 de crema de arroz. Sí, hacemos una crema de arroz. Y el agua lo iremos viendo, no la vamos a cortar completamente para que siga reabsorbiendo. Eso sí tenemos que tener mucho cuidado porque ya desde el pesaje nos vamos a acercar a los 5 litros de agua y hay que tener mucho cuidado y muy pendiente de no perder...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=714" target="_blank" class="timestamp">[11:54]</a> Ese equilibrio hormonal que hemos creado para que el agua vaya dentro y no fuera. Pero bueno, estaremos haciendo check-in de vez en cuando. Según mis teorías, contando horas, eso no debe de pasar. Así que nada, muy bien, muy contento y bueno, a partir de ahora pues revisando al...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=731" target="_blank" class="timestamp">[12:11]</a> al dedillo todo y controlando los fluidos, que es la parte más importante. Enhorabuena a José Maya y a su editor. Bueno, editor, filmmaker, lo que sea. Esto no es solo editor. Si no tiene tomas, no puede hacer nada. Estos son todos. Las tomas que está haciendo son espectáculos. No tengo los pelos de punta, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=795" target="_blank" class="timestamp">[13:15]</a> ¡Qué barbaridad, tío! Qué espectáculo de chaval, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=834" target="_blank" class="timestamp">[13:54]</a> Es que es impresionante el tío. Es impresionante tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=891" target="_blank" class="timestamp">[14:51]</a> La espalda es una salvajada. La espalda, el glúteo, femorales, todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=923" target="_blank" class="timestamp">[15:23]</a> Hay inserciones, todo, tío. Es que es un espectáculo de chaval.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=952" target="_blank" class="timestamp">[15:52]</a> Y lo que le queda por mejorar todavía.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=986" target="_blank" class="timestamp">[16:26]</a> Ya ves, allí es una puta estrella, tío. ¡No! ¡No, Jack! ¡Oh, Frank White! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Spray! ¡Kill it, man!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1018" target="_blank" class="timestamp">[16:58]</a> Ah, mira, en Emilio. Nada chicos, ya en el apartamento. Tengo preparador y cocinero. No me puedo dejar. La verdad es que, joder, se están portando conmigo todos. Desde el que está detrás de la cámara hasta... Hasta uno de México, cabello. Así que no tengo palabras de mi equipo. Y nada, voy a ver. Voy a dar mis patatines. Sí que es verdad que yo siempre, después de las semifinales y finales, me suelo duchar. Pero sí que es verdad que me enganchó bien el tinte, entonces... No lo sé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1053" target="_blank" class="timestamp">[17:33]</a> Se ven manchas. Ahora haremos una comida de arroz y ternera. Agua creo que no. Queremos salir más atrás. Y poco más. A mí es que este chaval me tiene ganado, padre. Me tiene ganado, tío. Lo tengo que decir así. Me tiene ganado. La actitud, el trabajo, disciplina, entorno, la parienta... Es que lo tiene todo, hermano. Tiene todo y me encanta, tío. De verdad, me encanta, tío. Me encanta, tío. Y a las dos o tres horas. Ahora lo he dicho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1082" target="_blank" class="timestamp">[18:02]</a> No puedo... No tengo palabras otra vez. Pues este campeonato para mí, sinceramente, era un premio. Y necesito recapacitar, porque no me lo creo. Y nada chicos, os voy diciendo, pero este vídeo va a quedar una. Os quiero mucho y gracias a todos por vuestro trabajo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1117" target="_blank" class="timestamp">[18:37]</a> Música Música</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1130" target="_blank" class="timestamp">[18:50]</a> Estamos viendo... Os digo una cosa, ¿eh? Este chaval va a ser historia de España, tío. Historia de la categoría clase, 100%. Estamos viendo de corazón, ¿eh? Vamos a estar disfrutando durante años a alguien que va a romper el panorama y que a nivel... Bueno, a nivel nacional va a ser el referente histórico, pero una cosa de locos, tío. Os lo digo de corazón, ¿eh? O sea, va a ser... Ya es, pero va a ser... Y la suerte que tenemos que lo estamos viendo en vivo ahora, viviéndolo, tío. O sea, el tío es historia viva, 100%, tío. 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1218" target="_blank" class="timestamp">[20:18]</a> Mil veces le miraré la espalda y mil veces fliparé.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1260" target="_blank" class="timestamp">[21:00]</a> Es una barbaridad, tío. El culo, tío. Es una barbaridad del glúteo, tío. Cuando hace así, tío, y ¡ay! ¡Mira, mira! ¡Mira esa espalda!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1312" target="_blank" class="timestamp">[21:52]</a> mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira mira</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1348" target="_blank" class="timestamp">[22:28]</a> A ver, yo entiendo que quieren llegar al final en el Olimpia y llevar una buena plantilla. Claro, es que lo entiendo porque al final Josema ya está clasificado. Entonces el otro no. El otro es una leyenda de la categoría y había que darle hueco al otro para que se clasifique. Pero no me vengáis con cuento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1372" target="_blank" class="timestamp">[22:52]</a> Que hay gente diciendo que por el POSING no ha ganado. Vete a la mierda, hombre. ¿Cómo que por el POSING, tío? ¿Cómo que por el POSING? ¿Estáis tontos o qué? ¿Seguro que está clasificado? ¿Cómo que moría?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1385" target="_blank" class="timestamp">[23:05]</a> Pero si ganó un ProShow después de la Olimpia, claro que está clasificado. Si aparte lo ha dicho Raúl en este vídeo, claro que está clasificado. Está clasificadísimo. Está clasificadísimo. Claro, por eso el otro ganó. Simplemente por eso. El otro no estaba clasificado y ya está. Y aquí quieren llevar allí una buena plantilla de Megapros, que van a dar el nivel y ya está. Y no hay más, tío. No hay más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1409" target="_blank" class="timestamp">[23:29]</a> Claro, ha ganado Ruf porque lo tienen que poner en el Olympia, exacto, y ya está, no hay más. No hay más, no hay más. Pues nada, que alguien gane un Olympia, gane un campeonato porque pose mejor. Por favor, Bouza, hermano. No me digáis tontería, por favor, tío. Te van a dar un campeonato por posar mejor, en serio. Por posar mejor te van a dar ganador de un campeonato. Venga, tío, de verdad, me jodáis, hombre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1434" target="_blank" class="timestamp">[23:54]</a> La estética es de Ruf, pero que la estética, hermano, Ruf hace tres años, cuatro años, sí. En lo que hay ahora, Ruf no. Porque vais a ver a Ruf cuando llegue a Olimpia y no va a entrar ni entre los cinco mejores. Ya lo vais a ver, a Ruf. Ya lo vais a ver. Ya lo vais a ver. ¿Vale? Ya lo vais a ver cuando llegue a Olimpia ni entre los cinco mejores para afuera. Ya lo vais a ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1457" target="_blank" class="timestamp">[24:17]</a> A lo vais a ver, ya está. Bueno, de verdad, yo sé que hay mucho que estáis todavía con que Classic es estética y que tiene que ganar gente como Roof. Pero que Classic ya es otra cosa. Otra cosa. Son Opens que dan el peso para que a ver si os entra en la cabeza. No hay más, ¿vale? Y los Roof con 1,70 que no llega, si quiere que no llega 1,75, 1,65...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1485" target="_blank" class="timestamp">[24:45]</a> Ya no van a ganar. ¿Sabes? No van a ganar. No van a ganar. Los bajitos en Classic ya no van a ganar. Ha cambiado la categoría. Y si vuelve a haber un cambio, me callo, pero de momento no van a ganar. Ya está. Y le han dado ahí para que se crea sinique, pero en Olympia no lo van a ganar. Punto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1500" target="_blank" class="timestamp">[25:00]</a> Es que para mí el niño pijo este que manda en todo esto, lo siento, pero a mí no me gusta, ¿sabes? Y cuando dice los porqué de que dan ganador a uno a otro, dices tú, ¿pero qué estás hablando, hermano? ¿Qué cojones hablas, tío? ¿Qué mierda hablas, tío? Al otro que si le ha ganado el Derek al Walker por la barriga. ¿Te quieres ir a la mierda, hermano? ¿Para qué pones entonces que están en empate a puntos? ¿Te quieres ir a la mierda, gilipollas?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1526" target="_blank" class="timestamp">[25:26]</a> Por la barriga, ¿sabes? Vete a la mierda, hermano. Vete a la mierda. Es un retrasado, hermano. Ese tío... A mí es que ese tío no le gusta el culturismo. Le gusta el negocio que tiene el culturismo. Pero el culturismo, nada. Y le ha tocado, le ha venido como ya está. Se le ha regalado la posición donde está. El Tyler este ya está. Y se acabó. Y no pasa nada. Hay que decirlo. Ese tío el culturismo no le gusta ni un poquito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1546" target="_blank" class="timestamp">[25:46]</a> Chicos y aquí llega la despedida del show day voy a ser claro y transparente han pasado tres días si no me equivoco necesitábamos un poco de tiempo para poder asimilar todo lo que está pasando y sigue bueno sigue llegando información de todos los medios</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1563" target="_blank" class="timestamp">[26:03]</a> Ha roto el mundo, hermano. Todo el mundo está hablando de ti, Josema, hermanito. Date por satisfecho. El mundo entero del culturismo mundial solo habla de ti. Nadie habla de Ruf Diesel. Nadie habla de él. Todo el mundo habla de ti. Mira todo Instagram de Brasil, de todos lados, americanos, europeos, en todos lados. Es Josema el boom.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1587" target="_blank" class="timestamp">[26:27]</a> Tiene todas las miradas en él. 10 se ha pasado desapercibido. Todo el mundo asume que a 10 se le tienen que dar el pase. Y ya. Así que quédate con eso, hermanito. Eres el que más ruido está haciendo a día de hoy en el panorama del Classic. Punto. Sinceramente, es como incluso mejor que en el Mister Olimpia. Ha sido una cosa muy loca. Estamos muy contentos y muy felices de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1613" target="_blank" class="timestamp">[26:53]</a> De todo, básicamente, pero es que desde que llegamos aquí hasta el resultado del físico, el puesto también, estoy muy feliz. Ya os digo, estamos hablando de que es Roof Diesel, ¿vale? Es un top 2 Mr. Olympia. Dos veces campeón de la North Classic. Son palabras muy mayores y nos hemos quedado a un punto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1633" target="_blank" class="timestamp">[27:13]</a> Él sabe que es superior. Él lo sabe. Ahora tiene que hacer esto, tiene que decir este discurso. Él sabe esto. De verdad, pensáis que él no sabe que es superior. Él lo sabe. Raúl, mira la cara de Raúl. Lo sabe. Y también saben los dos que antes ha dicho a Raúl un poquito a lo que hemos venido al Pittsburgh Pro para esto, tal, para darnos a conocer. Tal cual, ellos saben a lo que han ido. Ellos sabían que iba a pasar esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1661" target="_blank" class="timestamp">[27:41]</a> 100%. 100%. Y al New York Pro van a ir con otra mentalidad. Al New York Pro van a ir de otro rollo. Porque saben que en el New York Pro todo va a ser diferente. Él lo sabe. Él sí lo sabe. Independientemente del punto, hemos peleado contra él.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1677" target="_blank" class="timestamp">[27:57]</a> Así que nada, Raúl, no sé qué tienes que decir. Yo realmente tampoco puedo... No pueden ser polémicos, no se pueden tirar ahora los jueces encima. Tienen que ser humildes o por lo menos dar un punto de no querer nada... Joder, no crear polémica. Eso es ser inteligente, no crear polémica. Claro, cautos, porque no les conviene. Pensad que es un español en Estados Unidos. Siempre van a tirar por el estadounidense. Históricamente ha pasado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1703" target="_blank" class="timestamp">[28:23]</a> Entonces tienen que calmarse, dar ahora lo que tengan que decir, ser correctos. Yo sí puedo crear polémica, claro que sí. Claro. No, no, tampa no. Salen en el New York Pro, salen. Salen en el New York Pro. Sí, sí, cuatro días. Salen en el New York Pro este fin de semana. Es que es igual que en Olimpia. No puedo explicarme al 100% porque está siendo... No es por tirarle unos flores, pero no está siendo normal, tío. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1727" target="_blank" class="timestamp">[28:47]</a> Mira, comentábamos ahora antes de grabar algo que es una realidad. Desde que empezamos, en cada etapa teníamos una estrategia que seguir respecto a los pasos que hay que seguir, que yo considero que hay que dar en una carrera profesional. Pero es que en cada paso y en cada fase yo creo que hemos superado el objetivo que teníamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1752" target="_blank" class="timestamp">[29:12]</a> Aquí el primer objetivo era adentrarnos en ese top, adentrarnos en Estados Unidos, crear repercusión, dar un palmetazo encima de la mesa. Habéis reventado el juego, hermano. El tablero lo habéis partido por la mitad, Raúl. Lo habéis partido, tío. Ha sido una estrategia brillante independientemente del resultado, que no es malo, por cierto. Habéis partido, hermanito. Lo habéis partido. Es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1778" target="_blank" class="timestamp">[29:38]</a> De verdad, os ponéis a ver Instagram de todos los sitios y os prometo, están flipando con Josema. Están locos con Josema. Locos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1790" target="_blank" class="timestamp">[29:50]</a> Mostrar verdaderamente lo peligroso que podemos llegar a hacer. Obviamente hablando deportivamente. Y yo creo que... Buah, tío. Coronarse en el New York Pro. Eso sería epicísimo, tío. Estamos consiguiendo o lo hemos conseguido. Sí, que no siempre hay que ganar para...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1810" target="_blank" class="timestamp">[30:10]</a> y esto se lo he repetido a muchos de nuestro entorno que muchos dicen no, pero es que tendría es que paso a paso paso a paso creo que incluso con lo que estamos hablando estamos yendo demasiado rápido oye, bienvenido sea pero estamos yendo demasiado rápido es lo que tú has dicho, está siendo todo muy rápido estamos disfrutando muchísimo yo estoy disfrutando muchísimo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1839" target="_blank" class="timestamp">[30:39]</a> No esperaba en absoluto que iba a pasar todo esto en este espacio de tiempo. Pero es que ya te digo, sí que es verdad que me queda ahí el cosquilleo, ¿no? Claro, yo el año pasado hice tres shows, gané los tres. Y este año, pues, si hubiese ganado el de hace el Pittsburgh, serían cuatro de cuatro, ¿vale? Pero bueno, que eso es lo de menos, ¿vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1861" target="_blank" class="timestamp">[31:01]</a> Pero, ¿y si esto es tu camino para que tengas un poco los pies en el suelo y decir, bueno, no pasa nada, esto no es una derrota, es una victoria, no ganar para que ahora te llegue un New York Pro y, ¿por qué no? Un Olimpia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1877" target="_blank" class="timestamp">[31:17]</a> Muchas veces hay que bajar para subir. Muchas veces hay que bajar para subir, ¿eh? Que para mí esto no es bajar, ¿eh? Para mí, es que de verdad, no porque sea español, porque sea Josema, porque sea mi colega, no. Es que de corazón ha sido la primera, nunca lo he hecho, de ponerme a mirar Instagrams de culturismo. En Brasil, te digo, en Estados Unidos...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1897" target="_blank" class="timestamp">[31:37]</a> En un montón de sitios, ¿no? En Inglaterra, Estados Unidos, Reino Unido. Y que estén locos con él. Me dice que el trabajo está hecho. Ya está. Ahora está todo el mundo hablando de Josema. Y ahora todo el mundo está expectante qué pasará en el New York Pro. Todo el mundo. Viene con todo el hype de la revancha contra la Ruth Diesel. Todo el mundo. Había, disculpa, una frase que te gustó mucho.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1923" target="_blank" class="timestamp">[32:03]</a> Y es, ganar o tener una victoria sin reconocimiento no sirve de nada. Obviamente aquí hay reconocimiento, ¿vale? Aquí hay reconocimiento y por parte de los dos, Ruf, ganador, perfecto, totalmente de acuerdo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1938" target="_blank" class="timestamp">[32:18]</a> A mí me sorprendió. Sí, sí, totalmente. Pero tenemos un segundo puesto con un reconocimiento que aún estamos asimilando. Sí. Estamos asimilando. Mira, justo acabo de ver ahora un vídeo de Dave Palumbo, ¿no? Dave Palumbo y Chris Aceto, que la verdad que yo todavía...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1955" target="_blank" class="timestamp">[32:35]</a> No lo asimilo que para mí uno de los mejores preparadores del mundo se pregunte cómo hacemos para llevar esta condición y esta puesta al punto encima del escenario y que lo ve todo. Pues aquí tiene una gran parte del vídeo de lo que hacemos, ¿sabes? También fingí de la empresa de Hosties. Es una locura, es gente que lleva viviendo culturismo mucho y ha hecho culturismo y ha visto físicos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1981" target="_blank" class="timestamp">[33:01]</a> Así que nada, realmente poco más que decir. Estamos aquí en Nueva York, vamos a hacer el New York Pro también. Pero bueno, eso ya será para otro vídeo aparte. Y nada, muchísimas gracias. Espero que este vídeo os haya llegado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=wuWjO6Uute0&t=1994" target="_blank" class="timestamp">[33:14]</a> os motive y os dé ese impulso para los días que no tenéis un objetivo, pues que vayáis a por él, ¿vale? Así que nada, chicos, gracias a todos por llegar hasta aquí. Si os ha gustado, darle like y suscribiros. Y nos vemos en el siguiente vídeo, que será... Rodad to New York. Grande, Josema, Raúl. Grandes, tío. Qué grandes sois, tío, de verdad. Vamos a ver, tío. Ojalá gale todo, tío.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 15/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
