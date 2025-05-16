@@ -1,0 +1,428 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 16/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">16/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Joan Pradells</strong>: <a href='#video-5Z9cy-FqprY'>Probando Cosas Nuevas (para competir) | 90 Días Para Mi Competición Profesional</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-5Z9cy-FqprY">
+            <h2>Probando Cosas Nuevas (para competir) | 90 Días Para Mi Competición Profesional</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Joan Pradells</span>
+                <span class="date">Publicado: 16/05/2025 15:56</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY" target="_blank">
+                    <img src="https://i.ytimg.com/vi/5Z9cy-FqprY/hqdefault.jpg" alt="Probando Cosas Nuevas (para competir) | 90 Días Para Mi Competición Profesional" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El vlogger documenta su día, marcado por un intenso entrenamiento de pierna previo a una competición.
+Incluye métodos de preparación inusuales y su estado físico y mental durante el recorte calórico.
+También muestra momentos personales como cuidar la casa y gallinas de su pareja ausente.
+El video refleja la disciplina y el sacrificio necesarios en el culturismo de competición.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Inesperado Supositorio Matutino <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=152" target="_blank">[02:32]</a></h3>
+
+<p>El vlogger confiesa y muestra un supositorio que debe usar para mejorar su preparación. Describe la experiencia como extraña y necesaria para la competición.</p>
+
+<h3>¡Modo Gym Activado! Comienza la Tortura <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=488" target="_blank">[08:08]</a></h3>
+
+<p>Se prepara mental y físicamente para su entrenamiento de pierna, anticipando la intensidad y dificultad. Muestra su equipamiento y se dirige al gimnasio (su "cueva").</p>
+
+<h3>Lucha en la Prensa: Dolor y Técnica <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=700" target="_blank">[11:40]</a></h3>
+
+<p>Durante el entrenamiento de pierna, se enfrenta a la dificultad de una máquina de prensa, explicando cómo le hace "tope". Trabaja la técnica y el rango de movimiento con su entrenador.</p>
+
+<h3>Experimentando con Bandas y Tensión <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=925" target="_blank">[15:25]</a></h3>
+
+<p>Prueban diferentes bandas elásticas en los ejercicios para encontrar la tensión adecuada. Analizan cómo la banda modifica la sensación del movimiento y la carga.</p>
+
+<h3>El Dolor Punzante de los Cuádriceps <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=1257" target="_blank">[20:57]</a></h3>
+
+<p>Describe el intenso dolor en sus cuádriceps durante el entrenamiento, comparándolo con "cuchillas". Destaca una máquina de prensa particularmente dolorosa pero efectiva.</p>
+
+<h3>Cuidando Gallinas y Reflexionando <a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&amp;t=1671" target="_blank">[27:51]</a></h3>
+
+<p>Tras finalizar el entrenamiento y otros recados como la depilación, muestra a las gallinas y un huevo puesto. Reflexiona sobre la sensación de ir "a medio gas" en preparación y la cercana temporada de competiciones.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=0" target="_blank" class="timestamp">[00:00]</a> No sé muy bien cómo deciros esto, pero... O sea, esto es un puto supositorio. No me hacían efecto las sales esas. Yo quería probar un supositorio. Te voy a hacer todo esto por el culo. ¡Ya! ¡Vamos! ¡Adiós! Quiero tres. ¡Vamos! ¡Ya! ¡Ya! ¡Vamos! ¡Ya!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=27" target="_blank" class="timestamp">[00:27]</a> Tira, tira, tira. Aprieta la pierna, va. Ahí. Eh, hola. Hola. Al mundo entero. Nada la tenemos por aquí, chavales. Mañana viene.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=51" target="_blank" class="timestamp">[00:51]</a> Tengo que pasar la revisión a Fran, ahora. Y estoy aquí un poco perdido, la verdad. Solo 6 de la mañana, tío. Es que Marta se ha ido y creo que no, pues un pelín de ruido hace que no hace nada de ruido. Se deja todo súper abajo o tal para no hacer ruido, pero entero más o menos de qué se va. Y pues básicamente eso. No pasa nada. Marta se ha ido a Valencia, así que estoy yo aquí. Más solo que era una. La cosa es que no tengo coche.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=79" target="_blank" class="timestamp">[01:19]</a> Pero viene mi madre mañana. Perdonad por este despertar, eh. O sea, estoy ahora mismo en Narnia, no. En el siguiente, pero le tengo que pasar la revisión a Fran. Ahora mismo lo primero. La semana pasada no le pasé como lo de la sangre porque no me quedaba. Compramos ya. No me he quedado porque ahora como le estoy pasando dos revisions semanales, pues no me quedaba. Entonces tuve que pedir y ahora me voy a pedir como tengo la glucosa en sangre y a ver qué tal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=111" target="_blank" class="timestamp">[01:51]</a> He vuelto a pesar menos, eh, por cierto. Y estoy comiendo más. Es un poco raro. No he inspirado mucha confianza eso. O sea, es como que... No me mola. No me mola nada. Pero que también es lo que toca, ¿sabes? O sea, tengo que ir bajando. Se acercan las condiciones. Tengo que ir bajando. Es lógico. Se me hace raro también pasar dos revisiones semanales. Ahora os contaré bien. Hoy no tengo cardio. Pero ahora os contaré bien una cosa que tengo que hacer hoy que va a estar graciosa. Que Marta quiere que le llave, ¿sabes? Si se me ha costado conociendo. Let's go. Tengo una revisión para Fran.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=141" target="_blank" class="timestamp">[02:21]</a> Ahora os cuento. Se la voy a mandar y ahora os cuento lo que tengo que hacer. Quizá ya lo habéis visto. Se acabo de mandar a Rey San Fran, no sé muy bien cómo deciros esto, pero no sé si sabéis lo que es esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=152" target="_blank" class="timestamp">[02:32]</a> O sea, este es un puto supositorio. Yo no había visto un supositorio en mi puta vida. A ver si se ve. A ver si se ve. ¿Qué es? Bueno, básicamente. No me hacían efecto las sales esas. Yo quería probar un supositorio. Me dijo, prueba este, prueba este. Te voy a meter todo esto por el pueblo y luego esta parte introducirla y luego se ve que eso ya es la fiesta. Así que a ver cómo se me queda el abdomen también después de eso. No lo he hecho nunca, pero bueno, son pruebas para la competición.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=182" target="_blank" class="timestamp">[03:02]</a> Son más raras, tío. La verdad que este canal, tío, es que a veces creo que se pone súper turbio, tío. Pero meterme un puto supositorio por el culo es como... gracioso. ¿No gracioso? Bueno... Experiencia vital va a ser. Marta quería estar para no perdérselo, pero no va a estar. Así que me voy a tomar los EAS y el agua. Yo creo que el agua conforme entre va a salir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=204" target="_blank" class="timestamp">[03:24]</a> Evidentemente no voy a grabar esto. Como mucho quizás me llevo a la cámara ahí y cuando llevo un rato me he grabado la cara de sudores. Eso sí que lo puedo hacer. Pero no creo que vaya a ser muy agradable. Y luego, como hoy no tengo cardio, solo tengo movilidad, tengo posting y tal. A ver qué tal se me ve. Es muy fuerte esto. Es que esto es un buen troncho. Y todo esto es el líquido que tengo que introducirme. Madre mía. Vía rectal. Cinco mililitros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=233" target="_blank" class="timestamp">[03:53]</a> Voy a tener un supositorio. Nada, oye. Es que esto tengo que estar así cinco minutos hasta que me da efecto. Mira, ahora me llama Marta y me dijo, quiero verlo. Quiero ver tu cara. Hola. Hola, ¿qué tal? Bien. Tengo cinco minutos para aguantar así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=264" target="_blank" class="timestamp">[04:24]</a> No, yo estoy aquí, estoy chill. ¿Te lo has metido por qué? ¿Te lo has metido por el puto? Hombre, claro. ¿Por dónde me lo he metido? ¿Por la nariz? ¿Tú cómo vas? ¿Qué haces? Bien. He parado ahora a hacer pis porque ya me hacía pis. Y voy con el monstruo ahí tomándome la cafeína. ¿Tú qué tal? ¿Has dormido? Bueno, no mucho. Es que con... O sea, te escucho a veces cuando te despiertas y tal, pero bien. Ahora me prepararé todo y me pondré a hacer hipopresivos y eso. Pero me pica un poco. ¿Te pica? Sí, creo que voy a cortar ya, bebé. No, no. No, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=294" target="_blank" class="timestamp">[04:54]</a> ¿Qué? ¿Qué? Dime. Espera, que es que tengo mala conexión. Ah, vale. ¿Cuánto te queda? Ya estaría, yo creo. No, ¿cuánto tiempo llevas? Tres mils, me quedan dos mils. Pues entonces aguanta. Cuéntame algo. ¿Por dónde vas? Vale, pues... Voy y... Llevo una hora y media, o sea, no llevo tampoco tantísimo tiempo. Bueno, ni siquiera una hora y media, porque he salido a las cinco y media, o sea, tampoco llevo tantísimo tiempo. Nada, bebé, ya no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=322" target="_blank" class="timestamp">[05:22]</a> Bebé, luego hablamos. No aguanto más. Adiós. No, no, no. Aguanta, Joan. No puedo, no puedo. Adiós. Sí, sí, sí puedes. Aguanta. Esa es la gracia. Bebé, me voy a morir. O sea... Adiós. La gracia es esa. No, Joan. Bueno, luego me cuentas qué tal, ¿vale? Vale, adiós.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=346" target="_blank" class="timestamp">[05:46]</a> En resumen, mi flaring destinal debe ser espectacular, como dice Marta, que no la toque porque, sin más, me voy a preparar las cosas y me voy a bajar a entrar. Espectacular.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=356" target="_blank" class="timestamp">[05:56]</a> Cosas importantes de hoy. El supositorio no hace nada. El timer es horrible. La movilidad, más de lo mismo. Pero estoy siguiendo todo al pie de la letra. Y el posing, cada vez me noto mejor, tío. Estoy súper contento. Sabes que parece que semana a semana empiezo a apretar glúteos, efemerales, todo. Ahora me voy a tomar los greens, que me quedan dos. Debo preparar más. Me voy a vestir, voy a hacer la plena comida. Porque estoy un poco muerto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=384" target="_blank" class="timestamp">[06:24]</a> Estoy un poco así. Y encima me toca pierna. Cuando me toca pierna, entreno mucho. Ahora tengo que currar, tengo que comer dos veces. Cuando entreno de pierna, estaré perfecto. Además, que en un domingo me dijo el rodilla. Ey, bro, hay que hablar de los entrenamientos. Hay que empezar a bajar el ritmo. Y es cierto. Tiene toda razón. Así que probablemente semana que viene ya empezaremos a bajar el ritmo. Según qué entrenamientos o en según qué cosas empezaremos a quitar ciertas cosas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=407" target="_blank" class="timestamp">[06:47]</a> Ya la semana pasada, por ejemplo, quitamos ciertas cosas. Pero por ejemplo, pues han llegado cosas nuevas. Han llegado cosas nuevas y siempre me molan probarlas. Pero bueno, ya que Marta no está, voy a contar que estén todas las gallinas por ella, que hayan salido, si no las sacaré yo, que estén las ocho gallinas. Y lo que toca, me quedo al cuidado de la casa andorrana en el monte. A vestirme, son unos grins.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=433" target="_blank" class="timestamp">[07:13]</a> Para hoy no le falta ni bajar, no voy a ampliarlo aunque no se vean, pero está Yeti, Piyoto, la japonesa, la normal marrón, la normal gris, la normal blanca, Piyoto por ahí que no la veis, pero yo sí que la veo. Y no sé si me falta la japonesa como se mueve, pero sí, ya sé con todo hay hecho. Así que se les ha abierto la puerta.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=453" target="_blank" class="timestamp">[07:33]</a> Me creo que Marta a las 5 de la mañana antes de irse les haya abierto la puerta por si acaso. Pero bueno, que yo estoy pendiente. Aunque no me ha dado las indicaciones realmente que tengo que hacer para ponerles comida. Aunque ya creo que está toda la comida puesta. Pero una revisión les voy a tener que echar. 100%. O sea que hoy me llamará y me dirá.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=469" target="_blank" class="timestamp">[07:49]</a> Puedes bajar a ver a las gallinas. A ver si está. No sé quién bien porque no sé quién le hace no sé qué a no sé cuál. Coger el huevo que ponen y tal. Así que hoy lo haré. Me he dejado la puerta de casa abierta. ¿Sabéis que los días de pierna siempre tengo tostadas con melveda? ¿Creéis que se me ha quemado? Madre del amor hermoso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=488" target="_blank" class="timestamp">[08:08]</a> Bueno chavales, modo gym activado, estoy cagado. He hecho pantaloncito corto. Shaker de Batman. Eso quiere decir muchas cosas. Camita de manga larga. Eso quiere decir, hermano, que toca lo gordo, gordo, gordo. Prensa de Hakazibek. La de Gemelo de Tenensa que es horrible. En plan, que se hace dura como un demonio. Buah, las tensiones, Strife, todo. Es que todo, es que todo, es que todo. Es que hemos conseguido hacer todo complicado. O sea, es una bajada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=514" target="_blank" class="timestamp">[08:34]</a> ¿Hay alguien? Por cierto, no sé si lo he enseñado. Buena máquina de tortura. Por cierto, tengo bandas elásticas. No me he acordado para la jaca. Vamos a ser unos buenos chepros. ¿Pataras cortos?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=532" target="_blank" class="timestamp">[08:52]</a> Estoy nervioso y todo. Ya había llegado antes. ¿Qué tal? Bien, ¿y tú? Bien. Nervioso. ¿Qué tal? Nervioso. Nervioso, nervioso, nervioso. ¿Has visto lo que ha llevado? Me he visto en la caja, pero no. Tampoco me he fijado, la verdad. Vale, ya sé lo que es. Ya sé lo que es. Tengo mala pinta. Hay que montarlo, pero... ¿Y luego lo miramos? Sí, hoy no hay que pasar. ¿Y luego? Pues hoy te hago. No.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=559" target="_blank" class="timestamp">[09:19]</a> Hoy, después de hacer pierna, si me abres, me partes. Pero luego lo podríamos mirar, la verdad. Yo creo que será fácil de montar. Hoy, ¿qué se viene? Hoy lo primero es que se viene faja. El tío está en todo, madre mía. Estoy abriendo las bandas elásticas y es en plan boa. Pero me vienen de puta una de las bandas elásticas también para hacer movilidad. Ahora yo usaría unas normales. La lila, ¿no? Bueno, digamos. La lila te diría que es la más... Sí, te diría la lila también. La más normal. ¿Cómo es con ella? Esta, bro, para la prensa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=590" target="_blank" class="timestamp">[09:50]</a> Esa va a hacer mucho. Let's go. Día de piernas, día de cuáceres. Probablemente es el último día de país así, el puerto de esta historia. Nada, pero probablemente no le dé por bajarme de la vida. Ya veremos. Yo me voy a poner mi fajita para ir siempre bien apañado. Está tensa, ¿no? Ahora la cogemos bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=618" target="_blank" class="timestamp">[10:18]</a> Es que hoy tengo hasta más intra-entrene. O sea, es que hoy la vida puede ser maravillosa, chavales. Porque tengo 50 gramos de hidratos en el intra-entrene. Que me lo voy a ver igual de rápido. Sí, que me acabo de lavar los dientes. También. Entonces me vas a ver a culo. Aprendió un poco. Pero vamos a hacerlo. También. Este móvil no lo quiero. Bueno, mira dónde estoy. Pero la realidad es que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=642" target="_blank" class="timestamp">[10:42]</a> No toca aquí. Toca Shaker de Batman y toca bajar a la cueva. ¡Qué días más épicos! Me gusta, me gusta. Vamos a hacer una cosa. Vamos a cambiar el objetivo y vamos a bajar a echarle huevo ya. Estoy aquí remolandeando mucho. Tengo que decir que estaba bajando y justo ahí en el repartido de manduka. Y ya tengo comida para toda la semana, pero como es frío, yo tenía que meter en la nevera. ¿Te aclararás?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=671" target="_blank" class="timestamp">[11:11]</a> Que no tense arriba. Pero eso es fácil. Yo te lo claro, más o menos. Ahora luego, aunque no pose, me ayudas con una cosa de la movilidad para probarla, simplemente. Una banda de glúteos que quiero probar. Ya lo verás. Vamos a por ello. ¿Qué hago en la puta? ¡Ay, Dios! Y ahora sí que venís bien, bien de cerca. ¡Uh, uh, uh! ¡Qué granos! ¡Afeitar! ¡Madre mía!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=700" target="_blank" class="timestamp">[11:40]</a> A ver, no topo, güey. Es que va a hacer tope, tío. Increíble. Joder. Ya, pero tope te va a hacer tope. En plan, en todo lo que sean hackas y prensas, te van a hacer tope siempre. Sí, tú eres. Pero más a la preparación en este contexto. Por favor, sí. Sí, me da igual, pero ahora estoy en un momento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=728" target="_blank" class="timestamp">[12:08]</a> Lo suyo es que abajo no nos jodamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=741" target="_blank" class="timestamp">[12:21]</a> Vamos a probar así, si no te damos una vuelta a esta. ¿Sabes a lo que me refiero? Sí. A ver, que la azura, al igual con carga, no me hace tanto como ellos, pero es que... pero al menos, muy exagerado. Yo al menos, muy exagerado. La mierda costumbre hace unos batas, entonces... Yo te hago caso. Tú eres de... fucking boss. No te juro que no te voy a existar nada. Si te lo existes, tú no eres chingas. Te pego. Ha durado vosotros.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=775" target="_blank" class="timestamp">[12:55]</a> ¿Cómo lo sientes? ¿Sí? ¿No notas diferente o no notas que es más genial?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=804" target="_blank" class="timestamp">[13:24]</a> Brota, se nota. Sí, mucho. O sea, mucho no, pero se nota. Lo tienes que notar ahora. Vale, pero no es una locura. No. No es una locura, no. Pero notarlo. Sí, ha costado notarlo, pero... No, pero no lo sientes, ¿sabes? Siempre he sido yo anti... ¿Sabes? Sí, sí, sí. ¿Va bien? Sí. Un poco más fácil. Vale, pues...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=837" target="_blank" class="timestamp">[13:57]</a> Más de tres y seis fuertes, ¿no? Sí. Lo que hicimos la semana pasada. Sí. Esa, aquí hicimos cinco y cuatro. No quieres que le ponga peso a las cosas, ¿eh? No. No quieres, ¿eh? Ya le pondremos peso a las cosas. No quieres. Ya verás, haga clip que no quieres que le pongamos peso a las cosas. Vamos a ver cómo acaba la serie. Ah, sí, sí, que verá que nos ha hecho un sellado con vuelta aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=878" target="_blank" class="timestamp">[14:38]</a> ¡Sí! ¡Adiós! ¡Una! ¡Dos! ¡Vamos el peso! ¡Vamos! ¡Ya! ¡Vamos! ¡Estoy bien! ¡Adiós! ¡Tres!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=925" target="_blank" class="timestamp">[15:25]</a> Me has notado la banda en comparación a las anasanas pasadas. Más cómoda la vaina. Me ha sido un poco más genial tu perfil. Sí. Seguiría por apagón a la cura. Ya. Espero que esto sea mejor. Menos que buscaba. Claro, es que es lo que buscaba. ¿Probamos azul y salimos de dudas o no? Yo lo tiraría así.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=949" target="_blank" class="timestamp">[15:49]</a> ¿Por qué? Cuando alza con mi intención. Ya. A partir de mitad del recorrido ya hacía tensión. Mucha tensión. Y esta, aunque haga la misma tensión, mitad del recorrido y la mitad de gorda. Ya. No, eso es lo que te digo. Bajabas, luego soltabas. Voy a hacer que llueves un poquito. Que llevarás... vendas. Ahora sí. Los pusimos por... Debajas, tío. Y ahora lo he cogido. ¿Empujas el otro? ¿El otro qué? El pata.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=981" target="_blank" class="timestamp">[16:21]</a> ¿Encajado? Sí. Sí. Ahí si de verdad es tensión nada debería saber. ¿Te lo apretó yo? ¿Te lo apretás? Es que va a tener abajo del nuevo azul. Ah, sí, tenemos tensión. A ver, esto es para calentar. Claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1021" target="_blank" class="timestamp">[17:01]</a> Uno. Tres. Va. Tres. Una. Sigues. Dos. Vamos. Más. Vamos. Arriba. Sigues. Más. Quiero tres. Vamos. Ya. ¡Ya! ¡Vamos! ¡Ya! Una. Dos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1067" target="_blank" class="timestamp">[17:47]</a> He hecho un apretón más. Las dos últimas. Y me hago. Me hago bien. Me hago bien. Me hago bien. Me hago bien. Lo tengo que ir. Entonces en invierno tira así. 3, 2, 1. Todo lo que quieras. Claro. Pero bajando discos lo prefiero.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1082" target="_blank" class="timestamp">[18:02]</a> Confiamos aquí. Sí. ¿Sabes? Sí, sí. Y tú te fudes 100 euros y tú te estás rentando. No sé, yo te pongo bien penetrado, pero te compro lo que quieras. Drop, drop, drop. Te pongo a un lado, evitas dos. Te has puesto a la mitad de todos. Así, ¿sabes? Y que la presa no aparece.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1099" target="_blank" class="timestamp">[18:19]</a> Fum, fum, fum, fum, fum. Y cuando queden dudos por lado, que no se acabará la serie. Y que no se acabará la serie. Y que no se acabará la serie. Y que no se acabará la serie. 10 segundos. 20 más. Pero ahora en un contexto en el cual el procurador tampoco... Ahora lo doy pena, bro. Ahora lo doy pena. En la LOP vamos a intentar hacerla continua.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1117" target="_blank" class="timestamp">[18:37]</a> Ahora hacemos otra vez igual, en la tercera. Te voy a sacar... No voy a dejar que falles en la primera. O sea, sí, que pelees. Pero ya directamente te saco dos y voy a volver al otro lado. Vale. Saco dos y vamos a intentar hacerlo contigo. Vale. Si luego pasa cualquier cosa, pues pasa y ya está, ¿sabes? Pero vamos a intentar hacerlo. Vale, sí, sí. En el juego me gusta. Vamos a intentar hacerlo así. Y luego cualquier cosa, pues ya. Vamos. Ok, let's go.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1144" target="_blank" class="timestamp">[19:04]</a> ¡Vamos! ¡Arriba! Bien uno, sigues. Tenía la tuveza, es tuya. Prueba muy bien esta. Muy buena esta. He pillado el punto de la ruptura, bueno. Y el cinturón bien, ¿no? Sí. Sí, lo único que era... Ahora me pegaste un poco al pad. ¿Hacia abajo? Sí. Se te ha subido. A ver. A ver, el volumen supongo que tengo un precio, pero... Es que yo creo que no se me ha salido el... En volumen tú vas a ser el pad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1179" target="_blank" class="timestamp">[19:39]</a> Por aquí. Por debajo del tubo. ¿A mí no se sabe qué te pasa por aquí? Por debajo de la maña. Sí. Claro. ¿Bien? Sí. De lo que pasa. ¿Cómo andas? La puta de esa tan pequeña haja es que me tengo que poner así. ¿En plan? Mira los vidos. Para llorar de esto. Ya vas a estar muy debajo de toda la maña. Claro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1204" target="_blank" class="timestamp">[20:04]</a> Sí, tú sigues. Mientras te voy sacando discos, saco los tres a punto de fallar. Pum. Tres a punto de fallar. Pum. Como en la prime. En la free. Después te lo volví a ver. Uy, uy, uy. Vamos. Es porque no se ve clar, ¿sabes? Se me queda mal. Vamos. ¡Adiós! ¡Bien!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1235" target="_blank" class="timestamp">[20:35]</a> ¿Muy cómodo? ¿Qué? ¿Muy cómodo? ¡Envierno! Me preocupa mucho. Patrón. Tengo una rodilla aquí. Es que yo no sé si tú lo ves. No, estoy más pendiente de... Te miro las piernas. Un muchísimo peso, está claro. Pero salí de la rodilla aquí... Es una locura, ¿no? Cien por cien. Es como una jaca. Ya, pues, es precioso, bro. Y esto ya es todo. Envierno esto por cuatro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1263" target="_blank" class="timestamp">[21:03]</a> ¿Por cuatro series? ¿Por cuatro veces? Por cuatro por cuatro. Por diecisiete. Te lo pido por favor. Aguanta hasta el invierno y esto está el invierno. 100%. Yo sé que es una mierda de traerme ahora sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1276" target="_blank" class="timestamp">[21:16]</a> No es una mierda, es lo que toca. Cuando me voy a subir cojo y crecer y crecer y crecer. No es una mierda, es lo que toca. Hay que ser consecuentes. Quieres A, haces A. Si quieres A, no haces B. No se me lo quiero. Ahora es normal. Aparte, ya entras en modo de no ser un espejo objetivo. Ya entras en modo de estar rayado, comer y cabrita la cabeza. Por todo es normal. El contexto es normal. Ahora apretar dientes y al tirarte todo lo supo. Un poco más puedes exigir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1304" target="_blank" class="timestamp">[21:44]</a> Mucho nos estamos exigiendo. Que sí que es cierto que soy partidario de darle un motivo a la base muscular para quedarse, ¿sabes? Siempre y cuando se pueda tener duro, a piñón. Que de hecho, si te vas a analizar, yo que me apunto los pesos de todas las semanas, el peso se ha mantenido en todo. Trojanos a muerte. Una. Bien. Dos, sigues. Tres, vamos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1334" target="_blank" class="timestamp">[22:14]</a> Quiero cinco aquí. Quiero cuatro aquí, vamos. Arriba, arriba, arriba, aprieta, aprieta tú. Quiero tres.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1346" target="_blank" class="timestamp">[22:26]</a> Si lo aprietas tú, le vas a dar dos. Tira, tira, tira. Tira tú, Soban. Aprieta la pierna, va. Ahí. Matamos, vamos. Ya. Ya. Con ganas. Cinco. Arriba, arriba, arriba. Cuatro. Tres.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1377" target="_blank" class="timestamp">[22:57]</a> No sabes cómo me duelen los colíceps. Creo que este invierno me voy a hacer mucho daño. Sí. En plan va a ser como cuchillas. Dolor punzante. Sí, sí. Lo llevo a buscar. O sea, va muy al sitio. Muy al sitio, eh. Claro, esa prensa es dolorosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1395" target="_blank" class="timestamp">[23:15]</a> Es que ahí la carga la desplazas, ¿sabes? En plan, que es bastante vertical. Es una de cojones, pequeñita, compacta. Además la tenemos pillada con el cinturón detrás, etcétera, no sé qué. Tenemos muy pillada.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1410" target="_blank" class="timestamp">[23:30]</a> y a la que tengamos, a la que tengas tú las fuerzas y las energías de poder agarrar la seria muerte y poder hacer el patrón bien de saco y sigue, saco y sigue, saco y sigue, saco y sigue, pero ahí vamos a sacar de uno en uno y dan dos, dos y luego uno, uno, uno, uno, ¿sabes? Ahí se pone a hacer locuras en esa prensa. Yo si algo me corto los pies para no estar tan alto y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1440" target="_blank" class="timestamp">[24:00]</a> ¡Vamos! ¡Vamos! ¡Vamos!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1452" target="_blank" class="timestamp">[24:12]</a> se te parten sentado. Por eso te digo que hay que hacer más aductor. Saliento de pierna finalizado y con ganas de ver esto como el infierno, sinceramente. Es lo único que quiero y es lo único que me importa. No os ha gustado llover a la hora de guardar la caída de Marta, pero he hecho por meterme en uno que esto es momentáneo y que estamos yendo a medio gas porque está cerca la competición. Pero yo no quiero esto. Yo tengo gravísimo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1482" target="_blank" class="timestamp">[24:42]</a> el rato y que tu día se joda por entrenamiento. Eso es lo que quiero. Mi día se va a hacer entrenamiento. Estoy jodido en parte por eso, porque a mí no me gusta estar a media paz. Y siento que voy a media paz. O sea, siento que sí que hacemos seres fuertes, que tal. Pero me siento sin fuerza. Y siento que podría a veces ir más fuerte. Una putada. La verdad es una putada. Porque es la parte del culturismo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1508" target="_blank" class="timestamp">[25:08]</a> Esa prensa es lo mejor que me ha pasado en la historia. Esa prensa la carga al demonio. Esa prensa está dura, durísimo. Esa prensa te puedes poner muy fuerte. Con cualquier prensa, pero esa prensa va especialmente bien. Especialmente bien.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1524" target="_blank" class="timestamp">[25:24]</a> No tiene sentido, se tiene la rodilla aquí en la orejita. Yo puedo poner el cinturón, el pad, el rostrador detrás. Tiene para cargar el disco, pero tampoco falta cargar el extremo, vamos. Yo no sé si en invierno usaremos el pincho ese de arriba para hacer drop sets. No sé, es una locura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1542" target="_blank" class="timestamp">[25:42]</a> Vamos chicos, vamos para arriba. Me he visto las piernas bastante bombeadas haciendo extension ecuadices. Me ha hecho gracia. Pues solo me quito los pantalones, o sea las mallas, para hacer gemelos por una secuita para hacer extension ecuadices al final. Me dice Nuno, ¡eh, eh, eh! Que te quedas en extension ecuadices. Voy a quitármelo, pero me quedas en extension ecuadices. Los días de pierna...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1562" target="_blank" class="timestamp">[26:02]</a> ¡Guau! Pues quiero salir lo peor de todo. Me voy a comer esto, ¿vale? Que tengo refit, que eso está bastante guay, la verdad. Pero es que tengo depilación de todo el cuerpo a cero. Me van a destrozar. Por lo menos no tengo mucho pelo ahora mismo, la verdad. No tengo casi pelo. Me voy a poner con los cascos y voy a ponerme a llorar. O sea, os lo juro. No voy a llevar la cámara, pero... Es que lo paso mal, ¿eh? O sea, me pongo un calzoncillo ahí y me tiro dos horas. Como así...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1586" target="_blank" class="timestamp">[26:26]</a> Es que llego cansadísimo a casa. Es una locura. Por cierto, estaba pensando que esta mañana ha sido el supositorio y ha sido una locura. De hecho, Tony me ha preguntado y todo en plan, ¿qué tal el supositorio y tal? Está gracioso, la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1599" target="_blank" class="timestamp">[26:39]</a> Dios, no me apetece nada, tío. Siempre, tío, siempre además lo voy echando hacia atrás a la vez de pirarme la cera. Es una locura, es una locura. Pero es que es como mejor me queda y lo prefiero. Aunque mañana se me irrita un poco el cuerpo, me lo veréis y tal, pero es como mejor me queda, sin ninguna duda. Así que lo tengo que hacer. Por cierto, el día de refir, un poquito de piña.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1619" target="_blank" class="timestamp">[26:59]</a> en su jugo que la verdad que era un toque de la fruta que me preguntaba todo el niño que era lo que más me apetecía comer ya después de 18 semanas así decía bro pues si es que nada así muy guarro y la fruta un sushi cosas así como fresquitas ¿sabes? eso es de verdad de verdad de verdad era buena pero bueno voy a preparar unas cosas y me voy a ir y ahí me muero ya</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1639" target="_blank" class="timestamp">[27:19]</a> No, mira, ya estoy por aquí. Cambiado, conectando a este de competición. Y ready para empezar así. Estos cascos me salgan a la vida. Y a llorar. Madre mía. ¿Se me habrá salido un huevo o no? Gente depilado, depilado, depilado, depilado. No me ha hecho daño, la verdad que es súper bien, estoy súper contento. Me ha tocado bajar a hacerle un vídeo de comprobación a Marta, ¿vale? Porque no está. Y atentos a esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1671" target="_blank" class="timestamp">[27:51]</a> Es increíble. Bueno, claro, esto ha salido del culo de la gallina, pero es increíble cómo ponen el huevo de bien. Esta es la negra que ponen huevos todos los días. Son súper rojos. Yo no me los tomo por la dieta y eso. Son súper pequeñitos también, pero bueno, que Marta me hace enviarle vídeos de la gallina, básicamente. En plan, a ver que estén todas, que no sé qué, coger huevo para que no lo piquen, echarles comida, aunque está todo automatizado para que se puedan quedar. Pero me va a hacer...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1696" target="_blank" class="timestamp">[28:16]</a> Esta noche me va a llamar para decirme a ver si están todas, se han guardado todas en el adinero, para gritar. Está gracioso, la verdad. Está gracioso. Y yo ya, fuá, depiladísimo. La verdad que me rentaba, que flipas depilarme. Si también se ve mejor en el posing, salgo mañana, que mañana seguramente se me vea como más irritado. Me salga algo de acné esta primera semana y eso. Buah, por cierto, menuda sesión de pierna, eh. No la habéis visto bien, os lo juro, pero menuda sesión de pierna. O sea, ha sido matadora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1721" target="_blank" class="timestamp">[28:41]</a> Marta no está, se me hace raro. Yo tengo refit, tengo cereales hoy, se me hace muy raro. De hecho, esta semana en parte ha estado bien, pero se me está haciendo raro. O sea, soy totalmente honesto, soy totalmente sincero. La semana que viene hay que hacer alguna cosa guay, pero no sé, es como que vienen semanas un poco raras. Vienen semanas un poco raras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1738" target="_blank" class="timestamp">[28:58]</a> Es que se empieza a acercar mucho ya el verano. Y el verano son competiciones. Y es ver vuelos, ya habrá que ir viendo. Estaba poniendo jorgero de Tampa. Realmente coincidamos en Tampa. Es ya como entrar en esa fase. Y me da un poco de miedo incluso. Pero bueno, me están llamando. Así que chicos, os quiero mucho. Suscribiros. Voy a dejar aquí el vídeo. No porque me están llamando, pero voy a dejar aquí el vídeo. Y mañana nos vemos que es viernes. Y toca buen check. Aunque yo también toco check.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=5Z9cy-FqprY&t=1767" target="_blank" class="timestamp">[29:27]</a> Era mi madre. ¿Saluda? Eh, hola. Hola, adiós. A todo YouTube, al mundo entero. Hola y adiós. Cierro de vídeo. Chao, chao. Nada la tenemos por aquí, chavales. Mañana viene.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 16/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
