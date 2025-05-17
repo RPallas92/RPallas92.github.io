@@ -1,0 +1,423 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 17/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">17/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-x3ORVtyD6Pw'>SE FILTRA Y CONFIRMA EL ROBO A JOSEMA EN EL PITTSBURGH PRO</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-x3ORVtyD6Pw">
+            <h2>SE FILTRA Y CONFIRMA EL ROBO A JOSEMA EN EL PITTSBURGH PRO</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 17/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw" target="_blank">
+                    <img src="https://i.ytimg.com/vi/x3ORVtyD6Pw/hqdefault.jpg" alt="SE FILTRA Y CONFIRMA EL ROBO A JOSEMA EN EL PITTSBURGH PRO" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza el supuesto "robo" en el Pittsburgh Pro de culturismo, donde Josema quedó segundo. Se revela, basándose en fuentes internas como Milos Sarcev y Bozicharilo, que Josema ganó el pre-judging, la ronda que supuestamente define al ganador. Esto contradice la regla oficial (reafirmada por Tyler Mannion) de solo puntuar el pre-judging y el resultado final publicado. El presentador sugiere que la decisión fue manipulada para favorecer a otro atleta por intereses comerciales de la liga.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>La Bomba de Milos Sarcev y Bozicharilo <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&amp;t=40" target="_blank">[00:40]</a></h3>
+
+<p>Se revela en el podcast de Dennis James, con la confirmación de Milos Sarcev y Bozicharilo, que Josema ganó el Pre-judging del Pittsburgh Pro Classic Physique 7 a 8. Esto contradice la norma de que solo se juzga por la mañana y el resultado oficial donde Ruth Diesel fue el ganador.</p>
+
+<h3>La Regla Clave Contradicha por el Vicepresidente <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&amp;t=314" target="_blank">[05:14]</a></h3>
+
+<p>Se reproduce un clip antiguo de Tyler Mannion (vicepresidente de la IFBB Pro League) afirmando claramente que en Classic Physique solo se puntúa el Pre-judging y la final es solo confirmación. Esto evidencia la enorme contradicción con lo ocurrido en el evento de Pittsburgh.</p>
+
+<h3>Confirmación del "Flip-Flop" en las Puntuaciones <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&amp;t=673" target="_blank">[11:13]</a></h3>
+
+<p>Bozicharilo, el maestro de ceremonias del evento, confirma explícitamente que Josema ganaba en el Pre-judging por un punto. Milos Sarcev corrobora haber visto las hojas de puntuación iniciales, indicando que la decisión de valorar las finales cambió el resultado a favor de Ruth Diesel.</p>
+
+<h3>El Audio Revelador del Podcast <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&amp;t=1107" target="_blank">[18:27]</a></h3>
+
+<p>Durante un extracto del podcast, se escucha a Milos Sarcev y Bozicharilo discutir las hojas de puntuación, confirmando que "fue flip-flop" (se cambió el resultado) tras las finales. Esto refuerza la afirmación de que, a pesar de que Josema ganó el Pre-judging, las finales fueron puntuadas y alteraron el marcador.</p>
+
+<h3>El Verdadero Escándalo: Ocultar el Juzgamiento Extra <a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&amp;t=1230" target="_blank">[20:30]</a></h3>
+
+<p>El presentador enfatiza que el escándalo no es la victoria de Ruth Diesel, sino el hecho de que se puntuaron las finales en Classic Physique (algo inusual y negado previamente) a pesar de que Josema ya tenía un ganador en el Pre-judging. Cuestiona quién tomó la decisión de juzgar nuevamente y por qué se ocultó.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=0" target="_blank" class="timestamp">[00:00]</a> Vamos a hablar un poquito de una barbaridad que hemos estado discutiendo hace unos días y es sobre Josema y el robo que se acaba de demostrar en el Pittsburgh Pro. Vamos a verlo. Robo con pruebas en el campeonato de Josema que el otro día quedó segundo y resulta que será que realmente eran primero. Y aquí lo van a demostrar en el vídeo de Miguel.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=20" target="_blank" class="timestamp">[00:20]</a> Pero tenemos una noticia, o mejor dicho, una revelación de última hora, una revelación que desde luego puede hacer romper muchos esquemas dentro de la IFBB Pro League, porque esto es una contradicción en mayúsculas, y lo voy a demostrar, en la que se desvela en el programa, en el podcast de Dennis James, por parte de Milo Sarcefi, corroborado por Boz y Cherry Locke, la persona</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=39" target="_blank" class="timestamp">[00:39]</a> como todos sabéis, ese maestro de ceremonias que recibe los cartelines con la puntuación de los atletas, se desvela de manera oficial que en el Prejadkin, supuesto Prejadkin, que es lo único que se juzga en Clásic Fisic, y vamos a escuchar a Tyler Manning decirlo hace tan solo un año, cuando la victoria de Wesley Bissler sobre Ramón Dino, diciendo que solo se juzga en Clásic por la mañana y que por la noche simplemente una ronda de confirmación, o llamémoslo como queramos, pero que no tiene puntuación. Bien, pues se confirma en el podcast de Dennis James, por parte de Milos y por parte de Bozichelilo, que Josema salió vencedor del Clásic Fisic por 7 a 8.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=68" target="_blank" class="timestamp">[01:08]</a> Estoy flipando, te lo juro. Mira, a ver, yo no voy a flipar, no me voy a hacer sorprendido porque yo con Miguel estuve hablando anoche, ¿vale? De esta barbaridad, o sea, antes de que él publicase el vídeo. Y me lo dijo y fue como... No me lo puedo creer. No me lo puedo creer. ¿Vale? No me lo puedo creer. Que verdad que, bueno, sí que dije, dije en el vídeo mío, cuando vimos en las finales y tal, que era un canteo, claramente, para darle el pase a...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=95" target="_blank" class="timestamp">[01:35]</a> A Diesel, ¿vale? Es así. Porque estoy convencido que en el New York Pro, y espero no agafarlo, va a ganar. Va a ganar, Josema. No va a ganar Diesel. Una semana después. ¿Vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=108" target="_blank" class="timestamp">[01:48]</a> ¿Qué pasa? Interesa. Bueno, vamos a ver el vídeo y ahora digo lo que yo pienso. Ojo a esto. Salió vencedor por 7 a 8 en el Prejadkin y que tomaron la decisión, porque tenían dudas, de valorar también la final. De hecho, Bocicari lo dice, no os confiéis porque también valoran las finales. Con lo cual, hay una contradicción enorme.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=126" target="_blank" class="timestamp">[02:06]</a> Una contradicción enorme entre lo que se dice y lo que se hace, por no hablar de que también hubo una manipulación, y lo veremos, en el cartelín final. Porque en el cartelín final solamente se puntó el playar game y en lugar de dar a Josema como ganador, se da como ganador a Rutis, el que fue el que finalmente venció en el evento. Lo vamos a escuchar todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=141" target="_blank" class="timestamp">[02:21]</a> No quiero sacar grandes conclusiones del tema. Para mí, insisto. Y esto era un capítulo muy cerrado. Es decir, gana Ruth Diesel. Por la parte de Ruth Diesel, evidentemente, ¿cómo no le van a dar ganador? Por la parte de Josema ya escuchamos a Raúl Carrasco diciendo, oye, para nosotros no fue ningún robo. Justo vencedor. Hasta ahí muere todo. Sale luego Steve Weiberger, que era el juez central. Esto que no se olvide porque es muy importante. Steve Weiberger era el juez central del evento. Tyler Mannion era un juez adyacente. No era el juez central. De hecho, lo confirmó.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=165" target="_blank" class="timestamp">[02:45]</a> Tyler Mannion ayer, sale cada uno dando su valoración, uno habla del tema de la estética del posting, el otro habla de que le falta más bombeo, tampoco hay unanimidad en esto, tampoco debería por qué haberla, cada juez tiene su criterio, pero en este caso sí que hay una mentira, sí que hay una decisión que es mentira y es la que se nos muestra la opinión pública, que es que Josema no salió vencedor porque ganó Ruth Diesel en la única valoración que hacen del Prejacking. Bien, pues esto es rotundamente, y lo vamos a escuchar, falso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=188" target="_blank" class="timestamp">[03:08]</a> Falso. Josema salió como vencedor y lo va a corroborar tanto Milos que pudo ver el cartelín como por supuesto Bozicharino que lo tenía en la mano. Salió como vencedor en el Prejadkin por 7 a 8. Es decir, Josema debería haber ganado el evento porque ahí muere el evento. Evidentemente estas eran las imágenes que teníamos el pasado sábado por la mañana. Estas son imágenes del Prejadkin. Imágenes de lo que se puntúa, de lo que se evalúa. Tengo que decir que tampoco es que hubiera un cambio muy grande entre el Prejadkin y las finales. Pero bueno, independientemente de si hubiera cambio o no...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=215" target="_blank" class="timestamp">[03:35]</a> La opinión de Tyler Mannion o la información de Tyler Mannion o el criterio de la IFE Pro League, porque no olvidemos que este chico es el vicepresidente de la IFE Pro League, es la persona que manda realmente en todo esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=225" target="_blank" class="timestamp">[03:45]</a> Eh… Era esta. Quiero que lo escuchemos atentamente, porque estas declaraciones fueron de hace… Escuchad ahora, eh. Un año… Leer mejor. Ramón Dino, recordaréis que salió bien en el pre-jagging. Ramón Dino salió bastante mal. Y luego Ramón Dino remontó. Y de ahí vino la gente diciendo que Ramón Dino ha remontado y se ha mostrado mejor que Wesley. Y salió a la palestra diciendo… En Classic solamente se puntúa lo que ocurre en la mañana. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=249" target="_blank" class="timestamp">[04:09]</a> Menos mal que la hemeroteca no falla. Está diciendo claramente lo que importa es el Prejudging. No importa las finales. Las finales solo corrobora lo que hemos visto en el Prejudging.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=277" target="_blank" class="timestamp">[04:37]</a> Vamos a volver a escucharlo. Porque insisto que creo que, bueno, más claro agua. El Preyatgin es lo que se valora en Classic. Por la tarde o por la noche, cuando el siguiente es la final. Simplemente una ronda de… Es impresionante. ¡Qué confirmación! Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=292" target="_blank" class="timestamp">[04:52]</a> Por la mañana, ¿vale? Lo que importa la noche es para confirmar. O sea, el prejudging es para lo que importa y las finales es para confirmar. Pero el juzgamiento real es por la mañana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=314" target="_blank" class="timestamp">[05:14]</a> Es que es impresionante esto, de verdad. Este tipo es el presidente de la IFBB, tío. Este tío es el máximo que manda en el culturismo mundial, hermano. ¿Vicepresidente? ¿No es el presidente? En todos los eventos, durante estos días, recibiréis historias, información de que son los eventos importantes, donde se juzga… En eventos de plan B, por así decirlo, de cara B, se juzga. Ah, bueno, el presidente es su padre.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=342" target="_blank" class="timestamp">[05:42]</a> ¿No? Solamente en el pre-jagging. Pero que en eventos importantes como Olympia o Arnold o Pittsburgh se juzga en la semifinal. Eso es rotundamente falso. Esto lo dijo en este caso Tyler Mannion nada más y nada menos que en un Arnold. No, no, la viscón. Pero que esto no es algo que se haya inventado Miguel. Que esto lo va a confirmar ahora Milos justo aquí. Milos y el otro juez.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=361" target="_blank" class="timestamp">[06:01]</a> Que no va a ser algo de Miguel, que lo vamos a ver justo ahora. Insisto, ese argumento ya totalmente inválido. En Classic, tal y como ha firmado este señor, que es el que mueve los hilos de la IFV ProLiquid… Y vos Fichery, vale. … y de la manera de juzgar, se juzga única y exclusivamente en el Prejadgin. Y a partir de ahí tenemos… Qué sinvergüenzas son, tío. … que os voy a enseñar, que fue precisamente el cartelín de los jueces. Aquí tenéis nuestro amigo Juiz TV, para mí la mejor página de Instagram en habla hispana… La verdad que para mí también es muy buena esa página de Instagram.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=389" target="_blank" class="timestamp">[06:29]</a> La recomiendo a todos, eh. En el habla que quisiera, porque también lo opina en inglés. Tenemos el cartelín de jueces. Prejadkin. 7 a 8.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=399" target="_blank" class="timestamp">[06:39]</a> Ternes Rafinha 7, Josema 8. Si es verdad que no pone nada de pre-Jatkin, sino que pone Jatkin. Pero si os dais cuenta, en el otro lugar está en limpio el casillero de la final. Con lo cual, ¿qué quiere decir? Que no se puntuó la final. Hasta ahí todo correcto. Es decir, hasta aquí vamos bien. Es decir, solamente se juzga pre-Jatkin y los jueces entienden que gana Ruth Diesel por un punto a Josema. Hasta aquí, insisto, compramos. No hay robo, no hay nada por el estilo. Gana Ruth Diesel, te podrá parecer mejor, te podrá parecer peor. Podrás estar más de acuerdo o menos de acuerdo. Hasta ahí todo correcto. ¿Qué es lo que pasa?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=427" target="_blank" class="timestamp">[07:07]</a> Lo que ocurre es que hay un podcast, como digo, de Denis James, donde aparece Milo Sarcev y donde invitan en este caso a Bozicharillo, que Bozicharillo es el maestro de ceremonias de muchos eventos y en concreto el maestro de ceremonias del Pittsburgh Pro. Es la persona que recibe por parte del estadista las calificaciones de las categorías. Y aquí es donde viene el problema. Vamos a empezar a juchar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=445" target="_blank" class="timestamp">[07:25]</a> me tell you something that that was another one that i had the score sheets from earlier that was flip-flopped the other way until the last round and parents got improved his back to the bicep because it's published online twice first i've seen it was the same thing seven eight eight seven um yeah if carter can pull it off officially it's only one round judge and uh terrence has seven and uh yosema has eight yeah</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=475" target="_blank" class="timestamp">[07:55]</a> José Ma iba primero por la mañana o lo consideraron primero y luego fue segundo en el principio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=494" target="_blank" class="timestamp">[08:14]</a> Confíenme en esto, chicos. Confíen en mí, chicos. No, no, pero Dennis, te prometo, porque yo estaba con Jay y Betty, ella siempre encuentra las hojas y nos la mostró. A ver cómo dice vos. O sea que lo cambiaron, hermano. Increíble. Increíble, claro. Increíble, ¿no? Lo he nunca visto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=524" target="_blank" class="timestamp">[08:44]</a> Fue muy reñido. Imagino que... Esto no es para estar flipando, hermano. Esto no es para flipar. Es que esto es loquísimo, tío. De aquí la cabeza se ha tenido que explotar. Pero ¿cómo no nos va a explotar? Es que a mí... Mira, a mí lo que me molesta... ¿Vale? Esto siempre ha pasado. Esto no es nada. Esto no son cosas nuevas. Esto... Ha pasado. ¿Vale?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=543" target="_blank" class="timestamp">[09:03]</a> Muchas veces. El culturismo tiene una serie de giñadas en general y una serie de fumadas con las puntuaciones de los jueces siempre. Pero es que más aún, ¿vale?, en Estados Unidos. ¿Qué quiero decir? Siempre ha sido, en Estados Unidos sobre todo, un negocio culturismo. Pero es que desde la llegada de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=563" target="_blank" class="timestamp">[09:23]</a> Tyler Mannion lo ha hecho más negocio aún. A Tyler Mannion le gusta el culturismo lo que a mí la petanca, ¿vale? La verdad. Lo que pasa es que sabe que con el culturismo va a ganar dinero a las puertas. ¿Qué pasaba? Que es muy sencillo, yo lo dije el otro día. La cara de Ruth Diesel, ¿vale? Tiene que estar en el Olympia. Porque es un tío que ha quedado segundo en el Olympia y ha ganado dos Arnold Classic.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=588" target="_blank" class="timestamp">[09:48]</a> Entonces te interesa sacar una alineación en el Olimpia mega top. Te interesa un Ruf Diesel, un Dino, un Urf, un Josema, ¿vale? Y más y más y más. Interesa que haya un buen, una buena plantilla en la categoría más vista del mundo, porque es la categoría que todo el mundo quiere ver, ¿vale? Josema ya estaba clasificado, Ruf Diesel no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=616" target="_blank" class="timestamp">[10:16]</a> Y sabían que los dos iban a competir a la semana siguiente, o sea, ya en el New York Pro. Pues entonces, ¿qué hacen? Van los dos al campeonato y dicen, bueno...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=631" target="_blank" class="timestamp">[10:31]</a> Están igualados. Aunque gana José Ma, se lo damos a Diesel. Y en el New York Pro, como ya está clasificado Diesel, se lo damos a José Ma, que es el verdadero ganador. ¿Esto quién tiene la culpa? Pues tiene la culpa toda la mierda de clasificarse con ganar eventos. ¿Vale? Y ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=647" target="_blank" class="timestamp">[10:47]</a> Entonces yo esto no lo veo bien, sinceramente. No me parece bien. No me parece bien porque si un tío es ganador, es ganador. ¿Por qué? Porque ojalá no pase. Pero si mañana, por lo que sea, Josema se levanta con algún tipo de problemas, Josema a lo mejor no puede salir en el New York Pro. Y que Diesel no esté clasificado no es problema de Josema. Porque si Josema es mejor en el campeonato, tiene que ganar Josema. Pero...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=673" target="_blank" class="timestamp">[11:13]</a> El negocio. El negocio. Dice Boziccherilo que en el Prejatkin Josema ganaba por un punto. Es decir, las calificaciones que acabáis de ver estaban totalmente cambiadas. Es decir, Prejatkin, Josema siete, Ruth Diesel ocho. O sea, es que lo ha confirmado Boziccherilo. O sea, el tipo este, que es el presentador, tal cual. Es el tío que está ahí, que no podéis poner en duda esto. Y Milos lo ha vuelto a confirmar que él ha visto el papel de que Josema era el ganador. O sea, estos dos tíos, bueno, todos, pero sobre todo estos dos tíos,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=700" target="_blank" class="timestamp">[11:40]</a> tienen mucho peso en el culturismo mundial. ¡Mucho peso!</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=706" target="_blank" class="timestamp">[11:46]</a> Pero mucho. Y que toman la decisión de valorar la final puntuándola y cambian el sentido de las calificaciones. Es decir, José va a pasar a tener ocho. Hermano, la gente del culturismo está con Tyler Mannion hasta los cojones ya. Es más, Tyler Mannion, sinceramente, yo sé que Tyler Mannion está haciendo más mainstream el culturismo, la verdad.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=731" target="_blank" class="timestamp">[12:11]</a> Pero al que le guste el culturismo, de verdad, se está cargando el culturismo. En lo que el origen es culturismo. La verdad. Sí, sí, hará negocio, hará que la gente vea más el culturismo, pero lo que es el culturismo, la esencia del culturismo, se la está cargando este señor. Se la está cargando. Ya está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=749" target="_blank" class="timestamp">[12:29]</a> Ruf Diesel pasa a tener siete. Exactamente lo mismo que pasó en el Open. 15 a 15. ¿Por qué se decide…? Porque, por ejemplo, yo soy de los que piensan que Classic Physique… Habéis salido ahora todos los… No se malinterprete. Todos los Tabet de turno… Porque Tabet, todos sabéis que le flipa la línea, la línea… En Classic es la línea, la línea, la estética… Habéis salido todos los que opináis como Tabet… No, no, es justo ganador Ruf Diesel.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=774" target="_blank" class="timestamp">[12:54]</a> No, no. Sabéis que no. Que yo soy de los que piensan que Classic es Ruf Diesel. Para mí. Para mí, Classic es estética y la línea. 100%. No lo voy a negar. Pero todos sabemos que a día de hoy, eso ya, si no va acompañado de una altura, te vale verga. Te vale verga. Se acabó. Eso ya no lo valoran. Pero claro, eso es una opinión para mí, mía. La realidad es otra.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=799" target="_blank" class="timestamp">[13:19]</a> Y ya está. Y yo sé que saliste y muchos salieron de la cueva, ¿vale? Para decir, no, no, no, ha ganado justamente. No, no, no, ha ganado justamente. Tú sabes, igual que todo el mundo, que con el criterio que hay hoy día, Ruf Diesel no entra ni en el top 5 de los Olimpias. Es más, a ver si me calla la boca, a lo mejor me la calla. Este año, en condiciones normales, ese hombre no va a entrar en un top 5 Olimpia. En condiciones normales no va a entrar. Estando Dino, URSS...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=825" target="_blank" class="timestamp">[13:45]</a> Somerfield, Josema y tal. Ese tío no va a entrar en el top 5. Es que lo sabéis todos que no va a entrar en el top 5. Bueno, a lo mejor el top 5 sí, el quinto. Pero va a ser ni cuarto, ni tercero, ni segundo, ni primero. Que no. Que no, que no. Ya está. Y luego, la verdad, da una imagen...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=841" target="_blank" class="timestamp">[14:01]</a> Tú puedes ser muy estético, compi, pero parece el hijo de Josema. Parece el hijo. Parece el hijo, tío. No me jodáis, tío. Finales. ¿Quién decide cambiar a valorar las finales? Que posee increíble, que tiene un cuerpo increíble, pero que a día de hoy se pide otra cosa en Clásic. El criterio que se toma no solo era una cuestión de consideración, de ratificación de lo que se estaba votando, por qué ahora hay una calificación en la categoría Clásic en la final. Eso es lo que realmente</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=870" target="_blank" class="timestamp">[14:30]</a> Importa aquí. ¿Quién toma la decisión de decir vamos a juzgar la final? ¿Sobre qué criterio? ¿Sobre qué baremo? ¿Quién se ha sacado esa norma de la manga? Cuando hace un año precisamente el jefe de todo esto nos dice que solamente se califica por la mañana. ¿Habría sido sensato haber salido como salió ayer a valorar el Clásic y decir señores? Tomamos una decisión en el Prejadgin pero no lo teníamos claro y decidimos volver a evaluar o a puntuar en la final. ¿Por qué no lo dijo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=895" target="_blank" class="timestamp">[14:55]</a> Eso es un poco las incógnitas que tenemos aquí. Que no hay incógnita, hermano. Es que de verdad no hay ninguna incógnita. Que no, que esto es un negocio e interesa tener a Ruth Diesel en la alineación de la Olimpia. Es que ya está. No le deis más vueltas. No le deis más vueltas. Ruth Diesel es un peso pesado de la categoría. Es una leyenda de la categoría. Ya está. No le deis más vueltas. Es mejor Josema que Ruth Diesel hoy día. 100%.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=920" target="_blank" class="timestamp">[15:20]</a> ¡Cien por cien! ¡No te rayes, cien por cien! ¡Que Josema tiene que mejorar el post-ing! ¡Claro, cien por cien también! ¡Pero no me jodáis, por favor! Nos sale en este caso el presidente de la IFBB Proliga hablando de… Poniendo una manita así y diciendo… Eh, me estáis hablando de robos y yo… De robos nada. Me estáis hablando de política y yo de política nada. ¿Por qué se oculta esto?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=942" target="_blank" class="timestamp">[15:42]</a> Esa es la gran pregunta que surge en todo esto. ¿Por qué se oculta esto? Porque hasta entonces, y esto va a la gente a decir, claro, es que estáis intentándose agarraros a un clavo ardiendo para dar la victoria de José Manuel. No, no, no. ¿Qué coño agarraron a un clavo ardiendo? Si lo han dicho de ellos. ¿Clavo ardiendo de qué? Si te lo están diciendo. Gente fuerte, pesada del culturismo. ¿Qué coño?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=964" target="_blank" class="timestamp">[16:04]</a> Están desvelando esta situación. Nosotros aceptamos. Fijaros, como fans de Josema… Igual que yo lo he dicho de verdad. Diesel, tres años atrás, estaría un escalón por encima de Josema. Ya está. Lo sabéis. El que sepa cómo funciona el culturismo, Diesel, tres años atrás, era campeón, pero de calle. Pero hoy día no, porque han cambiado los criterios. Se acabó. Aceptamos perfectamente que Josema en este torneo quedará segundo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=993" target="_blank" class="timestamp">[16:33]</a> Se puntúa el pre-Jalgin, dan como ganador a Ruth Diesel, predominio de la línea, hasta aquí todo correcto, se da la mano y se compite en la siguiente competición. El problema está cuando surge esto. Cuando surge esto, evidentemente no sé en el seno de Josema, o mejor dicho, si lo sé y prefiero callármelo. Pero obviamente, la gente que somos fans del culturismo y evidentemente como españoles y como también gente cercana en este caso al entorno de Josema, valoramos mucho el trabajo. Yo he estado hablando esta mañana, dándole apoyo a Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1024" target="_blank" class="timestamp">[17:04]</a> No le voy a preguntar, ni le pienso preguntar. Él tiene que estar concentrado en la competición, ¿sabes? Pero me consta que el entorno de Josema está loco. ¿Vale? Loco. De corazón. Loco. El esfuerzo, la dedicación, el sufrimiento. Que no digo que no lo tengan sus rivales, pero sabemos lo que él tiene encima.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1050" target="_blank" class="timestamp">[17:30]</a> Y nos encontramos con esto, evidentemente entendemos que esto es una vergüenza. Claro que es una vergüenza. Es que no solamente va a quedar aquí. Vamos a seguir escuchando porque es que esto se va a ratificar. Esto va a ir a más. Esto va a escalar a más. Vamos a escuchar el siguiente extracto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1064" target="_blank" class="timestamp">[17:44]</a> Loca, a nivel mundial. Es fuerte que solo se esté hablando de Josema a nivel mundial. ¡Miradlo! ¿Meter una encuesta de Instagram de culturismo mundial? ¡Solo se habla de Josema! ¡Nadie está hablando de Diesel! ¡Nadie! Joder, no tiene esa calidad con 23 años. Sí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1092" target="_blank" class="timestamp">[18:12]</a> Bien, gracias. Bueno, no tengo nada. Pati nos enseñó que estaba en el UFC y he visto, pero no escrícoles. ¿Y lo viste? ¿Y este hombre que está hablando? Y este hombre Hungarian... ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos! ¡Milos</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1107" target="_blank" class="timestamp">[18:27]</a> Veo lo que Bobby dice, que fue flip-flop, justo como el Open. Pero ¿cómo verías las escuelas? Después de la pre-judición, viste las escuelas? No, después de las finales. Estoy viendo UFC con Jay, y luego estoy esperando, y ella siempre busca las escuelas. Luego encontró el Open y nos mostró.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1128" target="_blank" class="timestamp">[18:48]</a> Supongo que dice Jay, Jay Cutler, ¿no? Y Terence, 8, pre-judging, y luego el flip-flop. Y luego lo cambiaron.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1152" target="_blank" class="timestamp">[19:12]</a> Algunos atletas se creen que el show de la noche no cuenta y les aseguro que sí que cuenta. ¿Y Tyler Manning por qué dice que no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1169" target="_blank" class="timestamp">[19:29]</a> back at your best because that's something they changed many years ago it's it counts equally or more because obviously that's going into the pose out on the finals so do your homework boys did you see it did you see the classic uh score sheets yeah yeah and is this what i'm saying correct yeah yeah yeah that's what i saw</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1190" target="_blank" class="timestamp">[19:50]</a> Pues aquí… Hombre, viendo las declaraciones de Tyler Manning, diciendo prácticamente que en la final pues…</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1210" target="_blank" class="timestamp">[20:10]</a> Solo vale para confirmar lo que ya vieron, que lo que importa es juzgar ese pre-Jugging, que lo demás, bueno, pues sin más, pues no sé, ya van de loco. Queda ratificado lo que estamos hablando. Tanto Milo Sarcev, que lo pudo ver, como Bozicharillo, que lo pudo ver, hubo dos puntuaciones. Tanto en el pre-Jugging como en la final hubo dos valoraciones, cuando solamente hay que hacer una.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1230" target="_blank" class="timestamp">[20:30]</a> ¿Por qué se fue a la segunda valoración? ¿No valía con darle a Josema en este caso como ganador, ya que lo estabas dando como ganador en el pre-Jadgin? ¿Tenían muchas dudas de lo que estaban haciendo y por eso tuvieron que valorar la final con puntuaje, cosa que no se hace? Aquí está el escándalo. Aquí está el escándalo. El escándalo no está en dar como ganador a Ruth Teaser. No es ningún escándalo ese. Es una decisión de los jueces, se respeta, lo ha respetado todo el mundo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1255" target="_blank" class="timestamp">[20:55]</a> El problema es este escándalo. El problema es ocultar que sí que se valoraron las finales. Que no valió con el título de José Manuel Prejagin. No fue suficiente. Es que esto me parece fatal, tío. Se lo tuvieron que llegar a las finales. ¿Quién toma esa decisión? ¿Quién toma la decisión de decir vamos a valorar las finales? Porque con lo que hemos visto en el Prejagin no tenemos suficiente. A pesar de que dais a un ganador.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1280" target="_blank" class="timestamp">[21:20]</a> ¿Quién toma esa decisión? ¿Por qué se toma esa decisión? ¿Por qué se decide darle una vida más a Ruth Diesel? Porque es la realidad. Le da una vida más. Estás... Has perdido. ¿Por qué se le da una vida más, una posibilidad más de levantar eso? Esas son las preguntas que surgen aquí. ¿Quién toma esa decisión? Entonces, vamos a escuchar el tercer extracto que aquí nos explican un poquito cómo funciona el tema, con el tema del estadista y demás, pero se confirma. Se confirma el error. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1310" target="_blank" class="timestamp">[21:50]</a> Si los cheats en el final eran Terrence Seven y ¿qué su nombre? Eight, entonces tiene que ser un error. Sí, 15-15, idéntico como Open. Sé, pero supongo que no fue el resultado, porque si no hubiera tenido otra caja y otra otra... Claro, no tiene que haber sido el resultado, no es el correcto. Estoy roto. Pero no puedes simplemente ir después y cambiarlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1336" target="_blank" class="timestamp">[22:16]</a> No, no, no, no, no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1353" target="_blank" class="timestamp">[22:33]</a> Oh, that I don't know. And after it's changed, they had to mean that one that went out had to be a mistake. That's what I'm saying. Yeah. I mean, I hope people don't get caught up with that. Listen, sometimes there are mistakes in the sheet. Sometimes they get a preliminary one. Listen, the judges are judging until that final bell goes off. And I get that sheet of paper. I've had stuff changed in a moment. I get the hold up from Steve or Sandy or somebody. And that means, listen, where it's closer, we might change our mind. Let me explain to the people how this can happen.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1383" target="_blank" class="timestamp">[23:03]</a> No, no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1406" target="_blank" class="timestamp">[23:26]</a> Así que ellos hicieron errores. En lugar de segundo lugar, ella me dio dos primeros lugares. Y eso es como se cambió, porque el scorekeeper puede hacer un error. Y eso es por eso que siempre tenemos a alguien que se siente al lado del scorekeeper que le lee los números de los juegues. Así que el scorekeeper puede solo type los números, no leer y type, leer y type. Así que es como... No, no los juegues, chicos. Así que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1432" target="_blank" class="timestamp">[23:52]</a> Pues ahí teníamos ese extracto final donde obviamente se confirma que algo pasó. ¿Algo pasó? No pasó nada. Yo creo que esto confirma más mi teoría y la de todos, ¿no? Tenían que meter al otro y ya está. Y la han metido, punto. Es que no hay más. No le deis más vueltas, tío. Ya está. No le deis más vueltas. Es que... De verdad. O sea, ya el otro lo ha confirmado prácticamente. Creo que es así. Y este fin de semana, ¿Josema va a ganar? Porque va a ganar el New York Pro, ya veréis.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1459" target="_blank" class="timestamp">[24:19]</a> Insisto, puede pasar, puede haber errores, pero lo que no es normal, y vuelvo a insistir, es quién tomó la decisión de valorar puntualmente, es decir, con número, con calificación, 8 a 7 a favor en este caso de Rutiza en la final. ¿Por qué se tomó la decisión de valorar la final cuando ya tenías un ganador en el Preyatting? Que es lo que supuestamente, y hemos escuchado por parte de Tyler Mannion, cuenta. ¿Por qué ha contado el año pasado de esta manera? Porque este año no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1486" target="_blank" class="timestamp">[24:46]</a> Son un montón de interrogantes. Son un montón de interrogantes. Hay muchas cosas que no sabéis. Yo no las puedo contar porque obviamente forman parte de la privacidad y son las personas indicadas las que tendrían que decirlo. Pero yo sí que puedo decir que esto no sienta bien. Y que hay más cosas que no sientan bien. Hay algunos... No sé si la palabra sería ninguneos o... Hombre, claro que es ninguneo. Cosas raras. Están pasando cosas raras.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1514" target="_blank" class="timestamp">[25:14]</a> Y han pasado cosas raras. Y no sabemos si este fin de semana van a pasar cosas raras. ¡Ojito! José Michael Deloro no se lo llevan mañana. Bueno. Desde luego que esto es un escándalo. Esto es un absoluto escándalo. Y esto vuelve otra vez a sembrar la duda de una posible mano negra en cuanto a qué son ellos los que mueven el para dónde quieren que vaya la cosa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1535" target="_blank" class="timestamp">[25:35]</a> Que luego esto se comenta y ponen el grito en el cielo. Y aplican vetos y aplican historias. No lo digo yo. Esto no lo he develado yo. Esto lo está develando Milos Sarcev y Bozitscherilo. Que yo dudo mucho. Dudo mucho. Anda que los dos que lo están diciendo. Que estén dentro de ninguna lista alegra de la IFV Pro League. Entre otras cosas porque Milos Sarcev va como debería de ser. Como si fuera el salón de su casa por los eventos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1560" target="_blank" class="timestamp">[26:00]</a> Obviamente. Y bocicherilos con el que cuentan para que sea el maestro de ceremonias. Con lo cual, poco dudosos de ir en contra del sistema. Entonces, cuando salen diciendo lo que dicen, cuando desvelan lo que están desvelando, de la gravedad que lo están desvelando, porque sí, amigos, sí. Josema, te han robado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1577" target="_blank" class="timestamp">[26:17]</a> No lo digo yo, lo dicen ellos. Tú eras el ganador de lo que se juzga, del pre-jagin. Y alguien toma la decisión de que, no, esto así no termina de cuadrar. Vamos a valorar las finales. Evidentemente algo pasa. Y evidentemente alguien tiene que salir a la palestra, dar la cara y decir, hemos tomado esta decisión por esto, por esto y por esto. Ahora, salir a hablar, defendiéndose, como hizo Trajerman, donde, eh, ¿estáis hablando de robo? Robo no. El Open lo dijo, pero bueno, me da igual, lo puedo extrapolar aquí. Robo no. Esto de política, de que nosotros decidimos quién gana y quién no, no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1607" target="_blank" class="timestamp">[26:47]</a> Y se juzga por poses. Y por poses la cosa iba 2-2 hasta que valoramos la pose de mejor pose clásica.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=x3ORVtyD6Pw&t=1618" target="_blank" class="timestamp">[26:58]</a> Porque en el doble bíceps de frente se lo dio a Ruf, en el perfil se lo dio a Josema, por espalda se lo dio a Josema, en el abdomen y pierna se lo dio a Ruf, ya son 2-2, y el tercero, que es el que lo decide, lo decide la mejor pose clásica. Una mentira, no es una mentira, es una manera de justificarse, no lo sé. Quiero que me dejéis en la caja de comentarios si opináis. Quiero que en la medida de... Se confirma lo que yo decía. ¿Me sorprende? No. ¿A vosotros os sorprende?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 17/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
