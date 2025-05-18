@@ -1,0 +1,384 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 18/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">18/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Strongman Tarrako</strong>: <a href='#video-ET-qGwH9WxA'>FLOJOS, LLORONES Y ENCIMA LESIONADOS</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-ET-qGwH9WxA">
+            <h2>FLOJOS, LLORONES Y ENCIMA LESIONADOS</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Strongman Tarrako</span>
+                <span class="date">Publicado: 18/05/2025 09:54</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA" target="_blank">
+                    <img src="https://i.ytimg.com/vi/ET-qGwH9WxA/hqdefault.jpg" alt="FLOJOS, LLORONES Y ENCIMA LESIONADOS" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video critica a las personas que pronostican lesiones en ejercicios de fuerza o strongman, especialmente cuando ellos mismos están débiles y lesionados.
+El presentador argumenta que la mayoría de las lesiones en principiantes o intermedios se deben a una técnica deficiente y falta de conocimiento, no al ejercicio en sí.
+Contrasta su propia longevidad y rendimiento sin lesiones graves, a pesar de buscar límites, con la fragilidad de quienes entrenan mal.
+Enfatiza la importancia de aprender la técnica correcta y corregir los errores para evitar molestias y progresar adecuadamente.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>La Crítica Apocalíptica vs. La Realidad del Entrenado <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&amp;t=36" target="_blank">[00:36]</a></h3>
+
+<p>El presentador expresa frustración con quienes critican su entrenamiento de strongman, prediciendo lesiones. Señala que precisamente esos críticos son quienes están débiles y lesionados por no saber entrenar correctamente.</p>
+
+<h3>El Peso Muerto Mal Ejecutado y Sus Consecuencias <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&amp;t=213" target="_blank">[03:33]</a></h3>
+
+<p>Describe la técnica incorrecta común del peso muerto, sin usar las piernas y curvando la espalda. Explica cómo esto concentra la tensión en la lumbar, provocando lesiones prematuras en personas con musculatura débil.</p>
+
+<h3>Errores Simples que Causan Tendinitis (Curl de Bíceps) <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&amp;t=292" target="_blank">[04:52]</a></h3>
+
+<p>Ejemplifica con el curl de bíceps, donde soltar el peso en la fase negativa sobrecarga el tendón. Esto lleva a tendinitis o desgaste, sin estimular correctamente el músculo, resultado de una ejecución deficiente.</p>
+
+<h3>¿Por Qué Algunos Se Lesionan Siendo Débiles? <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&amp;t=403" target="_blank">[06:43]</a></h3>
+
+<p>Argumenta que la gran mayoría de personas con físicos y fuerzas bajos que están lesionadas es porque entrenan mal. Contrasta esto con su experiencia de buscar límites sin lesiones significativas, sugiriendo que la técnica es clave.</p>
+
+<h3>La Consecuencia de Entrenar Mal: Debilidad y Lesión <a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&amp;t=755" target="_blank">[12:35]</a></h3>
+
+<p>Concluye que entrenar mal te lleva a estar flojo, sin fuerza y lesionado o con molestias constantes. Insta a aceptar los errores técnicos y aprender de quienes tienen experiencia para salir de ese ciclo negativo.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=9" target="_blank" class="timestamp">[00:09]</a> Buenas amigos y amigas, nos encontramos en nuestro canal de YouTube Strongman Tarraco y como digo algunas veces en vídeos un poquito más contundentes intentaré no faltar al respeto a nadie ni insultar pero está complicada la cosa porque estoy un poquito hasta los cojones de muchas cosas pero de las que más me molesta es la constancia que tienen algunas personas en criticar y pronosticar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=36" target="_blank" class="timestamp">[00:36]</a> que te harás daño por lo que haces y precisamente son ellos los que están flojos y lesionados porque no tienen ni idea de entrenar que ese es el gran problema y supongo que será el título del vídeo ayer pues hice un paseo del granjero una prueba de strongman 155 por mano perfecto maravilloso y la tarana de siempre huy la espalda huy esto huy lo otro</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=62" target="_blank" class="timestamp">[01:02]</a> Ya hemos explicado muchas veces que las personas que nos dedicamos a competir, que hemos competido, que llevamos el rendimiento dentro, tomamos unos riesgos porque rendimiento y salud no van de la mano.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=75" target="_blank" class="timestamp">[01:15]</a> A partir de aquí, a toda esta caterva de apocalípticos de todo tipo de ejercicios que supongan un esfuerzo y un reto, no les ha dado por pensar que igual, si a estas alturas del partido estoy maravillosamente bien, ¿algo habré hecho bien? ¿O siguen esperando ya a que parezca el fullet tortuga para que me duela algo que me impida algo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=100" target="_blank" class="timestamp">[01:40]</a> Porque ayer hice eso, hice más Strongman, hice bíceps tríceps, a la tarde estuve en el huerto, hoy ya he hecho el cardio y ahora voy a entrenar. Dominguete por la mañana, vosotros veis este vídeo dominguete por la tarde. Aún le voy a pegar una serie de press de banca, voy a grabar unos vídeos por aquí y luego a la vuelta al huerto. Estoy mejor que vosotros, mucho mejor, de algunos que tienen 20 años menos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=126" target="_blank" class="timestamp">[02:06]</a> De los apocalípticos más mayores ya ni hablemos. La mayoría no se aguanta ni de pie. Entonces, ¿de qué estamos hablando? ¿Sabéis cuál es el problema? Que haya gente que en un nivel de exigencia de entrenamiento durante muchos años tenga molestias y tenga lesiones, tenga desgaste, es absolutamente normal. Ya lo hemos dicho. El entreno es lesivo. La vida es lesiva. La vida desgasta. Por lo tanto, lo que hay que hacer es vivirla</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=155" target="_blank" class="timestamp">[02:35]</a> según lo que sientas, sin tocar los cojones sistemáticamente a los demás. ¿Qué sucede? Que toda esta caterva de imbéciles que están todo el día dando por saco, ellos están fatal. Porque recibo vídeos constantes de gente, algunos que no me han criticado o mareado con ese aspecto, porque hay gente en ese aspecto, hay gente que lleva 15 o 20 años diciéndome, uy, el año que viene, uy, ¿cuándo? Uy, uy, uy, uy, uy.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=185" target="_blank" class="timestamp">[03:05]</a> Uy, tú en bicicleta, ¿sí? Entonces, claro, ¿qué sucede? Que no saben entrenar. Es absolutamente lamentable la cantidad de gente que no tiene ni puñetera idea de hacer peso muerto. No bajan el culo, no implican las piernas, mucho ego. Así de vídeo recibo. Incluso algunos que intentan ser clientes míos y dices, oye, esto está mal hecho. ¿Por qué? Porque lo digo yo que lo sé. Porque lo digo yo. Está mal hecho. Pregúntale a cualquiera.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=213" target="_blank" class="timestamp">[03:33]</a> ¿Qué pasará luego? Que como no implicamos las piernas, no bajamos el culo en el peso muerto, ¿qué hacemos? Le metemos toda la tensión a la parte baja de la espalda. Tal como sale, curvatura. Así, por un montón, ¿qué pasará de tiempo? Que encima lo hacéis antes de que vuestros paravertebrales, de que vuestros electores de columna, cuadrantes lumbares sean fuertes. ¿Y qué sucede? Que tenéis expuesta parte de la columna vertebral, habrá lesiones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=242" target="_blank" class="timestamp">[04:02]</a> El problema es vuestro, que sois flojos y tontos, porque no aprendéis a hacerlo. Y eso lleva a las lesiones y a las molestias. Que luego una persona, no digo que lo haga maravillosamente bien porque hay un factor genético y pueda tener molestias, y entonces veremos. Entonces quizás no hay que hacerlo, etc. Pero lo que no hay que hacer es anticipar lo que va a pasar y encima cuando lo haces mal es tu culpa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=269" target="_blank" class="timestamp">[04:29]</a> Y al final culpas al mundo. Entonces pasáis a la caterva de tío que está todo el día en contra de todos los ejercicios del mundo. Constantemente me mandan vídeos de cool de bíceps. Gente con brazos que no parecen ni brazos. Es que me duele aquí, es que me duele allá. ¿Cómo puede ser que estés tan flojo y ya te duela todo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=292" target="_blank" class="timestamp">[04:52]</a> No es evidentemente por un desgaste de mover toneladas de kilos con sentido porque te apasiona el mundo del culturismo o de la fuerza. Es porque eres tonto y lo haces mal. Porque hay gente que hace el cul de bíceps, hace la fase concéntrica, es decir, la fase positiva del movimiento, que hacen la negativa, ¡bom!, la suelta. ¿Qué pasa cuando pierdes tensión y pegas ese golpetazo abajo? Que va toda la tensión sobre el tendón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=321" target="_blank" class="timestamp">[05:21]</a> Y si no os lo acabáis partiendo, porque no os lo partís porque con ese peso no se puede partir nada, acabáis generando una tendiditis o un desgaste que os molesta. Luego, ¿qué hacéis? La apoyáis en la caderita y ¡pum! para arriba. ¿Qué sucede? ¿Qué conclusión tenemos? Que no trabajáis el bíceps y os jodéis los tendones. ¿Qué pasa después? Que encuentras una persona que es floja, que está lesionada y que por lo tanto es tonto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=347" target="_blank" class="timestamp">[05:47]</a> Porque fuerte, pero flojo, lesionado, ya tonto ya. Y así con una cantidad de ejercicios ingente, porque yo recibo muchos vídeos y hay gente que con toda la buena fe del mundo, luego le corriges y va, ostras, yo pensaba que lo hacía bien, ostras, porque realmente en los gimnasios ya nadie corrige, entiendo yo. Eso es otra cosa que podríamos abrir y que cada uno, pero evidentemente hay gente que en los gimnasios ya no corrige.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=375" target="_blank" class="timestamp">[06:15]</a> Antiguamente, o cuando yo tengo a alguien aquí, lo que pasa es que esto no está masificado, luchas porque lo haga bien. Y yo aquí hay gente que ha dicho, oye, o lo haces bien o te largas. Porque yo tengo una reputación que mantener y no vas a ir con mi camiseta por ahí diciendo que entrenas aquí entrenando como el puñetero culo. Porque además te vas a hacer daño. Y estas conversaciones las he tenido aquí la semana pasada y la otra. Entonces, la gran mayoría de gente que está lesionada...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=403" target="_blank" class="timestamp">[06:43]</a> Y encima, con físicos y fuerzas muy bajos, es porque entrenáis mal. Evidentemente, si competís en strongman, en powerlifting, si buscáis hipertrofia máxima, si buscáis límites, hay riesgos. Casualmente, un servidor los ha buscado todos sabidos y por haber los límites, y aquí estoy impecable. Ya sé que a algunos os jode, porque a algunos hay comentarios de hace 15 años, uy, el año que viene, el año que viene, mira, perfectito.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=435" target="_blank" class="timestamp">[07:15]</a> La mayoría es porque entrenáis mal. No sabéis entrenar. Hay sentadillas con valgos en las rodillas. Hay gente que choca las rodillas en la sentadilla. Se le meten para adentro, chocan y vuelven al sitio. Nadie corrige eso. No sabéis hacer ejercicios para compensar el valgo. Hoy haremos un vídeo en Patreon de eso. No tenéis ni idea de entrenar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=461" target="_blank" class="timestamp">[07:41]</a> Los remos barra son dramáticos. No hay nadie que haga un dorsal en el remo barra. Todos hacéis orejas, cervical, algo de trapecio y sobre todo mucha lumbar mal hecha. El problema es que no sabéis entrenar y que no os habéis preocupado en aprender y os centráis en dar por saco pensando que vuestras molestias y vuestras lesiones van a ser</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=487" target="_blank" class="timestamp">[08:07]</a> Para todo el mundo. ¿No os preocupa que con físicos como los que tenéis os duela todo? ¿No tiene sentido que cuando llevas uno o dos años entrenando en la puñetera juventud, ay me duele aquí, ay me duele allá, ay el hombro, ay lo otro, ay el codo, ay la muñeca? No es normal, es porque no entrenáis bien. Y os centráis en estar todo el día dando por saco en redes sociales en vez de decir, bueno, ¿los ejercicios cómo se hacen?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=514" target="_blank" class="timestamp">[08:34]</a> Fase excéntrica, fase concéntrica, control del movimiento, peso adecuado. El fallo debe ser real, muscular, no técnico. Hay gente que no puede llegar al fallo porque está más cerca de partirse en dos que del fallo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=532" target="_blank" class="timestamp">[08:52]</a> La gracia es hacer bien la técnica cuando estás cerca de tu fallo y mantienes la técnica lo más impoluta posible. Sobre todo en los ejercicios básicos. Entonces, claro, dicen, claro, los básicos son más lesivos. Claro, no se ha jodido. Si tú vas con peso libre, tienes más capacidad de contorsionismo lamentable como algunos que si lo haces en una máquina. Que ya al menos vas guiado. Algunos aún así son capaces de hacer mal una máquina. Pero claro, la...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=560" target="_blank" class="timestamp">[09:20]</a> Capacidad de hacer contorsionismo mal hecho, de subir de lado, de tener totalmente desbalanceado de un lado y de otro, descompensado, pues es mayor. Pero eso significa que sea lesivo en sí. No, eres tú que lo haces mal y que como eres tonto no quieres aprender. Y esto es así de sencillo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=583" target="_blank" class="timestamp">[09:43]</a> Entonces, cada vez que haces un ejercicio... Pero da igual que hagas un press mancuernas controlado, con rom completo perfecto, con unas mancuernas grandes... ¡Ostras! Esto a mí me duelen los codos con 15. Pues algo harás mal, compañero. Algo harás mal. O la genética te ha hecho una cosa extraña, articularmente, o haces algo mal. Alguien se ha planteado por qué hay gente que tiene una carrera más longeva que otros, por qué es tan mejor que otros. Evidentemente hay un factor genético en todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=613" target="_blank" class="timestamp">[10:13]</a> Pero luego hay una serie de multifactores que también pueden afectar. Y tengo mucha experiencia porque tengo clientes que constantemente me mandan vídeos. Gente que lleva años entrenando. Algunos con muy buen interés. Ey, mándame los vídeos. El 99%, y me estarán oyendo, hemos tenido que corregir durante semanas todos los ejercicios que hacían mal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=643" target="_blank" class="timestamp">[10:43]</a> de forma constante, gente que va a gimnasios y que tiene interés ya en contratarte, en mejorar, todo mal. Entonces las posibilidades de lesionarse son mucho más altas. Y luego está el gremio, porque evidentemente la gente que se queda como cliente conmigo, le corregimos, empieza a hacerlo bien, entonces dice menudo cambio.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=666" target="_blank" class="timestamp">[11:06]</a> No tengo molestias y noto mucho más estímulo y luego está la otra parte que cree que lo hace todo bien, que no se encomienda a nadie, que el capullo eres tú porque lo haces mal y hace otro tipo de ejercicios también mal hechos pensando que está en la verdad absoluta. Y hay gente que no sabe hacer ni un curl, ni un curl concentrado, el ángulo a tomar por saco, el curl alterno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=690" target="_blank" class="timestamp">[11:30]</a> Que tiene una rotación completa y es una de sus gracias. Ni rotación ni castañas. Medio martillo, medio mal, medio castaña pilonga. Que lo hacéis todo como el puñetero culo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=701" target="_blank" class="timestamp">[11:41]</a> Luego os duele todo, no estáis fuertes de nada y no, pues aquel seguro que se mete de todo. Claro, total, como yo soy un castañas que me duele todo y soy más flojo que mi abuela, pues claro, entonces es lógico que haya que tener una excusa mental para decir, hombre, aquí pasa algo raro. No, ¿sabes qué pasa? Que eres tonto. Y no lo sabes, que es lo peor. Entonces ya...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=726" target="_blank" class="timestamp">[12:06]</a> Esta es mi opinión, ¿no? Me hacía falta porque cada vez que cuelgas un vídeo moviendo peso, ¡uy, ya verás! ¿Ya verás qué? ¿Hasta cuándo hay que esperar para ver? Si sigo haciendo Strongman los sábados para distraerme. Perfectamente. Aceptar las cosas, de que las cosas hay que hacerlas bien, con buena técnica, descansando, alimentándose correctamente. Todos estos multifactores afectan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=755" target="_blank" class="timestamp">[12:35]</a> Lo que no tiene sentido que tengáis 23 centímetros de bíceps, que no se sabe si es un bíceps o una caña para enramar tomates, y ya estés con el bicipital hecho polvo, con los tendones me molestan, la articulación no sé qué, me duele la rodilla y las piernas ni están ni se las esperan. ¿Cómo puede ser eso? ¿Por qué? Porque estás entrenando mal y encima, como lo has hecho mal desde el inicio, no has creado una musculatura que te proteja buscando esos límites.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=ET-qGwH9WxA&t=785" target="_blank" class="timestamp">[13:05]</a> Total, que te espera estar flojo, no estar fuerte, estar lesionado o con muchas molestias y eso te convierte en un tonto entrenando. Y eso, acéptalo, intenta mejorar, aprende de la gente que lleva 25 años entrenando 6-5 días por semana y quizás salgas del atolladero en que te has metido solo. ¿De acuerdo? Un fuerte abrazo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 18/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
