@@ -1,0 +1,507 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 19/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">19/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Antonio Masmas</strong>: <a href='#video-xTne-d2IK-g'>ROBO A JOSEMA EXPLICADO POSE POR POSE EN EL NEW YORK PRO POR ARESYT</a></li>
+<li><strong>Miguel Navarro</strong>: <a href='#video-IkHpGxLG3ak'>¡NO GANAR EN EL NYPRO ENCIERRA UN MENSAJE! ¿ENCAJAN JOSEMA Y CALDERÓN en los GUSTOS por el OLYMPIA?</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-xTne-d2IK-g">
+            <h2>ROBO A JOSEMA EXPLICADO POSE POR POSE EN EL NEW YORK PRO POR ARESYT</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Antonio Masmas</span>
+                <span class="date">Publicado: 19/05/2025 14:01</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=xTne-d2IK-g" target="_blank">
+                    <img src="https://i.ytimg.com/vi/xTne-d2IK-g/hqdefault.jpg" alt="ROBO A JOSEMA EXPLICADO POSE POR POSE EN EL NEW YORK PRO POR ARESYT" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Análisis del New York Pro 2025 de Classic Physique, centrado en la polémica derrota de Josema frente a Terrence Ruf.
+Se compara pose a pose ambos físicos, destacando la superior condición y detalle de Josema.
+El video critica duramente la subjetividad de los criterios de juzgamiento, especialmente la "pose clásica".
+Se argumenta que la categoría está perdiendo sentido al priorizar la estructura y el "flow" sobre la condición física y el tamaño.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El Debate: ¿Fue Justo el Resultado del New York Pro? <a href="https://www.youtube.com/watch?v=xTne-d2IK-g&amp;t=0" target="_blank">[00:00]</a></h3>
+
+<p>El presentador introduce la controversia sobre el segundo puesto de Josema en el New York Pro 2025, considerándolo un "robo" frente a Terrence Ruf. Anuncia un análisis detallado para explicar por qué cree que Josema debió ganar.</p>
+
+<h3>Superioridad en Condición y Detalle Pose a Pose <a href="https://www.youtube.com/watch?v=xTne-d2IK-g&amp;t=124" target="_blank">[02:04]</a></h3>
+
+<p>Se inicia la comparación pose por pose, destacando que Josema muestra una condición física, detalle y separación muscular superiores en varias poses obligatorias. El análisis inicial favorece a Josema en base a criterios más objetivos.</p>
+
+<h3>La Pose Clásica: El Comodín Subjetivo <a href="https://www.youtube.com/watch?v=xTne-d2IK-g&amp;t=401" target="_blank">[06:41]</a></h3>
+
+<p>Se introduce la pose clásica como el punto de inflexión y principal crítica. Se denuncia que es una pose totalmente subjetiva que permite a los jueces justificar cualquier decisión, comparando poses que muestran músculos diferentes sin un criterio claro.</p>
+
+<h3>La Crisis de Criterios en Classic Physique <a href="https://www.youtube.com/watch?v=xTne-d2IK-g&amp;t=680" target="_blank">[11:20]</a></h3>
+
+<p>Se cuestiona por qué la "forma clásica" o estructura corporal, algo inmutable, tiene más peso que la condición física y el tamaño, que son resultado del entrenamiento y la dieta. Se argumenta que esta subjetividad está "cargando la categoría".</p>
+
+<h3>Petición de Claridad y Objetividad en el Juzgamiento <a href="https://www.youtube.com/watch?v=xTne-d2IK-g&amp;t=877" target="_blank">[14:37]</a></h3>
+
+<p>Se proponen soluciones como establecer poses clásicas obligatorias y comparables, y definir criterios de juzgamiento claros y públicos. Se reitera que Josema mereció ganar el New York Pro por su superioridad en los aspectos más objetivos del culturismo.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=0" target="_blank" class="timestamp">[00:00]</a> Vamos a ver una explicación de Ares YouTube sobre Josema y Ruf, ¿vale? De lo que ha pasado en el New York Pro. Por supuesto, hay que seguir a Ares YouTube por la explicación que va a dar y el análisis, que lo hace increíble. Os recomiendo mucho su canal, ¿eh? Vuelve a quedar segundo de nuevo contra Terrence en el New York Pro 2025. Ante la indignación de miles de personas. Ha sido justo, ha sido un robo. En el vídeo de hoy lo voy a analizar, porque yo creo que esta la tendría que haber ganado Josema. Los voy a analizar. Anda, esta la voy a haber ganado Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=28" target="_blank" class="timestamp">[00:28]</a> pose por pose, músculo por músculo, al detalle y os voy a decir por qué la categoría Classic no tiene ningún tipo de sentido. Terrence ha salido brutal, ha salido más grande que nunca, del Pittsburgh al New York ha conseguido llenarse un montón y salir mucho más grande. Con su 1.65 en algunas poses parecía un culturista 212.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=47" target="_blank" class="timestamp">[00:47]</a> Esto lo ha hecho a costa de sacrificar un poco de condición. Ha salido bien, pero no tanto como en el Pittsburgh en cuanto a condición física. Y eso que ha salido bastante definido, ¿eh? La estructura es brutal, la simetría, el balance, la armonía de su físico. Es muy estético, es espectacular la definición de Classic. Por su parte, Josema ha conseguido apretar todavía más. Es que Josema ha llegado al Prime. Ese es el tema. Josema ha salido en Prime. Punto. Es que un físico así quede segundo es que es frustrante, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=76" target="_blank" class="timestamp">[01:16]</a> La condición física es extraordinario. ¿Cómo puede llegar así de duro, así de separado, con piel de papel? En cuanto al tamaño, muy bien, Josema. Creo que ha salido enorme. Que ha conseguido llenar un poco las piernas desde el Pittsburgh. E igual que Terrence, ha conseguido salir más grande. Solo que, sin sacrificar condición, mejorándola. Claro, es que se le veía menos seco, menos definido al roof. Con la diésel, yo voy a decirle diésel. Su estructura... Josema tiene que haber ganado 100% aquí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=104" target="_blank" class="timestamp">[01:44]</a> No tiene tanta forma de X, no tiene formas tan abombadas, su cuádriceps no está tan bombeado, sí, pero tiene un montón de masa muscular, está enorme, muy definido y muy duro. En cuanto a balance y simetría, le falla eso y un poco los tríceps. Cada uno con sus puntos fuertes y débiles, aunque parece que importan más los de uno que los de otro. Vamos a compararlos pose por pose.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=124" target="_blank" class="timestamp">[02:04]</a> Empezando por la de doble bíceps de frente. José Maura la posa mucho mejor, está abriendo las piernas más hacia los lados, muestra más bombeo de cuádriceps, se ven más amplias. El torso muy amplio, la caja torácica, los dorsales enormes y bombeados, los brazos con un montón de pico de bíceps, el pecho lleno, los tríceps han mejorado y tiene muy buena forma de X en esta pose ahora que la ha cambiado desde el Pittsburgh. Hay mucha diferencia. La condición es espectacular.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=149" target="_blank" class="timestamp">[02:29]</a> Por su parte Terrence tiene unos cuádriceps enormes, bastante cortados. Los gemelos se ven finos a mi parecer. La cintura es más estrecha que la de Josema. Los dorsales son muy amplios y bombeados. El pecho está lleno. Los brazos son buenos. No tienen tanto pico de bíceps como los de Josema. Y tienen peor antebrazo, pero el tríceps está mejor. ¿Qué pasa en esta pose? Que la forma de Terrence es más acentuada, más forma de equis. Más diferencia entre hombros, cintura, pierna. Y Josema es un poco más plano, pero la ha mejorado un montón y se ve más clásico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=179" target="_blank" class="timestamp">[02:59]</a> Y uno parece el padre del otro. Hay que decirlo todo. A mí esta pose me gusta más. Josema de calle, vaya.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=196" target="_blank" class="timestamp">[03:16]</a> Los brazos en esta pose no se ven pequeños. La cintura está controlada. En el caso de Terrence ha cambiado como la posa. Su hombro y su pecho están bastante llenos. Los brazos se ven grandes. Y se le ve el torso muy bien de condición. Yendo al tren inferior, su pierna se ve más fina que la de Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=213" target="_blank" class="timestamp">[03:33]</a> Aquí gana Josema. Es un espectáculo la pata de Josema.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=236" target="_blank" class="timestamp">[03:56]</a> Para mí esta pose está más balanceada y más compensada y se ve mejor la de Josema. El nivel de condición y detalle es bastante superior. Yo le doy esta pose y van 1-1. Venga. Vamos con la pose de bíceps de... Se acabó. Aquí no hay nada que hacer. Aquí no hay nada que hacer. ...pose de Josema y palabras de los jueces el mejor doble bíceps de espaldas de Todo Classic. Los femorales... Mejor doble bíceps de espaldas de Todo Classic, sí. Pero luego le dais la victoria al otro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=261" target="_blank" class="timestamp">[04:21]</a> Están muy cortados y son súper profundos. Lo del femoral es que todo es una pasada de espalda de Josema. Comparad el tamaño del femoral de Josema con uno de Terrens hay mucha diferencia. El glúteo de cada uno de ellos tiene una forma diferente, pero el de Josema es más grande, es como más redondo, se le marcan más las fibras y se... Y estás más seco. ...ve más duro. Los gemelos en esta pose se ven similares, pero los de Josema más duros. El aductor de ambos es similar, pero es más grande el de Josema. Así que da igual lo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=289" target="_blank" class="timestamp">[04:49]</a> Yendo al tren superior, Josema tiene un efecto mucho más 3D, más densidad, más detalle, más dureza, más amplitud y los... Más todo, más todo. Los bíceps tienen bastante más pico, los hombros están muy bien, una pose espectacular, muy difícil de superar. En cuanto a la espalda de Terrence está muy bien, está densa, pero no tiene la amplitud de la de Josema ni de lejos. Los hombros son bastante buenos y los tríceps son más grandes. Aquí sí se le ven bien los antebrazos, aunque no tiene tanto pico de bíceps.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=318" target="_blank" class="timestamp">[05:18]</a> La forma, si queréis, es más bonita o fluye más. ¿Bonita para quién? Pura subjetividad, ¿no? Aquí lo objetivo es quién está más seco. Más bonito, tío. ¿Qué clase de culturismo es eso, tío? Más bonito. ¿Te quieres ir a la mierda? No Ares, digo, ¿quién diga eso? Quién es más grande y en este caso José Más se la lleva 2-1.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=335" target="_blank" class="timestamp">[05:35]</a> Vamos con la siguiente pose, abdomen y piernas. Gran cagada de Josema en mi opinión al posarla de esta forma. Ha cambiado la forma en que la posa, la hace mucho más erguido, pero no crunchea igual los abdominales, ¿no? Para que me entendáis. No he podido encontrar una foto de abdomen y piernas verdaderamente buena para compararlos. No tienen mucha calidad las imágenes.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=353" target="_blank" class="timestamp">[05:53]</a> En cuanto a las piernas, las de Josema se ven más bombeadas que en el Pittsburgh, se ven muy cortadas y separadas. Terrence las está abriendo un montón, las separa bastante y se le ven cortados los cuádriceps separados muy bien esas piernas. En cuanto al abdomen, lo tiene más fino, sí, pero también tiene menos densidad en este y menos masa muscular. Los oblicuos no se marcan tanto como los de Josema y la tableta no se ve igual de dura. El abdomen de Josema me parece espectacular, una gran mejora.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=379" target="_blank" class="timestamp">[06:19]</a> Pero da igual, eso no pasa nada. Bueno, dos-dos para Ares. A ver, sorpréndeme.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=401" target="_blank" class="timestamp">[06:41]</a> Pueden haber robado la competición a Josema por la pose clásica, la pose comodín, la pose que sirve para que gane el que tú quieres. Una pose totalmente subjetiva, donde están comparando una pose de expansión frontal, como la que hace Josema en este caso, con un tríceps de lado de Terrence. ¿Cómo puedes comparar un... Eso, eso iba a decir. ¿En serio? ¿En serio? ¿En serio? ¿Aquí qué hay que valorar aquí?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=426" target="_blank" class="timestamp">[07:06]</a> Una pose que muestra unos músculos con otra pose que muestra otros. Te bam, ganaba con esta pose, entre otras cosas. ¿Compararías un most muscular con un doble bíceps? ¿Compararías un bíceps de espaldas con una expansión? Es que nada que ver. ¿Un abdomen y piernas con un pecho de lado? Evidentemente no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=442" target="_blank" class="timestamp">[07:22]</a> No, claro que no. Esto sería un disparate. Pero en Classic está bien, está aceptado. Os voy a enseñar las poses clásicas que han estado haciendo cada uno porque se tiran un montón. Entonces los jueces eligen la que le da la gana y determinan quién es más clásico. ¿Qué es tener un flow más Classic? Porque para eso sirve esta pose, ¿pero qué es? ¿Y quién lo determina? ¿Criterio de quién? ¿En base a qué? ¿A la forma de X? ¿Aparecerse una letra? En fin, vamos a compararlas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=467" target="_blank" class="timestamp">[07:47]</a> La pose estilo Arnold, vamos a llamarla. Ambos se tiran esta pose. El tren inferior está similar en cuanto a tamaño. La pierna se ve un poquito más gruesa la de Terrence por el tema del cuádriceps. Se ve más rajada la de Josema. El glúteo se ve más grande el de Josema. A nivel espalda mucho más dura y detallada la de Josema. Esta pose clásica a mí me gusta más la de Josema. A mí también.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=487" target="_blank" class="timestamp">[08:07]</a> Parte que parece el maldito Arnold Schwarzenegger en esta pose. Entonces yo le daría la pose a Josema, pero bueno, se tiran más poses. Esta variación con un brazo levantado y el otro pues haciendo algo extraño, ¿no? Josema la hace de lado espaldas y Terrence la hace más de frente. Y yo os pregunto, ¿qué pose es más clásica? Como dice... ¿Qué pose es más clásica aquí? ¿Qué queréis? ¿Qué queréis aquí? ¿Qué os gusta más de las dos? ¿Lo de YouTube igual? ¿Qué os gusta más de las dos? ¿Cuál os gusta más de las dos? Hermano, Josema, a mí la pose de Josema aquí me parece una puta barbaridad, sinceramente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=515" target="_blank" class="timestamp">[08:35]</a> Pues no lo sé, depende de la opinión de cada uno, ¿no? A unos os gustará más la de Josema y os parecerá más clásica y a otros la de Terrence. Pero ¿cómo la podemos juzgar? No puedo comparar un femoral con un cuádriceps ni una espalda con un pecho. ¿Qué hacemos?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=532" target="_blank" class="timestamp">[08:52]</a> Siguiente pose clásica, en este caso ya la han tirado casi igual. Ojo que no es la misma, ¿eh? A mí me gusta mucho más la de Terrence en este caso. Se ve espectacular. Por otra parte, el brazo se ve blando. El abdomen también. Y no se ve al nivel de condición ni de detalle de Josema. Y Josema, por otra parte, se ve bastante más plano posando así las piernas. Si simplemente las abriese. Pero claro, ¿por qué no tener forma de X no es clásico? ¿O por qué tener las piernas juntas no es clásico? ¿Por qué utilizan ese criterio? Cada vez utilizan...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=559" target="_blank" class="timestamp">[09:19]</a> porque no les importa el culturismo una puta mierda les importa el negocio y les importan las americanadas ya está tío ya está bien ya está bien y de verdad creo que tendría que haber cuando acabe bueno lo suyo sería antes de que llegase la Olimpia que todos los preparadores y todos los culturistas se pusieran un poco de oye ¿qué está pasando?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=576" target="_blank" class="timestamp">[09:36]</a> ¿Qué mierda se está pasando? ¿Qué es que se valora en cada categoría? ¿Qué criterios usáis? ¿Qué es esto? Porque están todas las categorías a día de hoy que no tienen ni puta idea, nadie que hay que hacer. Dile a Chopin qué tiene que hacer ahora. ¿Salir seco, trillado como siempre? ¿O irse a por un volumen loco? No sé. Decídselo a Chopin a ver que en Open, por ejemplo. Ahora bien, ¿qué hacemos? ¿Quién va a ser campeón? Se supone que, bueno, a este ritmo. Ruf Diesel tiene que ganar el Olympia. Llegará el Olympia y no entrará en el top 3. Se caerá un quinto, cuarto, quinto...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=605" target="_blank" class="timestamp">[10:05]</a> puesto es que yo me estoy quedando loco es que me estoy quedando loco en el que les apetece y última pose clásica un muy acertado cambio de josema en las finales ha dejado de hacer la pose clásica que hacía y ha empezado a hacer esta y me parece brutal el cambio mirad qué calidad de piernas mirad qué dureza qué cabezas del cuádriceps que sartorio el aductor bastante bien qué barbaridad la cinta esta pose es un espectáculo josé matiz</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=629" target="_blank" class="timestamp">[10:29]</a> La estructura se le ve muy muy fina incluso para ser él en esta pose. Pero se le ve apretada, se le ve de calidad. Comparad con los abs de Terrence. La amplitud que muestra de hombro a hombro es inhumana. Mirad la calidad del pecho, de nuevo comparad los pechos. Los hombros duros, venados, una salvajada. Por su parte Terrence.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=647" target="_blank" class="timestamp">[10:47]</a> Literal, que si se llamara John Smith, este hombre hubiera ganado en Pittsburgh y hubiera ganado en Nueva York. Se acabó. Pesa eso, amigo, que no es americano y que es español.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=663" target="_blank" class="timestamp">[11:03]</a> Que sí, que sí, pero que mide unos 65. Que no me rayéis. Punto. Que mide unos 65. Que Classic ya no es para él. O eso es lo que nos habían dicho, ¿no? Eso es lo que le habían dicho a Madelman, tal cual. Que se acabó Classic para los bajitos. Que se acabó. Que o mide es unos 70 y pico o está fuera. Pero ahora resulta que no. Ahora resulta que no. Ahora no.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=680" target="_blank" class="timestamp">[11:20]</a> Una estatua. ¿Quién gana esta pose? El que tú quieras gana esta pose. Y este es el problema de Classic Physique. Los jueces eligen la pose que más les gusta o el que según ellos de forma súper subjetiva, depende la opinión de cada uno, sea más clásico. Y ese tío es el que gana esta pose, el que desempata y el que gana la competición. Es decir, si Josema quiere ganarle a Terrence, le tiene que superar en tres de las cuatro poses que son objetivas, por así decir. Que tampoco lo son.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=706" target="_blank" class="timestamp">[11:46]</a> Porque en la pose comodín se la van a dar siempre este tío, no importa a quién se enfrente, no importa a quién sea más grande, quién mida una cabeza más y parezca a su papá, quién tenga mayor condición física, más dureza, haga más dieta, no importa. Porque en la pose comodín, la pose clásica, se lo van a dar al que tenga más forma clásica. ¿Qué es forma clásica?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=725" target="_blank" class="timestamp">[12:05]</a> Si nos ceñimos al criterio del culturismo, donde la condición física, el tamaño, son lo más importante, seguido del balance muscular, simetría, el posing, etc., estaría superigualado incluso para mí, tendría que haber ganado Josema, es mi opinión.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=739" target="_blank" class="timestamp">[12:19]</a> Tu opinión y la del mundo entero. El mundo entero. El mundo entero. Pero si nos ceñimos al criterio de que juzgan la estructura, importa cómo hayas nacido, cosa que no puedes cambiar. Importa tu forma, cuánto te parezcas a una letra. Pues en ese caso entiendo perfectamente que haya ganado Terrence. Es una decisión muy subjetiva porque se ve más clásico, vamos a decir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=758" target="_blank" class="timestamp">[12:38]</a> Piernas más bombeadas, dorsales bombeados, cintura fina, más que José Masí. Pero ¿por qué importa más tu forma o tu estructura a que lo seco y lo grande que estés? ¿Es demasiado subjetiva esta categoría, al contrario que, por ejemplo, Open? Si aceptamos esta forma de juzgar y este criterio, que a mí no me parecen tan bien, en ese caso, vale, es justa la...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=777" target="_blank" class="timestamp">[12:57]</a> Se están cargando la categoría. Lo siento mucho, tío. Se están cargando Classic Physique. Se la están cargando. El culturismo en general, porque Tyler Mannion, os lo digo en serio, se está cargando el culturismo. Pero esta categoría la está reventando. Nadie sabe. Nada. Nadie. Estamos todos perdidos. Bueno, y todavía quiera que salga mañana o pasado que saldrá seguramente a decir las cuatro embustes de por qué ha ganado Nick Walker, de por qué ha ganado el Dements, por qué ha ganado Fran Barrios y por qué ha ganado Roof.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=803" target="_blank" class="timestamp">[13:23]</a> en classic. Vas a ver las cuatro embuste que va a soltar, porque es que es impresionante. Porque todavía lo de Nick Walker es claro. Fran Barrios para mí, aunque Ángel Calderón sea mi amigo, Fran Barrios para mí lo vi mejor, no puedo negarlo que Ángel. En Menz ha vuelto a ganar otra vez lo mismo. Cintura estrecha, piernitas así, clavícula gigante. Luego llegará un tío muy alto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=827" target="_blank" class="timestamp">[13:47]</a> Luego llegará el Olympia y ganará un cuerpo como el de Ryan Terry. Bueno, pues eso. Lo de siempre. ¿Vale? La película. Yo no sé. Menz está... Vamos, si Classic tiene problemas, Menz está... Para el arrastre. Las cosas como son. Menz está... Para el arrastre. No se sabe. Pero lo de Classic... A ver qué trola suelta el tío. A ver qué embuste suelta, tío.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=849" target="_blank" class="timestamp">[14:09]</a> Esta competición podría haber sido un robo. Entonces, ¿por qué Logan Franklin no ganó el Arnold Classic? Eso es lo que dije el otro día yo. Eso es lo que yo dije el otro día. ¿Por qué Logan Franklin no ganó el Arnold Classic? Y diréis, la diferencia de tamaño con Mike Sommerfeld era demasiado grande. Ya, pero Logan Franklin tenía una condición muy superior. Un look mucho más clásico que Mike. Mike es un Open. Ahí no importó tanto la estructura, la estética, supongo. En fin, yo creo que tendrían que hacer algo con esta categoría, con el tema de la pose clásica. Si es que lo dije, lo nombré el otro día, tí, con Logan.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=877" target="_blank" class="timestamp">[14:37]</a> Pedirles dos o tres poses clásicas obligatorias y compararlas idénticas. Igual que en Open hay ocho poses, pues aquí podrían poner seis o siete. Pedirles la clásica de brazo levantado, la clásica estilo Arnold y la clásica de tríceps si quieres. Sería una categoría mucho más objetiva, vamos a decir, y mucho más justa porque estaríamos juzgando unos músculos con otros, no con los opuestos. No tiene sentido la pose clásica. Y deberían establecer un criterio y hacer algún comunicado oficial dando unas directrices claras de qué carajo quieren en Classic.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=907" target="_blank" class="timestamp">[15:07]</a> Deberían de hacerlo, sí. Por ejemplo, la caja torácica tiene que ser dos veces la cintura, las piernas tienen que medir tanto, tienen que estar abiertas de esta forma. Deberían ser más claros con qué quieren. Y luego, ¿por qué solo cuenta el pre-judging en Classic Physique? ¿Por qué? Porque es que el señor Terrence había perdido condición en las finales y en las finales ha salido, vamos a decir, un poquito más difuminado, más aguado, mientras que José me ha salido hasta más apretado. Pero claro, no importa, porque en Classic solo importa el pre-judging. ¿Y por qué? Y en las demás categorías...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=935" target="_blank" class="timestamp">[15:35]</a> Sí, sí, una polla. El otro día lo enseñé. En el Prejudgin, en el Pitchburg, para quien no haya visto mi vídeo, que está por ahí. En el Prejudgin, Josema estaba por encima de Ruff. Y en las finales cambiaron el resultado. O sea que eso es mentira de que solo juzgan el Prejudgin. Es mentira todo. Que solo juzgan el Prejudgin es mentira. Y que juzgan las finales también es mentira. Es mentira todo. Todo es mentira. O todo es verdad, como lo quieres mirar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=957" target="_blank" class="timestamp">[15:57]</a> Les importan las finales. Me gustaría escuchar la explicación de los jueces. La subirán en unos días y yo os la traeré al canal, así que estad atentos. Conclusión del vídeo. Qué embusteros son, de verdad, qué asco me pueden dar, tío. Para mí tendría que haber ganado Josema por poco, él el New York y Terrence el Pittsburgh.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=974" target="_blank" class="timestamp">[16:14]</a> Tal cual, tal cual. Uno cada competición. Sí, tal cual, tal cual. Y haber desempatado en el Olimpia. Creo que Josema ha sido superior en los aspectos que hacen culturismo al culturismo, los más objetivos, y que Terrens ha sido superior en los más subjetivos. Cosa que, para mí, hace que la categoría classic tenga muy poco sentido y la pose clásica sea absurda, y tienen que hacer algo con esto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=994" target="_blank" class="timestamp">[16:34]</a> Es que es impresionante. Es que no tiene sentido ninguno. ...y la pose clásica sea absurda y tienen que hacer algo con esto. Esa sería la conclusión del vídeo, por si alguno se ha perdido. Muy absurdo lo que está pasando. Es muy absurdo, tío. O sea, y tengo un mosqueo que flipas con esto. Me da una pena José Matío, Carrasco y compañía. Me da mucha pena, tíos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=xTne-d2IK-g&t=1012" target="_blank" class="timestamp">[16:52]</a> Al chaval, mentalmente, le hagan esto, tío. O sea, me da mucha pena. O sea, el mundo entero está flipando con Josema. El puto mundo entero, eh. Da igual las cuentas que te metas, del país que te metas. Está todo el mundo flipando, tío. Con el físico que ha sacado Josema. Y lo pone en segundo. Dos veces. Alucinante. Alucinante.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="video-section" id="video-IkHpGxLG3ak">
+            <h2>¡NO GANAR EN EL NYPRO ENCIERRA UN MENSAJE! ¿ENCAJAN JOSEMA Y CALDERÓN en los GUSTOS por el OLYMPIA?</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 19/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak" target="_blank">
+                    <img src="https://i.ytimg.com/vi/IkHpGxLG3ak/hqdefault.jpg" alt="¡NO GANAR EN EL NYPRO ENCIERRA UN MENSAJE! ¿ENCAJAN JOSEMA Y CALDERÓN en los GUSTOS por el OLYMPIA?" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>El video analiza los resultados del New York Pro de culturismo, centrándose en la actuación de los españoles Josema y Ángel Calderón.
+Se debate la controvertida victoria de Ruth Diesel sobre Josema en Classic Physique y la sorprendente derrota de Ángel en 212.
+El presentador evalúa si los atletas cumplieron sus objetivos personales y discute las posibles estrategias futuras y decisiones de los jueces de la IFBB Pro League.
+Finalmente, se plantean las expectativas para las próximas competiciones de Ángel, como el Dubai Pro y el Mr. Olympia.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>El New York Pro y las Sorpresas <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&amp;t=38" target="_blank">[00:38]</a></h3>
+
+<p>El presentador introduce los resultados del New York Pro, destacando el segundo puesto de Josema ante Ruth Diesel y la inesperada derrota de Ángel Calderón frente a Fran Barrios. Califica a Fran Barrios como un ganador justo y merecido en esta ocasión.</p>
+
+<h3>La Controversia en Classic Physique <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&amp;t=186" target="_blank">[03:06]</a></h3>
+
+<p>Se analiza a fondo la victoria unánime de Ruth Diesel sobre Josema, a pesar de que este último mostró una mejor condición que en Pittsburgh. Se cuestiona la decisión de los jueces, sugiriendo una posible reestructuración en la categoría Classic Physique por parte de la IFBB.</p>
+
+<h3>Objetivos Cumplidos para Josema <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&amp;t=323" target="_blank">[05:23]</a></h3>
+
+<p>A pesar de no ganar, se argumenta que Josema cumplió sus dos objetivos principales: mejorar su físico respecto al Olympia y posicionarse como un contendiente serio ante los grandes nombres del culturismo. Expertos como Dave Palumbo y Phil Heath destacaron su condición.</p>
+
+<h3>Análisis de la Derrota de Ángel en 212 <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&amp;t=680" target="_blank">[11:20]</a></h3>
+
+<p>Se aborda el desempeño de Ángel Calderón en la categoría 212, reconociendo que no salió en su mejor punto de preparación. Se menciona la posible afectación por la ausencia de su preparador y se compara su físico con el más refinado de Fran Barrios.</p>
+
+<h3>¿Nuevas Generaciones en el Foco? <a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&amp;t=741" target="_blank">[12:21]</a></h3>
+
+<p>El presentador especula que la IFBB Pro League podría estar buscando dar paso a nuevos talentos en la categoría 212. Se plantea si esto podría poner en riesgo la posición de atletas establecidos como Ángel Calderón en futuras competiciones como el Dubai Pro y el Olympia.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo en el canal. Volvemos al set habitual. Volvemos otra vez a estar aquí, donde tenemos que estar. Porque tuvimos este pasado fin de semana, como todos sabéis, la Hércules Cut. De hecho, tenéis ahí el directo en el canal. Pero se produjo, evidentemente, el New York Pro. Os tengo que pedir un poco de disculpas también porque no pude realizarlo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=21" target="_blank" class="timestamp">[00:21]</a> Como a mí me habría gustado, como hicimos el Pittsburgh Pro con todas las declaraciones posteriores, toda la polémica, etc. Así que en ese sentido llegamos un poquito tarde, lo tengo que decir, pero nunca es tarde si desde luego que hay motivos para hablar de culturismo y del bueno, porque tuvimos ahí evidentemente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=38" target="_blank" class="timestamp">[00:38]</a> la presencia o la competitividad de Josema, que en este caso no pudo conseguir el título ante Ruth Diesel una vez más y de manera unánime, que esto también lo vamos a debatir ahora, si esto nos pareció más justo o más injusto. También tuvisteis un poquito de reflexión en el inicio de la Hércules Cup sobre esto y sobre todo ese segundo puesto, ese sorprendente segundo puesto de Ángel Calderón que vio como Fran Barrios se le colaba por la derecha y en este caso, desde mi punto de vista, fue un digno ganador.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=68" target="_blank" class="timestamp">[01:08]</a> Un ganador justo y merecido. Y yo creo que puede ser también un buen toque de atención para Ángel para que pueda mostrar su mejor físico dentro de cuatro semanas en Dubái, donde de hecho tendrá que intentar mantener ese título que consiguió el año pasado. Así que vamos a ver si Ángel mantiene esas opciones o si por el contrario empiezan a hacer algo que yo ya me empiezo a ver un poquito. Y no malo negra, sino directamente que creo que puede ocurrir</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=94" target="_blank" class="timestamp">[01:34]</a> Y es que desde dentro de la IFB Pro League, jueces, etcétera, etcétera, esté empezado a tomar la decisión de ir relegando poquito a poco a nuestro Ángel Calderón, que a la gente no se lo olvide, es el mejor culturista de la historia de este país. Así que como digo, vamos a analizarlo todo porque hay muchísimo, muchísimo de lo que hablar. Por supuesto, no olvidadme de los códigos de descuento, que este fin de semana habéis estado muy tranquilitos sin cordelaturra con el código de descuento, pero aquí vuelvo a la carga otra vez.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=119" target="_blank" class="timestamp">[01:59]</a> Código de descuento Iron Road en toda la web de Big. Por supuesto, daros las gracias por el apoyo que le estáis dando al código, que está siendo brutal. Así que, como digo, gracias a vosotros el canal sigue adelante y seguimos siempre adelante con la actualidad. Por supuesto, recomendaros el nuevo producto de Big, que es esa proteína de sabor piruleta, que está increíble, que además yo la recomiendo sobre todo por su pureza, 91% de pureza en la proteína. Y además, porque el envase es muy pequeñito, de 750 gramos, si bien ideal ahora que vienen los viajes...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=149" target="_blank" class="timestamp">[02:29]</a> que vienen las vacaciones, etcétera, etcétera, para que lo podáis llevar y que ocupe muy poquito y que podáis disfrutar de la mejor de las proteínas. Y por supuesto, no olvidarme de Agonjin, el código es el mismo, Iron Road, ya lo conocéis y tenéis a vuestra disposición ese pack 3x2 en el nuevo drop Back in the Game. Así que como digo, aprovechad el nuevo drop porque está espectacular y por la compra de dos camisetas os lleváis una tercera de regalo. Como digo, vamos a analizar...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=175" target="_blank" class="timestamp">[02:55]</a> Todo lo que dio de sí el New York Pro, sobre todo en las categorías tanto 2.12 como Classic, que teníamos una participación muy importante, evidentemente, con José Maicon Ángel Calderón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=186" target="_blank" class="timestamp">[03:06]</a> Y en el caso de Josema, sí que lo comentamos mientras estaba realizando el director en el que hicimos en el Pejagin y luego lo comentamos en el Hércules Capel, una vez que ya se produjo la final y Josema tuvo ese segundo puesto, yo comenté que había cosas que no me cuadraban. Hay cosas que no me cuadran de esta resolución y voy a decir por qué. Ya no voy a entrar a la victoria de Root Diesel. Ya no voy a entrar ni en eso.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=212" target="_blank" class="timestamp">[03:32]</a> Pongamos que se está queriendo hacer una reestructuración desde la IFE Pro League. Sale el mejor culturista clásico de todos los tiempos que es Grip Amster, que desde luego Josema se asemeja más que Ruth Diesel a esa imagen, por cierto.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=229" target="_blank" class="timestamp">[03:49]</a> Y ahora quieren un poco reestructurar el Classic, que no parezcan casi Opens y demás. Y quieren dar una mayor visión a la estética dentro de la categoría. Hasta ahí todo perfecto y todo cuadra. Por eso le dan la victoria a Ruth Diesel, a pesar de que salió peor. Y hay imágenes que lo demuestran y lo veréis esta noche además en Dairon Road.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=251" target="_blank" class="timestamp">[04:11]</a> donde Ruth Diesel salió peor que en el Pittsburgh Pro, salió con un puntito menor de condición, una capita más de agua, de hecho con gente que estuvo allí y no precisamente del equipo de Josema, sino es que había más españoles allí, como por ejemplo gente que tenía que competir y que acompañaba a los competidores.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=268" target="_blank" class="timestamp">[04:28]</a> Me comentaban que Ruth Diesel, y ellos también lo habían visto en Pittsburgh, no estaba al nivel que estuvo la semana pasada y que le dio el triunfo por un solo punto. Y aquí estando peor, Josema refinando un poco más esa condición que ya parece prácticamente imposible de mejorar y de refinar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=284" target="_blank" class="timestamp">[04:44]</a> nos encontramos con que la victoria en este caso es de categoría unánime. Por eso digo que son cosas que realmente a mí me sorprenden. Son cosas que, bueno, que no voy a hablar ni de mano negra, ni de nada por el estilo. Insisto, que te ganes Rutil, que es el número 2 Olimpia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=301" target="_blank" class="timestamp">[05:01]</a> o que ha sido número 2 Olimpia, desde luego que no me parece algo para tildar de robo, además, a pesar de que, como ya lo visteis la semana pasada, sacamos diferentes declaraciones donde se ponía en evidencia que algo había pasado, que se habían tomado decisiones que luego se giraban, en fin, todo lo que sabéis. Sobre este tema yo creo que hay que hablar seriamente.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=323" target="_blank" class="timestamp">[05:23]</a> Creo que hay que hablar en virtud a la realidad. Y la realidad es que Josema ha conseguido aquello que iba buscando. No hay que olvidar que Josema hace cuestión de un mes, prácticamente dos, hizo un vídeo donde afirmaba o donde confirmaba que iba a competir en el New York Pro y hablaba de que su principal objetivo eran dos. El primero, sacar un físico mejorado de la versión que vimos en el Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=348" target="_blank" class="timestamp">[05:48]</a> puliendo sus puntos débiles y sobre todo sacando todavía una mejor condición, yo creo que eso se ha conseguido con creces, hemos visto al mejor físico de Josema de todo este año que lleva en Classic, porque a la gente hay que recordarle que tan solo lleva un año en Classic, con lo cual es algo muy precoz todo lo que ha conseguido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=367" target="_blank" class="timestamp">[06:07]</a> Y que, por otro lado, esas mejoras se han visto. Y no es que las hayamos visto nosotros, es que las personas que juzgan, Tyler Mannion, Steve Wiberger, etc., etc., le han destacado que ha mejorado en todo. Recordaréis aquellas declaraciones de Tyler, ¿no? Con lo cual, por ahí un objetivo conseguido. Es decir, en muy poco tiempo, donde no ha habido un off-season como tal, porque tampoco se puede permitir en clase tener un off-season puro y duro...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=391" target="_blank" class="timestamp">[06:31]</a> Le ha metido mejoras y se ha mantenido en el peso. Que esa es otra de las cosas que hay que hablar, que aún así tiene un pequeño margen si se estira. Que seguramente juegue en esa baza antes de pasar a Open, yo creo. Y más viendo lo que hay. Pero bueno, dicho lo cual, eso se ha conseguido. Y el segundo objetivo que él puso encima de la mesa es que quería ir a Pittsburgh y luego a Nueva York.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=412" target="_blank" class="timestamp">[06:52]</a> para dar un puñetazo encima de la mesa y mostrar una candidatura seria al Mister Olimpia. No necesariamente por conseguirlo, pero sí por posicionar su nombre y que la gente hable de él. Esto yo creo que está ampliamente conseguido. Hemos visto a Dave Palumbo, Chris Aceto, Phil Heath, los brasileños, Denis James, Milo Sarcev, Bob Cicerillo. Hemos visto a todos hablando de Josema y sobre todo muy impactados con esa condición y esa separación. Con lo cual yo creo que ese objetivo también está conseguido.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=442" target="_blank" class="timestamp">[07:22]</a> Que evidentemente todos queríamos que ganara, el primero él, por supuesto, porque cuando uno va a competir el objetivo principal es ganar y más un tipo que tiene esas opciones de ganar. Que es cierto que es bastante raro lo que pasó en Pittsburgh y todavía más extraño que Ruth Diesel saliendo peor consiga de manera unánime ganar.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=460" target="_blank" class="timestamp">[07:40]</a> pues es un poco raro que todos los jueces tiran para el ganador a Ruth Diesel cuando salió peor y una semana antes la victoria fue por un solo punto. Incluso se valoró las finales, cosa que aquí parece que de momento no se han valorado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=476" target="_blank" class="timestamp">[07:56]</a> Desde luego que yo creo que el objetivo está conseguido, ahora vendrá una etapa de descanso activo, vamos a decirlo así, porque al final, insisto, tampoco puedes venirte muy arriba en ese off-season, por así decirlo, porque tienes que competir dentro de cinco meses, una cosa así, en octubre en el Olympia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=496" target="_blank" class="timestamp">[08:16]</a> y a partir de ahí veremos yo creo que la hoja de ruta y de hecho esta semana tendremos a raúl en el canal yo creo que la hoja de ruta va a ser estudiar seriamente si a este chico en el pesaje o en la medición se le decide estirar porque quizá esos esos pequeños handicaps de</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=512" target="_blank" class="timestamp">[08:32]</a> el bombeo de los bastos, etc., sí que se pueda conseguir llegando al pesaje con algún kilo más. Entonces, yo creo que va a ser algo, una herramienta que se va a utilizar antes, evidentemente, de tomar la decisión de ir a Open. Porque también tenéis que entender, y esto sería bueno preguntárselo a él, yo creo que durante el proceso, y esto lo vimos en el caso de Josema, esas dudas mentales, ese no parar, ese tener que estar constantemente con el freno de mano echado para poder dar el peso...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=542" target="_blank" class="timestamp">[09:02]</a> evidentemente juega un papel mental muy importante y una influencia muy grande, pero claro, luego cuando te subes a tarima y pasa esto, pasa que tienes una gran repercusión que todo el mundo está hablando de ti, que te cuelas en el buen sentido, merecidamente, en los grandes puestos, en los grandes nombres, en los grandes focos, probablemente compense.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=563" target="_blank" class="timestamp">[09:23]</a> probablemente compense ese sufrimiento y ese desgaste, por así decirlo. Que evidentemente se va a tomar la decisión de ir a Open, por supuesto que se va a tomar la decisión de ir a Open, no se sabe cuándo, evidentemente, pero entiendo que hasta ellos quieran un poquito retrasar esa decisión, porque ellos saben que si se van a Open el proceso es mucho más lento, se separa uno del foco, del foco en el que está ahora, evidentemente pasaría a otro foco,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=585" target="_blank" class="timestamp">[09:45]</a> Porque en Open eres relevante a más no poder estar dentro del debate del top 5 y en Open al final eres un Open con proyección más a día de hoy si se cambiara. Y entonces obviamente entiendo que se tomen esas decisiones. A partir de ahí, una de las grandes dudas que surgen. ¿Está Josep a nivel estructural a medio camino entre lo que es un Classic y lo que es un Open? Yo creo que es una evidencia que sí. ¿Por qué? Porque estamos viendo cómo están despejando en favor de otras estéticas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=613" target="_blank" class="timestamp">[10:13]</a> Ahora bien, yo tengo que ver a Ruth Diesel competir contra Ramón Dino y competir contra Urs Kalesinski, sobre todo contra Urs Kalesinski, y que me digan que Urs Kalesinski queda por delante de Ruth Diesel. Porque ahí sí que no habría un predominio de la línea. Sí que es cierto que, por ejemplo, en el caso de Urs, el bombeo de los bastos es increíble, pero hay otras...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=637" target="_blank" class="timestamp">[10:37]</a> situaciones musculares donde puede quedar bastante retratado. Y la estructura, a pesar de que es classic, porque Urso es clásico, Ramón Dino es clásico, pero no es tan clásico como Ruth Diesel. ¿Va a quedar Ruth Diesel por delante de ellos en el Mr. Olimpia? Es algo que yo quiero ver.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=652" target="_blank" class="timestamp">[10:52]</a> por no hablar de que lo hemos visto en otras competiciones donde no ha habido ese gran predominio de la línea. Entonces, insisto, no sé si a lo mejor hay un cierto, con esta decisión unánime hay un cierto también despeje, en este caso de estructuras como las que puede ofrecer Josema. No lo sé, es algo que evidentemente vamos a tener que ver con el tiempo. Y en el caso de 2-12, que aquí este sí que me parece un caso más sintomático,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=680" target="_blank" class="timestamp">[11:20]</a> Tenemos que hablar evidentemente de Ángel Calderón. Ángel no salió bien. Esto es una realidad y yo creo que es algo que nos podrán confirmar en los próximos días también Fran Espín desde aquí, desde España. Yo creo que la situación de que no pudiera</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=695" target="_blank" class="timestamp">[11:35]</a> Viajar Ángel de una u otra manera tuvo que afectar. Para la gente que evidentemente se acerca a esto tiene que entender que no es lo mismo que tu preparador esté para ejecutar cambios en virtud a lo que él ve con sus propios ojos y a un metro que lo que puede ver a través de una cámara o lo que le puede contar otro grandísimo preparador que esté allí, como es el caso de Joao. Es evidente que no es lo mismo a la hora de jugar ciertas estrategias que luego pueden ser clave cuando aparece un tipo, como en este caso Fran Barrios,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=725" target="_blank" class="timestamp">[12:05]</a> que sí que iba con una puesta a punto desde mi punto de vista pues más al menos no sé si puesta a punto pero desde luego un producto dentro de la tarima más refinado más estético y una vez más eso es lo que a mí me lleva a pensar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=741" target="_blank" class="timestamp">[12:21]</a> que a lo mejor dentro del establishment quieren ir dando paso a nuevos competidores en 2-12, llámese Fran Barrios, llámese por ejemplo Zagarella, llámese por ejemplo Nihat Kaya, que probablemente se encuentre con Ángel en Dubái.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=759" target="_blank" class="timestamp">[12:39]</a> Yo creo que evidentemente la Eiffel Pro League quiere nuevos proyectos de 2-12 que en un momento dado, como ocurre con el caso de Keone, digan a dar el paso a Open y digan a ser protagonistas del Open, como en su día ocurrió con Javi Chopin, como en su día ocurrió con Derek Lanford y ellos saben que los Clarida, los Ángel Calderón, los Ascanani, por supuesto ni que decir que ya no está.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=782" target="_blank" class="timestamp">[13:02]</a> Pero Kamal Elgarni, que ya está en Master, pero hasta hace dos días está en 212. Ellos saben que esos productos, a pesar de que son increíbles su trayectoria en 212 y están muy fuertes y son muy relevantes, son proyectos que no van a ir a Open, que no van a dar ese paso, salvo que se fueran a Master.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=799" target="_blank" class="timestamp">[13:19]</a> Yo creo que son productos que ellos tampoco van a estar muy por la labor de potenciar, insisto, no partiendo de la base de que para mí Fran Barrios ha sido digno ganador por muchos motivos. Yo creo que la zona media de Fran Barrios está muy bien controlada, estéticamente es una letra superior. Luego aparte, y además se ve bastante en las comparativas reales, no en la foto que os he puesto,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=819" target="_blank" class="timestamp">[13:39]</a> Creo, sinceramente, creo que a nivel sobre todo de la zona media e incluso las piernas, creo que aguantó bastante más el tipo. Sí que es cierto que tengo que decir que hubo una mejora bastante evidente en Ángel entre lo que es el Pelladguir y las finales. Yo Ángel lo vi bastante mejor en las finales. Pero sí que es cierto que esa zona media pudo decantar la decisión de los jueces, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=847" target="_blank" class="timestamp">[14:07]</a> Entonces veremos a ver, Ángel es un tipo con mucha densidad. También hay que contar que Ángel al final es un tipo que lleva mucho tiempo en la tarima. Lleva mucho tiempo compitiendo y obviamente también el cuerpo tiene un desgaste. Yo no conozco a Ángel Calderón en offseason. En offseason me refiero visual. En offseason que tú veas y digas, uff, está en offseason. Yo siempre he visto a Ángel condicionado, siempre he visto a Ángel muy duro y siempre he visto a Ángel que te daba la sensación de decir, este tío en una preparación de un mes o mes y medio está ya para salir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=876" target="_blank" class="timestamp">[14:36]</a> Entonces yo no sé hasta qué punto eso puede generar un desgaste en el cuerpo. Insisto que esto es hablar por hablar y que evidentemente esto lo trataremos a las 11 de la noche con la gente que realmente sabe de esto. Y por supuesto hablaremos con Fran Spins sobre el tema porque obviamente preocupa sobre todo de cara a los siguientes campeonatos y sobre todo de cara a la Olimpia.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=895" target="_blank" class="timestamp">[14:55]</a> porque puede llegar un Olimpia en el que a lo mejor, insisto, los Fran Barrios, los Zagarella, no creo que Kerry Bayo, pero sí que es verdad que puede haber atletas que en un momento dado puedan inquietar esa tercera plaza de Ángel Calderón.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=908" target="_blank" class="timestamp">[15:08]</a> Entonces, bueno, yo creo que todo hay que valorarlo en su justa medida y sí que es verdad, aquí no se va a ver, pero sí que es verdad que la entrega de premio Vivos a un ángel que entiendo perfectamente que esté, bueno, pues disgustado por esta sorpresa, ¿no?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=927" target="_blank" class="timestamp">[15:27]</a> como en este caso finalmente ocurrió. Así que desde luego que es algo que estoy completamente seguro que no le va a meter en un bache ni mucho menos, sino que además puede ser incluso hasta bueno el hecho de un atleta que en este tipo de campeonatos sabe que generalmente barre, que se haya encontrado con un puntito de él por abajo y que sí que vea una cierta amenaza en otros atletas y que esto le haga despertar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=952" target="_blank" class="timestamp">[15:52]</a> y traer una mejor versión en tan solo cuatro semanas que se va a enfrentar a otros competidores muy potentes en el Dubai Pro. Así que como digo chicos y chicas, esta es la actualidad del mundo del culturismo, en lo referente al New York Pro, incógnitas que nos quedan por delante, incógnitas que tenemos ahí.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=971" target="_blank" class="timestamp">[16:11]</a> ver qué va a ocurrir con Josema, de cara evidentemente al Mr. Olimpia, si va a haber un estiramiento o no para conseguir que esas mejoras se afiancen, si se va a seguir partiendo de ese mismo peso, ver un poco cuáles son las reflexiones, esto lo veremos a lo largo de la semana con Raúl, a ver qué opina de cómo ha ido todo, por otro lado el del 2-12, ver qué ocurre con Ángel, después sobre todo el Dubai Pro, ver el físico que va a salir en el Dubai Pro, si realmente hay una amenaza de estos jóvenes y si parece por otro lado</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=IkHpGxLG3ak&t=998" target="_blank" class="timestamp">[16:38]</a> que en este caso tanto la IFB Pro League, en el caso de Josema, ve que a lo mejor estructuralmente no caja tanto en el Classic y sobre todo en el caso de Ángel, si a lo mejor quieren hacer un poquito de despeje para que entre las 9 generaciones, todo eso quiero que me lo dejéis en la caja de comentarios, dadle un fuerte like al vídeo, suscribíos al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 19/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
