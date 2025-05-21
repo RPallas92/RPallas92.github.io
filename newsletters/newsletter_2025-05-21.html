@@ -1,0 +1,413 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen de Videos de YouTube - 21/05/2025</title>
+        <style>
+            :root {
+                --primary-color: #ff0000;
+                --secondary-color: #333;
+                --background-color: #f9f9f9;
+                --card-background: #ffffff;
+                --text-color: #333;
+                --link-color: #0066cc;
+                --border-color: #ddd;
+                --timestamp-color: #666;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                background-color: var(--background-color);
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background-color: var(--card-background);
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            h1 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+            
+            .date {
+                font-size: 1.2em;
+                color: var(--secondary-color);
+                margin-bottom: 20px;
+            }
+            
+            .video-list {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .video-list li {
+                margin-left: 1.5em;
+            }
+                        
+            .video-list h2 {
+                margin-bottom: 15px;
+                color: var(--secondary-color);
+            }
+            
+            .video-list ul {
+                list-style-type: none;
+            }
+            
+            .video-list li {
+                margin-bottom: 10px;
+            }
+            
+            .video-list a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+            
+            .video-list a:hover {
+                color: var(--primary-color);
+                text-decoration: underline;
+            }
+            
+            .video-section {
+                background-color: var(--card-background);
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .video-section h2 {
+                color: var(--secondary-color);
+                margin-bottom: 10px;
+            }
+            
+            .video-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            .video-thumbnail {
+                margin-bottom: 20px;
+            }
+            
+            .video-thumbnail img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s;
+            }
+            
+            .video-thumbnail img:hover {
+                transform: scale(1.02);
+            }
+            
+            /* Markdown content styles */
+            .markdown-content {
+                padding: 15px;
+            }
+            
+            .markdown-content h1, 
+            .markdown-content h2, 
+            .markdown-content h3 {
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                color: var(--secondary-color);
+            }
+            
+            .markdown-content p {
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content ul, 
+            .markdown-content ol {
+                margin-left: 2em;
+                margin-bottom: 1em;
+            }
+            
+            .markdown-content strong {
+                color: var(--secondary-color);
+            }
+            
+            /* Transcription styles */
+            .transcription-paragraph {
+                margin-bottom: 1em;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            
+            .timestamp {
+                color: var(--timestamp-color);
+                font-family: monospace;
+                margin-right: 10px;
+                text-decoration: none;
+                background-color: #eee;
+                padding: 2px 5px;
+                border-radius: 3px;
+                display: inline-block;
+            }
+            
+            .timestamp:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Collapsible styles */
+            .collapsible-container {
+                margin-bottom: 15px;
+            }
+            
+            .collapsible {
+                background-color: var(--primary-color);
+                color: white;
+                cursor: pointer;
+                padding: 12px 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 16px;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            }
+            
+            .collapsible:hover {
+                background-color: #cc0000;
+            }
+            
+            .collapsible:after {
+                content: "+";
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+            }
+            
+            .active:after {
+                content: "-";
+            }
+            
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: var(--card-background);
+                border: 1px solid var(--border-color);
+                border-radius: 0 0 4px 4px;
+            }
+            
+            .summary-content, .transcription-content {
+                padding: 15px;
+                white-space: pre-line;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+            
+            @media (max-width: 768px) {
+                body {
+                    padding: 10px;
+                }
+                
+                .video-meta {
+                    flex-direction: column;
+                }
+                
+                .video-meta span {
+                    margin-bottom: 5px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Resumen de Videos de YouTube</h1>
+                <div class="date">21/05/2025</div>
+            </header>
+            
+            <div class="video-list">
+                <h2>Lista de Videos</h2>
+                <ol>
+                    <li><strong>Miguel Navarro</strong>: <a href='#video-0WMa2gNiBx4'>¿PEAK WEEK SIN RAUL? ¡Mauro NO NOMBRA a Carrasco y TOMA DECISIONES POR SU CUENTA para POLONIA!</a></li>
+                </ol>
+            </div>
+            
+            
+        <div class="video-section" id="video-0WMa2gNiBx4">
+            <h2>¿PEAK WEEK SIN RAUL? ¡Mauro NO NOMBRA a Carrasco y TOMA DECISIONES POR SU CUENTA para POLONIA!</h2>
+            <div class="video-meta">
+                <span class="channel">Canal: Miguel Navarro</span>
+                <span class="date">Publicado: 21/05/2025 14:00</span>
+                <span class="video-link"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4" target="_blank">Ver en YouTube</a></span>
+            </div>
+            <div class="video-thumbnail">
+                <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4" target="_blank">
+                    <img src="https://i.ytimg.com/vi/0WMa2gNiBx4/hqdefault.jpg" alt="¿PEAK WEEK SIN RAUL? ¡Mauro NO NOMBRA a Carrasco y TOMA DECISIONES POR SU CUENTA para POLONIA!" loading="lazy">
+                </a>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Resumen</button>
+                <div class="content">
+                    <div class="summary-content markdown-content">
+                        <h2>Resumen General</h2>
+
+<p>Este video analiza la aparente ausencia del entrenador Raúl Carrasco en la preparación final ("Peak Week") del culturista Mauro.
+El narrador revisa un video reciente de Mauro donde no menciona a Raúl, a pesar de tomar decisiones clave sobre dieta y agua.
+Se compara esto con declaraciones previas de Raúl sobre un seguimiento estrecho y se discute la sorpresa de los seguidores.
+El video sugiere que Mauro podría estar haciendo la Peak Week por su cuenta, lo que genera interrogantes sobre la relación profesional.</p>
+
+<h2>Momentos Clave</h2>
+
+<h3>¿Dónde Está Raúl Carrasco? <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&amp;t=34" target="_blank">[00:34]</a></h3>
+
+<p>El narrador descubre en los comentarios del último video de Mauro sobre su preparación para competir que muchos seguidores preguntan por la ausencia y el rol de su entrenador, Raúl Carrasco. Esto inicia el análisis sobre una posible distancia entre ambos.</p>
+
+<h3>El Plan de Seguimiento Estrecho <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&amp;t=381" target="_blank">[06:21]</a></h3>
+
+<p>Se reproduce un fragmento de un video previo de Raúl Carrasco donde describe su plan para la preparación de Mauro, enfatizando la necesidad de checks diarios o muy frecuentes y una comunicación constante debido al metabolismo rápido de Mauro.</p>
+
+<h3>Mauro Toma las Riendas de su Peak Week <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&amp;t=616" target="_blank">[10:16]</a></h3>
+
+<p>Mauro explica detalladamente sus ajustes de agua, sal y carbohidratos para la semana previa a la competición, utilizando frases como "lo que he hecho" y "vamos a hacer", dando a entender que él mismo está tomando las decisiones clave de la Peak Week nutricional.</p>
+
+<h3>Ausencia Notoria en el Viaje <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&amp;t=1004" target="_blank">[16:44]</a></h3>
+
+<p>Mauro enumera a todas las personas que lo acompañarán a Polonia para la competición (familia, amigos, otros competidores), pero no menciona a Raúl Carrasco, lo que refuerza la percepción de su ausencia no solo en la preparación online sino también física.</p>
+
+<h3>La Polémica en Comentarios y Respuestas <a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&amp;t=1064" target="_blank">[17:44]</a></h3>
+
+<p>El narrador muestra comentarios de seguidores preguntando directamente a Mauro sobre la falta de Raúl y la respuesta de Mauro, que justifica la no asistencia de Raúl por temas familiares y de viaje, pero no aclara si sigue siendo su preparador online para la Peak Week.</p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collapsible-container">
+                <button class="collapsible">Ver Transcripción Completa</button>
+                <div class="content">
+                    <div class="transcription-content">
+                        <div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=2" target="_blank" class="timestamp">[00:02]</a> Bueno, ¿qué tal chicos y chicas? Bienvenidos a un nuevo vídeo en el canal y tenemos que hablar de una polémica que parece que ha surgido en el último contenido de Mauro donde varias personas, personas que son habituales de ver las publicaciones de Mauro</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=17" target="_blank" class="timestamp">[00:17]</a> Le empiezan a preguntar que qué pasa con Raúl Carrasco, que dónde está Raúl, que si la preparación, esta última la big week la está haciendo él bajo las directrices que él considera. Es cierto, es cierto que en todo el vídeo no nombra a Raúl en ningún momento y son 36 minutos de vídeo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=34" target="_blank" class="timestamp">[00:34]</a> Y yo he llegado al vídeo básicamente porque, obviamente, Mauro es esta semana noticia importante dentro del mundo del culturismo español porque compite en Polonia. Entonces, como hago con varios, digo, bueno, voy a ver la última publicación de Mauro, a ver qué se cuenta, cómo va, si hay algún update físico... Y empiezo a mirar en comentarios, porque digo, qué raro...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=52" target="_blank" class="timestamp">[00:52]</a> que habla de puesta a punto, de hacer el cosas, de tomar decisiones sobre la puesta a punto y no menciona en ningún momento a Raúl. Y entonces me meto en comentarios a ver si a la gente le parece lo mismo que a mí. Y hay amigos, y salta la sorpresa. Todo el mundo preguntando por lo mismo y la respuesta de Mauro, que por supuesto también la vamos a ver. ¿Existe algún problema entre estos dos? No tengo ni idea. No tengo ni la más remota idea. De hecho, Raúl, lo normal sería que a finales de esta semana entrara, pero entrara para hablar sobre todo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=80" target="_blank" class="timestamp">[01:20]</a> de lo ocurrido en el New York Pro con Josema y evidentemente también para hacer una previa del men's physique donde compite Mauro. Le preguntaremos sobre todo esto, pero sí que es cierto que resulta bastante sorprendente el hecho sobre todo de que no forme parte de estas decisiones en la big week. Otra cosa es el tema de viajar, que esto al final, obviamente Raúl acaba de volver de Nueva York o volverse otra vez a poner para irse a Polón, imagino que será un...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=104" target="_blank" class="timestamp">[01:44]</a> una situación complicada por una persona que también tiene familia, como puede ser el caso de Raúl, ¿no? Pero obviamente sí que llama bastante la atención que quede bastante presente que hay una persona por detrás del tema de los entrenamientos a la que se la nombre y a la que se la destaca y que en el tema nutricional, de suplementación, de checks, en ningún momento aparece el nombre de Raúl. Entonces, como digo, es algo bastante sorprendente y que ya no es que incida yo que sus propios seguidores</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=130" target="_blank" class="timestamp">[02:10]</a> comentan en su vídeo que qué pasa con Raúl y con sus directrices más en una Pig Week evidentemente se tienen que tomar decisiones muy importantes y que es una semana muy de entrenador como todos sabéis así que como digo chicos y chicas vamos a realizar toda la actualidad de Mauro por supuesto no sin olvidar mediante los códigos en el descuento código Iron Road en toda la web de Big como todos sabéis con el código tenéis un 10% de descuento además han salido nuevos productos por ejemplo esta creatina con sabor</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=154" target="_blank" class="timestamp">[02:34]</a> a Drácula, etc. Es una auténtica locura y estoy deseando que me llegue ya porque seguro que es un auténtico espectáculo. Además, tenéis que recordar que no solamente es esta creatina nueva de One Piece, sino que además tenéis también la proteína de 750 gramos, la proteína más limpia del mercado con más de un 91% de proteína con sabor piruleta en un envase de 750 gramos. Espectacular para el verano y para vuestras vacaciones. Así que os la podéis llevar...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=182" target="_blank" class="timestamp">[03:02]</a> Y ya sí que no hay excusas de que podáis seguir con toda la suplementación. Por otro lado, por supuesto, tenéis la promoción del 35% de descuento en toda la semana en Agonjin. 35 más un 5 adicional con el código Iron Road. Así que un 40% de descuento en vuestras compras en esa semana, esa week bodybuilding. Así que como digo, aprovechadlo chicos porque son dos ofertas, tanto la de Big como la de Agonjin, espectaculares. Y como digo...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=209" target="_blank" class="timestamp">[03:29]</a> Hay que basar a la actualidad de Mauro porque obviamente Mauro inició en este verano, bueno a finales de este verano cuando él terminó, mejor dicho a finales del Mister Olimpia, cuando él terminó temporada inició una fase de volumen, una fase de volumen donde todo parecía bastante rodado con Raúl y ahora lo escucharemos.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=229" target="_blank" class="timestamp">[03:49]</a> De hecho, él hizo un contenido bajando a Sevilla, un poquito también hay que decir que de clickbait porque tampoco hay tanto de explicar en los motivos del distanciamiento entre estos dos. Pero sí que es verdad que se afianzaron puntos muy importantes y que vamos a escuchar ahora y que sobre todo distan de lo que ha ocurrido en este último vídeo. Como digo, lo primero creo que es mandarse antecedentes y escuchar en este caso lo que decía Raúl a tan solo un mes de hoy. Es decir, hace un mes Raúl comentaba esto de la preparación de Mauro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=260" target="_blank" class="timestamp">[04:20]</a> Al final esto, tanto atleta como coax, te motiva. Te motiva porque has trabajado en Traere, como cualquier otro preparador, pero al final te motiva el compartir un producto nuevo con mejoras y eso al final es lo que te lleva a decir, tenemos ganas.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=282" target="_blank" class="timestamp">[04:42]</a> De hecho, ayer estábamos ilusionados con la fecha, contando las días, las semanas y soñando, que al final se trata de soñar en el que vamos a presentar esas mejoras que queremos. Entonces, en ese aspecto, muy contento.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=298" target="_blank" class="timestamp">[04:58]</a> Contando el tiempo que tenemos hasta la competición, obviamente no vamos a caer en el error de más es mejor, ni vamos a apretar ya la dieta ni el cardio, es decir, vamos a trabajar con lo necesario. Como siempre hemos dicho, siendo lo más eficiente posible, sacando el máximo con el mínimo. Si Mauro con 40 minutos de cardio...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=321" target="_blank" class="timestamp">[05:21]</a> vamos avanzando. Al objetivo que queremos no tenemos que subir más cardio ni estresar más al cuerpo. De hecho los cambios que vamos a empezar a hacer desde ahora es con pequeñas modificaciones en el cardio con la propia quema de calorías en el entrenamiento que de hecho mañana le escribiré a Lucas y con quemadores.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=348" target="_blank" class="timestamp">[05:48]</a> Pues ahí lo teníamos a Raúl, motivación, ilusión, hablando ya de las fechas que restan, comunicación con Lucas, que es la persona que le lleva los entrenamientos a Mauro, todo ilusión, como digo, y claro, hay que matizar esta situación, ¿no? Porque esto es, insisto, hace un mes, como podéis comprobar, toda esa ilusión, todo ese trabajo, todo ese foco puesto ya en las competiciones ya habladas, etcétera, etcétera,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=375" target="_blank" class="timestamp">[06:15]</a> Y algo muy interesante que vais a ver que empieza ya a distar de lo que ha ocurrido en esta pingüey. Vamos a seguir escuchando ropa.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=381" target="_blank" class="timestamp">[06:21]</a> Vamos a empezar a hacer, y que lo hago también con Josema, es ver una... bueno, no un check visual, que eso lo haremos cada semana, cada cinco días, pero sí llevar el control del peso diario. Esto es muy común cuando atletas tienen metabolismo rápido. Llevar un control diario del peso e incluso de sensaciones.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=406" target="_blank" class="timestamp">[06:46]</a> vale cada 48 horas y demás porque al final estamos en un punto que dejar un vacío de una semana para evaluar pesos y sensaciones respecto a hacer cambios lo veo como una pérdida de tiempo vale lo veo una pérdida de tiempo por lo tanto a mí al menos personalmente me hace sentir que estoy</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=430" target="_blank" class="timestamp">[07:10]</a> más enfocado con él, que cada día, de hecho no me agobia todo lo contrario, me motiva y me hace sentir que cada 24, cada 48 horas estamos trabajando puño a puño con el físico.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=448" target="_blank" class="timestamp">[07:28]</a> Desde mañana iremos viendo cómo va reaccionando el peso, las sensaciones y si tenemos que hacer modificaciones, pongo el mismo ejemplo de Josema porque está más cercano de la competición, pues no esperaremos una semana. Lo haremos cada dos días, cada tres días o cada cinco días cuando se tercie y sea oportuno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=466" target="_blank" class="timestamp">[07:46]</a> Pues ya habéis escuchado el objetivo o la hoja de ruta era checks prácticamente diarios, comunicación muy estrecha, no me sobrepasas de trabajo, me motivas. Algo muy importante el hecho de estar pendiente, el hecho de estar cercano en la preparación y sobre todo mantener toda la comunicación posible para llevar todo al dedillo y más en un metabolismo rápido como el de Mauro que en cualquier momento hay que hacer algunos ajustes, algunas historias y demás.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=492" target="_blank" class="timestamp">[08:12]</a> Esto es lo que ocurrió hace un mes. Ahora vamos a escuchar el último contenido de Mauro, que es donde él parece que no aparece, mejor dicho, valga la redundancia, el nombre de Raúl por ningún lado de la Pickwick.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=508" target="_blank" class="timestamp">[08:28]</a> Como digo, yo creo que interesa bastante escuchar en este caso a Mauro explicando la situación de la Peak Week y un poco también el papel que parece que no existe. Vamos a escucharlo, insisto, quiero sobre todo ponéroslo y que vosotros aquí vuestras propias conclusiones. Tampoco quiero yo motivaros a que penséis algo diferente, tampoco estoy intentando meter mierda por meterla, es simplemente algo que a mí me ha llamado la atención y que cuando a mí me ha llamado la atención y he visto un comentario, digo, no soy el único al que le llama la atención. Vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=534" target="_blank" class="timestamp">[08:54]</a> Epic Week es la semana previa, es la semana de apogeo, que se le llama. Es la semana donde un culturista juega con el sodio, con el agua, con los carbohidratos, con la suplementación, con el entrenamiento, etc. En busca de crear un físico irreal para un día puntual. Eso lo tenemos que tener clarísimo, ese físico irreal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=554" target="_blank" class="timestamp">[09:14]</a> Es un físico único y exclusivamente para una fecha, que es el día de la competición, y es cuando buscamos manipular el físico para salir deshidratados o más llenos posibles, etc. Para ello vamos a controlar completamente todo, ya os iré contando completamente al detalle lo que voy haciendo y tal.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=573" target="_blank" class="timestamp">[09:33]</a> Acordaros siempre que en comentarios podéis comentar lo que queráis y os explico lo que queráis. Al final soy preparador, he sido atleta durante muchos años y hay mil maneras de hacer una pit week. Cualquiera que tenga una duda pues me lo podéis decir en comentarios y se os contestará.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=590" target="_blank" class="timestamp">[09:50]</a> Pues ahí lo teníamos, voy a hacer ajustes, soy, aparte de aleta también soy entrenador, no aparece el nombre de Raúl, pero bueno, hasta aquí tampoco es necesario que aparezca, insisto, vamos a seguir viendo muchos más vídeos donde el nombre de Raúl no aparece. Y algo muy interesante es que vamos a ver cómo él toma decisiones o cambios, que además queda bastante claro que las toma él porque es que lo matiza en el discurso, vamos a escucharlo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=616" target="_blank" class="timestamp">[10:16]</a> hoy sí ya hasta esta semana lo que hemos hecho así bueno lo que he hecho ha sido ir controlando el tema del agua de mantenerlo tal como lo hago siempre o sea lo que hago de forma habitual entre 4-5 litros y aprox unos 5-6 gramos de sal al día un gramo de sal por comida</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=636" target="_blank" class="timestamp">[10:36]</a> Pues hoy ya lo que vamos a hacer es ir al dedillo, ¿vale? O sea, voy a verme, esto es un litro y medio de agua, después en el entrenamiento dos litros de agua y así, y quiero clavarlo cinco, o sea, cinco cada día, ajustado, clavado, ¿vale? Y después por otro lado me voy a pasar por el Carrefour o por el Alcampo, que ahí venden sobrecitos de sal de un gramo y así ya lo tenemos todo totalmente controlado, ¿vale? Tema nutrición y cardio, nutrición, la...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=665" target="_blank" class="timestamp">[11:05]</a> Retocaremos como hemos hecho estos últimos previos 10 días, que ha sido despertarnos, hacer el vídeo, ver el peso, poner un vídeo al lado del otro, analizar cómo me veo, qué cambios he notado de un día para el otro y analizar que el peso, si mantengo la condición, pues que no es necesario que vaya cayendo más de...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=687" target="_blank" class="timestamp">[11:27]</a> 2, 3, 5 gramos al día. Más que eso ya sería demasiado y nos iríamos a paseo como pasa siempre. Entonces eso lo estamos controlando día a día para que no pase.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=699" target="_blank" class="timestamp">[11:39]</a> Yo creo que este audio, en concreto este vídeo, este clip, es bastante sintomático de que la pigui la está haciendo él. ¿Por qué lo digo? Porque en el primer momento en el que él comenta, hoy sí, ya esta semana, lo que hemos hecho... Bueno, lo que he hecho, ya ahí hay un síntoma bastante evidente de que aquí el que toma las decisiones es él. Habla bastante de hacer las cosas como las ha hecho siempre. O sea, da la sensación de que está haciendo la pigui que le ha podido funcionar en el pasado.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=725" target="_blank" class="timestamp">[12:05]</a> y que no necesariamente tiene que ser exactamente la peak week que requiera esto, no porque no le pueda salir bien, le puede salir de hecho muy bien, y es más, luego si queréis veremos la lista para Polonia, para mí Mauro es el máximo favorito de todos los que van. Dicho esto, el papel de Raúl en este tipo de cosas, en este tipo de controles, ya lo habéis escuchado hace un mes, quería que fuera estrecho y evidentemente es donde Raúl realmente...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=748" target="_blank" class="timestamp">[12:28]</a> marca la diferencia con respecto a otro tipo de preparadores, porque al final, pautar una dieta de volumen o pautar una dieta de una cierta reestructuración física, no voy a decir que la pueda hacer cualquiera, pero más o menos dentro de los parámetros, pero la realidad o lo que marca realmente la diferencia entre un preparador y otro, tenéis que saber que es mucho la Pigwick.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=765" target="_blank" class="timestamp">[12:45]</a> y más un entrenador que lleva muchos años contigo y te conoce, con lo cual da la sensación, escuchando este último vídeo, que él va, que se compara vídeos, que toma decisiones, etcétera, etcétera, que es el que tiene la manija de la pickwick, resulta bastante sorprendente, a mí por lo menos me lo parece, insisto, déjame en la caja de comentarios que opináis, pero a mí me parece bastante sorprendente que se ponga a tomar decisiones</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=785" target="_blank" class="timestamp">[13:05]</a> sobre cómo se ve, sobre si baja o no baja el peso, sobre el impacto visual y que en ningún momento nombre el decir me hago check, lo mando a Raúl, Raúl toma decisiones, aquí como veis tampoco vuelve a aparecer el nombre de Raúl. Seguimos más adelante porque aquí se acaba a aparecer un nombre que es el de Lucas. Es decir, a Lucas lo tiene presente para el tema de los entrenos pero cuando vuelve otra vez al tema de nutrición vuelve otra vez a obviar el nombre de Raúl. Vamos a escucharlo. Lucas ya me ha pasado todo lo que es la planificación de entrenamiento. Te quiero Lucas con locura.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=816" target="_blank" class="timestamp">[13:36]</a> aquí está vale y lo que vamos a hacer es</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=822" target="_blank" class="timestamp">[13:42]</a> Lunes, martes, miércoles, jueves y viernes entreno, ¿vale? Sábado descanso y domingo me pone champs. Espalda y bíceps, primer día, o sea, hoy. Pecho, tríceps, hombro, miércoles, jueves espalda y bíceps y el viernes, ¿vale? Que es cuando faltarán dos días para competir.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=847" target="_blank" class="timestamp">[14:07]</a> Es pecho, hombro y tríceps, ¿vale? Como si fuera el bombeo pre-competición. Tema abs que lo haga todos los días. Y tema entrenamiento, entrenamientos de máximo una hora y media y el del viernes una hora, ¿vale? Y en ningún momento, o sea, no voy a hacer tanto, no voy a hacer back-offs, por ejemplo, y voy a ir más al grano en tema de la top-set, ¿vale? O sea, vamos a intentar seguir tirando pesado para que el músculo siga redondo y lleno.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=877" target="_blank" class="timestamp">[14:37]</a> Igualmente durante el entrenamiento se irá explicando todo y quiere entrenar conmigo esta semana y me echará un cable para que pueda rendir como Dios manda, haga los descansos y esas cosas que Lucas le ha puesto deberes. Y qué más deciros, tema nutricional, esto es importante. Ayer por la noche hice una carga de hidratos, metí en la cena 150 gramos de tortas totales, aparte del 50 gramos de arroz.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=903" target="_blank" class="timestamp">[15:03]</a> Y hoy me he despertado con un gramo menos que ayer, ¿vale? O sea, seguimos quemando hasta comiendo más. Entonces, ¿qué hemos hecho hoy? Subir carbos, ¿vale? Y lo que estoy haciendo es, en todas las comidas, meter 40 gramos de tortas, ¿vale? O sea, nos vamos a un cómputo total de 250 gramos de tortas al día de más.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=925" target="_blank" class="timestamp">[15:25]</a> Para que lo sepáis completamente todo. Tema sodio mantenemos igual, un gramo por comida. Y tema agua, dos litros y medio en botella de agua. Y dos litros 200 voy a hacer de la botella de entrenamiento. Más lo que vaya bebiendo del día. O sea que serán entre 5 y 6 litros máximos. Y ya está, creo que...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=947" target="_blank" class="timestamp">[15:47]</a> Pues aquí tenemos la explicación de Mauro, insisto, para el tema de entrenamientos tiene bastante presente lo que le comenta Lucas y lo que tiene que hacer, pero en el tema nutricional vuelve una vez más a tomar decisiones que en ningún momento aparece en Raúl. Yo no digo que Raúl no esté detrás, pero en ningún momento dice, bueno, yo mando reporte a Raúl diario, Raúl ha tomado la decisión de subir por aquí, bajar por allá, hacer esto, hacer aquello, sino que simplemente yo le voy subiendo, yo le voy aportándolo, yo le voy haciendo, con lo cual insisto que a mí también me vuelve una vez más a sorprender, o sea, no es algo de mi asombro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=977" target="_blank" class="timestamp">[16:17]</a> vamos a ver cuando habla del tema del viaje quién le va a acompañar y vais a ver que empieza a nombrar a todo el mundo pero en ningún momento nombrar a Raúl de decir bueno Raúl no va a poder viajar porque bueno como todos sabéis ha estado prácticamente casi un mes con Josema en Estados Unidos evidentemente las fechas coincidían bastante y ha sido imposible pero no os preocupéis porque Raúl va a estar detrás de toda la preparación como tiene que ser va a estar atento a todo etc etc en ningún momento vuelvo otra vez a nombrar a Raúl vamos a escucharlo</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1004" target="_blank" class="timestamp">[16:44]</a> Es que ya tengo todos los vuelos del apartamento y todo y nos vamos el jueves. En este caso me voy yo el jueves porque tengo el pesaje el viernes. Viene Iker conmigo. Quiero que esté conmigo entonces le pago el viaje. Viene Víctor con su pareja también a competir. Viene Adri y su mujer para estar conmigo.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1033" target="_blank" class="timestamp">[17:13]</a> El Siri va todo loco. Y por otro lado, mi mujer viene el viernes. Chicos, estoy muy, muy, muy contento. Pues ahí lo teníamos, ¿no? Yo creo que se podría a lo mejor haber explicado de alguna manera el hecho de que Raúl no fuera, pero hasta ahí, fijaros lo que os digo, que tiene todavía...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1055" target="_blank" class="timestamp">[17:35]</a> Un pase. A mí me parece que ya son bastantes clips donde da la sensación de que se está llevando el Lapigui. Pero a partir de ahí nos vamos aquí...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1064" target="_blank" class="timestamp">[17:44]</a> en comentarios de su vídeo que ahora que veáis es su vídeo vale ahí lo tenéis es el mismo vídeo del que he sacado yo los extractos y los comentarios los comentarios raúl no va raúl no va contigo etcétera etcétera y la respuesta vais a ver que prácticamente la misma siempre brother estoy grabando y editando cada día estando en pre con un hijo de tres años mujer ni negocios calma que no es fácil llegar a todos raúl estuvo un mes fuera con josema llegó el lunes y yo me voy el jueves tiene a sus hijas familia con los que estar no puede venir</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1091" target="_blank" class="timestamp">[18:11]</a> Y a cada persona que le pregunta más o menos, como digo, la contestación es bastante similar. Fijaros aquí, aunque hay alguno que le contesta un poco más, con mayor insistencia. Un poco es lo mismo, pero dice, no me refiero a venir, me refiero a llevarte online. Si te estás pautando tú la comida y el agua o eso parece. Y ahí es verdad que no recibe contestación. ¿Qué pasa con Raúl, que te lleva solo?</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1119" target="_blank" class="timestamp">[18:39]</a> Entonces, evidentemente son muchos interrogantes, a mí me parece bastante sorprendente, lo digo sinceramente, a mí me parece bastante sorprendente que después de una fase de volumen donde has conseguido una ganancia muscular importante, Mauro ha evolucionado mucho, de hecho insisto que es el gran favorito para lo que vamos a tener en Polonia el domingo por la mañana.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1137" target="_blank" class="timestamp">[18:57]</a> Que Raúl desaparezca de esta manera de la ecuación a mí personalmente me sorprende. Si queréis mi opinión, a mí me sorprende. Yo no tengo ningún tipo de información en esto. No le he preguntado a Raúl, no he hablado con Raúl. De hecho, lo último que hablé con Raúl fue justo cuando él vino a España. Creo que fue ayer.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1153" target="_blank" class="timestamp">[19:13]</a> Y le pregunté de grabar por el tema del New York Pro. En ningún momento hablamos de Mauro. Evidentemente yo le iba a haber preguntado por Mauro una vez ya el programa, básicamente. No por nada, porque no sabía esto, sino por el tema de que compite en Polonia, de cómo le veía, etc. Pero sí que es verdad que a mí me parece muy raro. A mí esto me parece muy extraño. Creo que es una apuesta a punto que puede ser a lo mejor incluso diferente por la mayor densidad muscular de Mauro la que ha conseguido en este bulk.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1179" target="_blank" class="timestamp">[19:39]</a> y que Raúl desaparezca de la ecuación de esta manera a mí me parece bastante sorprendente y que cuando se le pregunte lejos de atajar</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1188" target="_blank" class="timestamp">[19:48]</a> Casi es una respuesta con un poco hasta de cabreo. No sé realmente si ha pasado algo o no ha pasado algo. Hasta cierto punto si ha pasado algo entre los dos no forma parte de lo que realmente nos interesa. Pero sí que es verdad que nos interesa saber que el producto que salga sea un producto que vaya bajo la mano de las directrices de Raúl Carrasco. Porque si Mauro sale y no sale bien...</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1212" target="_blank" class="timestamp">[20:12]</a> que no digo que vaya a ocurrir, pero si Mauro sale y no sale bien, evidentemente que también queda, digamos, retratado por así decirlo, Raúl. Porque no deja de ser aleta de Raúl Carrasco. Entonces, insisto en que yo creo que esto sería bueno que de una u otra manera se esclareciera. Yo no sé vosotros qué pensáis, evidentemente dejadme en la caja de comentarios, pero me parece muy extraño y más viendo todas las trayectorias de Mauro, incluso en campeonatos donde no ha competido, pues él siempre está en comunicación. Yo recuerdo un campeonato, que yo creo que es lo que él está haciendo ahora,</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1242" target="_blank" class="timestamp">[20:42]</a> que fue el campeonato el que consiguió el último pase a la Olimpia, que creo que fue en México. En México, la apuesta a punto es cierto que Raúl no tuvo demasiado que ver y consiguió el pase. Y a mí me da la sensación de que en esta ocasión creo que está repitiendo la misma apuesta a punto de en México. Pero es probable que el físico no sea el mismo que en México. Y es posible que requiera una serie de retoques y de estar encima de ese físico, que no es lo mismo que en México, donde era ya la última prueba y donde el físico iba más rodado. Ojo a esto, porque también puede ser importante</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1271" target="_blank" class="timestamp">[21:11]</a> E insisto, evidentemente le preguntaré a Raúl sobre todo esto, porque es que creo que necesita el mundo saber, el mundo del culturismo y el mundo de la comunidad, saber qué está pasando aquí. Lejos de temas personales, cosa que nunca ha entrado en ellos, en lo que es el tema personal, pero sí el tema profesional. Y aquí es evidente que Lucas, que es la persona que está llevándole los entrenos, sí que está bastante presente y Raúl, pues ya lo habéis escuchado. Lo habéis escuchado el nombre de Raúl porque lo estoy diciendo yo, pero no porque lo esté nombrando en este caso Mauro.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1300" target="_blank" class="timestamp">[21:40]</a> Así que como digo chicos y chicas, esta es la información, os la he desglosado, parece que hay algo raro aquí, parece que está haciendo la apuesta a punto él, bajo su directriz, bajo su visión, teniendo en cuenta lo que le ha podido funcionar en el pasado y lo que no, y su experiencia y sus conocimientos, yo creo que si esto es así es un error.</div>
+<div class="transcription-paragraph"><a href="https://www.youtube.com/watch?v=0WMa2gNiBx4&t=1319" target="_blank" class="timestamp">[21:59]</a> el hecho de contar o poder contar con la manija de Raúl Carrasco y no tenerle en cuenta o despejarle de esta ecuación o querer hacer las cosas por tu cuenta, creo que es un error importante, lo cual no quiere decir que no te pueda salir bien, de hecho ya le salió bien en México, con lo cual eso no quiere decir que no te pueda salir bien, pero creo que es un error. Así que dejadme en la caja de comentarios que opináis de todo esto, fuerte like al vídeo, suscribiros al canal y como siempre digo chicos y chicas, siempre a más.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            <footer>
+                <p>Generado automáticamente el 21/05/2025</p>
+            </footer>
+        </div>
+        
+        <script>
+            // JavaScript for collapsible sections
+            document.addEventListener('DOMContentLoaded', function() {
+                var coll = document.getElementsByClassName("collapsible");
+                
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
