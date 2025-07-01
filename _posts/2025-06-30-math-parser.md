@@ -89,7 +89,7 @@ fn read_input_file() -> Result<String> {
 }
 
 fn eval(input: &str) -> u32 {
-    let mut tokens = tokenize(input).peekable();
+    let mut tokens = tokenize(input).into_iter().peekable();
     parse_expression(&mut tokens)
 }
 
@@ -256,15 +256,16 @@ We begin by calling `parse_expression` at **depth 1**:
 
 This baseline parser works well, but it's not optimized.
 
-If we compile it in release mode and execute it for the test file of **3.2GB**, it takes **15.56 seconds** to execute on my laptop:
+If we compile it in release mode and execute it for the test file of **1.6GB**, it takes **43.87 seconds** to execute on my laptop:
 
 ```
-Step 1: Input file read in 1.922002912s
-Step 2: Calculation completed in 8.646109663s
+Step 1: Input file read in 1.189915008s
+Step 2: Calculation completed in 41.876205675s
 
 --- Summary ---
 Result: 15
-Total time: 10.568144221s
+Total time: 43.06795088s
+
 ```
 
 In the next sections, we’ll go step by step to optimize this parser:
@@ -283,11 +284,60 @@ Let’s go!
 
 ### Optimization 1: Do not allocate a Vector when tokenizing.
 
-flamegraph and memory
+Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing.
 
+`cargo flamegraph --dev --bin parser`
 
+We get the following flame graph:
+
+![First flamegraph](../assets/images/math_parser/flamegraph_1_naive_solution.png)
+
+We can see that the majority of the time is spent in the tokenizer function, which reads the input string and allocates a vector of tokens.
+
+To profile memory usage, we can use [dhat](https://github.com/nnethercote/dhat-rs) to generate a profile JSON file and view it at https://nnethercote.github.io/dh_view/dh_view.html:
+
+![First memory profiling](../assets/images/math_parser/memory_1_naive_solution.png)
+
+Notice how **4 GB of RAM** is used just to allocate the token vector!
 
 ---
+
+
+I made a mistake in my initial implementation. Why does the `tokenize` function return a vector if we’re converting it into an iterator later anyway? Let’s just return a lazy iterator directly instead of allocating a vector:
+
+```rust
+fn eval(input: &str) -> u32 {
+    let mut tokens = tokenize(input).peekable();
+    parse_expression(&mut tokens)
+}
+
+fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
+    input.split_whitespace().map(|s| match s {
+        "+" => Token::Plus,
+        "-" => Token::Minus,
+        "(" => Token::OpeningParenthesis,
+        ")" => Token::ClosingParenthesis,
+        n => Token::Operand(n.parse().unwrap()),
+    })
+}
+```
+
+If we run the parser again after this small change, the speed improves significantly:
+
+```
+Step 1: Input file read in 1.285800942s
+Step 2: Calculation completed in 4.25785019s
+
+--- Summary ---
+Result: 15
+Total time: 5.543693402s
+```
+
+**Wow! From 43 seconds down to just 5**. What an improvement. A small mistake can have a huge impact on performance. Fortunately, the flamegraph pointed us straight to the bottleneck!
+
+
+
+
 
 
 
