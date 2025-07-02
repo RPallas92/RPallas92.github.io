@@ -282,7 +282,7 @@ Let’s go!
 
 ## Optimizations for speed and memory
 
-### Optimization 1: Do not allocate a Vector when tokenizing.
+### Optimization 1: Do not allocate a Vector when tokenizing
 
 Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing.
 
@@ -333,12 +333,108 @@ Result: 15
 Total time: 5.543693402s
 ```
 
-**Wow! From 43 seconds down to just 5**. What an improvement. A small mistake can have a huge impact on performance. Fortunately, the flamegraph pointed us straight to the bottleneck!
+**Wow! From 43 seconds down to just 5.54**. What an improvement. A small mistake can have a huge impact on performance. Fortunately, the flamegraph pointed us straight to the bottleneck!
+
+---
+
+### Optimization 2: Zero allocations — parse directly from the input bytes
+
+After removing the initial `Vec<Token>` allocation, performance improved significantly. But we can still do better.
+
+If we analyze the flamegraph again, we notice that although we no longer allocate a vector of tokens, we’re still splitting the input string by whitespace and allocating temporary &str slices during parsing:
+
+![Second flamegraph](../assets/images/math_parser/flamegraph_2.png)
+
+The boxes marked in pink/violet correspond to the `split_whitespaces` funciton used by our tokenizer:
+
+```rust
+fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
+    input.split_whitespace().map(|s| match s {
+        "+" => Token::Plus,
+        "-" => Token::Minus,
+        "(" => Token::OpeningParenthesis,
+        ")" => Token::ClosingParenthesis,
+        n => Token::Operand(n.parse().unwrap()),
+    })
+}
+```
+
+We're paying a cost for each `split_whitespace` call and every, which allocates intermediate slices. This churns memory and CPU cycles.
+
+Let’s go even lower level.
+
+#### The idea: Use &[u8]
+
+Instead of working with UTF-8 strings and &str, we can use raw bytes (&[u8]) and manually scan for digits and operators, to avoid temporary string allocations.
+
+
+Here is our new zero-memory allocation tokenizer:
+
+```rust
+fn read_input_file() -> Result<Vec<u8>> {
+    fs::read("data/input.txt")
+}
+
+struct Tokenizer<'a> {
+    input: &'a [u8],
+    pos: usize,
+}
+
+impl<'a> Iterator for Tokenizer<'a> {
+    type Item = Token;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.pos >= self.input.len() {
+            return None;
+        }
+
+        let byte = self.input[self.pos];
+
+        self.pos += 1;
+
+        let token = match byte {
+            b'+' => Some(Token::Plus),
+            b'-' => Some(Token::Minus),
+            b'(' => Some(Token::OpeningParenthesis),
+            b')' => Some(Token::ClosingParenthesis),
+            b'0'..=b'9' => {
+                let mut value = byte - b'0';
+                while self.pos < self.input.len() && self.input[self.pos].is_ascii_digit() {
+                    value = 10 * value + (self.input[self.pos] - b'0');
+                    self.pos += 1;
+                }
+
+                Some(Token::Operand(value))
+            }
+            other => panic!("Unexpected byte: '{}'", other as char),
+        };
+
+        self.pos += 1; // skip whitespace
+
+        return token;
+    }
+}
+```
+
+The only heap allocation occurs when the file is read into a vector. The tokenizer operates on references to that vector of bytes and does not perform any intermediate allocations.
+
+If we execute the program again, we get:
+
+```
+Step 1: Input file read in 1.435023269s
+Step 2: Calculation completed in 2.136090105s
+
+--- Summary ---
+Result: 15
+Total time: 3.571143085s
+```
+
+Great improvement! From **5.54 to 3.57 seconds**. Almost 2 seconds faster!
+
+---
 
 
 
-
-
-
-
-
+// custom number parsing with SIMD (like atoi lib?)
+// First pass with SIMD to find outter parentheses, then parallelize
+// MMAP instead of file read
