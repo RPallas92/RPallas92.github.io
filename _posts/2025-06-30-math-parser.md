@@ -24,14 +24,16 @@ description: Optimizing a math expression parser for speed and memory.
 
 ## Table of contents
 
-1. [Table of contents](#table-of-contents)
 1. [Baseline implementation](#baseline-implementation)
     1. [How it works](#how-it-works)
     1. [Parser Example: `(1 + 2) - 3`](#parser-example-1--2---3)
     1. [Sequence Diagram](#sequence-diagram)
     1. [It works! But we can do better](#it-works-but-we-can-do-better)
 1. [Optimizations for speed and memory](#optimizations-for-speed-and-memory)
-    1. [Optimization 1: Do not allocate a Vector when tokenizing.](#optimization-1-do-not-allocate-a-vector-when-tokenizing)
+    1. [Optimization 1: Do not allocate a Vector when tokenizing](#optimization-1-do-not-allocate-a-vector-when-tokenizing)
+    1. [Optimization 2: Zero allocations — parse directly from the input bytes](#optimization-2-zero-allocations--parse-directly-from-the-input-bytes)
+    1. [Optimization 3: Do not use `Peekable`](#optimization-3-do-not-use-peekable)
+
 
 ---
 
@@ -430,11 +432,103 @@ Total time: 3.571143085s
 ```
 
 Great improvement! From **5.54 to 3.57 seconds**. Almost 2 seconds faster!
-
 ---
 
 
+### Optimization 3: Do not use `Peekable`
+
+The new flamegraph shows several samples related to `Peekable`:
+
+- `core::iter::adapters::peekable::Peekable::peek::_{{closure}}`
+- `core::iter::adapters::peekable::Peekable::peek`
+
+![Third flamegraph](../assets/images/math_parser/flamegraph_2.png)
+
+
+This is because we wrap our tokenizer into Rust’s `Peekable`, which allows us to look at the next token without consuming it. We initially used it to look ahead when parsing expressions like `1 + (2 - 3)` to know whether to continue parsing or return early.
+
+However, in our use case, `peek()` isn't necessary. We can restructure the algorithm to work directly with a plain iterator.
+
+Here's the old version:
+
+```rust
+fn parse_expression(tokens: &mut Peekable<impl Iterator<Item = Token>>) -> u32 {
+    let mut left = parse_primary(tokens);
+
+    while let Some(Token::Plus) | Some(Token::Minus) = tokens.peek() {
+        let operator = tokens.next();
+        let right = parse_primary(tokens);
+        left = match operator {
+            Some(Token::Plus) => left + right,
+            Some(Token::Minus) => left - right,
+            other => panic!("Expected operator, got {:?}", other),
+        };
+    }
+
+    left
+}
+```
+
+And here’s the new version that eliminates `Peekable`:
+
+```rust
+fn parse_expression(tokens: &mut impl Iterator<Item = Token>) -> u32 {
+    let mut left = parse_primary(tokens);
+
+    while let Some(token) = tokens.next() {
+        if token == Token::ClosingParenthesis {
+            break;
+        }
+
+        let right = parse_primary(tokens);
+        left = match token {
+            Token::Plus => left + right,
+            Token::Minus => left - right,
+            other => panic!("Expected operator, got {:?}", other),
+        };
+    }
+
+    left
+}
+```
+
+We replaced the `peek()` logic with a `match` on the current token. If it’s a `+` or `-`, we consume the right-hand operand and compute the result. If it’s a closing parenthesis, we `break` (this is an important point: **we no longer manually skip the closing parenthesis after parsing a sub-expression**).
+
+Previously, with `peekable`, we consumed the `(`, parsed the sub-expression, and then had to explicitly `next()` again to discard the `)` after the recursive call. Now, since we're using a flat iterator, we simply let the closing `)` token be returned by `next()`, and our `while let Some(token)` loop handles it. If the token is a `)`, we break out of the loop, and the recursive call returns.
+
+We also simplified `parse_primary` in a similar way:
+
+```rust
+fn parse_primary(tokens: &mut impl Iterator<Item = Token>) -> u32 {
+    match tokens.next() {
+        Some(Token::OpeningParenthesis) => {
+            let val = parse_expression(tokens);
+            val
+        }
+        Some(Token::Operand(n)) => n as u32,
+        other => panic!("Expected number, got {:?}", other),
+    }
+}
+```
+
+By avoiding `peek()` and handling the tokens linearly, we improve the performance:
+
+```
+Step 1: Input file read in 1.070629616s
+Step 2: Calculation completed in 1.881817656s
+
+--- Summary ---
+Result: 15
+Total time: 2.952483691s
+```
+
+From **3.56 to 2.95 seconds**. We are getting faster. Let's keep optimizing!
+
+
+
+---
 
 // custom number parsing with SIMD (like atoi lib?)
+// custom parsing with match knowing there are 2-3 figures integers
 // First pass with SIMD to find outter parentheses, then parallelize
 // MMAP instead of file read
