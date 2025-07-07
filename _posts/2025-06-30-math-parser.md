@@ -578,6 +578,62 @@ Before diving into the code, let's look at the high-level plan. The entire proce
 [ Final Answer ]
 ```
 
+#### What is SIMD? A Quick Introduction
+
+**SIMD** stands for **S**ingle **I**nstruction, **M**ultiple **D**ata. It's a powerful feature built into virtually all modern CPUs, from laptops to servers to mobile phones. At its core, SIMD allows the CPU to perform the same operation on multiple pieces of data *at the same time*, with a single instruction.
+
+Think of a cashier at a grocery store. A traditional CPU core operates like a cashier scanning items one by one. This is a **scalar** operation—one instruction processes one piece of data.
+
+```
+Scalar Operation (One by one)
+Instruction: Is this byte '+'?
+      |
+      V
+[ H | e | l | l | o |   | + |   | W | o | r | l | d ]
+  ^--- Processed sequentially --->
+```
+
+A SIMD-enabled CPU is like a cashier with a giant, wide scanner that can read the barcodes of an entire row of items in the cart all at once. This is a **vector** operation.
+
+```
+SIMD Operation (All at once)
+Instruction: For all 64 of these bytes, tell me which ones are '+'?
+      |
+      V
+[ H | e | l | l | o |   | + |   | W | o | r | l | d | ... (up to 64 bytes) ]
+[ 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | ... (result mask)  ]
+\_______________________________________________________________________/
+                         Processed in a single cycle
+```
+
+For highly repetitive tasks, like searching for a specific character in a massive string, the performance gain is enormous.
+
+##### A Concrete Example: Finding `+`
+
+In our project, we need to find all the `+` characters.
+
+**The Scalar Way:**
+Without SIMD, we would have to write a simple `for` loop to check every single byte:
+
+```rust
+let mut positions = Vec::new();
+for (i, &byte) in input.iter().enumerate() {
+    if byte == b'+' {
+        positions.push(i);
+    }
+}
+```
+This is simple and correct, but for a 2GB file, this loop runs 2 billion times.
+
+**The SIMD Way:**
+With SIMD (specifically, the AVX-512 instructions we use), the process is different:
+
+1.  **Load:** We load a big chunk of our input string (64 bytes at a time) into a special, wide 512-bit CPU register.
+2.  **Compare:** We use a single instruction (`_mm512_cmpeq_epi8_mask`) to compare all 64 bytes in our register against a template register that contains 64 copies of the `+` character.
+3.  **Get Mask:** The CPU returns a single 64-bit integer (`u64`) as a result. This is a **bitmask**. If the 5th bit of this integer is `1`, it means the 5th byte of our input chunk was a `+`.
+
+In one instruction, we've done the work of 64 loop iterations. While using SIMD requires more complex code, this massive reduction in the number of instructions is the key to unlocking the next level of performance for data-intensive tasks.
+
 #### The Code
 
 Here are the two key functions that implement our parallel strategy. First, `parallel_eval` orchestrates the process, and second, the `find_best_split_indices_simd` function uses SIMD to find the valid split points.
