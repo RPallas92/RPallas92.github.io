@@ -25,7 +25,7 @@ description: Optimizing a math expression parser for speed and memory.
 
 1. [Baseline implementation (43.1 s)](#baseline-implementation-431s)
    1. [How it works](#how-it-works)
-   1. [Parser Example: `(1 + 2) - 3`](#parser-example-1--2---3)
+   1. [Parser Example: (1 + 2) - 3](#parser-example-1--2---3)
    1. [It works! But we can do better](#it-works-but-we-can-do-better)
 2. [Optimizations for speed and memory](#optimizations-for-speed-and-memory)
    1. [Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)](#optimization-1-do-not-allocate-a-vector-when-tokenizing-431s--645s--85-improvement)
