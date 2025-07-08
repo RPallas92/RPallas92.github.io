@@ -23,16 +23,16 @@ description: Optimizing a math expression parser for speed and memory.
 
 ## Table of contents
 
-1. [Baseline implementation (43.1 s)](#baseline-implementation)
+1. [Baseline implementation (43.1 s)](#baseline-implementation-431s)
    1. [How it works](#how-it-works)
    1. [Parser Example: `(1 + 2) - 3`](#parser-example-1--2---3)
    1. [It works! But we can do better](#it-works-but-we-can-do-better)
 2. [Optimizations for speed and memory](#optimizations-for-speed-and-memory)
-   1. [Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)](#optimization-1-do-not-allocate-a-vector-when-tokenizing-85)
-   1. [Optimization 2: Zero allocations — parse directly from the input bytes (6.45 s → 3.68 s, –43% improvement)](#optimization-2-zero-allocations-–-parse-directly-from-the-input-bytes-43)
-   1. [Optimization 3: Do not use `Peekable` (3.68 s → 3.21 s, –13% improvement)](#optimization-3-do-not-use-peekable-13)
-   1. [Optimization 4: Multithreading and SIMD (3.21 s → 2.21 s, –31% improvement)](#optimization-4-multithreading-and-simd-38)
-   1. [Optimization 5: Memory‑mapped I/O (2.21 s → 0.98 s, –56% improvement)](#optimization-5-memory‑mapped-io-56)
+   1. [Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)](#optimization-1-do-not-allocate-a-vector-when-tokenizing-431s--645s--85-improvement)
+   1. [Optimization 2: Zero allocations — parse directly from the input bytes (6.45 s → 3.68 s, –43% improvement)](#optimization-2-zero-allocations--parse-directly-from-the-input-bytes-645s--368s--43-improvement)
+   1. [Optimization 3: Do not use Peekable (3.68 s → 3.21 s, –13% improvement)](#optimization-3-do-not-use-peekable-368s--321s--13-improvement)
+   1. [Optimization 4: Multithreading and SIMD (3.21 s → 2.21 s, –31% improvement)](#optimization-4-multithreading-and-simd-321s--221s--31-improvement)
+   1. [Optimization 5: Memory‑mapped I/O (2.21 s → 0.98 s, –56% improvement)](#optimization-5-memory-mapped-io-221s--098s--56-improvement)
 3. [Conclusion](#conclusion)
 
 
@@ -58,7 +58,7 @@ We’ll start with a straightforward implementation and optimizite it step by st
 
 ---
 
-## Baseline implementation
+## Baseline implementation (43.1 s)
 
 Here’s the first version of our parser:
 
@@ -189,7 +189,7 @@ The recursive call to `parse_expression()` inside `parse_primary()` allows us to
 
 ---
 
-### Parser Example: `(1 + 2) - 3`
+### Parser Example: (1 + 2) - 3
 
 Let’s walk through parsing the expression `(1 + 2) - 3` using our functions:
 
@@ -291,7 +291,7 @@ Let’s go!
 
 ## Optimizations for speed and memory
 
-### Optimization 1: Do not allocate a Vector when tokenizing
+### Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)
 
 Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing.
 
@@ -346,7 +346,7 @@ Total time: 6.45377661s
 
 ---
 
-### Optimization 2: Zero allocations — parse directly from the input bytes
+### Optimization 2: Zero allocations — parse directly from the input bytes (6.45 s → 3.68 s, –43% improvement)
 
 After removing the initial `Vec<Token>` allocation, performance improved significantly. But we can still do better.
 
@@ -442,7 +442,7 @@ Great improvement! From **6.45 to 3.68 seconds**. Almost 2 seconds faster!
 ---
 
 
-### Optimization 3: Do not use `Peekable`
+### Optimization 3: Do not use Peekable (3.68 s → 3.21 s, –13% improvement)
 
 The new flamegraph shows several samples related to `Peekable`:
 
@@ -533,7 +533,7 @@ From **3.68 to 3.21 seconds**. We are getting faster. Let's keep optimizing!
 
 ---
 
-### Optimization 4: Multithreading and SIMD
+### Optimization 4: Multithreading and SIMD (3.21 s → 2.21 s, –31% improvement)
 
 The next logical step is to parallelize the computation. Ideally, if we have a CPU with 8 cores, we want to split the input file into 8 equal chunks and have each core work on one chunk simultaneously. This should, in theory, make our program up to 8 times faster.
 
@@ -615,7 +615,7 @@ Instruction: For all 64 of these bytes, tell me which ones are '+'?
 
 For repetitive tasks, like searching for a specific character in a long string, the performance gain is great.
 
-##### SIMD example: Finding `+`
+##### SIMD example: Finding +
 
 In our project, we need to find all the `+` characters.
 
@@ -819,7 +819,7 @@ This loop does **not** run 64 times. It only runs for the number of set bits in 
 
 This combination allows us to visit every interesting character in the correct, forward order, but without a slow byte-by-byte scan. Inside the loop, we just update our `depth` counter to know if we are at a top level position, and if so, we check if we can add a splitting point.
 
-#### Full examnple
+#### Full example
 
 Let's trace the entire flow with a small, concrete example.
 
@@ -894,7 +894,7 @@ From **3.21 to 2.21 seconds**. 1 second faster, for an already optimized program
 
 ---
 
-### Optimization 5: Memory-Mapped Files
+### Optimization 5: Memory-Mapped I/O (2.21 s → 0.98 s, –56% improvement)
 
 After profiling the memory usage of our parallel solution, we can see that we're still allocating a very large buffer on the heap to hold the entire file's contents.
 
@@ -910,7 +910,7 @@ When I tried `mmap` on the single-threaded version of the code, the performance 
 - **Page cache**: a kernel buffer that keeps file data in memory.
 
 
-#### Cost of `fs::read`
+#### Cost of fs::read
 
 1. **Double Memory Footprint**  
    ``` 
@@ -928,7 +928,7 @@ When I tried `mmap` on the single-threaded version of the code, the performance 
    That “ping‑pong” invalidation costs hundreds of CPU cycles per bounce.
 
 
-#### `mmap` improvement
+#### mmap improvement
 
 Instead of reading the entire file into a `Vec<u8>`, we can map it directly into memory with `mmap`. This gives us:
 
