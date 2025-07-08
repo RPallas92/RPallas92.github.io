@@ -21,19 +21,21 @@ description: Optimizing a math expression parser for speed and memory.
 
 # Optimizing a Math Expression Parser in Rust
 
-
 ## Table of contents
 
-1. [Baseline implementation](#baseline-implementation)
-    1. [How it works](#how-it-works)
-    1. [Parser Example: `(1 + 2) - 3`](#parser-example-1--2---3)
-    1. [Sequence Diagram](#sequence-diagram)
-    1. [It works! But we can do better](#it-works-but-we-can-do-better)
-1. [Optimizations for speed and memory](#optimizations-for-speed-and-memory)
-    1. [Optimization 1: Do not allocate a Vector when tokenizing](#optimization-1-do-not-allocate-a-vector-when-tokenizing)
-    1. [Optimization 2: Zero allocations — parse directly from the input bytes](#optimization-2-zero-allocations--parse-directly-from-the-input-bytes)
-    1. [Optimization 3: Do not use `Peekable`](#optimization-3-do-not-use-peekable)
-    1. [Optimization 4: Multithreading and SIMD](#optimization-4-multithreading-and-simd)
+1. [Baseline implementation (43.1 s)](#baseline-implementation)
+   1. [How it works](#how-it-works)
+   1. [Parser Example: `(1 + 2) - 3`](#parser-example-1--2---3)
+   1. [It works! But we can do better](#it-works-but-we-can-do-better)
+2. [Optimizations for speed and memory](#optimizations-for-speed-and-memory)
+   1. [Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)](#optimization-1-do-not-allocate-a-vector-when-tokenizing-85)
+   1. [Optimization 2: Zero allocations — parse directly from the input bytes (6.45 s → 3.68 s, –43% improvement)](#optimization-2-zero-allocations-–-parse-directly-from-the-input-bytes-43)
+   1. [Optimization 3: Do not use `Peekable` (3.68 s → 3.21 s, –13% improvement)](#optimization-3-do-not-use-peekable-13)
+   1. [Optimization 4: Multithreading and SIMD (3.21 s → 2.21 s, –31% improvement)](#optimization-4-multithreading-and-simd-38)
+   1. [Optimization 5: Memory‑mapped I/O (2.21 s → 0.98 s, –56% improvement)](#optimization-5-memory‑mapped-io-56)
+3. [Conclusion](#conclusion)
+
+
 
 ---
 
@@ -48,6 +50,11 @@ Let’s say we want to parse simple math expressions with addition, subtraction,
 ```
 
 We’ll start with a straightforward implementation and optimizite it step by step.
+
+
+
+**YOU CAN FIND THE FULL CODE ON https://github.com/RPallas92/math_parser/blob/main/src/main.rs**
+
 
 ---
 
@@ -528,20 +535,20 @@ From **3.68 to 3.21 seconds**. We are getting faster. Let's keep optimizing!
 
 ### Optimization 4: Multithreading and SIMD
 
-The next logical step is to parallelize the computation. Ideally, if we have a CPU with 8 cores, we want to split our giant input file into 8 perfectly equal chunks and have each core work on one chunk simultaneously. This should, in theory, make our program up to 8 times faster.
+The next logical step is to parallelize the computation. Ideally, if we have a CPU with 8 cores, we want to split the input file into 8 equal chunks and have each core work on one chunk simultaneously. This should, in theory, make our program up to 8 times faster.
 
-However, this is not as simple as just cutting the file into 8 pieces. We are bound by the rules of mathematics and syntax, which introduce two critical restrictions:
+However, this is not as simple as just splitting the file into 8 equal chunks. We are bound by the rules of maths and syntax, which introduce two restrictions:
 
-1.  **We cannot split inside parentheses.** A split can only happen at the "top level" (depth 0) of the expression. Splitting `(1 + 2|)` is invalid.
-2.  **We cannot split at a `-` operator.** This is a subtle but crucial mathematical point. Addition is *associative*, meaning `(a + b) + c` is the same as `a + (b + c)`. This property allows us to group additions freely. Subtraction is *not* associative: `(a - b) - c` is not the same as `a - (b - c)`. Splitting on a `-` would change the order of operations and produce the wrong answer.
+1.  **We cannot split inside parentheses.** A split can only happen at the "top level" of the expression. Splitting `((2 + 1)| - 2)` is invalid. And this includes nested parentheses.
+2.  **We cannot split at a `-` operator.** Addition is *associative*, meaning `(a + b) + c` is the same as `a + (b + c)`. This property allows us to group additions freely. Subtraction is *not* associative: `(a - b) - c` is not the same as `a - (b - c)`. Splitting on a `-` would change the order of operations and produce the wrong result.
 
-These restrictions mean we can't just split the file at `(total_size / 8)`. We need an intelligent way to find the *closest valid split point* (a `+` sign at depth 0) to that ideal boundary.
+These restrictions mean we can't just split the file at `(total_size / 8)`. We need an way to find the *closest valid split point* (a `+` sign at top level) to that ideal boundary.
 
-A naive scan to do this would be slow, requiring a full pass over the data just to find the split points before we even start the real work. So, isn't this solution slower (2 passes vs 1 pass)? Not necessarily. We can make the first pass incredibly fast if we use **SIMD**.
+To find those points, we would need to scan the whole input, to know in which points all the current parentheses are closed. A naive scan to do this would be slow, requiring a full pass over the data just to find the split points before we even start the real work. So, isn't this solution slower (2 passes vs 1 pass)? Not necessarily. We can make the first pass blazing fast if we use **SIMD**.
 
-#### The Overall Data Flow
+#### The algorithm at a high level
 
-Before diving into the code, let's look at the high-level plan. The entire process is orchestrated by our `parallel_eval` function, which follows this data flow:
+Before diving into the code, let's look at the high-level plan. The entire process is started by our `parallel_eval` function, which follows this data flow:
 
 ```
 [ Input File ]
@@ -564,7 +571,7 @@ Before diving into the code, let's look at the high-level plan. The entire proce
       |         |               | 3. Process in Parallel
       v         v               v
 .------------------------------------.
-|         Rayon Thread Pool          |
+|          Thread Pool               |
 |                                    |
 |  eval(c1)  eval(c2) ...  eval(cN)  |
 '------------------------------------'
@@ -578,11 +585,11 @@ Before diving into the code, let's look at the high-level plan. The entire proce
 [ Final Answer ]
 ```
 
-#### What is SIMD? A Quick Introduction
+#### What is SIMD?
 
-**SIMD** stands for **S**ingle **I**nstruction, **M**ultiple **D**ata. It's a powerful feature built into virtually all modern CPUs, from laptops to servers to mobile phones. At its core, SIMD allows the CPU to perform the same operation on multiple pieces of data *at the same time*, with a single instruction.
+**SIMD** stands for **S**ingle **I**nstruction, **M**ultiple **D**ata. It's a powerful feature built into modern CPUs. At its core, SIMD allows the CPU to perform the same operation on multiple pieces of data *at the same time*, with a single instruction.
 
-Think of a cashier at a grocery store. A traditional CPU core operates like a cashier scanning items one by one. This is a **scalar** operation—one instruction processes one piece of data.
+Think of a cashier at a grocery store. A traditional CPU core operates like a cashier scanning items one by one. This is a **scalar** operation (one instruction processes one piece of data).
 
 ```
 Scalar Operation (One by one)
@@ -593,7 +600,7 @@ Instruction: Is this byte '+'?
   ^--- Processed sequentially --->
 ```
 
-A SIMD-enabled CPU is like a cashier with a giant, wide scanner that can read the barcodes of an entire row of items in the cart all at once. This is a **vector** operation.
+A SIMD-enabled CPU is like a cashier with a wide scanner that can read the barcodes of an entire row of items in the cart all at once. This is a **vector** operation.
 
 ```
 SIMD Operation (All at once)
@@ -606,9 +613,9 @@ Instruction: For all 64 of these bytes, tell me which ones are '+'?
                          Processed in a single cycle
 ```
 
-For highly repetitive tasks, like searching for a specific character in a massive string, the performance gain is enormous.
+For repetitive tasks, like searching for a specific character in a long string, the performance gain is great.
 
-##### A Concrete Example: Finding `+`
+##### SIMD example: Finding `+`
 
 In our project, we need to find all the `+` characters.
 
@@ -623,16 +630,16 @@ for (i, &byte) in input.iter().enumerate() {
     }
 }
 ```
-This is simple and correct, but for a 2GB file, this loop runs 2 billion times.
+This is simple and correct, but for a 1.5GB file like ours, this loop runs 1.5 billion times.
 
 **The SIMD Way:**
 With SIMD (specifically, the AVX-512 instructions we use), the process is different:
 
-1.  **Load:** We load a big chunk of our input string (64 bytes at a time) into a special, wide 512-bit CPU register.
+1.  **Load:** We load a big chunk of our input string (64 bytes at a time) into a wide 512-bit CPU register.
 2.  **Compare:** We use a single instruction (`_mm512_cmpeq_epi8_mask`) to compare all 64 bytes in our register against a template register that contains 64 copies of the `+` character.
 3.  **Get Mask:** The CPU returns a single 64-bit integer (`u64`) as a result. This is a **bitmask**. If the 5th bit of this integer is `1`, it means the 5th byte of our input chunk was a `+`.
 
-In one instruction, we've done the work of 64 loop iterations. While using SIMD requires more complex code, this massive reduction in the number of instructions is the key to unlocking the next level of performance for data-intensive tasks.
+In one instruction, we've done the work of 64 loop iterations. While using SIMD requires more complex code, the performance gains are worth it.
 
 #### The Code
 
@@ -647,7 +654,6 @@ fn parallel_eval(input: &[u8], num_threads: usize) -> i64 {
     // 1. Find the best places to split the input.
     let split_indices = unsafe { find_best_split_indices_simd(input, num_threads - 1) };
 
-    // If we couldn't find any valid split points, fall back to single-threaded.
     if split_indices.is_empty() {
         return eval(input);
     }
@@ -674,6 +680,7 @@ fn parallel_eval(input: &[u8], num_threads: usize) -> i64 {
 #[target_feature(enable = "avx512f")]
 #[target_feature(enable = "avx512bw")]
 unsafe fn find_best_split_indices_simd(input: &[u8], num_splits: usize) -> Vec<usize> {
+    // Explanation of this function in the next section.
     let mut final_indices = Vec::with_capacity(num_splits);
     if num_splits == 0 {
         return final_indices;
@@ -750,30 +757,30 @@ unsafe fn find_best_split_indices_simd(input: &[u8], num_splits: usize) -> Vec<u
 
 #### Algorithm Breakdown: `find_best_split_indices_simd`
 
-This function's job is to find the best `+` signs to split on. It combines the raw speed of SIMD with a small amount of serial logic.
+This function's job is to find the best `+` signs to split on.
 
 ##### Step 1: The SIMD Scan
 
 The code enters a main loop, processing the input in 64-byte chunks. Inside, it uses `_mm512_cmpeq_epi8_mask` to generate bitmasks. This instruction compares all 64 bytes of the chunk against a target character and returns a 64-bit integer (`u64`) where the N-th bit is `1` if the N-th byte was a match.
 
-##### Step 2: The Fast Serial Scan with Bit-Hacking
+##### Step 2: The serial scan
 
-Next, we combine these masks and loop through only the interesting bits. This is the most clever part of the algorithm.
+Next, we combine these masks and loop through only the interesting bits. This is the key part:
 
 ```rust
-let mut all_interesting_mask = open_mask | close_mask | plus_mask;
+let mut all_interesting_mask = open_mask | close_mask | plus_mask; // This means we are looking for '(', ')' and '+' characters.
 
 while all_interesting_mask != 0 {
-    let j = all_interesting_mask.trailing_zeros() as usize;
+    let j = all_interesting_mask.trailing_zeros() as usize; // j is the index of the next found interesting character.
     let current_idx = i + j; // + j because the mask is a u64 little endian, so trailing zeros are the leading 0 in reality
-    if (open_mask >> j) & 1 == 1 {
+    if (open_mask >> j) & 1 == 1 { // If that char is a '(' we increase the depth (we enter in a sub expression)
         depth += 1;
-    } else if (close_mask >> j) & 1 == 1 {
+    } else if (close_mask >> j) & 1 == 1 { // If that char is a ')' we decrease the depth (we exit from a sub expression)
         depth -= 1;
     } else {
-        if depth == 0 {
+        if depth == 0 { // If the depth is 0, we are a top level, outside of parentheses. And it is a '+' sign. 
             last_op_at_depth_zero = current_idx;
-            if current_idx >= ideal_pos {
+            if current_idx >= ideal_pos { // If we have reached the ideal position (chunk / NUM_THREADS). So we add this '+' sign to the splitting indices.
                 final_indices.push(current_idx);
                 target_idx += 1;
                 if final_indices.len() >= num_splits {
@@ -782,7 +789,7 @@ while all_interesting_mask != 0 {
             }
         }
     }
-    all_interesting_mask &= all_interesting_mask - 1;
+    all_interesting_mask &= all_interesting_mask - 1; // Clears the lowest set 1 bit from the mask, as we have processed it already
 }
 ```
 
@@ -806,13 +813,13 @@ This loop does **not** run 64 times. It only runs for the number of set bits in 
     As you can see, `trailing_zeros` starts from the right of the integer, which corresponds to the left of our string chunk.
 
 
-2.  **`    if (open_mask >> j) & 1 == 1 {`**: This is just to check if there is an open parenthesis at position `j`. If so, we increment our counter `depth`.
+2.  **`if (open_mask >> j) & 1 == 1 {`**: This is just to check if there is an open parenthesis at position `j`. If so, we increment our counter `depth`.
 
-3.  **`all_interesting_mask &= all_interesting_mask - 1`**: This is a classic bit-hacking trick that clears the lowest set bit we just found. On the next iteration, `trailing_zeros` finds the *new* lowest set bit, which corresponds to the character at the *next lowest index*.
+3.  **`all_interesting_mask &= all_interesting_mask - 1`**: This is a trick that clears the lowest set 1 bit we just found. On the next iteration, `trailing_zeros` finds the *new* lowest set bit, which corresponds to the character at the *next lowest index*.
 
-This combination allows us to visit every interesting character in the correct, forward order, but without a slow byte-by-byte scan. Inside the loop, we just update our `depth` counter and check our splitting logic.
+This combination allows us to visit every interesting character in the correct, forward order, but without a slow byte-by-byte scan. Inside the loop, we just update our `depth` counter to know if we are at a top level position, and if so, we check if we can add a splitting point.
 
-#### Putting It All Together: A Concrete Example
+#### Full examnple
 
 Let's trace the entire flow with a small, concrete example.
 
@@ -864,49 +871,151 @@ Ideal Split ->                      ^
 
 The final answer is **-3**, which is correct. The entire process worked perfectly.
 
-By combining these techniques, we've transformed a serial problem into a highly parallel one, leveraging modern CPU architecture to achieve a significant performance boost.
+
+#### Result
+
+In summary, by using SIMD we can do a first blazing fast pass to know where we can split the input, then we can process each chunk in parallel. I think a similar technique is used by the popular [simdjson](https://github.com/simdjson/simdjson) library.
+
+I executed the code on my Surface laptop, and these were the results:
 
 
+```
+Step 1: Input file read in 1.199915008s
+
+Step 2: Calculation completed in 1.010507822s
+
+--- Summary ---
+Result: 2652
+Total time: 2.210422830s
+```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+From **3.21 to 2.21 seconds**. 1 second faster, for an already optimized program. Good!
 
 ---
 
-# DEPRECATED 
+### Optimization 5: Memory-Mapped Files
 
-Mention that I tried it but it did't improve the performance, mainly because the compiler is smart enough to optimize the previous solution, and because the numbers we have are small (between 1 and 4 digits). In any case, this was a good lesson of **always measure**.
+After profiling the memory usage of our parallel solution, we can see that we're still allocating a very large buffer on the heap to hold the entire file's contents.
 
-#### Better parsing with bitwise hacking
+I know that `mmap` (memory-mapped files) can be more efficient than standard file I/O because it avoids extra copying from kernel to user space, and lets the operating system manage memory for us.
 
-the frlamegrpah shows that tokenizer.next() is taking most of the time. it also shows is_ascii_digit has wide segment
-
-My intuition is that this is because of how we parse intergers. We don't know the length of the integers as they are variable, so we need to iterate byte by byte until we find a non-integer character.
-
-Let's add a restriction, our math parser, only accepts integers from 1 to 4 digits.
-
-Then the next optiomization is to remove the loop, and somehow write a function that tells us the length of the number we are parsing. we can use some bitwise for it
+When I tried `mmap` on the single-threaded version of the code, the performance gain was almost 0. But now that our program is multithreaded, let's try it again.
 
 
-https://rust-malaysia.github.io/code/2020/07/11/faster-integer-parsing.html
+#### Kernel Space vs. User Space
+
+- **Kernel space**: where the OS runs—manages hardware, I/O, page cache.  
+- **User space**: where our program runs—your heap buffers, stacks, etc.  
+- **Page cache**: a kernel buffer that keeps file data in memory.
+
+
+#### Cost of `fs::read`
+
+1. **Double Memory Footprint**  
+   ``` 
+   [ Disk ] → [ Page Cache ] (1.5 GB)  
+             → [ Heap Vec<u8> ] (1.5 GB)  
+   ```
+   It loads the file on Kernel space, and then it copies it to user space.
+
+2. **False Sharing Contention**  
+   Modern CPUs move data in 64‑byte “cache lines.” If two threads touch bytes in the same line, the line bounces back and forth:
+   ```
+   Thread 1: reads bytes 0–63        Thread 2: writes bytes 64–127
+       └─ both are in the same 64 B line ─┘
+   ```
+   That “ping‑pong” invalidation costs hundreds of CPU cycles per bounce.
+
+
+#### `mmap` improvement
+
+Instead of reading the entire file into a `Vec<u8>`, we can map it directly into memory with `mmap`. This gives us:
+
+```rust
+use memmap2::Mmap;
+
+fn read_input_file() -> std::io::Result<Mmap> {
+    let file = File::open("data/input.txt")?;
+    unsafe { Mmap::map(&file) }
+}
+```
+
+This avoid the extra copy `fs::read` does. It does not allocate the content of the file in user space memory. 
+
+```
+[ Disk ] → [ Page Cache (1.5 GB) ] ↔ [ mmap view in user space ]
+```
+
+I also think it is faster because we don't have false sharing with mmap. It hands us the file in 4 KB pages. Threads get whole pages:
+
+```
+Thread 1: Page 0 (bytes   0–4095)
+Thread 2: Page 1 (bytes 4096–8191)
+```
+Pages (4 KB) dwarf cache lines (64 B), so threads don’t fight over the same cache line as in the other solution. But I am not completely sure. This is my conclusion after reading a lof and check with different LLM models.
 
 
 
-// custom number parsing with SIMD (like atoi lib?)
-// custom parsing with match knowing there are 2-3 figures integers
-// First pass with SIMD to find outter parentheses, then parallelize
-// MMAP instead of file read
+#### Code Changes
+
+The change is minimal. The `read_input_file` now returns a `Mmap` that is passed directly to the `parallel_eval` function. Now the OS maps directly the file into our process memory on demand in a efficient way:
+
+```rust
+use memmap2::Mmap;
+
+fn read_input_file() -> Result<Mmap> {
+    let file = File::open("data/input.txt")?;
+    unsafe { Mmap::map(&file) }
+}
+
+fn main() -> Result<()> {
+    let mmap = read_input_file()?;
+    let result = parallel_eval(&mmap, NUM_THREADS);
+    println!("Result: {}", result);
+    Ok(())
+}
+```
+
+#### Performance Results
+
+```
+Step 1: Input file read in 18.8 µs  
+Step 2: Calculation completed in 981.2 ms  
+**Total time:** 981.3 ms
+```
+
+From **2.21s to 981ms**. Less than a second!! 
+
+---
+
+## Conclusion
+
+**YOU CAN FIND THE FULL CODE ON https://github.com/RPallas92/math_parser/blob/main/src/main.rs**
+
+
+We’ve taken our straightforward, single‑threaded parser and driven it from **43 s** down to **under 1 s** on a 1.5 GB file by applying a series of optimizations:
+
+1. **Eliminate intermediate allocations**  
+   - Swapped a `Vec<Token>` for a zero‑allocation byte iterator → **43 s → 6.4 s**  
+   - Parsed directly from `&[u8]` instead of `&str` → **6.4 s → 3.7 s**
+
+2. **Remove `Peekable`**  
+   - Restructured the parser to avoid look‑ahead boilerplate → **3.7 s → 3.2 s**
+
+3. **SIMD + Rayon for parallel split finding**  
+   - AVX‑512 scan to locate valid top‑level `+` split points in one fast pass  
+   - Spawn one thread per chunk for `eval()` → **3.2 s → 2.2 s**
+
+4. **Memory‑mapped I/O**  
+   - Replace `fs::read` + heap buffer with `mmap` → zero extra copy, no false‑sharing → **2.2 s → 0.98 s**
+
+**If you have any correction or comment, please, contact me on LinkedIn or at my email. Thank you very much for reading!**
+
+
+
+
+
+
+
+
