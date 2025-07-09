@@ -49,7 +49,7 @@ Let’s say we want to parse simple math expressions with addition, subtraction,
 (1 + (2 + 3)) - 4   => 2
 ```
 
-We’ll start with a straightforward implementation and optimizite it step by step.
+We’ll start with a straightforward implementation and optimize it step by step.
 
 
 
@@ -167,7 +167,7 @@ Let’s break it down.
 
 The program reads from a file called `input.txt`, which contains a math expression in a single line. That expression is passed to the `eval()` function.
 
-The `tokenize()` function walks through the input string, splits it by whitespace, and maps each part into a token. For example, this input:
+The `tokenize()` function processes the input string, splitting it by whitespace and converting each segment into a token. For example, this input:
 
 ```
 7 - 3 + 1
@@ -277,7 +277,7 @@ Total time: 43.06795088s
 
 ```
 
-In the next sections, we’ll go step by step to optimize this parser:
+In the following sections, we’ll optimize this parser step by step:
 
 1. Avoid allocating the token list.
 2. Use iterators and slices instead of `Vec<Token>`.
@@ -293,7 +293,7 @@ Let’s go!
 
 ### Optimization 1: Do not allocate a Vector when tokenizing (43.1 s → 6.45 s, –85% improvement)
 
-Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the stack of the current solution to know what we can start optimizing.
+Let's use [cargo flamegraph](https://github.com/brendangregg/FlameGraph) to visualize the call stack of the current solution and identify areas for optimization.
 
 `cargo flamegraph --dev --bin parser`
 
@@ -354,7 +354,7 @@ If we analyze the flamegraph again, we notice that although we no longer allocat
 
 ![Second flamegraph](../assets/images/math_parser/flamegraph_2.png)
 
-The boxes marked in pink/violet correspond to the `split_whitespaces` funciton used by our tokenizer:
+The pink/violet boxes correspond to the `split_whitespace` function used by our tokenizer:
 
 ```rust
 fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
@@ -368,16 +368,16 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
 }
 ```
 
-We're paying a cost for each `split_whitespace` call and every, which allocates intermediate slices. This churns memory and CPU cycles.
+We're paying a cost for each `split_whitespace` call, which allocates intermediate slices. This churns memory and CPU cycles.
 
-Let’s go even lower level.
+Let’s dive deeper.
 
 #### The idea: Use &[u8]
 
-Instead of working with UTF-8 strings and &str, we can use raw bytes (&[u8]) and manually scan for digits and operators, to avoid temporary string allocations.
+Instead of working with UTF-8 strings and `&str`, we can use raw bytes (`&[u8]`) and manually scan for digits and operators to avoid temporary string allocations.
 
 
-Here is our new zero-memory allocation tokenizer:
+Here is our new zero-allocation tokenizer:
 
 ```rust
 fn read_input_file() -> Result<Vec<u8>> {
@@ -438,7 +438,7 @@ Result: 2652
 Total time: 3.683753465s
 ```
 
-Great improvement! From **6.45 to 3.68 seconds**. Almost 2 seconds faster!
+A great improvement! From **6.45 to 3.68 seconds**, nearly 2 seconds faster!
 ---
 
 
@@ -452,7 +452,7 @@ The new flamegraph shows several samples related to `Peekable`:
 ![Third flamegraph](../assets/images/math_parser/flamegraph_2.png)
 
 
-This is because we wrap our tokenizer into Rust’s `Peekable`, which allows us to look at the next token without consuming it. We initially used it to look ahead when parsing expressions like `1 + (2 - 3)` to know whether to continue parsing or return early.
+This is because we wrap our tokenizer in Rust’s `Peekable` adapter, which allows us to inspect the next token without consuming it. We initially used it for look ahead when parsing expressions like `1 + (2 - 3)` to determine whether to continue parsing or return early.
 
 However, in our use case, `peek()` isn't necessary. We can restructure the algorithm to work directly with a plain iterator.
 
@@ -529,7 +529,7 @@ Result: 2652
 Total time: 3.21178544s
 ```
 
-From **3.68 to 3.21 seconds**. We are getting faster. Let's keep optimizing!
+From **3.68 to 3.21 seconds**. We are getting faster. Let's continue optimizing!
 
 ---
 
@@ -539,12 +539,12 @@ The next logical step is to parallelize the computation. Ideally, if we have a C
 
 However, this is not as simple as just splitting the file into 8 equal chunks. We are bound by the rules of maths and syntax, which introduce two restrictions:
 
-1.  **We cannot split inside parentheses.** A split can only happen at the "top level" of the expression. Splitting `((2 + 1)| - 2)` is invalid. And this includes nested parentheses.
-2.  **We cannot split at a `-` operator.** Addition is *associative*, meaning `(a + b) + c` is the same as `a + (b + c)`. This property allows us to group additions freely. Subtraction is *not* associative: `(a - b) - c` is not the same as `a - (b - c)`. Splitting on a `-` would change the order of operations and produce the wrong result.
+1.  **We cannot split inside parentheses.** A split can only happen at the "top level" of the expression. For example, splitting `((2 + 1)| - 2)` is invalid, and this applies to nested parentheses as well.
+2.  **We cannot split at a `-` operator.** Addition is *associative*, meaning `(a + b) + c` is equivalent to `a + (b + c)`. This property allows us to group additions freely. Subtraction, however, is *not* associative: `(a - b) - c` is not the same as `a - (b - c)`. Splitting on a `-` would alter the order of operations and lead to an incorrect result.
 
-These restrictions mean we can't just split the file at `(total_size / 8)`. We need an way to find the *closest valid split point* (a `+` sign at top level) to that ideal boundary.
+These restrictions mean we cannot simply split the file at `(total_size / 8)`. We need a way to find the *closest valid split point* (a `+` sign at the top level) to that ideal boundary.
 
-To find those points, we would need to scan the whole input, to know in which points all the current parentheses are closed. A naive scan to do this would be slow, requiring a full pass over the data just to find the split points before we even start the real work. So, isn't this solution slower (2 passes vs 1 pass)? Not necessarily. We can make the first pass blazing fast if we use **SIMD**.
+To find these points, we would need to scan the entire input to identify where all current parentheses are closed. A naive scan for this would be slow, requiring a full pass over the data just to find the split points before the actual work begins. So, is this solution slower (2 passes vs 1 pass)? Not necessarily. We can make the first pass blazing fast by using **SIMD**.
 
 #### The algorithm at a high level
 
@@ -589,7 +589,7 @@ Before diving into the code, let's look at the high-level plan. The entire proce
 
 **SIMD** stands for **S**ingle **I**nstruction, **M**ultiple **D**ata. It's a powerful feature built into modern CPUs. At its core, SIMD allows the CPU to perform the same operation on multiple pieces of data *at the same time*, with a single instruction.
 
-Think of a cashier at a grocery store. A traditional CPU core operates like a cashier scanning items one by one. This is a **scalar** operation (one instruction processes one piece of data).
+Consider a cashier at a grocery store. A traditional CPU core operates like a cashier scanning items one by one. This is a **scalar** operation, where one instruction processes one piece of data.
 
 ```
 Scalar Operation (One by one)
@@ -600,7 +600,7 @@ Instruction: Is this byte '+'?
   ^--- Processed sequentially --->
 ```
 
-A SIMD-enabled CPU is like a cashier with a wide scanner that can read the barcodes of an entire row of items in the cart all at once. This is a **vector** operation.
+A SIMD-enabled CPU is like a cashier with a wide scanner that can read the barcodes of an entire row of items in the cart simultaneously. This is a **vector** operation.
 
 ```
 SIMD Operation (All at once)
@@ -613,14 +613,14 @@ Instruction: For all 64 of these bytes, tell me which ones are '+'?
                          Processed in a single cycle
 ```
 
-For repetitive tasks, like searching for a specific character in a long string, the performance gain is great.
+For repetitive tasks, such as searching for a specific character in a long string, the performance gain is great.
 
 ##### SIMD example: Finding +
 
-In our project, we need to find all the `+` characters.
+In our project, we need to locate all `+` characters.
 
 **The Scalar Way:**
-Without SIMD, we would have to write a simple `for` loop to check every single byte:
+Without SIMD, we would need a simple `for` loop to check every single byte:
 
 ```rust
 let mut positions = Vec::new();
@@ -630,20 +630,20 @@ for (i, &byte) in input.iter().enumerate() {
     }
 }
 ```
-This is simple and correct, but for a 1.5GB file like ours, this loop runs 1.5 billion times.
+This approach is simple and correct, but for a 1.5GB file like ours, this loop would execute 1.5 billion times.
 
 **The SIMD Way:**
-With SIMD (specifically, the AVX-512 instructions we use), the process is different:
+With SIMD (specifically, using AVX-512 instructions), the process is different:
 
 1.  **Load:** We load a big chunk of our input string (64 bytes at a time) into a wide 512-bit CPU register.
 2.  **Compare:** We use a single instruction (`_mm512_cmpeq_epi8_mask`) to compare all 64 bytes in our register against a template register that contains 64 copies of the `+` character.
-3.  **Get Mask:** The CPU returns a single 64-bit integer (`u64`) as a result. This is a **bitmask**. If the 5th bit of this integer is `1`, it means the 5th byte of our input chunk was a `+`.
+3.  **Get Mask:** The CPU returns a single 64-bit integer (`u64`) as a result. This is a **bitmask**. If the 5th bit of this integer is `1`, it indicates that the 5th byte of our input chunk was a `+`.
 
-In one instruction, we've done the work of 64 loop iterations. While using SIMD requires more complex code, the performance gains are worth it.
+In a single instruction, we have done the work of 64 loop iterations. While SIMD requires more complex code, the performance gains are worth it.
 
 #### The Code
 
-Here are the two key functions that implement our parallel strategy. First, `parallel_eval` orchestrates the process, and second, the `find_best_split_indices_simd` function uses SIMD to find the valid split points.
+Here are the two key functions that implement our parallel strategy: `parallel_eval` orchestrates the process, and `find_best_split_indices_simd` uses SIMD to find the valid split points.
 
 ```rust
 fn parallel_eval(input: &[u8], num_threads: usize) -> i64 {
@@ -757,15 +757,15 @@ unsafe fn find_best_split_indices_simd(input: &[u8], num_splits: usize) -> Vec<u
 
 #### Algorithm Breakdown: `find_best_split_indices_simd`
 
-This function's job is to find the best `+` signs to split on.
+This function's purpose is to identify the optimal `+` signs for splitting.
 
 ##### Step 1: The SIMD Scan
 
-The code enters a main loop, processing the input in 64-byte chunks. Inside, it uses `_mm512_cmpeq_epi8_mask` to generate bitmasks. This instruction compares all 64 bytes of the chunk against a target character and returns a 64-bit integer (`u64`) where the N-th bit is `1` if the N-th byte was a match.
+The code enters a main loop, processing the input in 64-byte chunks. Within this loop, it uses `_mm512_cmpeq_epi8_mask` to generate bitmasks. This instruction compares all 64 bytes of the current chunk against a target character and returns a 64-bit integer (`u64`) where the N-th bit is `1` if the N-th byte was a match.
 
 ##### Step 2: The serial scan
 
-Next, we combine these masks and loop through only the interesting bits. This is the key part:
+Next, we combine these masks and iterate only through the "interesting" bits. This is a key step:
 
 ```rust
 let mut all_interesting_mask = open_mask | close_mask | plus_mask; // This means we are looking for '(', ')' and '+' characters.
@@ -795,7 +795,7 @@ while all_interesting_mask != 0 {
 
 This loop does **not** run 64 times. It only runs for the number of set bits in `all_interesting_mask`. To understand how it processes characters from left-to-right, we need to look at two key details:
 
-1.  **`trailing_zeros()` and Little-Endian:** You might think `trailing_zeros` starts from the *end* of the string, but it's the opposite. Modern x86-64 CPUs are **little-endian**. When a block of memory is loaded into a large integer register, the first byte in memory (e.g., `chunk[0]`) becomes the least significant byte (LSB) of the integer. The `trailing_zeros()` instruction counts from this LSB. Therefore, it always finds the set bit that corresponds to the character with the **lowest index** in our chunk.
+1.  **`trailing_zeros()` and Little-Endian:** While you might assume `trailing_zeros` starts from the *end* of the string, it's actually the opposite. Modern x86-64 CPUs are **little-endian**. When a block of memory is loaded into a large integer register, the first byte in memory (e.g., `chunk[0]`) becomes the least significant byte (LSB) of the integer. The `trailing_zeros()` instruction counts from this LSB, meaning it always finds the set bit corresponding to the character with the **lowest index** in our chunk.
 
     ```
     Memory (Bytes in a chunk):
@@ -821,7 +821,7 @@ This combination allows us to visit every interesting character in the correct, 
 
 #### Full example
 
-Let's trace the entire flow with a small, concrete example.
+Let's trace the entire flow with a small, concrete example:
 
 *   **Input String:** `(1-2) + (3-4) + (5-6)` (Length is 23 bytes)
 *   **Goal:** Find 1 split point (`num_splits = 1`) to create 2 chunks.
@@ -874,9 +874,9 @@ The final answer is **-3**, which is correct. The entire process worked perfectl
 
 #### Result
 
-In summary, by using SIMD we can do a first blazing fast pass to know where we can split the input, then we can process each chunk in parallel. I think a similar technique is used by the popular [simdjson](https://github.com/simdjson/simdjson) library.
+In summary, by using SIMD, we can perform an initial, extremely fast pass to identify optimal split points in the input, and then process each chunk in parallel. I believe a similar technique is employed by the popular [simdjson](https://github.com/simdjson/simdjson) library.
 
-I executed the code on my Surface laptop, and these were the results:
+I executed the code on my Surface laptop, and here are the results:
 
 
 ```
@@ -898,16 +898,16 @@ From **3.21 to 2.21 seconds**. 1 second faster, for an already optimized program
 
 After profiling the memory usage of our parallel solution, we can see that we're still allocating a very large buffer on the heap to hold the entire file's contents.
 
-I know that `mmap` (memory-mapped files) can be more efficient than standard file I/O because it avoids extra copying from kernel to user space, and lets the operating system manage memory for us.
+`mmap` (memory-mapped files) can be more efficient than standard file I/O because it avoids extra copying from kernel to user space, and allows the operating system to manage memory for us.
 
-When I tried `mmap` on the single-threaded version of the code, the performance gain was almost 0. But now that our program is multithreaded, let's try it again.
+When I initially tried `mmap` with the single-threaded version of the code, the performance gain was negligible. However, now that our program is multithreaded, let's re-evaluate its impact.
 
 
 #### Kernel Space vs. User Space
 
-- **Kernel space**: where the OS runs—manages hardware, I/O, page cache.  
-- **User space**: where our program runs—your heap buffers, stacks, etc.  
-- **Page cache**: a kernel buffer that keeps file data in memory.
+- **Kernel space**: The privileged area where the operating system runs, managing hardware, I/O, and the page cache.
+- **User space**: The unprivileged area where our application code executes, including your heap buffers, stacks, and other program data.
+- **Page cache**: A kernel-managed buffer that temporarily stores file data in memory to speed up subsequent access.
 
 
 #### Cost of fs::read
@@ -917,15 +917,15 @@ When I tried `mmap` on the single-threaded version of the code, the performance 
    [ Disk ] → [ Page Cache ] (1.5 GB)  
              → [ Heap Vec<u8> ] (1.5 GB)  
    ```
-   It loads the file on Kernel space, and then it copies it to user space.
+   This process involves loading the file into kernel space and then copying it to user space.
 
 2. **False Sharing Contention**  
-   Modern CPUs move data in 64‑byte “cache lines.” If two threads touch bytes in the same line, the line bounces back and forth:
+   Modern CPUs transfer data in 64-byte "cache lines". If two threads access bytes within the same cache line, the line "bounces" back and forth between their respective CPU caches:
    ```
    Thread 1: reads bytes 0–63        Thread 2: writes bytes 64–127
        └─ both are in the same 64 B line ─┘
    ```
-   That “ping‑pong” invalidation costs hundreds of CPU cycles per bounce.
+   This "ping-pong" invalidation can cost hundreds of CPU cycles per bounce.
 
 
 #### mmap improvement
@@ -941,7 +941,7 @@ fn read_input_file() -> std::io::Result<Mmap> {
 }
 ```
 
-This avoid the extra copy `fs::read` does. It does not allocate the content of the file in user space memory. 
+This approach avoids the extra copy performed by `fs::read` and does not allocate the file's content in user space memory.
 
 ```
 [ Disk ] → [ Page Cache (1.5 GB) ] ↔ [ mmap view in user space ]
@@ -953,13 +953,13 @@ I also think it is faster because we don't have false sharing with mmap. It hand
 Thread 1: Page 0 (bytes   0–4095)
 Thread 2: Page 1 (bytes 4096–8191)
 ```
-Pages (4 KB) dwarf cache lines (64 B), so threads don’t fight over the same cache line as in the other solution. But I am not completely sure. This is my conclusion after reading a lof and check with different LLM models.
+Pages (4 KB) are significantly larger than cache lines (64 B), which helps prevent threads from contending over the same cache line, unlike the previous solution. I'm not entirely certain about this, but it's my conclusion after extensive reading and consulting various LLM models.
 
 
 
 #### Code Changes
 
-The change is minimal. The `read_input_file` now returns a `Mmap` that is passed directly to the `parallel_eval` function. Now the OS maps directly the file into our process memory on demand in a efficient way:
+The change is minimal. The `read_input_file` function now returns an `Mmap` object, which is passed directly to the `parallel_eval` function. This allows the operating system to efficiently map the file directly into our process memory on demand:
 
 ```rust
 use memmap2::Mmap;
@@ -994,28 +994,20 @@ From **2.21s to 981ms**. Less than a second!!
 **YOU CAN FIND THE FULL CODE ON https://github.com/RPallas92/math_parser/blob/main/src/main.rs**
 
 
-We’ve taken our straightforward, single‑threaded parser and driven it from **43 s** down to **under 1 s** on a 1.5 GB file by applying a series of optimizations:
+We have transformed our straightforward, single-threaded parser, reducing its execution time from **43 s** to **under 1 s** on a 1.5 GB file by applying a series of optimizations:
 
 1. **Eliminate intermediate allocations**  
-   - Swapped a `Vec<Token>` for a zero‑allocation byte iterator → **43 s → 6.4 s**  
+   - Replaced `Vec<Token>` with a zero-allocation byte iterator → **43 s → 6.4 s**
    - Parsed directly from `&[u8]` instead of `&str` → **6.4 s → 3.7 s**
 
 2. **Remove `Peekable`**  
-   - Restructured the parser to avoid look‑ahead boilerplate → **3.7 s → 3.2 s**
+   - Restructured the parser to eliminate look-ahead boilerplate → **3.7 s → 3.2 s**
 
 3. **SIMD + Rayon for parallel split finding**  
-   - AVX‑512 scan to locate valid top‑level `+` split points in one fast pass  
-   - Spawn one thread per chunk for `eval()` → **3.2 s → 2.2 s**
+   - Utilized AVX-512 for a single, fast pass to locate valid top-level `+` split points
+   - Spawned one thread per chunk for `eval()` → **3.2 s → 2.2 s**
 
 4. **Memory‑mapped I/O**  
-   - Replace `fs::read` + heap buffer with `mmap` → zero extra copy, no false‑sharing → **2.2 s → 0.98 s**
+   - Replaced `fs::read` and heap buffer with `mmap` → zero extra copy, no false-sharing → **2.2 s → 0.98 s**
 
-**If you have any correction or comment, please, contact me on LinkedIn or at my email. Thank you very much for reading!**
-
-
-
-
-
-
-
-
+**If you have any corrections or comments, please contact me on LinkedIn or via email. Thank you very much for reading!*
