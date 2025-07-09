@@ -39,7 +39,7 @@ description: Optimizing a math expression parser for speed and memory.
 
 ---
 
-In a [previous post](https://rpallas.xyz/1brc/) I explored how to optimize file parsing for max speed. This time, we’ll look at different and self-contained problem: writing a math expression parser in Rust, and making it as fast and memory-efficient as possible.
+In a [previous post](https://rpallas.xyz/1brc/) I explored how to optimize file parsing for max speed. This time, we’ll look at a different, self-contained problem: writing a math expression parser in Rust, and making it as fast and memory-efficient as possible.
 
 Let’s say we want to parse simple math expressions with addition, subtraction, and parentheses. For example:
 
@@ -53,7 +53,7 @@ We’ll start with a straightforward implementation and optimize it step by step
 
 
 
-**YOU CAN FIND THE FULL CODE ON https://github.com/RPallas92/math_parser/blob/main/src/main.rs**
+**YOU CAN FIND THE FULL CODE ON:** https://github.com/RPallas92/math_parser/blob/main/src/main.rs
 
 
 ---
@@ -350,7 +350,7 @@ Total time: 6.45377661s
 
 After removing the initial `Vec<Token>` allocation, performance improved significantly. But we can still do better.
 
-If we analyze the flamegraph again, we notice that although we no longer allocate a vector of tokens, we’re still splitting the input string by whitespace and allocating temporary &str slices during parsing:
+If we analyze the flamegraph again, we notice that although we no longer allocate a vector of tokens, we’re still splitting the input string by whitespace. This iterator-based approach is a huge improvement, but there is still overhead in processing the string and creating `&str` slices for each token:
 
 ![Second flamegraph](../assets/images/math_parser/flamegraph_2.png)
 
@@ -537,7 +537,7 @@ From **3.68 to 3.21 seconds**. We are getting faster. Let's continue optimizing!
 
 The next logical step is to parallelize the computation. Ideally, if we have a CPU with 8 cores, we want to split the input file into 8 equal chunks and have each core work on one chunk simultaneously. This should, in theory, make our program up to 8 times faster.
 
-However, this is not as simple as just splitting the file into 8 equal chunks. We are bound by the rules of maths and syntax, which introduce two restrictions:
+However, this is not as simple as just splitting the file into 8 equal chunks. We are bound by the rules of math and syntax, which introduce two restrictions:
 
 1.  **We cannot split inside parentheses.** A split can only happen at the "top level" of the expression. For example, splitting `((2 + 1)| - 2)` is invalid, and this applies to nested parentheses as well.
 2.  **We cannot split at a `-` operator.** Addition is *associative*, meaning `(a + b) + c` is equivalent to `a + (b + c)`. This property allows us to group additions freely. Subtraction, however, is *not* associative: `(a - b) - c` is not the same as `a - (b - c)`. Splitting on a `-` would alter the order of operations and lead to an incorrect result.
@@ -778,7 +778,7 @@ while all_interesting_mask != 0 {
     } else if (close_mask >> j) & 1 == 1 { // If that char is a ')' we decrease the depth (we exit from a sub expression)
         depth -= 1;
     } else {
-        if depth == 0 { // If the depth is 0, we are a top level, outside of parentheses. And it is a '+' sign. 
+        if depth == 0 { // If the depth is 0, we are at a top level, outside of parentheses. And it is a '+' sign.
             last_op_at_depth_zero = current_idx;
             if current_idx >= ideal_pos { // If we have reached the ideal position (chunk / NUM_THREADS). So we add this '+' sign to the splitting indices.
                 final_indices.push(current_idx);
@@ -919,13 +919,15 @@ When I initially tried `mmap` with the single-threaded version of the code, the 
    ```
    This process involves loading the file into kernel space and then copying it to user space.
 
-2. **False Sharing Contention**  
-   Modern CPUs transfer data in 64-byte "cache lines". If two threads access bytes within the same cache line, the line "bounces" back and forth between their respective CPU caches:
+2. **False Sharing Contention**
+   Modern CPUs transfer data between main memory and CPU caches in 64-byte blocks called "cache lines." False sharing occurs when multiple threads access *different* variables that happen to reside on the same cache line. If one thread modifies its variable, the entire cache line is invalidated for all other threads, forcing them to re-fetch it from memory even though their own data hasn't changed.
    ```
-   Thread 1: reads bytes 0–63        Thread 2: writes bytes 64–127
-       └─ both are in the same 64 B line ─┘
+   // Thread 1 writes to data at byte 8
+   // Thread 2 writes to data at byte 40
+   // Both bytes are in the same 64-byte cache line (0-63).
+   // The cache line "bounces" between the cores, causing delays.
    ```
-   This "ping-pong" invalidation can cost hundreds of CPU cycles per bounce.
+   With a single large `Vec<u8>`, the boundaries of the chunks processed by each thread could easily fall in a way that causes this contention.
 
 
 #### mmap improvement
@@ -950,10 +952,10 @@ This approach avoids the extra copy performed by `fs::read` and does not allocat
 I also think it is faster because we don't have false sharing with mmap. It hands us the file in 4 KB pages. Threads get whole pages:
 
 ```
-Thread 1: Page 0 (bytes   0–4095)
-Thread 2: Page 1 (bytes 4096–8191)
+Thread 1 works on data starting at Page 0 (byte 0)
+Thread 2 works on data starting at Page N (byte N*4096)
 ```
-Pages (4 KB) are significantly larger than cache lines (64 B), which helps prevent threads from contending over the same cache line, unlike the previous solution. I'm not entirely certain about this, but it's my conclusion after extensive reading and consulting various LLM models.
+Since pages (4 KB) are much larger than cache lines (64 B), threads operate on memory regions that are physically far apart, preventing them from contending over the same cache lines. I'm not entirely certain about this, but it's my conclusion after reading a lot about the topic and consulting various LLM models.
 
 
 
@@ -991,7 +993,7 @@ From **2.21s to 981ms**. Less than a second!!
 
 ## Conclusion
 
-**YOU CAN FIND THE FULL CODE ON https://github.com/RPallas92/math_parser/blob/main/src/main.rs**
+**YOU CAN FIND THE FULL CODE ON:** https://github.com/RPallas92/math_parser/blob/main/src/main.rs
 
 
 We have transformed our straightforward, single-threaded parser, reducing its execution time from **43 s** to **under 1 s** on a 1.5 GB file by applying a series of optimizations:
@@ -1010,4 +1012,4 @@ We have transformed our straightforward, single-threaded parser, reducing its ex
 4. **Memory‑mapped I/O**  
    - Replaced `fs::read` and heap buffer with `mmap` → zero extra copy, no false-sharing → **2.2 s → 0.98 s**
 
-**If you have any corrections or comments, please contact me on LinkedIn or via email. Thank you very much for reading!*
+**If you have any corrections or comments, please contact me on LinkedIn or via email. Thank you very much for reading!**
