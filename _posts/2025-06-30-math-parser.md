@@ -265,7 +265,7 @@ We begin by calling `parse_expression` at **depth 1**:
 
 This baseline parser works well, but it's not optimized.
 
-If we compile it in release mode and execute it for the test file of **1.6GB**, it takes **43.87 seconds** to execute on my laptop:
+If we compile it in release mode and execute it for the test file of **1.5GB**, it takes **43.87 seconds** to execute on my laptop:
 
 ```
 Step 1: Input file read in 1.189915008s
