@@ -995,21 +995,12 @@ From **2.21s to 981ms**. Less than a second!!
 
 **YOU CAN FIND THE FULL CODE ON:** https://github.com/RPallas92/math_parser/blob/main/src/main.rs
 
+We started with a simple math parser that took 43 seconds to run. By making a series of changes, we made it run in under one second. Here is a summary of what we did:
 
-We have transformed our straightforward, single-threaded parser, reducing its execution time from **43 s** to **under 1 s** on a 1.5 GB file by applying a series of optimizations:
-
-1. **Eliminate intermediate allocations**  
-   - Replaced `Vec<Token>` with a zero-allocation byte iterator → **43 s → 6.4 s**
-   - Parsed directly from `&[u8]` instead of `&str` → **6.4 s → 3.7 s**
-
-2. **Remove `Peekable`**  
-   - Restructured the parser to eliminate look-ahead boilerplate → **3.7 s → 3.2 s**
-
-3. **SIMD + Rayon for parallel split finding**  
-   - Utilized AVX-512 for a single, fast pass to locate valid top-level `+` split points
-   - Spawned one thread per chunk for `eval()` → **3.2 s → 2.2 s**
-
-4. **Memory‑mapped I/O**  
-   - Replaced `fs::read` and heap buffer with `mmap` → zero extra copy, no false-sharing → **2.2 s → 0.98 s**
+1.  **Stopped creating a list of all tokens at once.** Instead of reading the whole file and creating a big list of tokens, we processed them one by one. This was the biggest improvement, bringing the time down from 43 to 6.4 seconds. (To be honest I made this mistake in purpose just to see the difference).
+2.  **Worked with bytes instead of text.** Instead of treating the input as text, we worked with the raw bytes. This avoided extra work and brought the time down to 3.7 seconds.
+3.  **Simplified the code by removing `Peekable`.** We changed the logic to avoid peeking at the next token, which made the code faster, reducing the time to 3.2 seconds.
+4.  **Used multiple threads and modern CPU features.** We used Rayon to run calculations in parallel and SIMD to find split points faster. This brought the time down to 2.2 seconds.
+5.  **Used memory-mapped files.** Instead of reading the file into memory ourselves, we let the operating system handle it. This was the final optimization, bringing the time down to just 0.98 seconds.
 
 **If you have any corrections or comments, please contact me on LinkedIn or via email. Thank you very much for reading!**
