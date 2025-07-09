@@ -53,7 +53,7 @@ We’ll start with a straightforward implementation and optimize it step by step
 
 
 
-**YOU CAN FIND THE FULL CODE ON:** https://github.com/RPallas92/math_parser
+**YOU CAN FIND THE FULL CODE ON:** [https://github.com/RPallas92/math_parser](https://github.com/RPallas92/math_parser)
 
 
 ---
@@ -993,7 +993,7 @@ From **2.21s to 981ms**. Less than a second!!
 
 ## Conclusion
 
-**YOU CAN FIND THE FULL CODE ON:** https://github.com/RPallas92/math_parser
+**YOU CAN FIND THE FULL CODE ON:** [https://github.com/RPallas92/math_parser](https://github.com/RPallas92/math_parser)
 
 We started with a simple math parser that took 43 seconds to run. By making a series of changes, we made it run in under one second. Here is a summary of what we did:
 
