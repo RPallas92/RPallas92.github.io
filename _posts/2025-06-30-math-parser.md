@@ -13,6 +13,8 @@ tag:
 - optimization
 - bitwise
 - hash maps
+- SIMD
+- mmap
 category: blog
 author: Ricardo Pallas
 projects: true
