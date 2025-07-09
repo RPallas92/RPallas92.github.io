@@ -277,15 +277,16 @@ Total time: 43.06795088s
 
 ```
 
-In the following sections, we’ll optimize this parser step by step:
+While the current parser is correct, its 43-second runtime shows there is room for improvement. Our goal is to make it faster and more memory-efficient.
 
-1. Avoid allocating the token list.
-2. Use iterators and slices instead of `Vec<Token>`.
-3. Parse directly from the input string.
+We will improve the parser's performance through several key optimizations:
 
-The goal is to make a parser that’s not only simple and correct, but also lean and fast.
+*   **Eliminate unnecessary allocations:** First, we'll change the tokenizer to avoid creating a list of tokens in memory.
+*   **Process bytes directly:** We'll modify the parser to read raw bytes instead of string slices, reducing overhead.
+*   **Parallelize the work:** We'll use multithreading and SIMD to perform calculations in parallel.
+*   **Optimize file I/O:** Finally, we'll use memory-mapped files to speed up file reading.
 
-Let’s go!
+Let's get started.
 
 ---
 
