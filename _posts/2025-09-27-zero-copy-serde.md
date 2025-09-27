@@ -28,7 +28,7 @@ description: How to persist structs with great performance using zero-copy seria
 - [Product Stock Update](#product-stock-update)
 - [Results](#results)
 - [Important Caveats and Pitfalls](#important-caveats-and-pitfalls)
-- [Conclusion](#conclusion-and-further-reading)
+- [Conclusion](#conclusion)
 
 ## Introduction
 
