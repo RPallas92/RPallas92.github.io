@@ -332,4 +332,6 @@ If you want to dive deeper into the mechanics of how libraries like `musli-zeroc
 
 - **Understanding Musli Zero-Copy:** [https://udoprog.github.io/rust/2023-10-19/musli-zerocopy.html](https://udoprog.github.io/rust/2023-10-19/musli-zerocopy.html)
 
+**Also, you can find the full code example here:** https://github.com/RPallas92/GrausDB/blob/main/examples/zero_copy_struct_serde/src/main.rs
+
 Thanks for reading, and happy coding!
