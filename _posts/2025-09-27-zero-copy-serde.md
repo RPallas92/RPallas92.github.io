@@ -367,7 +367,7 @@ With a more complex struct (11 fields including a nested struct), the advantage 
 
 Zero-copy just casts the bytes and you're done. No parsing, no validation, no allocations.
 
-For systems doing millions of operations per second, this difference is huge. The full comparison code is available at: [zero_copy_vs_traditional_serde.rs](https://github.com/RPallas92/GrausDB/blob/main/examples/zero_copy_struct_serde/examples/zero_copy_vs_traditional_serde.rs)
+For systems doing millions of operations per second, this difference is huge. The full comparison code is available at: [zero_copy_vs_traditional_serde.rs](https://github.com/RPallas92/GrausDB/blob/main/examples/zero_copy_struct_serde/src/zero_copy_vs_traditional_serde.rs)
 
 ## Important Caveats and Pitfalls
 
