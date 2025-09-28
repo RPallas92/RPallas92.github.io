@@ -27,6 +27,7 @@ description: How to persist structs with great performance using zero-copy seria
 - [Example: The Product Struct](#example-the-product-struct)
 - [Product Stock Update](#product-stock-update)
 - [Results](#results)
+- [Zero-Copy vs Traditional JSON Serialization](#zero-copy-vs-traditional-json-serialization)
 - [Important Caveats and Pitfalls](#important-caveats-and-pitfalls)
 - [Conclusion](#conclusion)
 
@@ -293,6 +294,80 @@ Let me break down what's happening in each iteration:
 So each iteration involves multiple database operations: two reads and one write. That means we're doing **60,000 database operations** in 55 milliseconds—that's over **1 million operations per second**. On a Surface Go 2! 
 
 By avoiding data copies and using zero-copy deserialization, we can build systems that are fast, even on modest hardware.
+
+## Zero-Copy vs Traditional JSON Serialization
+
+To show the real-world impact of zero-copy serialization, I ran a comparison benchmark against traditional JSON serialization using `serde_json`. This time with a more realistic, complex struct that better represents real-world data.
+
+Here's the struct we're testing with:
+
+```rust
+#[derive(ZeroCopy)]
+#[repr(C)]
+struct Product {
+    product_id: u64,
+    stock: u16,
+    price: u32,
+    weight: f32,
+    is_available: bool,
+    category: Ref<str>,
+    manufacturer: Ref<str>,
+    dimensions: Dimensions,
+    rating: f32,
+    name: Ref<str>,
+    description: Ref<str>,
+}
+
+#[derive(ZeroCopy)]
+#[repr(C)]
+struct Dimensions {
+    length: u32,
+    width: u32,
+    height: u32,
+}
+```
+
+And the JSON equivalent for comparison:
+
+```rust
+#[derive(Serialize, Deserialize)]
+struct ProductJson<'a> {
+    product_id: u64,
+    stock: u16,
+    price: u32,
+    weight: f32,
+    is_available: bool,
+    category: &'a str,
+    manufacturer: &'a str,
+    dimensions: DimensionsJson,
+    rating: f32,
+    name: &'a str,
+    description: &'a str,
+}
+```
+
+The benchmark runs 1 million read operations (with deserialization) for both approaches:
+
+```bash
+rpallas@rpallas-Surface-Laptop-Go-2:~/workspace/GrausDB/examples/zero_copy_struct_serde$ cargo run --release --example zero_copy_vs_traditional_serde
+GrausDB opened at ='"./grausdb_data"'
+Zero-copy benchmark completed in 563.205706ms
+
+Starting JSON benchmark...
+JSON benchmark completed in 1.072244937s
+```
+
+**Zero-copy is ~90% faster** than JSON serialization (563ms vs 1072ms). That's nearly **2x the performance**.
+
+With a more complex struct (11 fields including a nested struct), the advantage of zero-copy becomes clear. JSON serialization needs to:
+- Parse the JSON structure
+- Validate UTF-8 for every string
+- Allocate memory for the deserialized struct
+- Copy all the data into the new allocations
+
+Zero-copy just casts the bytes and you're done. No parsing, no validation, no allocations.
+
+For systems doing millions of operations per second, this difference is huge. The full comparison code is available at: [zero_copy_vs_traditional_serde.rs](https://github.com/RPallas92/GrausDB/blob/main/examples/zero_copy_struct_serde/examples/zero_copy_vs_traditional_serde.rs)
 
 ## Important Caveats and Pitfalls
 
